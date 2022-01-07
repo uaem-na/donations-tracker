@@ -1,6 +1,6 @@
 # mcgill-uaem-website
 
-General-purpose distribution platform developed for the McGill chapter of the Universities Allied for Essential Medicine by the following individuals:
+General-purpose distribution platform developed for the McGill chapter of the Universities Allied for Essential Medicine
 
 ## Contributing Members
 **Frontend Developers**: Lucas Nelson, Jinho Yoon, Edgar Chang, Tristan Stevens, Gaby Le Bideau
