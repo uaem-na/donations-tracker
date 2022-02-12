@@ -1,10 +1,11 @@
 import logo from './assets/media/logo.svg';
 import './assets/style/Main.css';
+import Login from './components/login/login';
 
 function App() {
   return (
     <div>
-      <h1>Hello UAEM</h1>
+      <Login/>
     </div>
   );
 }
