@@ -2,6 +2,7 @@ import IndividualLogin from "./indv";
 import OrganizationLogin from "./org";
 import { useState, useEffect } from "react";
 import { Tab } from "@headlessui/react";
+import Registration from "../signup/reg";
 
 export const Login = () => {
   return (
@@ -48,6 +49,7 @@ export const Login = () => {
             </div>
           </div>
         </div>
+        {/* <Registration/> */}
       </div>
     </div>
   );
