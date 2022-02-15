@@ -1,10 +1,10 @@
 export const ChangeProfile = ({firstName, setFirst, lastName, setLast, org, setOrg, email}) => {
     return (
-    <form className="text-left">
+    <form className="text-left text-sm">
         <div className="p-2">
           <p className="text-gray-500 select-none font-medium">User information:</p>
           </div>
-      <div className="flex items-center border-2 py-2 px-3 rounded-2xl mb-4">
+      <div className="flex items-center border-2 py-2 px-3 rounded-2xl mb-2">
       <label htmlFor="default" className="text-gray-500 select-none font-medium ">First Name</label>
             <input
               className="pl-2 outline-none border-none"
@@ -15,7 +15,7 @@ export const ChangeProfile = ({firstName, setFirst, lastName, setLast, org, setO
               defaultValue={`${firstName}`}
             />
           </div>
-          <div className="flex items-center border-2 py-2 px-3 rounded-2xl mb-4">
+          <div className="flex items-center border-2 py-2 px-3 rounded-2xl mb-2">
           <label htmlFor="default" className="text-gray-500 select-none font-medium ">Last Name</label>
             <input
               className="pl-2 outline-none border-none"
@@ -66,7 +66,7 @@ export const ChangeProfile = ({firstName, setFirst, lastName, setLast, org, setO
           <div className="p-2">
           <p className="text-gray-500 select-none font-medium">Set a new password:</p>
           </div>
-        <div className="flex items-center border-2 py-2 px-3 rounded-2xl mb-4">
+        <div className="flex items-center border-2 py-2 px-3 rounded-2xl mb-2">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-5 w-5 text-gray-500"

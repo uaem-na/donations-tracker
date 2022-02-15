@@ -26,7 +26,7 @@ export const Profile = () => {
                         </div>
                         <h1 className="text-2xl text-gray-700">Welcome back, {userFirstName} {userLastName}.</h1>
                         <h3 className="text-lg text-gray-500 ">{userOrg}</h3>
-                        <p className="text-sm text-gray-400 my-4 hover:text-blue-500 cursor-pointer" onClick={() => setChange(!showChange)}>
+                        <p className="text-sm text-gray-400 mt-2 hover:text-blue-500 cursor-pointer" onClick={() => setChange(!showChange)}>
                             {profileChangeString}
                         </p>
                         {showChange && <ChangeProfile firstName={userFirstName} setFirst={setUserFirstName} lastName={userLastName} setLast={setUserLastName} org={userOrg} setOrg={setUserOrg} email={email}/>}
