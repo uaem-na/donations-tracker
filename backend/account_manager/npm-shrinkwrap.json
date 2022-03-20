@@ -5,16 +5,17 @@
   "requires": true,
   "packages": {
     "": {
+      "name": "ppe_user_api",
       "version": "1.0.0",
       "license": "ISC",
       "dependencies": {
-        "async": "^3.2.2",
+        "async": "^3.2.0",
         "body-parser": "^1.19.0",
-        "concurrently": "^6.5.1",
+        "concurrently": "^6.2.0",
         "config": "^3.3.6",
         "express": "^4.17.1",
-        "mongodb": "^3.7.3",
-        "mongoose": "^5.13.14",
+        "mongodb": "^3.6.8",
+        "mongoose": "^5.12.14",
         "nodemon": "^2.0.7"
       }
     },
@@ -336,7 +337,6 @@
       "dependencies": {
         "anymatch": "~3.1.2",
         "braces": "~3.0.2",
-        "fsevents": "~2.3.2",
         "glob-parent": "~5.1.2",
         "is-binary-path": "~2.1.0",
         "is-glob": "~4.0.1",
@@ -1231,8 +1231,7 @@
         "bson": "^1.1.4",
         "denque": "^1.4.1",
         "optional-require": "^1.1.8",
-        "safe-buffer": "^5.1.2",
-        "saslprep": "^1.0.0"
+        "safe-buffer": "^5.1.2"
       },
       "engines": {
         "node": ">=4"

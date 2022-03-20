@@ -5,7 +5,7 @@ import Profile from './components/profile/profile';
 
 function App() {
   return (
-    <Profile/>
+    <Login/>
     // <Login />
     // <div className='flex justify-center items-center h-screen'>
     //     Hello UAEM!

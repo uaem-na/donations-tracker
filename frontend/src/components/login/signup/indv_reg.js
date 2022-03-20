@@ -1,7 +1,39 @@
+import Userfront from "@userfront/core";
+import { useState } from "react";
+
+Userfront.init("demo1234");
+
 export const IndividualRegistration = ({ handleReg }) => {
+  const [email, setEmail] = useState("")
+  const [accountName, setAccountName] = useState("")
+  const [password, setPassword] = useState("")
+  const [passwordVerify, setPasswordVerify] = useState("")
+
+  const handleInputChange = (event) => {
+    event.preventDefault();
+    const target = event.target;
+    this.setState({
+      [target.name]: target.value,
+    });
+  }
+
+  // Handle the form submission by calling Userfront.signup()
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    // Call Userfront.signup()
+    Userfront.signup({
+      method: "password",
+      email: this.state.email,
+      password: this.state.password,
+      data: {
+        accountName: this.state.accountName,
+      },
+    });
+  }
+
   return (
     <div>
-      <form className="bg-white">
+      <form onSubmit={handleSubmit} className="bg-white">
       <div className="flex items-center border-2 py-2 px-3 rounded-2xl mb-4">
             <input
               className="pl-2 outline-none border-none"
