@@ -9,7 +9,7 @@ services:
     environment:
       NODE_ENV: production
     ports:
-      - 3000:3000
+      - 7000:7000
     volumes:
       - .:/usr/src/app
   mongodb:

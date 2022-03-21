@@ -7,8 +7,7 @@ const userSchema = mongoose.Schema({
     email: {type: String, required: true},
     password: {type: String, required: true},
     userOrg: {type: String, required: true},
-    // postalCode: {type: String, required: true},
-    // orgName: {type: String, required: false}
+    orgName: {type: String, required: false}
 
 }, {timestamp: true});
 

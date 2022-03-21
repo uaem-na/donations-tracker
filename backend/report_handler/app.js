@@ -9,7 +9,7 @@ mongoose.connect('mongodb://mongodb:27017/reports', {useNewUrlParser: true, useU
 // Display connection status upon running file
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'CONNECTION ERROR'));
-db.once('open', () => {console.log('database connected')});
+db.once('open', () => {console.log('database connected – running on port 3000')});
 
 // Initialize router
 app.use('/reports', reportsRoute);
