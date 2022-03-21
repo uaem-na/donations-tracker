@@ -1,9 +1,10 @@
 # mcgill-uaem-website
 
-General-purpose distribution platform developed for the McGill chapter of the Universities Allied for Essential Medicine by the following individuals:
+General-purpose distribution platform developed for the McGill chapter of the Universities Allied for Essential Medicine.
 
-Frontend Developers: Lucas Nelson, Jinho Yoon, Edgar Chang, Tristan Stevens, Gaby Le Bideau
-Backend Developers: Lucas Nelson, Zhekai Jiang
-UAEM McGill Coordinator: Yeji Lori Song (Not a developer)
+## Contributing Members
+**Frontend Developers**: Lucas Nelson, Edgar Chang, Tristan Stevens, Gaby Le Bideau. <br />
+**Backend Developers**: Zhekai Jiang, Lucas Nelson. <br />
+**UAEM McGill Coordinator**: Yeji Lori Song (not a developer). <br />
 
-This file will be updated with necessary details at a later date.
+This file will be updated with necessary details at a later date.  
