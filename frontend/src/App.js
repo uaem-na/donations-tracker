@@ -1,16 +1,26 @@
 import './assets/style/Main.css';
 import Login from './components/login/login';
-import mask from './assets/media/ppe-mask.svg'
 import Profile from './components/profile/profile';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Link,
+  Navigate,
+  useLocation,
+} from "react-router-dom";
+import Landing from './components/landing';
 
 function App() {
   return (
-    <Login/>
-    // <Login />
-    // <div className='flex justify-center items-center h-screen'>
-    //     Hello UAEM!
-    //     <img className='mx-8' src={mask}/>
-    // </div>
+    <Router>
+      <Routes>
+        <Route path='/' element={<Landing/>}/>
+        <Route path='/login' element={<Login login={true}/>}/>
+        <Route path='/register' element={<Login login={false}/>}/>
+        <Route path='/dashboard' element={<Profile/>}/>
+      </Routes>
+    </Router>
   );
 }
 

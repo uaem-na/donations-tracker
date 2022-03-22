@@ -1,5 +1,6 @@
 import Userfront from "@userfront/core";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 Userfront.init("8nwrppdb");
 
@@ -156,12 +157,13 @@ export const IndividualRegistration = ({ handleReg }) => {
         >
           Register
         </button>
-        <p
+        <Link
           className="text-sm ml-2 hover:text-blue-500 cursor-pointer"
           onClick={() => handleReg(false)}
+          to='/login'
         >
-          Go back to sign in?
-        </p>
+          Go back to login?
+        </Link>
       </form>
     </div>
   );

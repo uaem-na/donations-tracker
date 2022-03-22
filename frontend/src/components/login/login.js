@@ -1,9 +1,9 @@
-import IndividualLogin from "./indv";
+import IndividualLogin from "./indv_log";
 import { useState, useEffect } from "react";
 import IndividualRegistration from "./signup/indv_reg";
 
-export const Login = () => {
-    const [isReg, setIsReg] = useState(false)
+export const Login = ({login}) => {
+    const [isReg, setIsReg] = useState(!login)
     // true for sign in, false for reg
 
     // logic to change text based on state
