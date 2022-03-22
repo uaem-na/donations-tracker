@@ -1,29 +1,18 @@
-export const ChangeProfile = ({firstName, setFirst, lastName, setLast, org, setOrg, email}) => {
+export const ChangeProfile = ({name, setName, org, setOrg, email}) => {
     return (
     <form className="text-left text-sm">
         <div className="p-2">
           <p className="text-gray-500 select-none font-medium">User information:</p>
           </div>
       <div className="flex items-center border-2 py-2 px-3 rounded-2xl mb-2">
-      <label htmlFor="default" className="text-gray-500 select-none font-medium ">First Name</label>
+      <label htmlFor="default" className="text-gray-500 select-none font-medium ">Name</label>
             <input
               className="pl-2 outline-none border-none"
               type="text"
               name=""
               id=""
-              onChange={(e) => setFirst(e.target.value)}
-              defaultValue={`${firstName}`}
-            />
-          </div>
-          <div className="flex items-center border-2 py-2 px-3 rounded-2xl mb-2">
-          <label htmlFor="default" className="text-gray-500 select-none font-medium ">Last Name</label>
-            <input
-              className="pl-2 outline-none border-none"
-              type="text"
-              name=""
-              id=""
-              onChange={(e) => setLast(e.target.value)}
-              defaultValue={`${lastName}`}
+              onChange={(e) => setName(e.target.value)}
+              defaultValue={`${name}`}
             />
           </div>
           <div className="flex items-center border-2 py-2 px-3 rounded-2xl">
