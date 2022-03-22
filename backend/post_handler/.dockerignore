@@ -22,3 +22,5 @@
 **/secrets.dev.yaml
 **/values.dev.yaml
 README.md
+docker-compose.yml
+docker-compose.debug.yml
