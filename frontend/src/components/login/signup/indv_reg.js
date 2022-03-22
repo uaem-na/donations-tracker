@@ -97,7 +97,7 @@ export const IndividualRegistration = ({ handleReg }) => {
             </svg>
             <input
               className="pl-2 outline-none border-none"
-              type="text"
+              type="email"
               name=""
               id=""
               value={email}
@@ -120,7 +120,7 @@ export const IndividualRegistration = ({ handleReg }) => {
           </svg>
           <input
             className="pl-2 outline-none border-none"
-            type="text"
+            type="password"
             name=""
             id=""
             value={password}
@@ -143,7 +143,7 @@ export const IndividualRegistration = ({ handleReg }) => {
           </svg>
           <input
             className="pl-2 outline-none border-none"
-            type="text"
+            type="password"
             name=""
             id=""
             value={passwordVerify}
