@@ -11,9 +11,7 @@ import {
 } from "react-router-dom";
 import Landing from './components/landing';
 import Userfront from "@userfront/core";
-import ViewRequest from './components/viewRequest';
-import ViewOffer from './components/viewOffer';
-import NewReqOff from './components/newReqOff';
+import ReqOff from './components/requestOfferPage/reqOff';
 
 Userfront.init("8nwrppdb");
 
@@ -40,10 +38,10 @@ function App() {
     <Router>
       <Routes>
         <Route path='/' element={<Landing/>}/>
-        <Route path='/request' element={<ViewRequest/>}/>
-        <Route path='/offer' element={<ViewOffer/>}/>
-        <Route path='/new-request' element={<NewReqOff offer={false}/>}/>
-        <Route path='/new-offer' element={<NewReqOff offer={true}/>}/>
+        <Route path='/request' element={<ReqOff offer={false} edit={false}/>}/>
+        <Route path='/offer' element={<ReqOff offer={true} edit={false}/>}/>
+        <Route path='/new-request' element={<ReqOff offer={false} edit={true}/>}/>
+        <Route path='/new-offer' element={<ReqOff offer={true}/>} edit={true}/>
         <Route path='/login' element={<NoAuth><Login login={true}/></NoAuth>}/>
         <Route path='/register' element={<NoAuth><Login login={false}/></NoAuth>}/>
         <Route path='/profile' element={
