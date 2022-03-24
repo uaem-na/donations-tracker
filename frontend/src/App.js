@@ -2,10 +2,11 @@ import './assets/style/Main.css';
 import Login from './components/login/login';
 import mask from './assets/media/ppe-mask.svg'
 import Profile from './components/profile/profile';
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
 function App() {
   return (
-    <Profile/>
+    <Login/>
     // <Login />
     // <div className='flex justify-center items-center h-screen'>
     //     Hello UAEM!
