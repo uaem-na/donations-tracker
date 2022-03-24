@@ -1,5 +1,4 @@
 import './assets/style/Main.css';
-import Login from './components/login/login';
 import Profile from './components/profile/profile';
 import {
   BrowserRouter as Router,
@@ -14,6 +13,8 @@ import Userfront from "@userfront/core";
 import ReqOff from './components/requestOfferPage/reqOff';
 import Dashboard from './components/dashboard';
 import Navbar from './components/nav';
+import Login from './components/auth/login';
+import Register from './components/auth/register';
 
 Userfront.init("8nwrppdb");
 
@@ -37,7 +38,7 @@ function NoAuth({ children }) {
 
 function App() {
   return (
-    <>
+    <div className="flex flex-col min-h-screen">
     <Router>
     <Navbar/>
       <Routes>
@@ -47,14 +48,14 @@ function App() {
         <Route path='/offer/:id' element={<ReqOff offer={true} edit={false}/>}/>
         <Route path='/new-request' element={<ReqOff offer={false} edit={true}/>}/>
         <Route path='/new-offer' element={<ReqOff offer={true}/>} edit={true}/>
-        <Route path='/login' element={<NoAuth><Login login={true}/></NoAuth>}/>
-        <Route path='/register' element={<NoAuth><Login login={false}/></NoAuth>}/>
+        <Route path='/login' element={<NoAuth><Login/></NoAuth>}/>
+        <Route path='/register' element={<NoAuth><Register/></NoAuth>}/>
         <Route path='/profile' element={
           <RequireAuth><Profile/></RequireAuth>
         }/>
       </Routes>
     </Router>
-    </>
+    </div>
   );
 }
 
