@@ -5,17 +5,18 @@
   "requires": true,
   "packages": {
     "": {
+      "name": "ppe_user_api",
       "version": "1.0.0",
       "license": "ISC",
       "dependencies": {
-        "async": "^3.2.2",
+        "async": "^3.2.0",
         "body-parser": "^1.19.0",
-        "concurrently": "^6.5.1",
+        "concurrently": "^6.2.0",
         "config": "^3.3.6",
         "express": "^4.17.1",
-        "mongodb": "^3.7.3",
-        "mongoose": "^5.13.14",
-        "nodemon": "^2.0.7"
+        "mongodb": "^3.6.8",
+        "mongoose": "^5.12.14",
+        "nodemon": "^2.0.14"
       }
     },
     "node_modules/@sindresorhus/is": {

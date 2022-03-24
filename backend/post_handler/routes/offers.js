@@ -3,21 +3,17 @@ const router = express.Router();
 var { Offers } = require('../models/offers');
 
 
-function postOffer(req, res) {
-    var errorMsg = "";
+function parseBodyProfiles(req) {
 
-    const userId = req.query.userId;
-    if (userId === undefined || userId === "") {
-        errorMsg += 'User ID cannot be empty.\n';
-    }
-
-    const ppeProfiles = req.query.ppeProfiles;
+    let errorMsg = "";
+    const ppeProfiles = req.body.ppeProfiles;
+    
     if (ppeProfiles === undefined || ppeProfiles.length == 0) {
         errorMsg += 'There should be at least one PPE.\n';
     }
     ppeProfiles.forEach((ppe, ind) => {
         if (ppe.category === undefined || ppe.category === "") {
-            errorMsg += 'PPE ' + ind + ': category cannot be empty.\n';
+        errorMsg += 'PPE ' + ind + ': category cannot be empty.\n';
         }
         if (ppe.description === undefined || ppe.description === "") {
             errorMsg += 'PPE ' + ind + ': description cannot be empty.\n';
@@ -26,35 +22,43 @@ function postOffer(req, res) {
             errorMsg += 'PPE ' + ind + ': quantity cannot be empty.\n';
         }
     });
+    return errorMsg;
+}
+
+function postOffer(req, res) {
+    var errorMsg = "";
+
+    const userId = req.body.userId;
+    if (userId === undefined || userId === "") {
+        errorMsg += 'User ID cannot be empty.\n';
+    }
+
+    const postalCode = req.body.postalCode;
+    if (postalCode === undefined || postalCode === "") {
+        errorMsg += 'Postal code cannot be empty.\n';
+    }
+
+    errorMsg += parseBodyProfiles(req);
 
     if (errorMsg !== "") {
         res.status(400).send('Error posting offer.\n' + errorMsg);
         return;
     }
 
+    const ppeProfiles = req.body.ppeProfiles;
+
     const newOffer = new Offers({
         "userId": userId,
         "ppeProfiles": ppeProfiles,
-        "reportIds": []
+        "reportIds": [],
+        "postalCode": postalCode
     });
     newOffer.save()
-        .then(newOffer => res.send(newOffer))
+        .then(offer => res.send(offer))
         .catch(err => res.status(500).send('Error posting offer.\n' + err));
 }
 
 router.post('/', postOffer);
-
-// For testing purposes only
-router.post('/test/post', (req, res) => postOffer(
-    { query: {
-        "userId": req.query.userId,
-        "ppeProfiles": [
-            {"category": "Masks", "description": "N95", "quantity": "100"}, 
-            {"category": "Gowns", "description": "Medical", "quantity": "50"}]
-    }}, 
-    res
-));
-
 
 router.get('/', (req, res) => {
     Offers.find()
@@ -92,26 +96,14 @@ router.get('/user/:userId', (req, res) => {
 
 
 function updatePpes (req, res) {
+
     var errorMsg = "";
     const id = req.params.id;
     if (id === undefined || id === "") {
         errorMsg += 'Offer ID cannot be empty.';
     }
-    const ppeProfiles = req.query.ppeProfiles;
-    if (ppeProfiles === undefined || ppeProfiles.length == 0) {
-        errorMsg += 'There should be at least one PPE.\n';
-    }
-    ppeProfiles.forEach((ppe, ind) => {
-        if (ppe.category === undefined || ppe.category === "") {
-            errorMsg += 'PPE ' + ind + ': category cannot be empty.\n';
-        }
-        if (ppe.description === undefined || ppe.description === "") {
-            errorMsg += 'PPE ' + ind + ': description cannot be empty.\n';
-        }
-        if (ppe.quantity === undefined || ppe.quantity === "") {
-            errorMsg += 'PPE ' + ind + ': quantity cannot be empty.\n';
-        }
-    });
+
+    errorMsg += parseBodyProfiles(req);
 
     if (errorMsg !== "") {
         res.status(400).send('Error updating PPEs in offer' + id + '.\n' + errorMsg);
@@ -131,18 +123,6 @@ function updatePpes (req, res) {
 }
 
 router.put('/ppes/:id', updatePpes);
-
-// For testing purposes only
-router.put('/test/ppes/:id', (req, res) => { updatePpes(
-    {
-        params: {"id": req.params.id}, 
-        query: { "ppeProfiles": [
-            {"category": "Masks", "description": "KN95", "quantity": "500"}, 
-            {"category": "Gowns", "description": "Medical", "quantity": "70"}
-        ]}
-    },
-    res
-)});
 
 router.put('/report/:id', (req, res) => {
     var errorMsg = "";
@@ -183,6 +163,48 @@ router.put('/report/:id', (req, res) => {
         })
         .catch(err => res.status(500).send('Error updating reports for offer ' + id + '.\n' + err));
 });
+
+router.put('/postalCode/:id', (req, res) => {
+
+    let errorMsg = "";
+    const id = req.params.id;
+    if (id == undefined || id == "") {
+        errorMsg += "Error modifying postal code.\nOffer ID must be defined.\n";
+    }
+
+    const postalCode = req.query.postalCode;
+    if (postalCode == undefined || postalCode == "") {
+        errorMsg += "Error modifying postal code.\nNew postal code must be specified.\n";
+    }
+
+    if (errorMsg != "") {
+        res.status(400).send(errorMsg);
+        return;
+    }
+
+    Offers.findByIdAndUpdate(id, { postalCode: postalCode }, (err, ret) => {
+        if (ret == null) {
+            errorMsg += `Error modifying postal code.\nOffer ${id} not found.\n`;
+            res.status(400).send(errorMsg);
+        }
+        else if (err) {
+            errorMsg += `Error modifying postal code for offer ${id}.\n`;
+            res.status(500).send(errorMsg);
+        }
+        else {
+            Offers.findById(id, (err, result) => {
+                if (err) {
+                    errorMsg += `Error returning modifying postal code for offer ${id}.\n`;
+                    res.status(500).send(errorMsg);
+                }
+                else {
+                    res.send(result);
+                }
+            })
+        }
+    });
+});
+
 
 router.delete('/:id', (req, res) => {
     const id = req.params.id;

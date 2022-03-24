@@ -1,14 +1,72 @@
+import Userfront from "@userfront/core";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+
+Userfront.init("8nwrppdb");
+
 export const IndividualRegistration = ({ handleReg }) => {
+  const [email, setEmail] = useState("")
+  const [accountName, setAccountName] = useState("")
+  const [password, setPassword] = useState("")
+  const [org, setOrg] = useState("")
+  const [passwordVerify, setPasswordVerify] = useState("")
+
+  const handleName = (e) => {
+    setAccountName(e.target.value);
+  }
+
+  const handleOrg = (e) => {
+    setOrg(e.target.value);
+  }
+
+  const handlePassword = (e) => {
+    setPassword(e.target.value);
+  }
+
+  const handlePasswordVerify = (e) => {
+    setPasswordVerify(e.target.value);
+  }
+
+  const handleEmail = (e) => {
+    setEmail(e.target.value);
+  }
+
+  // Handle the form submission by calling Userfront.signup()
+  const handleSubmit = (event) => {
+    console.log("submitting")
+    event.preventDefault();
+    var success = true;
+    // Call Userfront.signup()
+    Userfront.signup({
+      method: "password",
+      name: accountName,
+      email: email,
+      password: password,
+      data: {
+        accountOrganization: org
+      },
+    }).catch((error) => {
+      success=false;
+      console.log(error.message);
+    });
+    console.log("submitted");
+    if(success){
+      console.log("good, redirect");
+    }
+  }
+
   return (
     <div>
-      <form className="bg-white">
+      <form onSubmit={handleSubmit} className="bg-white">
       <div className="flex items-center border-2 py-2 px-3 rounded-2xl mb-4">
             <input
               className="pl-2 outline-none border-none"
               type="text"
               name=""
               id=""
-              placeholder="First Name"
+              value={accountName}
+              onChange={handleName}
+              placeholder="Full Name"
             />
           </div>
           <div className="flex items-center border-2 py-2 px-3 rounded-2xl mb-4">
@@ -17,15 +75,8 @@ export const IndividualRegistration = ({ handleReg }) => {
               type="text"
               name=""
               id=""
-              placeholder="Last Name"
-            />
-          </div>
-          <div className="flex items-center border-2 py-2 px-3 rounded-2xl mb-4">
-            <input
-              className="pl-2 outline-none border-none"
-              type="text"
-              name=""
-              id=""
+              value={org}
+              onChange={handleOrg}
               placeholder="User Organization"
             />
           </div>
@@ -46,9 +97,11 @@ export const IndividualRegistration = ({ handleReg }) => {
             </svg>
             <input
               className="pl-2 outline-none border-none"
-              type="text"
+              type="email"
               name=""
               id=""
+              value={email}
+              onChange={handleEmail}
               placeholder="Email Address"
             />
           </div>
@@ -67,9 +120,11 @@ export const IndividualRegistration = ({ handleReg }) => {
           </svg>
           <input
             className="pl-2 outline-none border-none"
-            type="text"
+            type="password"
             name=""
             id=""
+            value={password}
+            onChange={handlePassword}
             placeholder="Password"
           />
         </div>
@@ -88,9 +143,11 @@ export const IndividualRegistration = ({ handleReg }) => {
           </svg>
           <input
             className="pl-2 outline-none border-none"
-            type="text"
+            type="password"
             name=""
             id=""
+            value={passwordVerify}
+            onChange={handlePasswordVerify}
             placeholder="Repeat Password"
           />
         </div>
@@ -98,14 +155,15 @@ export const IndividualRegistration = ({ handleReg }) => {
           type="submit"
           className="block w-full bg-indigo-600 mt-4 py-2 rounded-2xl text-white font-semibold mb-2"
         >
-          Login
+          Register
         </button>
-        <p
+        <Link
           className="text-sm ml-2 hover:text-blue-500 cursor-pointer"
           onClick={() => handleReg(false)}
+          to='/login'
         >
-          Go back to sign in?
-        </p>
+          Go back to login?
+        </Link>
       </form>
     </div>
   );
