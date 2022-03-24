@@ -1,18 +1,6 @@
 import './assets/style/Main.css';
 import Login from './components/login/login';
 import Profile from './components/profile/profile';
-<<<<<<< HEAD
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
-
-function App() {
-  return (
-    <Login/>
-    // <Login />
-    // <div className='flex justify-center items-center h-screen'>
-    //     Hello UAEM!
-    //     <img className='mx-8' src={mask}/>
-    // </div>
-=======
 import {
   BrowserRouter as Router,
   Routes,
@@ -56,7 +44,7 @@ function App() {
         }/>
       </Routes>
     </Router>
->>>>>>> 8b18430dfd8bdfbb5a459ace337aa7507cfcb462
+
   );
 }
 
