@@ -2,36 +2,36 @@ version: '3.4'
 
 services:
   reporthandler:
-    image: reporthandler
+    # image: reporthandler
     build:
       context: ./report_handler
-      dockerfile: ./report_handler/Dockerfile
+      dockerfile: ./Dockerfile
     environment:
       NODE_ENV: production
     ports:
-      - '3000:3000'
+      - 4000:3000
     volumes:
       - ./report_handler:/usr/src/app/
   posthandler:
-    image: posthandler
+    # image: posthandler
     build:
       context: ./post_handler
-      dockerfile: ./post_handler/Dockerfile
+      dockerfile: ./Dockerfile
     environment:
       NODE_ENV: production
     ports:
-      - 7000:7000
+      - 4002:7000
     volumes:
       - ./post_handler:/usr/src/app/
   userhandler:
-    image: userhandler
+    # image: userhandler
     build:
       context: ./account_manager
-      dockerfile: ./account_manager/Dockerfile
+      dockerfile: ./Dockerfile
     environment:
       NODE_ENV: production
     ports:
-      - '5000:5000'
+      - 4001:5000
     volumes:
       - ./account_manager:/usr/src/app/
   mongodb:
