@@ -2,8 +2,11 @@ import { useState, useEffect } from "react";
 import EditPPE from "./sections/editppe";
 import Location from "./sections/location";
 import ViewPPE from "./sections/viewppe";
+import { useNavigate, useParams } from "react-router-dom";
 
 export const ReqOff = ({ offer, edit }) => {
+  const navigate = useNavigate();
+  const params = useParams();
   const [ppe, setPPE] = useState([]);
   
   var typeReq = "";
@@ -22,11 +25,11 @@ export const ReqOff = ({ offer, edit }) => {
     if (offer) {
       typeReq = "View a PPE Offer";
       pageDesc =
-        "You are viewing a PPE offer.";
+        `You are viewing a PPE offer with ID ${params.id}.`;
     } else {
       typeReq = "View a PPE Request";
       pageDesc =
-        "You are viewing a PPE request.";
+        `You are viewing a PPE request with ID ${params.id}.`;
     }
   }
   const [localEdit, setLocalEdit] = useState(edit);
@@ -34,6 +37,7 @@ export const ReqOff = ({ offer, edit }) => {
   const [postal, setPostal] = useState("");
 
   useEffect(() => {
+    console.log(params.id)
     // TODO: request if not in edit mode
     if (!edit) {
       setPPE([

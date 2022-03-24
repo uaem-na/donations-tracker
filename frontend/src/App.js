@@ -12,6 +12,8 @@ import {
 import Landing from './components/landing';
 import Userfront from "@userfront/core";
 import ReqOff from './components/requestOfferPage/reqOff';
+import Dashboard from './components/dashboard';
+import Navbar from './components/nav';
 
 Userfront.init("8nwrppdb");
 
@@ -28,18 +30,21 @@ function NoAuth({ children }) {
   let location = useLocation();
   if (Userfront.tokens.accessToken) {
     // Redirect to the /dashboard page
-    return <Navigate to="/dashboard" state={{ from: location }} replace />;
+    return <Navigate to="/profile" state={{ from: location }} replace />;
   }
   return children;
 }
 
 function App() {
   return (
+    <>
     <Router>
+    <Navbar/>
       <Routes>
         <Route path='/' element={<Landing/>}/>
-        <Route path='/request' element={<ReqOff offer={false} edit={false}/>}/>
-        <Route path='/offer' element={<ReqOff offer={true} edit={false}/>}/>
+        <Route path='/dashboard' element={<Dashboard/>}/>
+        <Route path='/request/:id' element={<ReqOff offer={false} edit={false}/>}/>
+        <Route path='/offer/:id' element={<ReqOff offer={true} edit={false}/>}/>
         <Route path='/new-request' element={<ReqOff offer={false} edit={true}/>}/>
         <Route path='/new-offer' element={<ReqOff offer={true}/>} edit={true}/>
         <Route path='/login' element={<NoAuth><Login login={true}/></NoAuth>}/>
@@ -49,6 +54,7 @@ function App() {
         }/>
       </Routes>
     </Router>
+    </>
   );
 }
 
