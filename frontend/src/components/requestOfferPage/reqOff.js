@@ -3,12 +3,29 @@ import EditPPE from "./sections/editppe";
 import Location from "./sections/location";
 import ViewPPE from "./sections/viewppe";
 import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
+const REPORT_URL = process.env.REACT_APP_REPORT_URL;
+const POST_URL = process.env.REACT_APP_POST_URL;
 
 export const ReqOff = ({ offer, edit }) => {
   const navigate = useNavigate();
   const params = useParams();
   const [ppe, setPPE] = useState([]);
-  
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (offer) {
+      axios
+        .post(POST_URL+'/offers', {
+          title: "Hello World!",
+          body: "This is a new post.",
+        })
+        .then((response) => {
+          console.log(response.data);
+        });
+    }
+  };
+
   var typeReq = "";
   var pageDesc = "";
   if (edit) {
@@ -24,12 +41,10 @@ export const ReqOff = ({ offer, edit }) => {
   } else {
     if (offer) {
       typeReq = "View a PPE Offer";
-      pageDesc =
-        `You are viewing a PPE offer with ID ${params.id}.`;
+      pageDesc = `You are viewing a PPE offer with ID ${params.id}.`;
     } else {
       typeReq = "View a PPE Request";
-      pageDesc =
-        `You are viewing a PPE request with ID ${params.id}.`;
+      pageDesc = `You are viewing a PPE request with ID ${params.id}.`;
     }
   }
   const [localEdit, setLocalEdit] = useState(edit);
@@ -37,7 +52,7 @@ export const ReqOff = ({ offer, edit }) => {
   const [postal, setPostal] = useState("");
 
   useEffect(() => {
-    console.log(params.id)
+    console.log(params.id);
     // TODO: request if not in edit mode
     if (!edit) {
       setPPE([
@@ -45,7 +60,7 @@ export const ReqOff = ({ offer, edit }) => {
         { type: "gloves", amount: "100", desc: "Surgical" },
         { type: "masks", amount: "1000", desc: "KN-95" },
       ]);
-      setPostal("H3A1G3")
+      setPostal("H3A1G3");
     }
   }, []);
 
@@ -53,7 +68,7 @@ export const ReqOff = ({ offer, edit }) => {
     <div>
       <div className="container mx-auto my-4">
         <div>
-          <form action="#" method="POST">
+          <form onSubmit={handleSubmit} method="POST">
             <div className="shadow sm:rounded-md sm:overflow-hidden">
               <div className="px-4 py-5 bg-white space-y-6 sm:p-6">
                 <div className="px-4 sm:px-0">
@@ -64,12 +79,14 @@ export const ReqOff = ({ offer, edit }) => {
                 </div>
               </div>
               <section id="ppe" className="px-4 py-5 bg-white sm:p-6">
-                  <ViewPPE ppe={ppe} localEdit={localEdit} setPPE={setPPE}/>
-                  {localEdit && (
-                    <EditPPE ppe={ppe} setPPE={setPPE}/>
-                  )}
+                <ViewPPE ppe={ppe} localEdit={localEdit} setPPE={setPPE} />
+                {localEdit && <EditPPE ppe={ppe} setPPE={setPPE} />}
               </section>
-              <Location postal={postal} localEdit={localEdit} setPostal={setPostal}/>
+              <Location
+                postal={postal}
+                localEdit={localEdit}
+                setPostal={setPostal}
+              />
               <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
                 {localEdit != edit && (
                   <a

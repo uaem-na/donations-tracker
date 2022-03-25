@@ -2,6 +2,8 @@ const express = require('express');
 const app = express();
 const usersRoute = require('./routes/users');
 const mongoose = require('mongoose');
+const cors = require('cors');
+app.use(cors());
 
 mongoose.connect('mongodb://mongodb:27017/users', { useUnifiedTopology: true, useNewUrlParser: true});
 

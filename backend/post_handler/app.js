@@ -2,7 +2,8 @@ const express = require('express');
 const app = express();
 const offersRoute = require('./routes/offers');
 const requestsRoute = require('./routes/requests');
-
+const cors = require('cors');
+app.use(cors());
 app.use(express.json());
 
 var mongoose = require('mongoose');
