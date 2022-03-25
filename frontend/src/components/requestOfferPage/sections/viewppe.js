@@ -5,7 +5,7 @@ export const ViewPPE = ({ppe, localEdit, setPPE}) => {
 
     return(
         <>
-        {ppe.length > 0 && (
+        {ppe && ppe.length > 0 && (
             <div className="col-span-6">
               <p className="block text-sm font-medium text-gray-700 mb-2">
                 Added PPE:
@@ -14,16 +14,16 @@ export const ViewPPE = ({ppe, localEdit, setPPE}) => {
                 {ppe.map((p, i) => (
                   <div className="col-span-3 mr-2 text-sm font-medium text-gray-700 mb-2 p-4 border-2 rounded-md">
                     <p>
-                      <span className="font-bold">Type: </span>
-                      {p.type}
+                      <span className="font-bold">Category: </span>
+                      {p.category}
                     </p>
                     <p>
                       <span className="font-bold">Description: </span>
-                      {p.desc}
+                      {p.description}
                     </p>
                     <p>
                       <span className="font-bold">Amount: </span>
-                      {p.amount}
+                      {p.quantity}
                     </p>
                     {localEdit && (
                       <a

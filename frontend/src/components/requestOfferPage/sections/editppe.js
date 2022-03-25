@@ -8,11 +8,11 @@ export const EditPPE = ({ ppe, setPPE }) => {
   const addPPE = (e) => {
     e.preventDefault();
     const newObj = {
-      type: type,
-      desc: desc,
-      amount: amount,
+      category: type,
+      description: desc,
+      quantity: amount,
     };
-    ppe.push(newObj);
+    setPPE([...ppe, newObj]);
     setAmount("");
     setDesc("");
   };

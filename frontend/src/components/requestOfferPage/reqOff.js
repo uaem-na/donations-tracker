@@ -4,6 +4,10 @@ import Location from "./sections/location";
 import ViewPPE from "./sections/viewppe";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import Userfront from "@userfront/core";
+
+Userfront.init("8nwrppdb");
+const userData = JSON.parse(JSON.stringify(Userfront.user, null, 2));
 const REPORT_URL = process.env.REACT_APP_REPORT_URL;
 const POST_URL = process.env.REACT_APP_POST_URL;
 
@@ -11,20 +15,6 @@ export const ReqOff = ({ offer, edit }) => {
   const navigate = useNavigate();
   const params = useParams();
   const [ppe, setPPE] = useState([]);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (offer) {
-      axios
-        .post(POST_URL+'/offers', {
-          title: "Hello World!",
-          body: "This is a new post.",
-        })
-        .then((response) => {
-          console.log(response.data);
-        });
-    }
-  };
 
   var typeReq = "";
   var pageDesc = "";
@@ -51,16 +41,64 @@ export const ReqOff = ({ offer, edit }) => {
   const [type, setType] = useState("gloves");
   const [postal, setPostal] = useState("");
 
+  const handleSubmit = (e) => {
+    // TODO: handle put request for editing
+    e.preventDefault();
+    if (offer) {
+      axios
+        .post(POST_URL + "/offers", {
+          userId: userData.username,
+          ppeProfiles: ppe,
+          postalCode: postal,
+        })
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((e) => {
+          console.log(e.response);
+        });
+    } else {
+      axios
+        .post(POST_URL + "/requests", {
+          userId: userData.username,
+          ppeProfiles: ppe,
+          postalCode: postal,
+        })
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((e) => {
+          console.log(e.response);
+        });
+    }
+  };
+
   useEffect(() => {
-    console.log(params.id);
-    // TODO: request if not in edit mode
-    if (!edit) {
-      setPPE([
-        { type: "masks", amount: "100", desc: "Surgical" },
-        { type: "gloves", amount: "100", desc: "Surgical" },
-        { type: "masks", amount: "1000", desc: "KN-95" },
-      ]);
-      setPostal("H3A1G3");
+    if(!edit){
+      console.log(params.id);
+      if (offer) {
+        axios
+          .get(POST_URL + `/offers/${params.id}`)
+          .then((response) => {
+            console.log(response.data);
+            setPPE(response.data.ppeProfiles)
+            setPostal(response.data.postalCode)
+          })
+          .catch((e) => {
+            console.log(e.response);
+          });
+      } else {
+        axios
+          .get(POST_URL + `/requests/${params.id}`)
+          .then((response) => {
+            console.log(response.data);
+            setPPE(response.data.ppeProfiles)
+            setPostal(response.data.postalCode)
+          })
+          .catch((e) => {
+            console.log(e.response);
+          });
+      }
     }
   }, []);
 
