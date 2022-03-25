@@ -37,11 +37,12 @@ function postUser(req, res) {
     const orgName = req.query.orgName;
     if (userOrg.toLowerCase() == 'no' && orgName != undefined && orgName != "") {
         errorMsg += "Error posting user.\nUser does not represent an organization.\n";
-        res.status(400).send(errorMsg);
-        return;
     }
     else if (userOrg.toLowerCase() == 'yes' && (orgName == undefined || orgName == "")) {
         errorMsg += "Error posting user.\nPlease specify an organization.\n"
+    }
+
+    if (errorMsg != "") {
         res.status(400).send(errorMsg);
         return;
     }
