@@ -47,7 +47,7 @@ function App() {
         <Route path='/request/:id' element={<ReqOff offer={false} edit={false}/>}/>
         <Route path='/offer/:id' element={<ReqOff offer={true} edit={false}/>}/>
         <Route path='/new-request' element={<ReqOff offer={false} edit={true}/>}/>
-        <Route path='/new-offer' element={<ReqOff offer={true}/>} edit={true}/>
+        <Route path='/new-offer' element={<ReqOff offer={true} edit={true}/>}/>
         <Route path='/login' element={<NoAuth><Login/></NoAuth>}/>
         <Route path='/register' element={<NoAuth><Register/></NoAuth>}/>
         <Route path='/profile' element={

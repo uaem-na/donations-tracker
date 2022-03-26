@@ -3,12 +3,19 @@ import EditPPE from "./sections/editppe";
 import Location from "./sections/location";
 import ViewPPE from "./sections/viewppe";
 import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
+import Userfront from "@userfront/core";
+
+Userfront.init("8nwrppdb");
+const userData = JSON.parse(JSON.stringify(Userfront.user, null, 2));
+const REPORT_URL = process.env.REACT_APP_REPORT_URL;
+const POST_URL = process.env.REACT_APP_POST_URL;
 
 export const ReqOff = ({ offer, edit }) => {
   const navigate = useNavigate();
   const params = useParams();
   const [ppe, setPPE] = useState([]);
-  
+
   var typeReq = "";
   var pageDesc = "";
   if (edit) {
@@ -24,28 +31,74 @@ export const ReqOff = ({ offer, edit }) => {
   } else {
     if (offer) {
       typeReq = "View a PPE Offer";
-      pageDesc =
-        `You are viewing a PPE offer with ID ${params.id}.`;
+      pageDesc = `You are viewing a PPE offer with ID ${params.id}.`;
     } else {
       typeReq = "View a PPE Request";
-      pageDesc =
-        `You are viewing a PPE request with ID ${params.id}.`;
+      pageDesc = `You are viewing a PPE request with ID ${params.id}.`;
     }
   }
   const [localEdit, setLocalEdit] = useState(edit);
   const [type, setType] = useState("gloves");
   const [postal, setPostal] = useState("");
 
+  const handleSubmit = (e) => {
+    // TODO: handle put request for editing
+    e.preventDefault();
+    if (offer) {
+      axios
+        .post(POST_URL + "/offers", {
+          userId: userData.username,
+          ppeProfiles: ppe,
+          postalCode: postal,
+        })
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((e) => {
+          console.log(e.response);
+        });
+    } else {
+      axios
+        .post(POST_URL + "/requests", {
+          userId: userData.username,
+          ppeProfiles: ppe,
+          postalCode: postal,
+        })
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((e) => {
+          console.log(e.response);
+        });
+    }
+  };
+
   useEffect(() => {
-    console.log(params.id)
-    // TODO: request if not in edit mode
-    if (!edit) {
-      setPPE([
-        { type: "masks", amount: "100", desc: "Surgical" },
-        { type: "gloves", amount: "100", desc: "Surgical" },
-        { type: "masks", amount: "1000", desc: "KN-95" },
-      ]);
-      setPostal("H3A1G3")
+    if(!edit){
+      console.log(params.id);
+      if (offer) {
+        axios
+          .get(POST_URL + `/offers/${params.id}`)
+          .then((response) => {
+            console.log(response.data);
+            setPPE(response.data.ppeProfiles)
+            setPostal(response.data.postalCode)
+          })
+          .catch((e) => {
+            console.log(e.response);
+          });
+      } else {
+        axios
+          .get(POST_URL + `/requests/${params.id}`)
+          .then((response) => {
+            console.log(response.data);
+            setPPE(response.data.ppeProfiles)
+            setPostal(response.data.postalCode)
+          })
+          .catch((e) => {
+            console.log(e.response);
+          });
+      }
     }
   }, []);
 
@@ -53,7 +106,7 @@ export const ReqOff = ({ offer, edit }) => {
     <div>
       <div className="container mx-auto my-4">
         <div>
-          <form action="#" method="POST">
+          <form onSubmit={handleSubmit} method="POST">
             <div className="shadow sm:rounded-md sm:overflow-hidden">
               <div className="px-4 py-5 bg-white space-y-6 sm:p-6">
                 <div className="px-4 sm:px-0">
@@ -64,12 +117,14 @@ export const ReqOff = ({ offer, edit }) => {
                 </div>
               </div>
               <section id="ppe" className="px-4 py-5 bg-white sm:p-6">
-                  <ViewPPE ppe={ppe} localEdit={localEdit} setPPE={setPPE}/>
-                  {localEdit && (
-                    <EditPPE ppe={ppe} setPPE={setPPE}/>
-                  )}
+                <ViewPPE ppe={ppe} localEdit={localEdit} setPPE={setPPE} />
+                {localEdit && <EditPPE ppe={ppe} setPPE={setPPE} />}
               </section>
-              <Location postal={postal} localEdit={localEdit} setPostal={setPostal}/>
+              <Location
+                postal={postal}
+                localEdit={localEdit}
+                setPostal={setPostal}
+              />
               <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
                 {localEdit != edit && (
                   <a
