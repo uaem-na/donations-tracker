@@ -1,14 +1,14 @@
-FROM node:lts-alpine@sha256:6e52e0b3bedfb494496488514d18bee7fd503fd4e44289ea012ad02f8f41a312
+FROM node:alpine
 
 ENV NODE_ENV=production
 
-COPY ["package-lock.json", "npm-shrinkwrap.json", "package.json", "./"]
+WORKDIR /app
 
-WORKDIR /usr/src/app/
+COPY package.json ./
 
-RUN npm install --production --silent && mv node_modules ../
+RUN npm i
 
-COPY . .
+COPY . /app
 
 EXPOSE 7000
 

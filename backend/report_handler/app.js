@@ -1,6 +1,8 @@
 const express = require("express");
 const app = express();
 const reportsRoute = require('./routes/reports');
+const cors = require('cors');
+app.use(cors());
 
 // Connect to local MongoDB database
 const mongoose = require("mongoose");
