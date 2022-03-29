@@ -30,7 +30,7 @@ export const ReqOff = ({ offer, edit }) => {
       pageDesc =
         "This will go into our database and other contributors will be able to request available PPE from you.";
     } else {
-      typeReq = "Submit a PPE Request";
+      typeReq = "Make a PPE Request";
       pageDesc =
         "This will go into our database and other contributors will be able to view your PPE request.";
     }
@@ -44,19 +44,40 @@ export const ReqOff = ({ offer, edit }) => {
     }
   }
   const [localEdit, setLocalEdit] = useState(edit);
-  const [type, setType] = useState("gloves");
   const [postal, setPostal] = useState("");
   const [postalError, setPostalError] = useState("");
   const [ppeDescError, setppeDescError] = useState(false);
   const [ppeNumError, setppeNumError] = useState(false);
+
+  const deleteInDB = () => {
+    if (offer) {
+      axios
+        .delete(POST_URL + `/offers/${params.id}`)
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((e) => {
+          console.log(e.response);
+        });
+    } else {
+      axios
+        .delete(POST_URL + `/requests/${params.id}`)
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((e) => {
+          console.log(e.response);
+        });
+    }
+  };
 
   const handleSubmit = (e) => {
     // TODO: handle put request for editing
     e.preventDefault();
 
     if (!(ppe.length > 0)) {
-      setppeDescError(true)
-      setppeNumError(true)
+      setppeDescError(true);
+      setppeNumError(true);
     } else if (!validPostal(postal)) {
       setPostalError(true);
     } else {
@@ -138,7 +159,16 @@ export const ReqOff = ({ offer, edit }) => {
               </div>
               <section id="ppe" className="px-4 py-5 bg-white sm:p-6">
                 <ViewPPE ppe={ppe} localEdit={localEdit} setPPE={setPPE} />
-                {localEdit && <EditPPE ppeDescError={ppeDescError} ppeNumError={ppeNumError} setppeDescError={setppeDescError} setppeNumError={setppeNumError} ppe={ppe} setPPE={setPPE} />}
+                {localEdit && (
+                  <EditPPE
+                    ppeDescError={ppeDescError}
+                    ppeNumError={ppeNumError}
+                    setppeDescError={setppeDescError}
+                    setppeNumError={setppeNumError}
+                    ppe={ppe}
+                    setPPE={setPPE}
+                  />
+                )}
               </section>
               <Location
                 postal={postal}
@@ -147,11 +177,20 @@ export const ReqOff = ({ offer, edit }) => {
                 postalError={postalError}
               />
               <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
+                {!edit && (
+                  <a
+                    type="submit"
+                    onClick={() => deleteInDB()}
+                    className="cursor-pointer inline-flex justify-center mr-2 py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                  >
+                    Delete
+                  </a>
+                )}
                 {localEdit != edit && (
                   <a
                     type="submit"
                     onClick={() => setLocalEdit(!localEdit)}
-                    className="cursor-pointer inline-flex justify-center mr-2 py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                    className="cursor-pointer inline-flex justify-center mr-2 py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                   >
                     Cancel
                   </a>
