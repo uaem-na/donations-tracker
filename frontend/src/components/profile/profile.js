@@ -47,9 +47,8 @@ export const Profile = () => {
   }, []);
 
   return (
-    <div className="w-full flex">
-      <div className="fixed w-1/2 h-screen bg-gradient-to-tr from-blue-800 to-purple-700 flex items-center justify-center">
-        <div className="w-2/3">
+    <div className="w-full">
+      <div className="flex items-center justify-center pt-28">
           <div className="shadow-4xl bg-white font-semibold text-center rounded-3xl border shadow-lg p-8 pt-16 relative">
             <div className="flex justify-center">
               <div className="shadow-lg rounded-full bg-gradient-to-tr from-[#FFDB10] to-[#FF8510] mx-auto absolute -top-20 w-32 h-32 border-4 border-white flex items-center justify-center">
@@ -78,24 +77,18 @@ export const Profile = () => {
                 email={email}
               />
             )}
-          </div>
         </div>
       </div>
-      <div className="w-1/2"></div>
-      <div className="w-1/2">
-        <div class="flex flex-col bg-white m-auto p-auto">
-          <h1 class="text-4xl text-gray-700 p-10 pb-0 font-bold ml-2">
-            PPE Requests
-          </h1>
-          <PPEOffers offers={offers}/>
-        </div>
-        <div class="flex flex-col bg-white m-auto p-auto">
-          <h1 class="text-4xl text-gray-700 px-10 font-bold ml-2">
-            PPE Offers
-          </h1>
-        </div>
-        <PPERequests requests={requests}/>
+      <div>
+      <div className="p-6">
+      <h1 className="text-3xl p-4 font-semibold">Offers</h1>
+      <PPEOffers offers={offers}/>
       </div>
+      <div className="p-6 pt-0">
+      <h1 className="text-3xl p-4 font-semibold">Requests</h1>
+      <PPERequests requests={requests}/>
+      </div>
+    </div>
     </div>
   );
 };
