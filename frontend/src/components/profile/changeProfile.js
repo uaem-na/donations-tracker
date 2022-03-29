@@ -1,6 +1,6 @@
-export const ChangeProfile = ({name, setName, org, setOrg, email}) => {
+export const ChangeProfile = ({name, setName, org, setOrg, email, handleSubmit}) => {
     return (
-    <form className="text-left text-sm">
+    <form className="text-left text-sm" onSubmit={handleSubmit}>
         <div className="p-2">
           <p className="text-gray-500 select-none font-medium">User information:</p>
           </div>

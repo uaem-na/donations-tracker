@@ -17,6 +17,15 @@ export const Profile = () => {
   const [userName, setUserName] = useState(userData.name);
   const [userOrg, setUserOrg] = useState(userData.data.accountOrganization);
   const [email] = useState(userData.email);
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    Userfront.user.update({
+      name: userName,
+    }).catch((error) => {
+      console.log(error.message);
+    });
+  };
+  
   let profileChangeString;
   if (!showChange) {
     profileChangeString = "Need to edit your profile?";
@@ -45,6 +54,8 @@ export const Profile = () => {
         console.log(e.response);
       });
   }, []);
+
+
 
   return (
     <div className="w-full">
@@ -75,6 +86,7 @@ export const Profile = () => {
                 org={userOrg}
                 setOrg={setUserOrg}
                 email={email}
+                handleSubmit={handleSubmit}
               />
             )}
         </div>
