@@ -1,4 +1,4 @@
-export const Location = ({postal, setPostal, localEdit}) => {
+export const Location = ({postal, setPostal, localEdit, postalError}) => {
     return(
         <section id="location" className="px-4 py-5 bg-white sm:p-6">
                 {localEdit ? (
@@ -52,11 +52,13 @@ export const Location = ({postal, setPostal, localEdit}) => {
                           id="postal-code"
                           value={postal}
                           onChange={(e) =>
-                            setPostal(e.target.value.toUpperCase())
+                            setPostal(e.target.value.toUpperCase().replace(/[^a-z0-9]/gi,'').substring(0,6))
                           }
+                          placeholder="e.g. H3A1G3"
                           autoComplete="postal-code"
-                          className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                          className={`mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md `+ (postalError && `border-red-500 bg-red-200`)}
                         />
+                        {postalError && (<p className="text-sm text-red-500 p-1">Invalid postal code.</p>)}
                       </div>
                       <div className="col-span-6">
                         <p className="text-sm text-black">
