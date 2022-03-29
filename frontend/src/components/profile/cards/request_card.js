@@ -21,7 +21,7 @@ export const RequestCard = ({
   }, []);
   return (
     <Link className="cursor" to={`/request/${id}`}>
-      <div className="inline-block px-3 font-semibold">
+      <div className="pb-4 inline-block px-3 font-semibold">
         <div className="p-6 w-64 h-80 max-w-xs overflow-hidden rounded-lg shadow-md bg-white hover:shadow-xl transition-shadow duration-300 ease-in-out">
         <h2
             className={`text-xl text-gray-700 mb-2 ${statusColors[statusID]}`}

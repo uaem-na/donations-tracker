@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import OfferCard from "./profile/cards/offer_card";
 import RequestCard from "./profile/cards/request_card";
+import PPEOffers from "./profile/cards/ppe_offers";
+import PPERequests from "./profile/cards/ppe_requests";
 const POST_URL = process.env.REACT_APP_POST_URL;
 
 export const Dashboard = () => {
@@ -13,7 +15,7 @@ export const Dashboard = () => {
     axios
       .get(POST_URL + `/offers`)
       .then((response) => {
-        console.log(response.data);
+        // console.log(response.data);
         setOffers(response.data);
       })
       .catch((e) => {
@@ -22,7 +24,7 @@ export const Dashboard = () => {
     axios
       .get(POST_URL + `/requests`)
       .then((response) => {
-        console.log(response.data);
+        // console.log(response.data);
         setRequests(response.data);
       })
       .catch((e) => {
@@ -33,15 +35,12 @@ export const Dashboard = () => {
   return (
     <div>
       <div className="p-6">
-      <h1 className="text-3xl p-4 font-semibold">Offers</h1>{offers.map((ppe) => (
-        <OfferCard id={ppe._id} postalCode={ppe.postalCode} ppeProfiles={ppe.ppeProfiles} createdAt={ppe.createdAt}/>
-      ))}
+      <h1 className="text-3xl p-4 font-semibold">Offers</h1>
+      <PPEOffers offers={offers}/>
       </div>
       <div className="p-6 pt-0">
       <h1 className="text-3xl p-4 font-semibold">Requests</h1>
-      {requests.map((ppe) => (
-        <RequestCard status={ppe.status} id={ppe._id} postalCode={ppe.postalCode} ppeProfiles={ppe.ppeProfiles} createdAt={ppe.createdAt}/>
-      ))}
+      <PPERequests requests={requests}/>
       </div>
     </div>
   );

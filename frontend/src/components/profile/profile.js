@@ -1,12 +1,17 @@
 import { useState, useEffect } from "react";
 import { ChangeProfile } from "./changeProfile";
-import PPERequests from "./cards/ppe_requests";
-import PPEOffers from "./cards/ppe_offers";
 import Userfront from "@userfront/core";
+import { Link } from "react-router-dom";
+import axios from "axios";
+import PPEOffers from "./cards/ppe_offers";
+import PPERequests from "./cards/ppe_requests";
+const POST_URL = process.env.REACT_APP_POST_URL;
 
 Userfront.init("8nwrppdb");
 
 export const Profile = () => {
+  const [offers, setOffers] = useState([]);
+  const [requests, setRequests] = useState([]);
   const userData = JSON.parse(JSON.stringify(Userfront.user, null, 2));
   const [showChange, setChange] = useState(false);
   const [userName, setUserName] = useState(userData.name);
@@ -18,6 +23,28 @@ export const Profile = () => {
   } else {
     profileChangeString = "Close changes.";
   }
+
+  useEffect(() => {
+    // console.log(userData)
+    axios
+      .get(POST_URL + `/offers/user/${userData.username}`)
+      .then((response) => {
+        console.log(response.data);
+        setOffers(response.data);
+      })
+      .catch((e) => {
+        console.log(e.response);
+      });
+    axios
+      .get(POST_URL + `/requests/user/${userData.username}`)
+      .then((response) => {
+        console.log(response.data);
+        setRequests(response.data);
+      })
+      .catch((e) => {
+        console.log(e.response);
+      });
+  }, []);
 
   return (
     <div className="w-full flex">
@@ -60,14 +87,14 @@ export const Profile = () => {
           <h1 class="text-4xl text-gray-700 p-10 pb-0 font-bold ml-2">
             PPE Requests
           </h1>
+          <PPEOffers offers={offers}/>
         </div>
-        <PPERequests />
         <div class="flex flex-col bg-white m-auto p-auto">
           <h1 class="text-4xl text-gray-700 px-10 font-bold ml-2">
             PPE Offers
           </h1>
         </div>
-        <PPEOffers />
+        <PPERequests requests={requests}/>
       </div>
     </div>
   );
