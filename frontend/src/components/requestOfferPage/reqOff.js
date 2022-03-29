@@ -5,6 +5,7 @@ import ViewPPE from "./sections/viewppe";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import Userfront from "@userfront/core";
+import { set } from "date-fns";
 
 Userfront.init("8nwrppdb");
 const userData = JSON.parse(JSON.stringify(Userfront.user, null, 2));
@@ -55,6 +56,7 @@ export const ReqOff = ({ offer, edit }) => {
         .delete(POST_URL + `/offers/${params.id}`)
         .then((response) => {
           console.log(response.data);
+          navigate('/dashboard')
         })
         .catch((e) => {
           console.log(e.response);
@@ -64,6 +66,7 @@ export const ReqOff = ({ offer, edit }) => {
         .delete(POST_URL + `/requests/${params.id}`)
         .then((response) => {
           console.log(response.data);
+          navigate('/dashboard')
         })
         .catch((e) => {
           console.log(e.response);
@@ -93,6 +96,8 @@ export const ReqOff = ({ offer, edit }) => {
           })
           .then((response) => {
             console.log(response.data);
+            setLocalEdit(false);
+            navigate(`/request/${response.data._id}`)
           })
           .catch((e) => {
             console.log(e.response);
@@ -106,6 +111,8 @@ export const ReqOff = ({ offer, edit }) => {
           })
           .then((response) => {
             console.log(response.data);
+            setLocalEdit(false);
+            navigate(`/request/${response.data._id}`)
           })
           .catch((e) => {
             console.log(e.response);
