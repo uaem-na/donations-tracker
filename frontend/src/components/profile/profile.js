@@ -1,7 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, cloneElement } from "react";
 import { ChangeProfile } from "./changeProfile";
 import Userfront from "@userfront/core";
-import { Link } from "react-router-dom";
 import axios from "axios";
 import PPEOffers from "./cards/ppe_offers";
 import PPERequests from "./cards/ppe_requests";
@@ -24,6 +23,7 @@ export const Profile = () => {
     }).catch((error) => {
       console.log(error.message);
     });
+    setChange(!showChange)
   };
   
   let profileChangeString;
