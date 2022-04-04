@@ -1,42 +1,50 @@
 import Userfront from "@userfront/core";
-import ResetForm from "./resetForm";
+// import Userfront from "@userfront/react";
 
 Userfront.init("8nwrppdb");
 
-export const ChangeProfile = ({name, setName, org, setOrg, email, handleSubmit}) => {
-    const sendResetLink = () => {
-      Userfront.sendResetLink(email).then((res) => {console.log(res)});
-    }
-    return (
+// const PasswordResetForm = Userfront.build({
+//   toolId: "mraonn"
+// })
+
+export const ChangeProfile = ({ name, setName, org, setOrg, email, handleSubmit }) => {
+  const sendResetLink = async () => {
+    const res = await Userfront.sendResetLink(email)
+    console.log(res)
+    // Userfront.resetPassword({
+    //   password: '65659898',
+    // }).then((res) => {console.log(res + " reset link has been sent.")});
+  }
+  return (
     <form className="text-left text-sm" onSubmit={handleSubmit}>
-        <div className="p-2">
-          <p className="text-gray-500 select-none font-medium">User information:</p>
-          </div>
+      <div className="p-2">
+        <p className="text-gray-500 select-none font-medium">User information:</p>
+      </div>
       <div className="flex items-center border-2 py-2 px-3 rounded-2xl mb-2">
-      <label htmlFor="default" className="text-gray-500 select-none font-medium ">Name</label>
-            <input
-              className="pl-2 outline-none border-none"
-              type="text"
-              name=""
-              id=""
-              onChange={(e) => setName(e.target.value)}
-              defaultValue={`${name}`}
-            />
-          </div>
-          <div className="flex items-center border-2 py-2 px-3 rounded-2xl">
-          <label htmlFor="default" className="text-gray-500 select-none font-medium ">Organization</label>
-            <input
-              className="pl-2 outline-none border-none"
-              type="text"
-              name=""
-              id=""
-              onChange={(e) => setOrg(e.target.value)}
-              defaultValue={`${org}`}
-            />
-          </div>
-          <div className="p-2">
-          <p className="text-gray-400 select-none font-medium text-sm">Please contact an admin to change your email.</p>
-          </div>
+        <label htmlFor="default" className="text-gray-500 select-none font-medium ">Name</label>
+        <input
+          className="pl-2 outline-none border-none"
+          type="text"
+          name=""
+          id=""
+          onChange={(e) => setName(e.target.value)}
+          defaultValue={`${name}`}
+        />
+      </div>
+      <div className="flex items-center border-2 py-2 px-3 rounded-2xl">
+        <label htmlFor="default" className="text-gray-500 select-none font-medium ">Organization</label>
+        <input
+          className="pl-2 outline-none border-none"
+          type="text"
+          name=""
+          id=""
+          onChange={(e) => setOrg(e.target.value)}
+          defaultValue={`${org}`}
+        />
+      </div>
+      <div className="p-2">
+        <p className="text-gray-400 select-none font-medium text-sm">Please contact an admin to change your email.</p>
+      </div>
       <div className="flex items-center border-2 py-2 px-3 rounded-2xl">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -58,12 +66,18 @@ export const ChangeProfile = ({name, setName, org, setOrg, email, handleSubmit})
           name=""
           id=""
           value={`${email}`}
-          disabled/>
+          disabled />
       </div>
       <div className="p-2">
         <p className="text-gray-500 select-none font-medium">Set a new password:</p>
       </div>
-      <ResetForm/>
+      <button
+        onClick={sendResetLink}
+        type='button'
+        className="block w-full bg-indigo-600 mt-4 py-2 rounded-2xl text-white font-semibold mb-2"
+      >
+        Send password reset link
+      </button>
       <button
         type="submit"
         className="block w-full bg-indigo-600 mt-4 py-2 rounded-2xl text-white font-semibold mb-2"
@@ -71,7 +85,7 @@ export const ChangeProfile = ({name, setName, org, setOrg, email, handleSubmit})
         Save Changes
       </button>
     </form>
-    )
+  )
 }
 
 export default ChangeProfile

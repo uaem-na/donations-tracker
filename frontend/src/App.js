@@ -1,5 +1,6 @@
 import './assets/style/Main.css';
 import Profile from './components/profile/profile';
+import Reset from './components/profile/reset';
 import {
   BrowserRouter as Router,
   Routes,
@@ -44,6 +45,7 @@ function App() {
       <Routes>
         <Route path='/' element={<Landing/>}/>
         <Route path='/dashboard' element={<Dashboard/>}/>
+        <Route path='/reset' element={<Reset/>}/>
         <Route path='/request/:id' element={<ReqOff offer={false} edit={false}/>}/>
         <Route path='/offer/:id' element={<ReqOff offer={true} edit={false}/>}/>
         <Route path='/new-request' element={<ReqOff offer={false} edit={true}/>}/>

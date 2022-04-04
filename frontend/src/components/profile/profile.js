@@ -25,6 +25,14 @@ export const Profile = () => {
     });
     setChange(!showChange)
   };
+
+  const sendResetLink = async () => {
+    const res = await Userfront.sendResetLink(email)
+    console.log(res + 'happy')
+    // Userfront.resetPassword({
+    //   password: '65659898',
+    // }).then((res) => {console.log(res + " reset link has been sent.")});
+  }
   
   let profileChangeString;
   if (!showChange) {
