@@ -9,7 +9,7 @@ mongoose.connect('mongodb://mongodb:27017/users', { useUnifiedTopology: true, us
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'CONNECTION ERROR'));
-db.once('open', () => console.log('database connected – running on port 5000'));
+db.once('open', () => console.log('database connected – running on port 4001'));
 
 app.use('/users', usersRoute);
 
