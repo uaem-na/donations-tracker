@@ -11,7 +11,7 @@ mongoose.connect('mongodb://mongodb:27017/posts', {useNewUrlParser: true});
 
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'CONNECTION ERROR'));
-db.once('open', () => { console.log('Connected  – running on port 4002'); });
+db.once('open', () => { console.log('Connected  – running on port 4001'); });
 
 app.use(express.json());
 app.use('/offers', offersRoute);

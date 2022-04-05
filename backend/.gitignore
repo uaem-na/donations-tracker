@@ -3,3 +3,4 @@ data/
 **/.vscode
 package-lock.json
 npm-shrinkwrap.json
+**data/

@@ -1,0 +1,50 @@
+version: '3.4'
+
+services:
+  userhandler:
+    build:
+      context: ./backend/account_manager
+      dockerfile: ./Dockerfile
+    environment:
+      NODE_ENV: production
+    ports:
+      - 4000:5000
+    volumes:
+      - ./backend/account_manager:/usr/src/app/
+  posthandler:
+    build:
+      context: ./backend/post_handler
+      dockerfile: ./Dockerfile
+    environment:
+      NODE_ENV: production
+    ports:
+      - 4001:7000
+    volumes:
+      - ./backend/post_handler:/usr/src/app/
+  reporthandler:
+    build:
+      context: ./backend/report_handler
+      dockerfile: ./Dockerfile
+    environment:
+      NODE_ENV: production
+    ports:
+      - 4002:3000
+    volumes:
+      - ./backend/report_handler:/usr/src/app/
+  reactapp:
+    image: app:react
+    build:
+      context: ./frontend
+      dockerfile: ./Dockerfile
+    environment:
+      NODE_ENV: production
+    ports:
+    - 3000:3000
+    volumes:
+    - ./frontend:/app
+  mongodb:
+    image: mongo:latest
+    ports:
+      - '27017:27017'
+    volumes:
+      - './data/db:/data/db'
