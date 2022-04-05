@@ -1,16 +1,13 @@
 FROM node:lts-alpine@sha256:99026ffbfde86092cdcc353f2f879f8d331e1c04c04e7e37cf74961ffe4d156d
 
-ENV NODE_ENV=production
-
 WORKDIR /app
 
-COPY package.json package-lock.json ./
+ENV PATH="./node_modules/.bin:$PATH"
 
-RUN npm ci --only=production
+COPY . .
 
-COPY . /app
-
-EXPOSE 5000
+RUN npm run build
 
 CMD ["npm", "start"]
 
+# EXPOSE 3000

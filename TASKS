@@ -11,4 +11,6 @@ Edgar:
 - authentication
 
 Lucas:
-- finish up backend
+- Containerize frontend
+- Set up Nginx-proxy
+- Shift to frontend/map/homepage
