@@ -1,4 +1,5 @@
 import Userfront from "@userfront/core";
+import { useNavigate } from "react-router-dom";
 // import Userfront from "@userfront/react";
 
 Userfront.init("8nwrppdb");
@@ -8,9 +9,11 @@ Userfront.init("8nwrppdb");
 // })
 
 export const ChangeProfile = ({ name, setName, org, setOrg, email, handleSubmit }) => {
+  const navigate = useNavigate();
   const sendResetLink = async () => {
     const res = await Userfront.sendResetLink(email)
-    console.log(res)
+    //use hardcoded substring for now, will change to email reset link later when hosted.
+    navigate(res.result.url.substring(21))
     // Userfront.resetPassword({
     //   password: '65659898',
     // }).then((res) => {console.log(res + " reset link has been sent.")});

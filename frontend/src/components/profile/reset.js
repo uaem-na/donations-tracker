@@ -72,7 +72,7 @@ export const Reset = () => {
                         <label htmlFor="default" className="text-gray-500 select-none font-medium ">Password</label>
                         <input
                             className="pl-2 outline-none border-none"
-                            type="text"
+                            type="password"
                             name=""
                             id=""
                             onChange={(e) => setPassword(e.target.value)}
