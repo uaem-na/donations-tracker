@@ -5,11 +5,18 @@ import ViewPPE from "./sections/viewppe";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import Userfront from "@userfront/core";
+import { set } from "date-fns";
 
 Userfront.init("8nwrppdb");
 const userData = JSON.parse(JSON.stringify(Userfront.user, null, 2));
 const REPORT_URL = process.env.REACT_APP_REPORT_URL;
 const POST_URL = process.env.REACT_APP_POST_URL;
+
+function validPostal(value) {
+  var regex =
+    /^[ABCEGHJ-NPRSTVXY]\d[ABCEGHJ-NPRSTV-Z][ -]?\d[ABCEGHJ-NPRSTV-Z]\d$/i;
+  return regex.exec(value);
+}
 
 export const ReqOff = ({ offer, edit }) => {
   const navigate = useNavigate();
@@ -24,7 +31,7 @@ export const ReqOff = ({ offer, edit }) => {
       pageDesc =
         "This will go into our database and other contributors will be able to request available PPE from you.";
     } else {
-      typeReq = "Submit a PPE Request";
+      typeReq = "Make a PPE Request";
       pageDesc =
         "This will go into our database and other contributors will be able to view your PPE request.";
     }
@@ -38,34 +45,28 @@ export const ReqOff = ({ offer, edit }) => {
     }
   }
   const [localEdit, setLocalEdit] = useState(edit);
-  const [type, setType] = useState("gloves");
   const [postal, setPostal] = useState("");
+  const [postalError, setPostalError] = useState("");
+  const [ppeDescError, setppeDescError] = useState(false);
+  const [ppeNumError, setppeNumError] = useState(false);
 
-  const handleSubmit = (e) => {
-    // TODO: handle put request for editing
-    e.preventDefault();
+  const deleteInDB = () => {
     if (offer) {
       axios
-        .post(POST_URL + "/offers", {
-          userId: userData.username,
-          ppeProfiles: ppe,
-          postalCode: postal,
-        })
+        .delete(POST_URL + `/offers/${params.id}`)
         .then((response) => {
           console.log(response.data);
+          navigate('/dashboard')
         })
         .catch((e) => {
           console.log(e.response);
         });
     } else {
       axios
-        .post(POST_URL + "/requests", {
-          userId: userData.username,
-          ppeProfiles: ppe,
-          postalCode: postal,
-        })
+        .delete(POST_URL + `/requests/${params.id}`)
         .then((response) => {
           console.log(response.data);
+          navigate('/dashboard')
         })
         .catch((e) => {
           console.log(e.response);
@@ -73,16 +74,63 @@ export const ReqOff = ({ offer, edit }) => {
     }
   };
 
+  const handleSubmit = (e) => {
+    // TODO: handle put request for editing
+    e.preventDefault();
+
+    if (!(ppe.length > 0)) {
+      setppeDescError(true);
+      setppeNumError(true);
+    } else if (!validPostal(postal)) {
+      setPostalError(true);
+    } else {
+      setPostalError(false);
+      setppeNumError(false);
+      setppeDescError(false);
+      if (offer) {
+        axios
+          .post(POST_URL + "/offers", {
+            userId: userData.username,
+            ppeProfiles: ppe,
+            postalCode: postal,
+          })
+          .then((response) => {
+            console.log(response.data);
+            setLocalEdit(false);
+            navigate(`/request/${response.data._id}`)
+          })
+          .catch((e) => {
+            console.log(e.response);
+          });
+      } else {
+        axios
+          .post(POST_URL + "/requests", {
+            userId: userData.username,
+            ppeProfiles: ppe,
+            postalCode: postal,
+          })
+          .then((response) => {
+            console.log(response.data);
+            setLocalEdit(false);
+            navigate(`/request/${response.data._id}`)
+          })
+          .catch((e) => {
+            console.log(e.response);
+          });
+      }
+    }
+  };
+
   useEffect(() => {
-    if(!edit){
+    if (!edit) {
       console.log(params.id);
       if (offer) {
         axios
           .get(POST_URL + `/offers/${params.id}`)
           .then((response) => {
             console.log(response.data);
-            setPPE(response.data.ppeProfiles)
-            setPostal(response.data.postalCode)
+            setPPE(response.data.ppeProfiles);
+            setPostal(response.data.postalCode);
           })
           .catch((e) => {
             console.log(e.response);
@@ -92,8 +140,8 @@ export const ReqOff = ({ offer, edit }) => {
           .get(POST_URL + `/requests/${params.id}`)
           .then((response) => {
             console.log(response.data);
-            setPPE(response.data.ppeProfiles)
-            setPostal(response.data.postalCode)
+            setPPE(response.data.ppeProfiles);
+            setPostal(response.data.postalCode);
           })
           .catch((e) => {
             console.log(e.response);
@@ -118,19 +166,38 @@ export const ReqOff = ({ offer, edit }) => {
               </div>
               <section id="ppe" className="px-4 py-5 bg-white sm:p-6">
                 <ViewPPE ppe={ppe} localEdit={localEdit} setPPE={setPPE} />
-                {localEdit && <EditPPE ppe={ppe} setPPE={setPPE} />}
+                {localEdit && (
+                  <EditPPE
+                    ppeDescError={ppeDescError}
+                    ppeNumError={ppeNumError}
+                    setppeDescError={setppeDescError}
+                    setppeNumError={setppeNumError}
+                    ppe={ppe}
+                    setPPE={setPPE}
+                  />
+                )}
               </section>
               <Location
                 postal={postal}
                 localEdit={localEdit}
                 setPostal={setPostal}
+                postalError={postalError}
               />
               <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
+                {!edit && (
+                  <a
+                    type="submit"
+                    onClick={() => deleteInDB()}
+                    className="cursor-pointer inline-flex justify-center mr-2 py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                  >
+                    Delete
+                  </a>
+                )}
                 {localEdit != edit && (
                   <a
                     type="submit"
                     onClick={() => setLocalEdit(!localEdit)}
-                    className="cursor-pointer inline-flex justify-center mr-2 py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                    className="cursor-pointer inline-flex justify-center mr-2 py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                   >
                     Cancel
                   </a>

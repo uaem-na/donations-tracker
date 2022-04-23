@@ -12,6 +12,8 @@ Userfront.init("8nwrppdb");
 const navigation = [
   { name: "Home", href: "/", current: false },
   { name: "Dashboard", href: "/dashboard", current: false },
+  { name: "Make Request", href: "/new-request", current: false },
+  { name: "New Offer", href: "/new-offer", current: false },
 ];
 
 function classNames(...classes) {
