@@ -1,4 +1,4 @@
-FROM node:lts-alpine@sha256:99026ffbfde86092cdcc353f2f879f8d331e1c04c04e7e37cf74961ffe4d156d
+FROM node:lts-alpine
 
 WORKDIR /app
 
@@ -6,6 +6,7 @@ ENV PATH="./node_modules/.bin:$PATH"
 
 COPY . .
 
+RUN npm ci --only=production
 RUN npm run build
 
 CMD ["npm", "start"]

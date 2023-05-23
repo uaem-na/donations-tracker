@@ -1,6 +1,5 @@
 data/
 **/node_modules/
 **/.vscode
-package-lock.json
 npm-shrinkwrap.json
 **data/
