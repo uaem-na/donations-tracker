@@ -6,7 +6,7 @@ ENV PATH="./node_modules/.bin:$PATH"
 
 COPY . .
 
-RUN npm ci --only=production
+RUN npm ci --omit=dev
 RUN npm run build
 
 CMD ["npm", "start"]
