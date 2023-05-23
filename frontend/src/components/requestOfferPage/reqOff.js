@@ -9,8 +9,8 @@ import { set } from "date-fns";
 
 Userfront.init("8nwrppdb");
 const userData = JSON.parse(JSON.stringify(Userfront.user, null, 2));
-const REPORT_URL = process.env.REACT_APP_REPORT_URL;
-const POST_URL = process.env.REACT_APP_POST_URL;
+const REPORT_URL = process.env.REACT_APP_BACKEND_URL;
+const POST_URL = process.env.REACT_APP_BACKEND_URL;
 
 function validPostal(value) {
   var regex =
@@ -56,7 +56,7 @@ export const ReqOff = ({ offer, edit }) => {
         .delete(POST_URL + `/offers/${params.id}`)
         .then((response) => {
           console.log(response.data);
-          navigate('/dashboard')
+          navigate("/dashboard");
         })
         .catch((e) => {
           console.log(e.response);
@@ -66,7 +66,7 @@ export const ReqOff = ({ offer, edit }) => {
         .delete(POST_URL + `/requests/${params.id}`)
         .then((response) => {
           console.log(response.data);
-          navigate('/dashboard')
+          navigate("/dashboard");
         })
         .catch((e) => {
           console.log(e.response);
@@ -97,7 +97,7 @@ export const ReqOff = ({ offer, edit }) => {
           .then((response) => {
             console.log(response.data);
             setLocalEdit(false);
-            navigate(`/request/${response.data._id}`)
+            navigate(`/request/${response.data._id}`);
           })
           .catch((e) => {
             console.log(e.response);
@@ -112,7 +112,7 @@ export const ReqOff = ({ offer, edit }) => {
           .then((response) => {
             console.log(response.data);
             setLocalEdit(false);
-            navigate(`/request/${response.data._id}`)
+            navigate(`/request/${response.data._id}`);
           })
           .catch((e) => {
             console.log(e.response);

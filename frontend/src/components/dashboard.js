@@ -5,7 +5,7 @@ import OfferCard from "./profile/cards/offer_card";
 import RequestCard from "./profile/cards/request_card";
 import PPEOffers from "./profile/cards/ppe_offers";
 import PPERequests from "./profile/cards/ppe_requests";
-const POST_URL = process.env.REACT_APP_POST_URL;
+const POST_URL = process.env.REACT_APP_BACKEND_URL;
 
 export const Dashboard = () => {
   const [offers, setOffers] = useState([]);
@@ -35,12 +35,12 @@ export const Dashboard = () => {
   return (
     <div>
       <div className="p-6">
-      <h1 className="text-3xl p-4 font-semibold">Offers</h1>
-      <PPEOffers offers={offers}/>
+        <h1 className="text-3xl p-4 font-semibold">Offers</h1>
+        <PPEOffers offers={offers} />
       </div>
       <div className="p-6 pt-0">
-      <h1 className="text-3xl p-4 font-semibold">Requests</h1>
-      <PPERequests requests={requests}/>
+        <h1 className="text-3xl p-4 font-semibold">Requests</h1>
+        <PPERequests requests={requests} />
       </div>
     </div>
   );
