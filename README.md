@@ -3,7 +3,6 @@
 - [UAEM Donations Tracker Application for McGill UAEM chapter](#uaem-donations-tracker-application-for-mcgill-uaem-chapter)
   - [Project description](#project-description)
   - [Contributors](#contributors)
-    - [Developers](#developers)
     - [Coordinators](#coordinators)
   - [Setup](#setup)
     - [Running docker compose](#running-docker-compose)
@@ -14,13 +13,11 @@ General-purpose distribution platform developed for the McGill chapter of the Un
 
 ## Contributors 
 
-### Developers
+[![](https://contrib.rocks/image?repo=uaem-na/donations-tracker)](https://github.com/uaem-na/donations-tracker/graphs/contributors)
 
-**Frontend**: Lucas Nelson, Edgar Chang, Tristan Stevens, Gaby Le Bideau
+Original repository: https://github.com/Lucas44/mcgill-uaem-website
 
-**Backend**: Zhekai Jiang, Lucas Nelson
-
-[![](https://contrib.rocks/image?repo=Lucas44/mcgill-uaem-website)](https://github.com/Lucas44/mcgill-uaem-website/graphs/contributors)
+Initial contributors: Lucas Nelson, Edgar Chang, Tristan Stevens, Gaby Le Bideau, Zhekai Jiang
 
 ### Coordinators
 
