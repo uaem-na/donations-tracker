@@ -6,6 +6,9 @@
     - [Coordinators](#coordinators)
   - [Setup](#setup)
     - [Running docker compose](#running-docker-compose)
+    - [Running backend and frontend separately](#running-backend-and-frontend-separately)
+      - [Backend](#backend)
+      - [frontend](#frontend)
 
 ## Project description
 
@@ -28,3 +31,29 @@ Yeji Lori Song
 ### Running docker compose
 
 `docker-compose build && docker-compose up -d`
+
+### Running backend and frontend separately
+
+#### Backend
+
+In the backend folder, install dependencies. 
+
+`npm run install`
+
+Then setup the `.env` file according to `.env.sample`.
+
+Run the project.
+
+`npm run start`
+
+#### frontend
+
+In the frontend folder, install npm dependencies.
+
+`npm run install`
+
+`.env` file is only used for local development. This file is added to `.dockerignore`.
+
+Run the project.
+
+`npm run start`
