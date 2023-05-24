@@ -30,4 +30,4 @@ Yeji Lori Song
 
 ### Running docker compose
 
-`docker-compose build --build-arg REACT_APP_BACKEND_URL="http://localhost:8081" && docker-compose up -d`
+`docker-compose build && docker-compose up -d`
