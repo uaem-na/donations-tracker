@@ -15,6 +15,14 @@ General-purpose distribution platform developed for the McGill chapter of the Un
 
 ## Setup
 
+If you want to run the whole project using docker-compose, then you only need to set up the `.env` file in the top-level of the project.
+
+If you want to run backend or frontend separately, you need to verify/configure `.env` file in each directory as well.
+
+To configure the `.env` file use `.env.sample` as the template. All the keys in the sample files must be supplied for correct configuration.
+
+NOTES: majority of these variables are build-time variables, do not confuse them with runtime variables
+
 ### Running docker compose
 
 `docker-compose build && docker-compose up -d`
