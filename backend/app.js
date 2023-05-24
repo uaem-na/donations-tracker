@@ -1,11 +1,15 @@
 require("dotenv").config();
 
-const port = process.env.PORT || 8081;
 const atlasConnectionString = process.env.ATLAS_CONNECTION;
 if (!atlasConnectionString) {
   console.error("Missing ATLAS_CONNECTION environment variable");
   process.exit();
 }
+
+const port = process.env.PORT || 8081;
+const corsOptions = {
+  origin: process.env.CLIENT_ORIGIN || "http://localhost:8080",
+};
 
 const express = require("express");
 const cors = require("cors");
@@ -23,7 +27,7 @@ const usersRouter = require("./routes/users");
 const app = express();
 
 app.use(logger("dev"));
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -46,7 +50,7 @@ connection.once("open", () => {
 });
 
 app.listen(port, () => {
-  console.log(`Listening on port ${port}`);
+  console.log(`Backend is listening on port ${port}`);
 });
 
 module.exports = app;
