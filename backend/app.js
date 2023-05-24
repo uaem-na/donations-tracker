@@ -6,7 +6,7 @@ if (!atlasConnectionString) {
   process.exit();
 }
 
-const port = process.env.PORT || 8081;
+const port = process.env.NODE_DOCKER_PORT || 8081;
 const corsOptions = {
   origin: process.env.CLIENT_ORIGIN || "http://localhost:8080",
 };
