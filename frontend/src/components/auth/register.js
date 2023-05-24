@@ -1,6 +1,5 @@
 import Userfront from "@userfront/core";
 import { useState } from "react";
-import { Link } from "react-router-dom";
 
 Userfront.init("8nwrppdb");
 
@@ -67,7 +66,10 @@ export const Register = ({ handleReg }) => {
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="rounded-md shadow-sm space-y-2">
             <div>
-              <label className="ml-1 text-gray-700 font-bold text-sm" htmlFor="email-address">
+              <label
+                className="ml-1 text-gray-700 font-bold text-sm"
+                htmlFor="email-address"
+              >
                 Full Name
               </label>
               <input
@@ -82,7 +84,10 @@ export const Register = ({ handleReg }) => {
               />
             </div>
             <div>
-              <label className="ml-1 text-gray-700 font-bold text-sm" htmlFor="email-address">
+              <label
+                className="ml-1 text-gray-700 font-bold text-sm"
+                htmlFor="email-address"
+              >
                 Organization
               </label>
               <input
@@ -97,7 +102,10 @@ export const Register = ({ handleReg }) => {
               />
             </div>
             <div>
-              <label className="ml-1 text-gray-700 font-bold text-sm" htmlFor="email-address">
+              <label
+                className="ml-1 text-gray-700 font-bold text-sm"
+                htmlFor="email-address"
+              >
                 Email address
               </label>
               <input
@@ -112,7 +120,10 @@ export const Register = ({ handleReg }) => {
               />
             </div>
             <div>
-              <label className="ml-1 text-gray-700 font-bold text-sm" htmlFor="password">
+              <label
+                className="ml-1 text-gray-700 font-bold text-sm"
+                htmlFor="password"
+              >
                 Password
               </label>
               <input

@@ -1,8 +1,5 @@
-import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import OfferCard from "./profile/cards/offer_card";
-import RequestCard from "./profile/cards/request_card";
 import PPEOffers from "./profile/cards/ppe_offers";
 import PPERequests from "./profile/cards/ppe_requests";
 const POST_URL = process.env.REACT_APP_BACKEND_URL;

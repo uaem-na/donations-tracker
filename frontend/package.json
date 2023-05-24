@@ -20,7 +20,7 @@
   },
   "scripts": {
     "prepare": "cd .. && husky install frontend/.husky",
-    "start": "npm run watch:css && react-scripts start",
+    "start": "set port=8080 && npm run watch:css && react-scripts start",
     "watch:css": "npx tailwindcss -i src/assets/style/index.css -o src/assets/style/index-compiled.css",
     "build": "npm run watch:css && react-scripts build"
   },

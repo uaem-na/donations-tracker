@@ -1,4 +1,4 @@
-import { useState, useEffect, cloneElement } from "react";
+import { useState, useEffect } from "react";
 import { ChangeProfile } from "./changeProfile";
 import Userfront from "@userfront/core";
 import axios from "axios";

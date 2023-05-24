@@ -31,7 +31,7 @@ export const Login = () => {
     <div className="min-h-full flex flex-grow items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="shadow sm:rounded-md p-8 max-w-md w-full space-y-8">
         <div>
-        <h1 className="text-5xl font-bold block text-center">UAEM</h1>
+          <h1 className="text-5xl font-bold block text-center">UAEM</h1>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
             Sign in to your account
           </h2>
@@ -73,7 +73,12 @@ export const Login = () => {
             </div>
           </div>
           <div>
-          <Link className="ml-1 text-gray-600 font-bold text-sm" to='/register'>Need to register?</Link>
+            <Link
+              className="ml-1 text-gray-600 font-bold text-sm"
+              to="/register"
+            >
+              Need to register?
+            </Link>
           </div>
           <div>
             <button

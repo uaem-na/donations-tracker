@@ -5,11 +5,9 @@ import ViewPPE from "./sections/viewppe";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import Userfront from "@userfront/core";
-import { set } from "date-fns";
 
 Userfront.init("8nwrppdb");
 const userData = JSON.parse(JSON.stringify(Userfront.user, null, 2));
-const REPORT_URL = process.env.REACT_APP_BACKEND_URL;
 const POST_URL = process.env.REACT_APP_BACKEND_URL;
 
 function validPostal(value) {
@@ -185,22 +183,22 @@ export const ReqOff = ({ offer, edit }) => {
               />
               <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
                 {!edit && (
-                  <a
-                    type="submit"
+                  <button
+                    type="button"
                     onClick={() => deleteInDB()}
                     className="cursor-pointer inline-flex justify-center mr-2 py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                   >
                     Delete
-                  </a>
+                  </button>
                 )}
-                {localEdit != edit && (
-                  <a
-                    type="submit"
+                {localEdit !== edit && (
+                  <button
+                    type="button"
                     onClick={() => setLocalEdit(!localEdit)}
                     className="cursor-pointer inline-flex justify-center mr-2 py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                   >
                     Cancel
-                  </a>
+                  </button>
                 )}
                 {localEdit ? (
                   <button
@@ -210,13 +208,13 @@ export const ReqOff = ({ offer, edit }) => {
                     Submit
                   </button>
                 ) : (
-                  <a
-                    type="submit"
+                  <button
+                    type="button"
                     onClick={() => setLocalEdit(!localEdit)}
                     className="cursor-pointer inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                   >
                     Edit
-                  </a>
+                  </button>
                 )}
               </div>
             </div>
