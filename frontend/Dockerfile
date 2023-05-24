@@ -37,7 +37,7 @@ COPY nginx.conf /etc/nginx/conf.d/configfile.template
 # copy static assets from "builder" stage
 COPY --from=builder /app/build .
 
-ENV REACT_DOCKER_PORT 8080
+ENV PORT 8080
 ENV HOST 0.0.0.0
 EXPOSE 8080
-CMD sh -c "envsubst '\$REACT_DOCKER_PORT' < /etc/nginx/conf.d/configfile.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
+CMD sh -c "envsubst '\$PORT' < /etc/nginx/conf.d/configfile.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
