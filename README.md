@@ -8,7 +8,6 @@
       - [Backend](#backend)
       - [frontend](#frontend)
   - [Contributors](#contributors)
-    - [Coordinators](#coordinators)
 
 ## Project description
 
@@ -50,10 +49,4 @@ Run the project.
 
 [![](https://contrib.rocks/image?repo=uaem-na/donations-tracker)](https://github.com/uaem-na/donations-tracker/graphs/contributors)
 
-Original repository: https://github.com/Lucas44/mcgill-uaem-website
-
-Initial contributors: Lucas Nelson, Edgar Chang, Tristan Stevens, Gaby Le Bideau, Zhekai Jiang
-
-### Coordinators
-
-Yeji Lori Song
+`+ Lucas Nelson, Edgar Chang, Tristan Stevens, Gaby Le Bideau, Zhekai Jiang`
