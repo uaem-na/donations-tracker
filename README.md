@@ -5,6 +5,8 @@
   - [Contributors](#contributors)
     - [Developers](#developers)
     - [Coordinators](#coordinators)
+  - [Setup](#setup)
+    - [Running docker compose](#running-docker-compose)
 
 ## Project description
 
@@ -23,3 +25,9 @@ General-purpose distribution platform developed for the McGill chapter of the Un
 ### Coordinators
 
 Yeji Lori Song
+
+## Setup
+
+### Running docker compose
+
+`docker-compose build --build-arg REACT_APP_BACKEND_URL="http://localhost:8081" && docker-compose up -d`
