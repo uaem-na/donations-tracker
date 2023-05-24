@@ -1,6 +1,10 @@
 # name the stage as "builder"
 FROM node:lts-alpine AS builder
 
+# get argument for backend url
+ARG REACT_APP_BACKEND_URL
+ENV REACT_APP_BACKEND_URL=$REACT_APP_BACKEND_URL
+
 # set working directory for building the react app
 WORKDIR /app
 
@@ -10,7 +14,7 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 
 # install node modules
-RUN npm ci --omit=dev
+RUN npm pkg delete scripts.prepare && npm ci --omit=dev
 
 # copy all files except those in .dockerignore
 COPY . .

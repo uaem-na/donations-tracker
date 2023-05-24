@@ -1,15 +1,22 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
-export const EditPPE = ({ ppe, setPPE, ppeDescError, ppeNumError, setppeDescError, setppeNumError }) => {
+export const EditPPE = ({
+  ppe,
+  setPPE,
+  ppeDescError,
+  ppeNumError,
+  setppeDescError,
+  setppeNumError,
+}) => {
   const [type, setType] = useState("masks");
   const [desc, setDesc] = useState("");
   const [amount, setAmount] = useState("");
 
   const addPPE = (e) => {
     e.preventDefault();
-    if(desc && amount){
-      setppeNumError(false)
-      setppeDescError(false)
+    if (desc && amount) {
+      setppeNumError(false);
+      setppeDescError(false);
       const newObj = {
         category: type,
         description: desc,
@@ -19,14 +26,14 @@ export const EditPPE = ({ ppe, setPPE, ppeDescError, ppeNumError, setppeDescErro
       setAmount("");
       setDesc("");
     } else if (desc) {
-      setppeNumError(true)
-      setppeDescError(false)
-    } else if (amount){
-      setppeDescError(true)
-      setppeNumError(false)
+      setppeNumError(true);
+      setppeDescError(false);
+    } else if (amount) {
+      setppeDescError(true);
+      setppeNumError(false);
     } else {
-      setppeNumError(true)
-      setppeDescError(true)
+      setppeNumError(true);
+      setppeDescError(true);
     }
   };
 
@@ -66,7 +73,10 @@ export const EditPPE = ({ ppe, setPPE, ppeDescError, ppeNumError, setppeDescErro
           placeholder="e.g. KN-95 Surgical Masks"
           onChange={(e) => setDesc(e.target.value)}
           autoComplete="desc"
-          className={`mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md ` + (ppeDescError && `border-red-500 bg-red-200`)}
+          className={
+            `mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md ` +
+            (ppeDescError && `border-red-500 bg-red-200`)
+          }
         />
       </div>
       <div className="col-span-3 sm:col-span-3 lg:col-span-2">
@@ -81,15 +91,25 @@ export const EditPPE = ({ ppe, setPPE, ppeDescError, ppeNumError, setppeDescErro
           name="quantity"
           id="quantity"
           value={amount}
-          onChange={(e) => setAmount(e.target.value.replace(/[^0-9]/gi,''))}
+          onChange={(e) => setAmount(e.target.value.replace(/[^0-9]/gi, ""))}
           autoComplete="quantity"
           placeholder="e.g. 52"
-          className={`mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md ` + (ppeNumError && `border-red-500 bg-red-200`)}
+          className={
+            `mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md ` +
+            (ppeNumError && `border-red-500 bg-red-200`)
+          }
         />
       </div>
-      {
-        ((ppeNumError || ppeDescError) && (ppeNumError && ppeDescError && ppe.length===0 ? (<div className="col-span-6 text-sm text-red-500 p-1">Please add at least one PPE item.</div>) : (<div className="col-span-6 text-sm text-red-500 p-1">Please fill in all the PPE item fields.</div>)))
-      }
+      {(ppeNumError || ppeDescError) &&
+        (ppeNumError && ppeDescError && ppe.length === 0 ? (
+          <div className="col-span-6 text-sm text-red-500 p-1">
+            Please add at least one PPE item.
+          </div>
+        ) : (
+          <div className="col-span-6 text-sm text-red-500 p-1">
+            Please fill in all the PPE item fields.
+          </div>
+        ))}
       <div className="col-span-6 text-right">
         <button
           onClick={addPPE}
