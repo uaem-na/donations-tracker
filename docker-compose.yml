@@ -9,6 +9,7 @@ services:
       NODE_ENV: production
       ATLAS_CONNECTION: ${ATLAS_CONNECTION}
       CLIENT_ORIGIN: ${CLIENT_ORIGIN}
+      PORT: ${BACKEND_DOCKER_PORT}
     ports:
       - ${BACKEND_LOCAL_PORT}:${BACKEND_DOCKER_PORT}
     networks:
