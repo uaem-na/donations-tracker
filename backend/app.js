@@ -1,11 +1,5 @@
 require("dotenv").config();
 
-const atlasConnectionString = process.env.ATLAS_CONNECTION;
-if (!atlasConnectionString) {
-  console.error("Missing ATLAS_CONNECTION environment variable");
-  process.exit();
-}
-
 const port = parseInt(process.env.PORT) || 8081;
 const corsOptions = {
   origin: process.env.CLIENT_ORIGIN || "http://localhost:8080",
@@ -39,18 +33,22 @@ app.use("/reports", reportsRouter);
 app.use("/requests", requestsRouter);
 app.use("/users", usersRouter);
 
-mongoose.connect(atlasConnectionString);
-
-const connection = mongoose.connection;
-connection.on("error", console.error.bind(console, "CONNECTION ERROR"));
-connection.once("open", () => {
-  console.log(
-    `Connected to MongoDB Atlas at ${connection.host}:${connection.port}`
-  );
-});
-
 app.listen(port, () => {
   console.log(`Backend is listening on port ${port}`);
 });
+const atlasConnectionString = process.env.ATLAS_CONNECTION;
+if (!atlasConnectionString) {
+  console.warn("Missing ATLAS_CONNECTION environment variable");
+} else {
+  mongoose.connect(atlasConnectionString);
+
+  const connection = mongoose.connection;
+  connection.on("error", console.error.bind(console, "CONNECTION ERROR"));
+  connection.once("open", () => {
+    console.log(
+      `Connected to MongoDB Atlas at ${connection.host}:${connection.port}`
+    );
+  });
+}
 
 module.exports = app;
