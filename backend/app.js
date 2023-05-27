@@ -1,6 +1,5 @@
 require("dotenv").config();
 
-const port = parseInt(process.env.PORT) || 8081;
 const corsOptions = {
   origin: process.env.CLIENT_ORIGIN || "http://localhost:8080",
 };
@@ -33,9 +32,6 @@ app.use("/reports", reportsRouter);
 app.use("/requests", requestsRouter);
 app.use("/users", usersRouter);
 
-app.listen(port, () => {
-  console.log(`Backend is listening on port ${port}`);
-});
 const atlasConnectionString = process.env.ATLAS_CONNECTION;
 if (!atlasConnectionString) {
   console.warn("Missing ATLAS_CONNECTION environment variable");
