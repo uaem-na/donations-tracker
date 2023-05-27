@@ -1,3 +1,4 @@
+import React from "react";
 import "./assets/style/Main.css";
 import Profile from "./components/profile/profile";
 import Reset from "./components/profile/reset";
