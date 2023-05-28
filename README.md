@@ -25,6 +25,8 @@ NOTES: majority of these variables are build-time variables, do not confuse them
 
 ### Running docker compose
 
+You can use docker-compose file for local development.
+
 `docker-compose build && docker-compose up -d`
 
 ### Running backend and frontend separately

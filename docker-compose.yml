@@ -12,8 +12,11 @@ services:
       PORT: ${BACKEND_DOCKER_PORT}
     ports:
       - ${BACKEND_LOCAL_PORT}:${BACKEND_DOCKER_PORT}
+    container_name: donations-tracker-backend
     networks:
       - tracker
+    depends_on:
+      - db
   frontend:
     image: donations-tracker-frontend:${TAG}
     depends_on:
@@ -28,7 +31,22 @@ services:
       NODE_ENV: production
     ports:
       - ${REACT_LOCAL_PORT}:${REACT_DOCKER_PORT}
+    container_name: donations-tracker-frontend
     networks:
       - tracker
+  db:
+    image: mongo:latest
+    restart: unless-stopped
+    ports:
+      - 27017:27017
+    container_name: donations-tracker-db
+    networks:
+      - tracker
+    volumes:
+      - mongo-data:/data/db
 networks:
   tracker:
+    driver: bridge
+volumes:
+  mongo-data:
+    driver: local
