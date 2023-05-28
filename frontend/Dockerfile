@@ -1,6 +1,10 @@
 # name the stage as "builder"
 FROM node:lts-alpine AS builder
 
+# get argument for Google Maps API key
+ARG REACT_APP_GOOGLE_MAPS_API_KEY
+ENV REACT_APP_GOOGLE_MAPS_API_KEY=$REACT_APP_GOOGLE_MAPS_API_KEY
+
 # get argument for backend url
 ARG REACT_APP_BACKEND_URL
 ENV REACT_APP_BACKEND_URL=$REACT_APP_BACKEND_URL
