@@ -4,6 +4,8 @@
   "private": true,
   "dependencies": {
     "@headlessui/react": "^1.4.3",
+    "@reach/combobox": "^0.18.0",
+    "@react-google-maps/api": "^2.18.1",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
