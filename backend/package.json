@@ -6,7 +6,8 @@
   "author": "Universities Allied for Essential Medicines",
   "license": "MIT",
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "dev": "nodemon --legacy-watch ./bin/www"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
@@ -16,5 +17,8 @@
     "express": "^4.18.2",
     "mongoose": "^7.2.0",
     "morgan": "~1.9.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
   }
 }

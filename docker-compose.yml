@@ -17,6 +17,8 @@ services:
       - 8081:8081
     networks:
       - tracker
+    volumes:
+      - "./backend:/backend"
     depends_on:
       - db
   frontend:

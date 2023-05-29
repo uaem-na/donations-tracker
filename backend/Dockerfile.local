@@ -8,16 +8,13 @@ ENV NODE_ENV=production
 WORKDIR /backend
 
 # copy the package.json and package-lock.json files to the working directory
-COPY package.json package-lock.json ./
+COPY package.json package-lock.json /backend/
 
 # install the dependencies
-RUN npm ci --omit=dev
-
-# copy the rest of the files to the working directory; this respects .dockerignore
-COPY . ./
+RUN npm ci
 
 # expose port 8081
 EXPOSE 8081
 
 # start the server
-CMD ["npm", "start"]
+CMD ["npm", "run", "dev"]
