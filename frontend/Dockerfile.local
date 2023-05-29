@@ -13,9 +13,6 @@ COPY package.json package-lock.json /app/
 # install node modules
 RUN npm ci
 
-# Add rest of client code
-COPY . /app
-
 # expose port 8080
 EXPOSE 8080
 
