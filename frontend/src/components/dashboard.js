@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import axios from "../common/http-common";
 import PPEOffers from "./profile/cards/ppe_offers";
 import PPERequests from "./profile/cards/ppe_requests";
-const POST_URL = process.env.REACT_APP_BACKEND_URL;
 
 export const Dashboard = () => {
   const [offers, setOffers] = useState([]);
@@ -10,7 +9,7 @@ export const Dashboard = () => {
 
   useEffect(() => {
     axios
-      .get(POST_URL + `/offers`)
+      .get(`/offers`)
       .then((response) => {
         // console.log(response.data);
         setOffers(response.data);
@@ -19,7 +18,7 @@ export const Dashboard = () => {
         console.log(e.response);
       });
     axios
-      .get(POST_URL + `/requests`)
+      .get(`/requests`)
       .then((response) => {
         // console.log(response.data);
         setRequests(response.data);
