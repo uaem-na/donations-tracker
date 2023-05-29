@@ -2,16 +2,15 @@ version: '3.8'
 
 services:
   backend:
-    image: donations-tracker-backend:${TAG}
+    image: donations-tracker-backend:latest
     restart: unless-stopped
     build:
       context: ./backend
       dockerfile: Dockerfile.local
     container_name: donations-tracker-backend
     environment:
-      NODE_ENV: production
-      CONNECTION_STRING: ${MONGO_CONNECTION_STRING}
-      CLIENT_ORIGIN: ${CLIENT_ORIGIN}
+      CONNECTION_STRING: mongodb://donations-tracker-db:27017
+      CLIENT_ORIGIN: http://donations-tracker-frontend:8080
       PORT: 8081
       DEBUG: backend:*
     ports:
@@ -21,7 +20,7 @@ services:
     depends_on:
       - db
   frontend:
-    image: donations-tracker-frontend:${TAG}
+    image: donations-tracker-frontend:latest
     restart: unless-stopped
     build:
       context: ./frontend
