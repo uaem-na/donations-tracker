@@ -1,0 +1,23 @@
+# This file is used to create a docker image for the backend
+FROM node:lts-alpine
+
+# set the NODE_ENV environment variable to production
+ENV NODE_ENV=production
+
+# set all the files in the /backend directory as the working directory
+WORKDIR /backend
+
+# copy the package.json and package-lock.json files to the working directory
+COPY package.json package-lock.json ./
+
+# install the dependencies
+RUN npm ci --omit=dev
+
+# copy the rest of the files to the working directory; this respects .dockerignore
+COPY . ./
+
+# expose port 8081
+EXPOSE 8081
+
+# start the server
+CMD ["npm", "start"]

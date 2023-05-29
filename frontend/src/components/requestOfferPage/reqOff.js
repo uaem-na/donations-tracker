@@ -3,12 +3,11 @@ import EditPPE from "./sections/editppe";
 import Location from "./sections/location";
 import ViewPPE from "./sections/viewppe";
 import { useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
+import axios from "../../common/http-common";
 import Userfront from "@userfront/core";
 
 Userfront.init("8nwrppdb");
 const userData = JSON.parse(JSON.stringify(Userfront.user, null, 2));
-const POST_URL = process.env.REACT_APP_BACKEND_URL;
 
 function validPostal(value) {
   var regex =
@@ -51,7 +50,7 @@ export const ReqOff = ({ offer, edit }) => {
   const deleteInDB = () => {
     if (offer) {
       axios
-        .delete(POST_URL + `/offers/${params.id}`)
+        .delete(`/offers/${params.id}`)
         .then((response) => {
           console.log(response.data);
           navigate("/dashboard");
@@ -61,7 +60,7 @@ export const ReqOff = ({ offer, edit }) => {
         });
     } else {
       axios
-        .delete(POST_URL + `/requests/${params.id}`)
+        .delete(`/requests/${params.id}`)
         .then((response) => {
           console.log(response.data);
           navigate("/dashboard");
@@ -87,7 +86,7 @@ export const ReqOff = ({ offer, edit }) => {
       setppeDescError(false);
       if (offer) {
         axios
-          .post(POST_URL + "/offers", {
+          .post("/offers", {
             userId: userData.username,
             ppeProfiles: ppe,
             postalCode: postal,
@@ -102,7 +101,7 @@ export const ReqOff = ({ offer, edit }) => {
           });
       } else {
         axios
-          .post(POST_URL + "/requests", {
+          .post("/requests", {
             userId: userData.username,
             ppeProfiles: ppe,
             postalCode: postal,
@@ -124,7 +123,7 @@ export const ReqOff = ({ offer, edit }) => {
       console.log(params.id);
       if (offer) {
         axios
-          .get(POST_URL + `/offers/${params.id}`)
+          .get(`/offers/${params.id}`)
           .then((response) => {
             console.log(response.data);
             setPPE(response.data.ppeProfiles);
@@ -135,7 +134,7 @@ export const ReqOff = ({ offer, edit }) => {
           });
       } else {
         axios
-          .get(POST_URL + `/requests/${params.id}`)
+          .get(`/requests/${params.id}`)
           .then((response) => {
             console.log(response.data);
             setPPE(response.data.ppeProfiles);

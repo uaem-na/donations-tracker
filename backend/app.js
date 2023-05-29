@@ -32,11 +32,11 @@ app.use("/reports", reportsRouter);
 app.use("/requests", requestsRouter);
 app.use("/users", usersRouter);
 
-const atlasConnectionString = process.env.ATLAS_CONNECTION;
-if (!atlasConnectionString) {
-  console.warn("Missing ATLAS_CONNECTION environment variable");
+const connectionString = process.env.CONNECTION_STRING;
+if (!connectionString) {
+  console.warn("Missing CONNECTION_STRING environment variable");
 } else {
-  mongoose.connect(atlasConnectionString);
+  mongoose.connect(connectionString);
 
   const connection = mongoose.connection;
   connection.on("error", console.error.bind(console, "CONNECTION ERROR"));

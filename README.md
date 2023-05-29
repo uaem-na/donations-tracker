@@ -3,10 +3,7 @@
 - [UAEM Donations Tracker Application for McGill UAEM chapter](#uaem-donations-tracker-application-for-mcgill-uaem-chapter)
   - [Project description](#project-description)
   - [Setup](#setup)
-    - [Running docker compose](#running-docker-compose)
-    - [Running backend and frontend separately](#running-backend-and-frontend-separately)
-      - [Backend](#backend)
-      - [frontend](#frontend)
+    - [Developing locally](#developing-locally)
   - [Contributors](#contributors)
 
 ## Project description
@@ -23,35 +20,15 @@ To configure the `.env` file use `.env.sample` as the template. All the keys in 
 
 NOTES: majority of these variables are build-time variables, do not confuse them with runtime variables
 
-### Running docker compose
+### Developing locally
+
+Set up the `.env` file in the root directory based on `.env.sample` file. As of writing, you only need to provide your own Google Maps API key for local development.
+
+Then run the following command to use docker compose for local development.
 
 `docker-compose build && docker-compose up -d`
 
-### Running backend and frontend separately
-
-#### Backend
-
-In the backend folder, install dependencies. 
-
-`npm run install`
-
-Then setup the `.env` file according to `.env.sample`.
-
-Run the project.
-
-`npm run start`
-
-#### frontend
-
-In the frontend folder, install npm dependencies.
-
-`npm run install`
-
-`.env` file is only used for local development. This file is added to `.dockerignore`.
-
-Run the project.
-
-`npm run start`
+NOTE: If you use Windows as host for your docker containers, initializing react development server can take quite some time. Check the container logs for its progress.
 
 ## Contributors 
 

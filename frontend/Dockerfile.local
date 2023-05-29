@@ -1,0 +1,23 @@
+FROM node:lts-alpine
+
+# get argument for Google Maps API key
+ARG REACT_APP_GOOGLE_MAPS_API_KEY
+ENV REACT_APP_GOOGLE_MAPS_API_KEY=$REACT_APP_GOOGLE_MAPS_API_KEY
+
+# set working directory for running dev server
+WORKDIR /app
+
+# copy node module specs
+COPY package.json package-lock.json /app/
+
+# install node modules
+RUN npm ci
+
+# Add rest of client code
+COPY . /app
+
+# expose port 8080
+EXPOSE 8080
+
+# start dev server
+CMD ["npm", "start"]

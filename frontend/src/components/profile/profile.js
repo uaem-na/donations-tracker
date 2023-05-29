@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
 import { ChangeProfile } from "./changeProfile";
 import Userfront from "@userfront/core";
-import axios from "axios";
+import axios from "../../common/http-common";
 import PPEOffers from "./cards/ppe_offers";
 import PPERequests from "./cards/ppe_requests";
-const POST_URL = process.env.REACT_APP_BACKEND_URL;
 
 Userfront.init("8nwrppdb");
 
@@ -46,7 +45,7 @@ export const Profile = () => {
   useEffect(() => {
     // console.log(userData)
     axios
-      .get(POST_URL + `/offers/user/${userData.username}`)
+      .get(`/offers/user/${userData.username}`)
       .then((response) => {
         console.log(response.data);
         setOffers(response.data);
@@ -55,7 +54,7 @@ export const Profile = () => {
         console.log(e.response);
       });
     axios
-      .get(POST_URL + `/requests/user/${userData.username}`)
+      .get(`/requests/user/${userData.username}`)
       .then((response) => {
         console.log(response.data);
         setRequests(response.data);

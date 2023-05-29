@@ -2,33 +2,57 @@ version: '3.8'
 
 services:
   backend:
-    image: donations-tracker-backend:${TAG}
-    build: ./backend
+    image: donations-tracker-backend:latest
     restart: unless-stopped
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.local
+    container_name: donations-tracker-backend
     environment:
-      NODE_ENV: production
-      ATLAS_CONNECTION: ${ATLAS_CONNECTION}
-      CLIENT_ORIGIN: ${CLIENT_ORIGIN}
-      PORT: ${BACKEND_DOCKER_PORT}
+      CONNECTION_STRING: mongodb://donations-tracker-db:27017
+      CLIENT_ORIGIN: http://donations-tracker-frontend:8080
+      PORT: 8081
+      DEBUG: backend:*
     ports:
-      - ${BACKEND_LOCAL_PORT}:${BACKEND_DOCKER_PORT}
+      - 8081:8081
     networks:
       - tracker
-  frontend:
-    image: donations-tracker-frontend:${TAG}
     depends_on:
-      - backend
+      - db
+  frontend:
+    image: donations-tracker-frontend:latest
+    restart: unless-stopped
     build:
       context: ./frontend
-      dockerfile: Dockerfile
-      args:
-        - REACT_APP_BACKEND_URL=${REACT_APP_BACKEND_URL}
-        - REACT_APP_GOOGLE_MAPS_API_KEY=${REACT_APP_GOOGLE_MAPS_API_KEY}
+      dockerfile: Dockerfile.local
+    container_name: donations-tracker-frontend
     environment:
-      NODE_ENV: production
+      PORT: 8080
+      WDS_SOCKET_HOST: 127.0.0.1 
+      CHOKIDAR_USEPOLLING: true
+      WATCHPACK_POLLING: true
+      REACT_APP_GOOGLE_MAPS_API_KEY: ${REACT_APP_GOOGLE_MAPS_API_KEY}
     ports:
-      - ${REACT_LOCAL_PORT}:${REACT_DOCKER_PORT}
+      - 8080:8080
     networks:
       - tracker
+    volumes:
+      - "./frontend:/app"
+    depends_on:
+      - backend
+  db:
+    image: mongo:latest
+    restart: unless-stopped
+    ports:
+      - 27017:27017
+    container_name: donations-tracker-db
+    networks:
+      - tracker
+    volumes:
+      - mongo-data:/data/db
 networks:
   tracker:
+    driver: bridge
+volumes:
+  mongo-data:
+    driver: local
