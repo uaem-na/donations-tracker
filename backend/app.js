@@ -4,6 +4,7 @@ const corsOptions = {
   origin: process.env.CLIENT_ORIGIN || "http://localhost:8080",
 };
 
+const debug = require("debug")("backend:app");
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
@@ -34,15 +35,15 @@ app.use("/users", usersRouter);
 
 const connectionString = process.env.CONNECTION_STRING;
 if (!connectionString) {
-  console.warn("Missing CONNECTION_STRING environment variable");
+  debug("Missing CONNECTION_STRING environment variable");
 } else {
   mongoose.connect(connectionString);
 
   const connection = mongoose.connection;
   connection.on("error", console.error.bind(console, "CONNECTION ERROR"));
   connection.once("open", () => {
-    console.log(
-      `Connected to MongoDB Atlas at ${connection.host}:${connection.port}`
+    debug(
+      `Connected to MongoDB at ${connection.host}:${connection.port}/${connection.db.databaseName}`
     );
   });
 }
