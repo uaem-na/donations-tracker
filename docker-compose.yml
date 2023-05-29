@@ -9,7 +9,7 @@ services:
       dockerfile: Dockerfile.local
     container_name: donations-tracker-backend
     environment:
-      CONNECTION_STRING: mongodb://donations-tracker-db:27017
+      CONNECTION_STRING: mongodb://donations-tracker-db:27017/dev
       CLIENT_ORIGIN: http://donations-tracker-frontend:8080
       PORT: 8081
       DEBUG: backend:*
