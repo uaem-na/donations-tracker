@@ -14,6 +14,7 @@ const logger = require("morgan");
 const mongoose = require("mongoose");
 const passport = require("passport");
 const crypto = require("crypto");
+const flash = require("connect-flash");
 
 const indexRouter = require("./routes/index");
 const offersRouter = require("./routes/offers");
@@ -23,13 +24,18 @@ const usersRouter = require("./routes/users");
 
 const app = express();
 
+const session = require("express-session");
 // set up session and passport local strategy in MongoDB
 if (!process.env.CONNECTION_STRING) {
-  debug(
-    "Missing CONNECTION_STRING environment variable, session will not be configured"
+  app.use(
+    session({
+      secret:
+        process.env.SESSION_SECRET || crypto.randomBytes(20).toString("hex"),
+      resave: false,
+      saveUninitialized: false,
+    })
   );
 } else {
-  const session = require("express-session");
   const MongoDBStore = require("connect-mongodb-session")(session);
   const sessionStore = new MongoDBStore({
     uri: process.env.CONNECTION_STRING,
@@ -42,7 +48,7 @@ if (!process.env.CONNECTION_STRING) {
       secret:
         process.env.SESSION_SECRET || crypto.randomBytes(20).toString("hex"),
       resave: false,
-      saveUninitialized: true,
+      saveUninitialized: false,
       cookie: {
         secure: process.env.NODE_ENV === "production",
         maxAge: 60 * 60 * 1000,
@@ -71,6 +77,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+app.use(flash());
 
 app.use("/", indexRouter);
 app.use("/offers", offersRouter);
@@ -92,5 +99,36 @@ if (!connectionString) {
     );
   });
 }
+
+// catch 404 and forward to error handler
+app.use(function (req, res, next) {
+  var err = new Error("Not Found");
+  err.status = 404;
+  next(err);
+});
+
+// error handlers
+
+// development error handler
+// will print stacktrace
+if (app.get("env") === "development") {
+  app.use(function (err, req, res, next) {
+    res.status(err.status || 500);
+    res.render("error", {
+      message: err.message,
+      error: err,
+    });
+  });
+}
+
+// production error handler
+// no stacktraces leaked to user
+app.use(function (err, req, res, next) {
+  res.status(err.status || 500);
+  res.render("error", {
+    message: err.message,
+    error: {},
+  });
+});
 
 module.exports = app;
