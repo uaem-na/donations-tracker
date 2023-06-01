@@ -1,97 +1,124 @@
-import Userfront from "@userfront/core";
-import { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
+import styled from "styled-components";
+import { useForm } from "react-hook-form";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { Button } from "../button";
+import { Paper } from "../paper";
+import { TextInput } from "../textInput";
 
-Userfront.init("8nwrppdb");
+const schema = yup.object().shape({
+  email: yup
+    .string()
+    .email("Invalid email address")
+    .required("E-mail address is required for login"),
+  password: yup
+    .string()
+    .min(8, "Must be 8 characters or more")
+    .required("Password is required for login"),
+});
 
-export const Login = () => {
-  const [password, setPassword] = useState("");
-  const [email, setEmail] = useState("");
+const Login = () => {
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
 
-  const handlePassword = (e) => {
-    setPassword(e.target.value);
-  };
-
-  const handleEmail = (e) => {
-    setEmail(e.target.value);
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    Userfront.login({
-      method: "password",
-      email: email,
-      password: password,
-    }).catch((error) => {
-      console.log(error.message);
-    });
-  };
+  // TODO: connect login to backend
+  const onSubmit = (data) => console.log(data);
 
   return (
-    <div className="min-h-full flex flex-grow items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="shadow sm:rounded-md p-8 max-w-md w-full space-y-8">
-        <div>
-          <h1 className="text-5xl font-bold block text-center">UAEM</h1>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Sign in to your account
-          </h2>
-        </div>
-        <form className="mt-8 space-y-3" onSubmit={handleSubmit}>
-          <input type="hidden" name="remember" defaultValue="true" />
-          <div className="rounded-md shadow-sm -space-y-px">
-            <div>
-              <label htmlFor="email-address" className="sr-only">
-                Email address
-              </label>
-              <input
-                id="email-address"
-                name="email"
-                type="email"
-                value={email}
-                onChange={handleEmail}
-                autoComplete="email"
-                required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="Email address"
-              />
-            </div>
-            <div>
-              <label htmlFor="password" className="sr-only">
-                Password
-              </label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                value={password}
-                onChange={handlePassword}
-                autoComplete="current-password"
-                required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="Password"
-              />
-            </div>
-          </div>
-          <div>
-            <Link
-              className="ml-1 text-gray-600 font-bold text-sm"
-              to="/register"
-            >
-              Need to register?
-            </Link>
-          </div>
-          <div>
-            <button
-              type="submit"
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            >
-              Sign in
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+    <Wrapper>
+      <Paper>
+        <Header>UAEM</Header>
+        <Subheader>Sign in to your account</Subheader>
+        <LoginForm onSubmit={handleSubmit(onSubmit)}>
+          <label htmlFor="email" className="sr-only">
+            Email address
+          </label>
+          <TextInput
+            {...register("email")}
+            type="email"
+            autoComplete="email"
+            aria-invalid={errors.email ? "true" : "false"}
+            isError={!!errors.email}
+            placeholder="E-mail address"
+          />
+          {errors.email && (
+            <ErrorMessage role="alert">{errors.email.message}</ErrorMessage>
+          )}
+
+          <TextInput
+            {...register("password", {
+              required: true,
+              minLength: 8,
+            })}
+            type="password"
+            autoComplete="current-password"
+            aria-invalid={errors.password ? "true" : "false"}
+            isError={!!errors.password}
+            placeholder="Password"
+          />
+          {errors.password && (
+            <ErrorMessage role="alert">{errors.password.message}</ErrorMessage>
+          )}
+
+          <RegisterLink to="/register">Need to register?</RegisterLink>
+          <Button type="submit">Sign in</Button>
+        </LoginForm>
+      </Paper>
+    </Wrapper>
   );
 };
+
+const Wrapper = styled.div`
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const Header = styled.h1`
+  font-size: 3rem;
+  text-align: center;
+  font-weight: 700;
+`;
+
+const Subheader = styled.h3`
+  font-size: 2rem;
+  text-align: center;
+  font-weight: 500;
+`;
+
+const LoginForm = styled.form`
+  display: flex;
+  flex-direction: column;
+  margin-top: 32px;
+`;
+
+const ErrorMessage = styled.span`
+  display: block;
+  font-size: 1rem;
+  margin-bottom: 8px;
+  color: red;
+`;
+
+const RegisterLink = styled(Link)`
+  color: var(--color-gray-300);
+  font-size: 1rem;
+  font-weight: 700;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  width: fit-content;
+  align-self: center;
+
+  &:hover {
+    color: var(--color-gray-100);
+  }
+`;
 
 export default Login;
