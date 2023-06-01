@@ -19,6 +19,7 @@ services:
       - tracker
     volumes:
       - "./backend:/backend"
+      - "/backend/node_modules/"
     depends_on:
       - db
   frontend:
@@ -40,6 +41,7 @@ services:
       - tracker
     volumes:
       - "./frontend:/app"
+      - "/app/node_modules/"
     depends_on:
       - backend
   db:
