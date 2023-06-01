@@ -1,6 +1,7 @@
-Dockerfile
+Dockerfile*
 .dockerignore
 .gitignore
 build
 node_modules
 .env*
+.husky
