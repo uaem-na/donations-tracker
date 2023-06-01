@@ -1,6 +1,9 @@
 # name the stage as "builder"
 FROM node:lts-alpine AS builder
 
+# set the NODE_ENV environment variable to production
+ENV NODE_ENV=production
+
 # get argument for Google Maps API key
 ARG REACT_APP_GOOGLE_MAPS_API_KEY
 ENV REACT_APP_GOOGLE_MAPS_API_KEY=$REACT_APP_GOOGLE_MAPS_API_KEY
