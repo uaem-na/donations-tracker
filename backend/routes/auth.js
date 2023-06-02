@@ -33,6 +33,7 @@ router.post("/logout", (req, res, next) => {
 
 // handle sign up logic
 router.post("/register", (req, res, next) => {
+  console.log(req.body);
   User.register(
     new User({
       email: req.body.email,
