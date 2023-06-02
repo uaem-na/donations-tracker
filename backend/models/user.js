@@ -1,15 +1,24 @@
 const mongoose = require("mongoose");
+const passportLocalMongoose = require("passport-local-mongoose");
 
-const userSchema = mongoose.Schema(
+const User = mongoose.Schema(
   {
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
-    email: { type: String, required: true },
-    password: { type: String, required: true },
-    userOrg: { type: String, required: true },
-    orgName: { type: String, required: false },
+    organization: { type: String, required: true },
+    admin: { type: Boolean, default: false }, // TODO: add admin mechanism
+    active: { type: Boolean, default: true }, // TODO: add deactivation mechanism
+    verified: { type: Boolean, default: false }, // TODO: add veritifcation mechanism for admin
   },
   { timestamp: true }
 );
 
-module.exports.User = mongoose.model("User", userSchema);
+// email, salt and hash are added by passport-local-mongoose
+User.plugin(passportLocalMongoose, {
+  usernameField: "email",
+  limitAttempts: true,
+  maxAttempts: 10,
+  unlockInterval: 10 * 60 * 1000, // 10 minutes
+});
+
+module.exports = mongoose.model("User", User);
