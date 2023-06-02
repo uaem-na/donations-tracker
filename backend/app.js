@@ -2,6 +2,7 @@ require("dotenv").config();
 
 const corsOptions = {
   origin: process.env.CLIENT_ORIGIN || "http://localhost:8080",
+  credentials: true,
 };
 
 const debug = require("debug")("backend:app");
@@ -16,7 +17,7 @@ const passport = require("passport");
 const crypto = require("crypto");
 const flash = require("connect-flash");
 
-const indexRouter = require("./routes/index");
+const authRouter = require("./routes/auth");
 const offersRouter = require("./routes/offers");
 const reportsRouter = require("./routes/reports");
 const requestsRouter = require("./routes/requests");
@@ -79,7 +80,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(flash());
 
-app.use("/", indexRouter);
+app.use("/auth", authRouter);
 app.use("/offers", offersRouter);
 app.use("/reports", reportsRouter);
 app.use("/requests", requestsRouter);
@@ -113,7 +114,7 @@ app.use(function (req, res, next) {
 // will print stacktrace
 if (app.get("env") === "development") {
   app.use(function (err, req, res, next) {
-    res.status(err.status || 500).send({
+    res.status(err.status || 500).json({
       message: err.message,
       error: err,
     });
@@ -123,7 +124,7 @@ if (app.get("env") === "development") {
 // production error handler
 // no stacktraces leaked to user
 app.use(function (err, req, res, next) {
-  res.status(err.status || 500).send({
+  res.status(err.status || 500).json({
     message: err.message,
     error: {},
   });

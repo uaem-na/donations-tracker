@@ -1,7 +1,7 @@
 const express = require("express");
 const passport = require("passport");
 const router = express.Router();
-let { User } = require("../models/user");
+const User = require("../models/user");
 
 // handle login logic
 router.post(
@@ -15,7 +15,7 @@ router.post(
       if (err) {
         return next(err);
       }
-      res.redirect("/");
+      res.status(200).json({ success: "Login successful." });
     });
   }
 );
@@ -33,14 +33,13 @@ router.post("/logout", (req, res, next) => {
 
 // handle sign up logic
 router.post("/register", (req, res, next) => {
-  console.log(req.body);
+  const { email, firstName, lastName, organization, password } = req.body;
   User.register(
     new User({
-      email: req.body.email,
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
-      userOrg: req.body.userOrg,
-      orgName: req.body.orgName,
+      email,
+      firstName,
+      lastName,
+      organization,
     }),
     req.body.password,
     (err, user) => {
@@ -53,10 +52,11 @@ router.post("/register", (req, res, next) => {
           if (err) {
             return next(err);
           }
-          // return res.status(200).json({ success: "Registration successful." });
-          res.redirect("/");
+          return res.status(200).json({ success: "Registration successful." });
         });
       });
     }
   );
 });
+
+module.exports = router;

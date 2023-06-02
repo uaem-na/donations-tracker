@@ -5,8 +5,7 @@ const User = mongoose.Schema(
   {
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
-    userOrg: { type: String, required: true }, // TODO: seems like this should be an ObjectId
-    orgName: { type: String, required: true }, // TODO: seems like a duplicate property
+    organization: { type: String, required: true },
     admin: { type: Boolean, default: false }, // TODO: add admin mechanism
     active: { type: Boolean, default: true }, // TODO: add deactivation mechanism
     verified: { type: Boolean, default: false }, // TODO: add veritifcation mechanism for admin

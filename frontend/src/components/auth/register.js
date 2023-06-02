@@ -1,12 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useNavigate } from "react-router-dom";
 import { Button } from "../button";
 import { Paper } from "../paper";
 import { TextInput } from "../textInput";
 import { QUERIES } from "../../constants";
+import axios from "../../common/http-common";
 
 const schema = yup.object().shape({
   email: yup
@@ -26,7 +28,10 @@ const schema = yup.object().shape({
   lastName: yup.string().required("Last name is required"),
 });
 
-const RegisterNew = () => {
+const Register = () => {
+  const navigate = useNavigate();
+  const [serverError, setServerError] = useState("");
+
   const {
     register,
     formState: { errors },
@@ -35,8 +40,23 @@ const RegisterNew = () => {
     resolver: yupResolver(schema),
   });
 
-  // TODO: connect register to backend
-  const onSubmit = (data) => console.log(data);
+  const onSubmit = (data) => {
+    axios
+      .post("/auth/register", data)
+      .then((res) => {
+        console.log(res.data);
+        navigate("/login");
+      })
+      .catch((err) => {
+        const { data } = err.response;
+        if (data) {
+          const { error } = data;
+          setServerError(error);
+        } else {
+          console.error(err, err.response);
+        }
+      });
+  };
 
   return (
     <Wrapper>
@@ -132,6 +152,9 @@ const RegisterNew = () => {
           <Button type="submit" style={{ marginTop: "28px" }}>
             Register
           </Button>
+          {serverError && (
+            <ServerMessage role="alert">{serverError}</ServerMessage>
+          )}
         </RegisterForm>
       </ResponsivePaper>
     </Wrapper>
@@ -177,4 +200,11 @@ const ErrorMessage = styled.span`
   color: red;
 `;
 
-export default RegisterNew;
+const ServerMessage = styled.span`
+  display: block;
+  font-size: 1rem;
+  margin-top: 16px;
+  color: red;
+`;
+
+export default Register;
