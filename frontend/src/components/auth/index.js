@@ -1,3 +1,2 @@
 export { default as Login } from "./login";
-export { Register } from "./register";
-export { default as RegisterNew } from "./register.new";
+export { default as Register } from "./register";

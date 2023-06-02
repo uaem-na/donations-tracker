@@ -13,7 +13,7 @@ import Landing from "./components/landing";
 import Userfront from "@userfront/core";
 import ReqOff from "./components/requestOfferPage/reqOff";
 import Dashboard from "./components/dashboard";
-import { Login, Register } from "./components/auth";
+import { Login, Register, RegisterNew } from "./components/auth";
 import { Layout } from "./components/layout";
 
 Userfront.init("8nwrppdb");
@@ -62,14 +62,7 @@ function App() {
               element={<ReqOff offer={true} edit={true} />}
             />
             <Route path="/login" element={<Login />} />
-            <Route
-              path="/register"
-              element={
-                <NoAuth>
-                  <Register />
-                </NoAuth>
-              }
-            />
+            <Route path="/register" element={<Register />} />
             <Route
               path="/profile"
               element={
