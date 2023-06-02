@@ -6,6 +6,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Button } from "../button";
 import { Paper } from "../paper";
 import { TextInput } from "../textInput";
+import { QUERIES } from "../../constants";
 
 const schema = yup.object().shape({
   email: yup
@@ -39,7 +40,7 @@ const RegisterNew = () => {
 
   return (
     <Wrapper>
-      <Paper>
+      <ResponsivePaper>
         <Header>UAEM</Header>
         <Subheader>Register for an account</Subheader>
         <RegisterForm onSubmit={handleSubmit(onSubmit)}>
@@ -132,7 +133,7 @@ const RegisterNew = () => {
             Register
           </Button>
         </RegisterForm>
-      </Paper>
+      </ResponsivePaper>
     </Wrapper>
   );
 };
@@ -142,6 +143,13 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+
+const ResponsivePaper = styled(Paper)`
+  @media ${QUERIES.phoneAndSmaller} {
+    width: clamp(300px, 80vw, 600px);
+  }
+  width: 600px;
 `;
 
 const Header = styled.h1`
