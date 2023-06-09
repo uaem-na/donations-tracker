@@ -14,6 +14,7 @@ import ReqOff from "./components/requestOfferPage/reqOff";
 import Dashboard from "./components/dashboard";
 import { Login, Register, AuthProvider, useAuth } from "./components/auth";
 import { Layout } from "./components/layout";
+import { AccountPage } from "./pages";
 
 const RequireAuth = ({ children }) => {
   const { user } = useAuth();
@@ -64,10 +65,10 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route
-                path="/profile"
+                path="/account"
                 element={
                   <RequireAuth>
-                    <Profile />
+                    <AccountPage />
                   </RequireAuth>
                 }
               />

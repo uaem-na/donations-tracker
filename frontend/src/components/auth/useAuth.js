@@ -42,7 +42,7 @@ export const AuthProvider = ({ children }) => {
       .post("/auth/login", { email, password })
       .then((res) => {
         setUser(res.data);
-        navigate("/");
+        navigate("/account");
       })
       .catch((err) => {
         const { data } = err.response;
