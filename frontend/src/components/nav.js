@@ -2,13 +2,7 @@
 import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Link } from "react-router-dom";
-
-import Userfront from "@userfront/core";
 import { useAuth } from "./auth";
-
-Userfront.init("8nwrppdb");
-
-// import { BellIcon, MenuIcon, XIcon } from '@heroicons/react/outline'
 
 const navigation = [
   { name: "Home", href: "/", current: false },
@@ -24,6 +18,7 @@ function classNames(...classes) {
 export default function Navbar() {
   const { user, logout } = useAuth();
   return (
+    // TODO: verify accessibility
     <Disclosure as="nav" className="bg-gray-800">
       {({ open }) => (
         <>
