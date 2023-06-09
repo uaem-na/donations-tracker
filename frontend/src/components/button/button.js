@@ -8,7 +8,7 @@ const Button = styled.button`
   font-weight: 500;
   line-height: 1.25rem;
   margin-top: 8px;
-  padding: 8px;
+  padding: 8px 16px;
   height: 48px;
 
   &:hover {
