@@ -4,6 +4,7 @@ import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Link } from "react-router-dom";
 
 import Userfront from "@userfront/core";
+import { useAuth } from "./auth";
 
 Userfront.init("8nwrppdb");
 
@@ -21,6 +22,7 @@ function classNames(...classes) {
 }
 
 export default function Navbar() {
+  const { user, logout } = useAuth();
   return (
     <Disclosure as="nav" className="bg-gray-800">
       {({ open }) => (
@@ -73,17 +75,17 @@ export default function Navbar() {
                 {/* Profile dropdown */}
                 <Menu as="div" className="ml-3 relative">
                   <div>
-                    {Userfront.tokens.accessToken ? (
+                    {user ? (
                       <Menu.Button className="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
                         <span className="sr-only">Open user menu</span>
                         <div className="shadow-lg rounded-full bg-gradient-to-tr from-[#FFDB10] to-[#FF8510] w-8 h-8 border-2 border-white flex items-center justify-center">
-                <h1 className="-mt-0.5 text-lg text-white">
-                   
-                </h1>
-              </div>
+                          <h1 className="-mt-0.5 text-lg text-white"></h1>
+                        </div>
                       </Menu.Button>
                     ) : (
-                      <Link className="text-gray-300" to='/login'>Login</Link>
+                      <Link className="text-gray-300" to="/login">
+                        Login
+                      </Link>
                     )}
                   </div>
                   <Transition
@@ -112,7 +114,7 @@ export default function Navbar() {
                       <Menu.Item>
                         {({ active }) => (
                           <span
-                          onClick={Userfront.logout}
+                            onClick={logout}
                             className={classNames(
                               active ? "bg-gray-100" : "",
                               "cursor-pointer block px-4 py-2 text-sm text-gray-700"

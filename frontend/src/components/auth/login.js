@@ -1,15 +1,14 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useNavigate } from "react-router-dom";
 import { Button } from "../button";
 import { Paper } from "../paper";
 import { TextInput } from "../textInput";
 import { QUERIES } from "../../constants";
-import axios from "../../common/http-common";
+import useAuth from "./useAuth";
 
 const schema = yup.object().shape({
   email: yup
@@ -23,8 +22,8 @@ const schema = yup.object().shape({
 });
 
 const Login = () => {
-  const navigate = useNavigate();
-  const [serverError, setServerError] = useState("");
+  const { login: loginApi, loading, error } = useAuth();
+
   const {
     register,
     formState: { errors },
@@ -34,21 +33,8 @@ const Login = () => {
   });
 
   const onSubmit = (data) => {
-    axios
-      .post("/auth/login", data)
-      .then((res) => {
-        console.log(res.data);
-        navigate("/");
-      })
-      .catch((err) => {
-        const { data } = err.response;
-        if (data) {
-          const { error } = data;
-          setServerError(error);
-        } else {
-          console.error(err, err.response);
-        }
-      });
+    const { email, password } = data;
+    loginApi(email, password);
   };
 
   return (
@@ -88,10 +74,10 @@ const Login = () => {
           )}
 
           <RegisterLink to="/register">Need to register?</RegisterLink>
-          <Button type="submit">Sign in</Button>
-          {serverError && (
-            <ServerMessage role="alert">{serverError}</ServerMessage>
-          )}
+          <Button disabled={loading} type="submit">
+            Sign in
+          </Button>
+          {error && <ServerMessage role="alert">{error}</ServerMessage>}
         </LoginForm>
       </ResponsivePaper>
     </Wrapper>

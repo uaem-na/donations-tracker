@@ -10,69 +10,70 @@ import {
   useLocation,
 } from "react-router-dom";
 import Landing from "./components/landing";
-import Userfront from "@userfront/core";
 import ReqOff from "./components/requestOfferPage/reqOff";
 import Dashboard from "./components/dashboard";
-import { Login, Register, RegisterNew } from "./components/auth";
+import { Login, Register, AuthProvider, useAuth } from "./components/auth";
 import { Layout } from "./components/layout";
 
-Userfront.init("8nwrppdb");
-
-function RequireAuth({ children }) {
+const RequireAuth = ({ children }) => {
+  const { user } = useAuth();
   let location = useLocation();
-  if (!Userfront.tokens.accessToken) {
-    // Redirect to the /login page
-    return <Navigate to="/login" state={{ from: location }} replace />;
-  }
-  return children;
-}
 
-function NoAuth({ children }) {
-  // let location = useLocation();
-  // if (Userfront.tokens.accessToken) {
-  //   // Redirect to the /dashboard page
-  //   return <Navigate to="/profile" state={{ from: location }} replace />;
-  // }
+  if (!user) {
+    // If user is not logged in, redirect to login page with current path as redirect path
+    return <Navigate to="login" state={{ from: location.pathname }} />;
+  }
+
   return children;
-}
+};
 
 function App() {
   return (
     <>
       <Router>
-        <Routes>
-          <Route path="/" element={<Layout />}>
-            <Route index element={<Landing />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/reset" element={<Reset />} />
-            <Route
-              path="/request/:id"
-              element={<ReqOff offer={false} edit={false} />}
-            />
-            <Route
-              path="/offer/:id"
-              element={<ReqOff offer={true} edit={false} />}
-            />
-            <Route
-              path="/new-request"
-              element={<ReqOff offer={false} edit={true} />}
-            />
-            <Route
-              path="/new-offer"
-              element={<ReqOff offer={true} edit={true} />}
-            />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route
-              path="/profile"
-              element={
-                <RequireAuth>
-                  <Profile />
-                </RequireAuth>
-              }
-            />
-          </Route>
-        </Routes>
+        <AuthProvider>
+          <Routes>
+            <Route path="/" element={<Layout />}>
+              <Route index element={<Landing />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/reset" element={<Reset />} />
+              <Route
+                path="/request/:id"
+                element={<ReqOff offer={false} edit={false} />}
+              />
+              <Route
+                path="/offer/:id"
+                element={<ReqOff offer={true} edit={false} />}
+              />
+              <Route
+                path="/new-request"
+                element={
+                  <RequireAuth>
+                    <ReqOff offer={false} edit={true} />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path="/new-offer"
+                element={
+                  <RequireAuth>
+                    <ReqOff offer={true} edit={true} />
+                  </RequireAuth>
+                }
+              />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route
+                path="/profile"
+                element={
+                  <RequireAuth>
+                    <Profile />
+                  </RequireAuth>
+                }
+              />
+            </Route>
+          </Routes>
+        </AuthProvider>
       </Router>
     </>
   );

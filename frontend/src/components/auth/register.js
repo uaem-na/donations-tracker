@@ -3,12 +3,11 @@ import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useNavigate } from "react-router-dom";
 import { Button } from "../button";
 import { Paper } from "../paper";
 import { TextInput } from "../textInput";
 import { QUERIES } from "../../constants";
-import axios from "../../common/http-common";
+import useAuth from "./useAuth";
 
 const schema = yup.object().shape({
   email: yup
@@ -29,8 +28,7 @@ const schema = yup.object().shape({
 });
 
 const Register = () => {
-  const navigate = useNavigate();
-  const [serverError, setServerError] = useState("");
+  const { register: registerApi, loading, error } = useAuth();
 
   const {
     register,
@@ -41,21 +39,7 @@ const Register = () => {
   });
 
   const onSubmit = (data) => {
-    axios
-      .post("/auth/register", data)
-      .then((res) => {
-        console.log(res.data);
-        navigate("/login");
-      })
-      .catch((err) => {
-        const { data } = err.response;
-        if (data) {
-          const { error } = data;
-          setServerError(error);
-        } else {
-          console.error(err, err.response);
-        }
-      });
+    registerApi(data);
   };
 
   return (
@@ -149,12 +133,14 @@ const Register = () => {
               {errors.confirmPassword.message}
             </ErrorMessage>
           )}
-          <Button type="submit" style={{ marginTop: "28px" }}>
+          <Button
+            disabled={loading}
+            type="submit"
+            style={{ marginTop: "28px" }}
+          >
             Register
           </Button>
-          {serverError && (
-            <ServerMessage role="alert">{serverError}</ServerMessage>
-          )}
+          {error && <ServerMessage role="alert">{error}</ServerMessage>}
         </RegisterForm>
       </ResponsivePaper>
     </Wrapper>

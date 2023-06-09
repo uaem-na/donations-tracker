@@ -114,6 +114,10 @@ app.use(function (req, res, next) {
 // will print stacktrace
 if (app.get("env") === "development") {
   app.use(function (err, req, res, next) {
+    const flashError = req.flash("error");
+    if (flashError && flashError.length > 0) {
+      err.message = flashError[0];
+    }
     res.status(err.status || 500).json({
       message: err.message,
       error: err,
