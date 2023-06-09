@@ -7,6 +7,7 @@ import PPERequests from "./cards/ppe_requests";
 
 Userfront.init("8nwrppdb");
 
+// TODO: refactor this to "account" component and use auth hook instead of userfront
 export const Profile = () => {
   const [offers, setOffers] = useState([]);
   const [requests, setRequests] = useState([]);
