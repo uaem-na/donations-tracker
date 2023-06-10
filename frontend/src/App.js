@@ -1,6 +1,5 @@
 import React from "react";
 import "./assets/style/Main.css";
-import Reset from "./components/profile/reset";
 import {
   BrowserRouter as Router,
   Routes,
@@ -10,7 +9,6 @@ import {
 } from "react-router-dom";
 import Landing from "./components/landing";
 import ReqOff from "./components/requestOfferPage/reqOff";
-import Dashboard from "./components/dashboard";
 import { Login, Register, AuthProvider, useAuth } from "./components/auth";
 import { Layout } from "./components/layout";
 import { AccountPage } from "./pages";
@@ -35,8 +33,6 @@ function App() {
           <Routes>
             <Route path="/" element={<Layout />}>
               <Route index element={<Landing />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/reset" element={<Reset />} />
               <Route
                 path="/request/:id"
                 element={<ReqOff offer={false} edit={false} />}

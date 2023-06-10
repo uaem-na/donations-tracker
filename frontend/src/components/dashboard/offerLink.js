@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import formatDistance from "date-fns/formatDistance";
 
-export const OfferCard = ({ id, postalCode, ppeProfiles, createdAt }) => {
+export const OfferLink = ({ id, postalCode, ppeProfiles, createdAt }) => {
   return (
     <Link className="cursor" to={`/offer/${id}`}>
       <div className="inline-block px-3 font-semibold">
@@ -27,4 +27,4 @@ export const OfferCard = ({ id, postalCode, ppeProfiles, createdAt }) => {
   );
 };
 
-export default OfferCard;
+export default OfferLink;

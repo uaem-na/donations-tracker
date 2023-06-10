@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import formatDistance from "date-fns/formatDistance";
 import { Link } from "react-router-dom";
 
-export const RequestCard = ({
+export const RequestLink = ({
   id,
   postalCode,
   ppeProfiles,
@@ -23,7 +23,7 @@ export const RequestCard = ({
     <Link className="cursor" to={`/request/${id}`}>
       <div className="pb-4 inline-block px-3 font-semibold">
         <div className="p-6 w-64 h-80 max-w-xs overflow-hidden rounded-lg shadow-md bg-white hover:shadow-xl transition-shadow duration-300 ease-in-out">
-        <h2
+          <h2
             className={`text-xl text-gray-700 mb-2 ${statusColors[statusID]}`}
           >
             {statuses[statusID]}
@@ -49,7 +49,7 @@ export const RequestCard = ({
   );
 };
 
-export default RequestCard;
+export default RequestLink;
 
 // export const RequestCard = ({reportIds, ppeProfiles, date, status}) => {
 //     let statuses = ["Completed", "In Progress", "Under Approval"]

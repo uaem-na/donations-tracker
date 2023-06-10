@@ -6,7 +6,6 @@ import { useAuth } from "./auth";
 
 const navigation = [
   { name: "Home", href: "/", current: false },
-  { name: "Dashboard", href: "/dashboard", current: false },
   { name: "Make Request", href: "/new-request", current: false },
   { name: "New Offer", href: "/new-offer", current: false },
 ];
@@ -96,7 +95,7 @@ export default function Navbar() {
                       <Menu.Item>
                         {({ active }) => (
                           <Link
-                            to="/profile"
+                            to="/account"
                             className={classNames(
                               active ? "bg-gray-100" : "",
                               "block px-4 py-2 text-sm text-gray-700"
