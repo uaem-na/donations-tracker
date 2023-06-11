@@ -6,7 +6,17 @@ import React, {
   useState,
 } from "react";
 import { useNavigate } from "react-router-dom";
+import { object, string, boolean } from "yup";
 import axios from "../../common/http-common";
+
+const UserSchema = object().shape({
+  admin: boolean().required("Admin status is required"),
+  email: string().email("Invalid email address").required("Email is required"),
+  firstName: string().required("First name is required"),
+  lastName: string().required("Last name is required"),
+  organization: string().required("Organization is required"),
+  verified: boolean().required("Verification status is required"),
+});
 
 const AuthContext = createContext();
 
@@ -16,6 +26,7 @@ export const AuthProvider = ({ children }) => {
   const [error, setError] = useState();
   const [loading, setLoading] = useState(false);
   const [loadingInitial, setLoadingInitial] = useState(true);
+  const [refreshSession, setRefreshSession] = useState(false);
 
   // check if there is an active session
   useEffect(() => {
@@ -23,18 +34,36 @@ export const AuthProvider = ({ children }) => {
       .get("/auth/session")
       .then((res) => {
         console.count("session");
-        if (!res.data.error) {
+        if (res.data && !res.data.error) {
+          // validate server response, this will throw error if schema validation fails
+          UserSchema.validateSync(res.data);
           setUser(res.data);
+
+          // clear error if there was one
+          if (error) {
+            setError(undefined);
+          }
         }
       })
       .catch((err) => {
-        const { data } = err.response;
-        if (data && data.message) {
-          setError(data.message);
+        if (err.response) {
+          // handle network error
+          const { data } = err.response;
+          if (data && data.message) {
+            setError(data.message);
+          } else if (data && data.error && typeof data.error === "string") {
+            setError(data.error);
+          } else {
+            setError("An unknown error occurred.");
+          }
+        } else if (err.name === "ValidationError") {
+          console.warn(`session does not match UserSchema: ${err.message}`);
+        } else {
+          console.error(err);
         }
       })
       .finally(() => setLoadingInitial(false));
-  }, []);
+  }, [refreshSession]); // refreshSession state used to force refresh of session
 
   const login = (email, password) => {
     setLoading(true);
@@ -43,13 +72,26 @@ export const AuthProvider = ({ children }) => {
       .post("/auth/login", { email, password })
       .then((res) => {
         console.count("login");
-        setUser(res.data);
-        navigate("/account");
+        if (res.data && !res.data.error) {
+          // validate server response, this will throw error if schema validation fails
+          UserSchema.validateSync(res.data);
+          setUser(res.data);
+
+          // clear error if there was one
+          if (error) {
+            setError(undefined);
+          }
+
+          // navigate to account page
+          navigate("/account");
+        }
       })
       .catch((err) => {
         const { data } = err.response;
         if (data && data.message) {
           setError(data.message);
+        } else if (data && data.error && typeof data.error === "string") {
+          setError(data.error);
         } else {
           setError("An unknown error occurred.");
         }
@@ -60,15 +102,28 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     axios
       .post("/auth/logout")
-      .then(() => {
+      .then((res) => {
         console.count("logout");
-        setUser(undefined);
-        navigate("/");
+
+        if (res.data && !res.data.error) {
+          setUser(undefined);
+          setRefreshSession(!refreshSession);
+
+          // clear error if there was one
+          if (error) {
+            setError(undefined);
+          }
+
+          // navigate to home after log out
+          navigate("/");
+        }
       })
       .catch((err) => {
         const { data } = err.response;
         if (data && data.message) {
           setError(data.message);
+        } else if (data && data.error && typeof data.error === "string") {
+          setError(data.error);
         } else {
           setError("An unknown error occurred.");
         }
@@ -81,12 +136,18 @@ export const AuthProvider = ({ children }) => {
       .post("/auth/register", data)
       .then((res) => {
         console.count("register");
+        setRefreshSession(!refreshSession);
         navigate("/");
+        if (error) {
+          setError(undefined);
+        }
       })
       .catch((err) => {
         const { data } = err.response;
         if (data && data.message) {
           setError(data.message);
+        } else if (data && data.error && typeof data.error === "string") {
+          setError(data.error);
         } else {
           setError("An unknown error occurred.");
         }

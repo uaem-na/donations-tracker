@@ -2,12 +2,15 @@ import React from "react";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
+import YupPassword from "yup-password";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Button } from "../button";
 import { Paper } from "../paper";
 import { TextInput } from "../textInput";
 import { QUERIES } from "../../constants";
 import useAuth from "./useAuth";
+
+YupPassword(yup); // extend yup
 
 const schema = yup.object().shape({
   email: yup
@@ -17,6 +20,11 @@ const schema = yup.object().shape({
   password: yup
     .string()
     .min(8, "Must be 8 characters or more")
+    .max(256, "Must less than 256 characters")
+    .minLowercase(1, "Must contain at least 1 lowercase letter")
+    .minUppercase(1, "Must contain at least 1 uppercase letter")
+    .minNumbers(1, "Must contain at least 1 number")
+    .minSymbols(1, "Must contain at least 1 symbol")
     .required("Password is required"),
   confirmPassword: yup
     .string()

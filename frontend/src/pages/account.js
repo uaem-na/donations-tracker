@@ -7,8 +7,10 @@ import { Button } from "../components/button";
 import Offers from "../components/dashboard/offers";
 import Requests from "../components/dashboard/requests";
 import { DEVICES } from "../constants";
+import { useAuth } from "../components/auth";
 
 const AccountPage = () => {
+  const { user } = useAuth();
   const [offers, setOffers] = useState([]);
   const [requests, setRequests] = useState([]);
 
