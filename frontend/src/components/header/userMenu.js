@@ -67,6 +67,7 @@ export const UserMenu = () => {
           <DropdownMenu.Portal>
             <DropdownMenuContent>
               <DropdownMenuArrow />
+
               <DropdownMenu.Group>
                 <DropdownMenuItem
                   onSelect={() => {
@@ -75,6 +76,18 @@ export const UserMenu = () => {
                 >
                   Your account
                 </DropdownMenuItem>
+              </DropdownMenu.Group>
+              <DropdownMenuSeparator />
+              <DropdownMenu.Group>
+                <DropdownMenuItem onSelect={() => navigate("/new-offer")}>
+                  Make offer
+                </DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => navigate("/new-request")}>
+                  Make request
+                </DropdownMenuItem>
+              </DropdownMenu.Group>
+              <DropdownMenuSeparator />
+              <DropdownMenu.Group>
                 <DropdownMenuItem onSelect={() => logout()}>
                   Logout
                 </DropdownMenuItem>
@@ -105,6 +118,12 @@ const MenuButton = styled.button`
   &:focus {
     box-shadow: 0 0 0 2px black;
   }
+`;
+
+const DropdownMenuSeparator = styled(DropdownMenu.Separator)`
+  height: 1px;
+  background-color: var(--color-gray-800);
+  margin: 5px;
 `;
 
 const DropdownMenuContent = styled(DropdownMenu.Content)`
@@ -153,6 +172,7 @@ const DropdownMenuItem = styled(DropdownMenu.Item)`
   outline: none;
   cursor: pointer;
 
+  &:hover,
   &:focus {
     box-shadow: 0 0 0 2px black;
   }

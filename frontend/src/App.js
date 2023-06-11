@@ -11,7 +11,7 @@ import Landing from "./components/landing";
 import ReqOff from "./components/requestOfferPage/reqOff";
 import { Login, Register, AuthProvider, useAuth } from "./components/auth";
 import { Layout } from "./components/layout";
-import { AccountPage } from "./pages";
+import { AboutUsPage, AccountPage, FaqPage } from "./pages";
 
 const RequireAuth = ({ children }) => {
   const { user } = useAuth();
@@ -32,7 +32,26 @@ function App() {
         <AuthProvider>
           <Routes>
             <Route path="/" element={<Layout />}>
+              {/* Public pages */}
               <Route index element={<Landing />} />
+              <Route path="/about-us" element={<AboutUsPage />} />
+              <Route path="/faq" element={<FaqPage />} />
+
+              {/* Private pages */}
+              <Route
+                path="/account"
+                element={
+                  <RequireAuth>
+                    <AccountPage />
+                  </RequireAuth>
+                }
+              />
+
+              {/* Authentication pages */}
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+
+              {/* Others */}
               <Route
                 path="/request/:id"
                 element={<ReqOff offer={false} edit={false} />}
@@ -54,16 +73,6 @@ function App() {
                 element={
                   <RequireAuth>
                     <ReqOff offer={true} edit={true} />
-                  </RequireAuth>
-                }
-              />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route
-                path="/account"
-                element={
-                  <RequireAuth>
-                    <AccountPage />
                   </RequireAuth>
                 }
               />

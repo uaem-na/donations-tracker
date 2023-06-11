@@ -1,5 +1,5 @@
 export const siteLinks = [
   { name: "Home", path: "/", menu: true },
-  { name: "Make Request", path: "/new-request", menu: true },
-  { name: "New Offer", path: "/new-offer", menu: true },
+  { name: "About us", path: "/about-us", menu: true },
+  { name: "FAQ", path: "/faq", menu: true },
 ];
