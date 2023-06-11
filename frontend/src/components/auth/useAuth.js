@@ -22,6 +22,7 @@ export const AuthProvider = ({ children }) => {
     axios
       .get("/auth/session")
       .then((res) => {
+        console.count("session");
         if (!res.data.error) {
           setUser(res.data);
         }
@@ -41,6 +42,7 @@ export const AuthProvider = ({ children }) => {
     axios
       .post("/auth/login", { email, password })
       .then((res) => {
+        console.count("login");
         setUser(res.data);
         navigate("/account");
       })
@@ -59,6 +61,7 @@ export const AuthProvider = ({ children }) => {
     axios
       .post("/auth/logout")
       .then(() => {
+        console.count("logout");
         setUser(undefined);
         navigate("/");
       })
@@ -77,6 +80,7 @@ export const AuthProvider = ({ children }) => {
     axios
       .post("/auth/register", data)
       .then((res) => {
+        console.count("register");
         navigate("/");
       })
       .catch((err) => {
@@ -95,16 +99,13 @@ export const AuthProvider = ({ children }) => {
       user,
       error,
       loading,
-      login,
-      logout,
-      register,
     }),
     [user, loading, error]
   );
 
   return (
     // render children only after we've checked for an active session
-    <AuthContext.Provider value={memoedValue}>
+    <AuthContext.Provider value={{ ...memoedValue, login, logout, register }}>
       {!loadingInitial && children}
     </AuthContext.Provider>
   );

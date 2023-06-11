@@ -18,7 +18,8 @@ export const RequestLink = ({
     if (status === "Posted") {
       setStatus(0);
     }
-  }, []);
+  }, [status]);
+
   return (
     <Link className="cursor" to={`/request/${id}`}>
       <div className="pb-4 inline-block px-3 font-semibold">
