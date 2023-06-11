@@ -89,7 +89,7 @@ export const UserMenu = () => {
               <DropdownMenuSeparator />
               <DropdownMenu.Group>
                 <DropdownMenuItem onSelect={() => logout()}>
-                  Logout
+                  <LogoutText>Logout</LogoutText>
                 </DropdownMenuItem>
               </DropdownMenu.Group>
             </DropdownMenuContent>
@@ -176,6 +176,10 @@ const DropdownMenuItem = styled(DropdownMenu.Item)`
   &:focus {
     box-shadow: 0 0 0 2px black;
   }
+`;
+
+const LogoutText = styled.span`
+  color: red;
 `;
 
 export default UserMenu;
