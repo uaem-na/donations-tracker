@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import YupPassword from "yup-password";
 import { yupResolver } from "@hookform/resolvers/yup";
+import * as Label from "@radix-ui/react-label";
 import { Button } from "../button";
 import { Paper } from "../paper";
 import { TextInput } from "../textInput";
@@ -35,6 +36,8 @@ const schema = yup.object().shape({
   lastName: yup.string().required("Last name is required"),
 });
 
+const FIELD_HEIGHT = "44px";
+
 const Register = () => {
   const { register: registerApi, loading, error } = useAuth();
 
@@ -56,91 +59,78 @@ const Register = () => {
         <Header>UAEM</Header>
         <Subheader>Register for an account</Subheader>
         <RegisterForm onSubmit={handleSubmit(onSubmit)}>
-          <label htmlFor="firstName" className="sr-only">
-            First name
-          </label>
-          <TextInput
-            {...register("firstName")}
-            type="text"
-            autoComplete="given-name"
-            aria-invalid={errors.firstName ? "true" : "false"}
-            isError={!!errors.firstName}
-            placeholder="First name"
-          />
-          {errors.firstName && (
-            <ErrorMessage role="alert">{errors.firstName.message}</ErrorMessage>
-          )}
-          <label htmlFor="lastName" className="sr-only">
-            Last name
-          </label>
-          <TextInput
-            {...register("lastName")}
-            type="text"
-            autoComplete="family-name"
-            aria-invalid={errors.lastName ? "true" : "false"}
-            isError={!!errors.lastName}
-            placeholder="Last name"
-          />
-          {errors.lastName && (
-            <ErrorMessage role="alert">{errors.lastName.message}</ErrorMessage>
-          )}
-          <label htmlFor="organization" className="sr-only">
-            Organization
-          </label>
-          <TextInput
-            {...register("organization")}
-            type="text"
-            autoComplete="organization"
-            aria-invalid={errors.organization ? "true" : "false"}
-            isError={!!errors.organization}
-            placeholder="Organization"
-          />
-          {errors.organization && (
-            <ErrorMessage role="alert">
-              {errors.organization.message}
-            </ErrorMessage>
-          )}
-          <TextInput
-            {...register("email")}
-            type="email"
-            autoComplete="email"
-            aria-invalid={errors.email ? "true" : "false"}
-            isError={!!errors.email}
-            placeholder="E-mail address"
-          />
-          {errors.email && (
-            <ErrorMessage role="alert">{errors.email.message}</ErrorMessage>
-          )}
-          <TextInput
-            {...register("password", {
-              required: true,
-              minLength: 8,
-            })}
-            type="password"
-            autoComplete="new-password"
-            aria-invalid={errors.password ? "true" : "false"}
-            isError={!!errors.password}
-            placeholder="Password"
-          />
-          {errors.password && (
-            <ErrorMessage role="alert">{errors.password.message}</ErrorMessage>
-          )}
-          <TextInput
-            {...register("confirmPassword", {
-              required: true,
-              minLength: 8,
-            })}
-            type="password"
-            autoComplete="new-password"
-            aria-invalid={errors.confirmPassword ? "true" : "false"}
-            isError={!!errors.confirmPassword}
-            placeholder="Confirm your password"
-          />
-          {errors.confirmPassword && (
-            <ErrorMessage role="alert">
-              {errors.confirmPassword.message}
-            </ErrorMessage>
-          )}
+          <InputGroup>
+            <InputLabel htmlFor="firstName">First name</InputLabel>
+            <TextInput
+              {...register("firstName")}
+              id="firstName"
+              type="text"
+              autoComplete="given-name"
+              placeholder="First name"
+              height={FIELD_HEIGHT}
+              errorMessage={errors.firstName?.message}
+            />
+          </InputGroup>
+          <InputGroup>
+            <InputLabel htmlFor="lastName">Last name</InputLabel>
+            <TextInput
+              {...register("lastName")}
+              id="lastName"
+              type="text"
+              autoComplete="family-name"
+              placeholder="Last name"
+              height={FIELD_HEIGHT}
+              errorMessage={errors.lastName?.message}
+            />
+          </InputGroup>
+          <InputGroup>
+            <InputLabel htmlFor="organization">Organization</InputLabel>
+            <TextInput
+              {...register("organization")}
+              id="organization"
+              type="text"
+              autoComplete="organization"
+              placeholder="Organization"
+              height={FIELD_HEIGHT}
+              errorMessage={errors.organization?.message}
+            />
+          </InputGroup>
+          <InputGroup>
+            <InputLabel htmlFor="email">E-mail</InputLabel>
+            <TextInput
+              {...register("email")}
+              id="email"
+              type="email"
+              autoComplete="email"
+              placeholder="E-mail"
+              height={FIELD_HEIGHT}
+              errorMessage={errors.email?.message}
+            />
+          </InputGroup>
+          <InputGroup>
+            <InputLabel htmlFor="password">Password</InputLabel>
+            <TextInput
+              {...register("password")}
+              id="password"
+              type="password"
+              autoComplete="new-password"
+              placeholder="Password"
+              height={FIELD_HEIGHT}
+              errorMessage={errors.password?.message}
+            />
+          </InputGroup>
+          <InputGroup>
+            <InputLabel htmlFor="confirmPassword">Confirm password</InputLabel>
+            <TextInput
+              {...register("confirmPassword")}
+              id="confirmPassword"
+              type="password"
+              autoComplete="new-password"
+              placeholder="Confirm your password"
+              height={FIELD_HEIGHT}
+              errorMessage={errors.confirmPassword?.message}
+            />
+          </InputGroup>
           <Button
             disabled={loading}
             type="submit"
@@ -185,13 +175,31 @@ const RegisterForm = styled.form`
   display: flex;
   flex-direction: column;
   margin-top: 32px;
+  gap: 12px;
 `;
 
-const ErrorMessage = styled.span`
-  display: block;
-  font-size: 1rem;
-  margin-bottom: 8px;
-  color: red;
+const InputGroup = styled.div`
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+
+  label {
+    flex: 30%;
+  }
+
+  div {
+    flex: 70%;
+  }
+`;
+
+const InputLabel = styled(Label.Root)`
+  display: inline-flex;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: ${FIELD_HEIGHT};
+  justify-content: flex-end;
+  align-self: flex-start;
+  padding-right: 16px;
 `;
 
 const ServerMessage = styled.span`
