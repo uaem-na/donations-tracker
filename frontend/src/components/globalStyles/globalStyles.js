@@ -33,6 +33,7 @@ const GlobalStyles = createGlobalStyle`
     --color-error: hsl(12, 75%, 45%);
     --color-success: hsl(139, 35%, 40%);
     --color-warn: hsl(36, 99%, 47%);
+    --color-highlight: hsl(47, 100%, 50%);
     --color-gray-50: hsl(212deg, 19%, 10%);
     --color-gray-100: hsl(212deg, 15%, 20%);
     --color-gray-200: hsl(212deg, 15%, 25%);

@@ -5,7 +5,7 @@ const PageSubtitle = styled.h2`
   font-weight: 500;
   margin-top: 28px;
   margin-bottom: 16px;
-  line-height: 1.2;
+  line-height: 1.5;
   color: var(--color-secondary);
 `;
 
