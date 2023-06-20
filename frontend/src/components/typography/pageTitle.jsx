@@ -5,7 +5,7 @@ const PageTitle = styled.h1`
   font-weight: 700;
   margin-top: 36px;
   margin-bottom: 24px;
-  line-height: 1.2;
+  line-height: 1.5;
   color: var(--color-primary);
 `;
 
