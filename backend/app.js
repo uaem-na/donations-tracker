@@ -25,8 +25,14 @@ const usersRouter = require("./routes/users");
 
 const app = express();
 
-const session = require("express-session");
+app.use(logger("dev"));
+app.use(cors(corsOptions));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+
 // set up session and passport local strategy in MongoDB
+const session = require("express-session");
 if (!process.env.CONNECTION_STRING) {
   app.use(
     session({
@@ -36,6 +42,8 @@ if (!process.env.CONNECTION_STRING) {
       saveUninitialized: false,
     })
   );
+
+  app.use(flash());
 } else {
   const MongoDBStore = require("connect-mongodb-session")(session);
   const sessionStore = new MongoDBStore({
@@ -58,27 +66,21 @@ if (!process.env.CONNECTION_STRING) {
     })
   );
 
+  app.use(flash());
+
   // set up passport middleware
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(passport.initialize());
   app.use(passport.session());
 
   // set up passport local strategy
-  const User = require("./models/user");
+  const { User } = require("./models/user");
   passport.use(User.createStrategy());
 
   // set up passport local serialization
   passport.serializeUser(User.serializeUser());
   passport.deserializeUser(User.deserializeUser());
 }
-
-app.use(logger("dev"));
-app.use(cors(corsOptions));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, "public")));
-app.use(flash());
 
 app.use("/auth", authRouter);
 app.use("/offers", offersRouter);
@@ -114,6 +116,12 @@ app.use(function (req, res, next) {
 // will print stacktrace
 if (app.get("env") === "development") {
   app.use(function (err, req, res, next) {
+    if (req.flash) {
+      const flashError = req.flash("error");
+      if (flashError && flashError.length > 0) {
+        err.message = flashError[0];
+      }
+    }
     res.status(err.status || 500).json({
       message: err.message,
       error: err,

@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const passportLocalMongoose = require("passport-local-mongoose");
+const { passwordStrength } = require("check-password-strength");
 
 const User = mongoose.Schema(
   {
@@ -19,6 +20,36 @@ User.plugin(passportLocalMongoose, {
   limitAttempts: true,
   maxAttempts: 10,
   unlockInterval: 10 * 60 * 1000, // 10 minutes
+  passwordValidator: (password, cb) => {
+    if (password.length >= 256) {
+      return cb({
+        message: `Password must be less than 256 characters.`,
+      });
+    }
+    const result = passwordStrength(password);
+    const diversityTest = result.contains
+      .map((type) => {
+        return (
+          type.indexOf("uppercase") > -1 ||
+          type.indexOf("lowercase") > -1 ||
+          type.indexOf("number") > -1 ||
+          type.indexOf("symbol") > -1
+        );
+      })
+      .every((value) => value > -1);
+
+    console.log(diversityTest);
+
+    if (result.length >= 8 && diversityTest) {
+      // password is strong enough, empty cb() for no error
+      return cb(null);
+    } else {
+      // password is weak
+      return cb({
+        message: `Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one symbol.`,
+      });
+    }
+  },
 });
 
-module.exports = mongoose.model("User", User);
+module.exports.User = mongoose.model("User", User);

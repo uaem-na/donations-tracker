@@ -1,30 +1,29 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useNavigate } from "react-router-dom";
+import * as Label from "@radix-ui/react-label";
 import { Button } from "../button";
 import { Paper } from "../paper";
 import { TextInput } from "../textInput";
 import { QUERIES } from "../../constants";
-import axios from "../../common/http-common";
+import useAuth from "./useAuth";
 
 const schema = yup.object().shape({
   email: yup
     .string()
     .email("Invalid email address")
     .required("E-mail address is required for login"),
-  password: yup
-    .string()
-    .min(8, "Must be 8 characters or more")
-    .required("Password is required for login"),
+  password: yup.string().required("Password is required for login"),
 });
 
+const FIELD_HEIGHT = "44px";
+
 const Login = () => {
-  const navigate = useNavigate();
-  const [serverError, setServerError] = useState("");
+  const { login: loginApi, loading, error } = useAuth();
+
   const {
     register,
     formState: { errors },
@@ -34,21 +33,8 @@ const Login = () => {
   });
 
   const onSubmit = (data) => {
-    axios
-      .post("/auth/login", data)
-      .then((res) => {
-        console.log(res.data);
-        navigate("/");
-      })
-      .catch((err) => {
-        const { data } = err.response;
-        if (data) {
-          const { error } = data;
-          setServerError(error);
-        } else {
-          console.error(err, err.response);
-        }
-      });
+    const { email, password } = data;
+    loginApi(email, password);
   };
 
   return (
@@ -57,41 +43,35 @@ const Login = () => {
         <Header>UAEM</Header>
         <Subheader>Sign in to your account</Subheader>
         <LoginForm onSubmit={handleSubmit(onSubmit)}>
-          <label htmlFor="email" className="sr-only">
-            Email address
-          </label>
-          <TextInput
-            {...register("email")}
-            type="email"
-            autoComplete="email"
-            aria-invalid={errors.email ? "true" : "false"}
-            isError={!!errors.email}
-            placeholder="E-mail address"
-          />
-          {errors.email && (
-            <ErrorMessage role="alert">{errors.email.message}</ErrorMessage>
-          )}
-
-          <TextInput
-            {...register("password", {
-              required: true,
-              minLength: 8,
-            })}
-            type="password"
-            autoComplete="current-password"
-            aria-invalid={errors.password ? "true" : "false"}
-            isError={!!errors.password}
-            placeholder="Password"
-          />
-          {errors.password && (
-            <ErrorMessage role="alert">{errors.password.message}</ErrorMessage>
-          )}
-
+          <InputGroup>
+            <InputLabel htmlFor="email">E-mail</InputLabel>
+            <TextInput
+              {...register("email")}
+              id="email"
+              type="email"
+              autoComplete="email"
+              placeholder="E-mail address"
+              height={FIELD_HEIGHT}
+              errorMessage={errors.email?.message}
+            />
+          </InputGroup>
+          <InputGroup>
+            <InputLabel htmlFor="password">Password</InputLabel>
+            <TextInput
+              {...register("password")}
+              id="password"
+              type="password"
+              autoComplete="current-password"
+              placeholder="Password"
+              height={FIELD_HEIGHT}
+              errorMessage={errors.password?.message}
+            />
+          </InputGroup>
+          <Button disabled={loading} type="submit">
+            Sign in
+          </Button>
           <RegisterLink to="/register">Need to register?</RegisterLink>
-          <Button type="submit">Sign in</Button>
-          {serverError && (
-            <ServerMessage role="alert">{serverError}</ServerMessage>
-          )}
+          {error && <ServerMessage role="alert">{error}</ServerMessage>}
         </LoginForm>
       </ResponsivePaper>
     </Wrapper>
@@ -128,28 +108,34 @@ const LoginForm = styled.form`
   display: flex;
   flex-direction: column;
   margin-top: 32px;
+  gap: 12px;
 `;
 
-const ErrorMessage = styled.span`
-  display: block;
-  font-size: 1rem;
+const InputGroup = styled.div`
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+`;
+
+const InputLabel = styled(Label.Root)`
+  display: inline-flex;
+  font-size: 16px;
+  font-weight: 500;
+  margin-top: 8px;
   margin-bottom: 8px;
-  color: red;
 `;
 
 const ServerMessage = styled.span`
   display: block;
   font-size: 1rem;
   margin-top: 16px;
-  color: red;
+  color: var(--color-error);
 `;
 
 const RegisterLink = styled(Link)`
   color: var(--color-gray-300);
-  font-size: 1rem;
+  font-size: 1.2rem;
   font-weight: 700;
-  margin-top: 8px;
-  margin-bottom: 8px;
   width: fit-content;
   align-self: center;
 

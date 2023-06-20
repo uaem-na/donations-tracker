@@ -2,14 +2,14 @@ import React from "react";
 import styled from "styled-components";
 import { Outlet } from "react-router-dom";
 import { GlobalStyles } from "../globalStyles";
-import Navbar from "../nav";
+import { Header } from "../header";
 
 const Layout = () => {
   return (
     <>
       <GlobalStyles />
       <Wrapper>
-        <Navbar />
+        <Header />
         <Outlet />
       </Wrapper>
     </>
