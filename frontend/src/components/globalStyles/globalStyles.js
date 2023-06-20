@@ -28,8 +28,11 @@ const GlobalStyles = createGlobalStyle`
     --shadow-color: 212 20% 50%;
     --color-background: hsl(212deg, 33%, 96%);
     --color-text: hsl(212deg, 33%, 20%);
-    --color-primary: hsl(212deg, 33%, 50%);
-    --color-secondary: hsl(212deg, 33%, 50%);
+    --color-primary: hsl(215, 28%, 28%);
+    --color-secondary: hsl(215, 28%, 52%);
+    --color-error: hsl(12, 75%, 45%);
+    --color-success: hsl(139, 35%, 40%);
+    --color-warn: hsl(36, 99%, 47%);
     --color-gray-50: hsl(212deg, 19%, 10%);
     --color-gray-100: hsl(212deg, 15%, 20%);
     --color-gray-200: hsl(212deg, 15%, 25%);

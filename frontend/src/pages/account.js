@@ -1,13 +1,25 @@
 // [Private] My Account page component
 // Contains: dashboard, account information and actions to make offers/requests
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import axios from "../common/http-common";
-import { Button } from "../components/button";
 import Offers from "../components/dashboard/offers";
+import React, { useEffect, useState } from "react";
 import Requests from "../components/dashboard/requests";
+import UpdatePasswordForm from "../components/account/updatePasswordForm";
+import UpdateUserInfoForm from "../components/account/updateUserInfoForm";
+import axios from "../common/http-common";
+import styled from "styled-components";
+import { Button } from "../components/button";
 import { DEVICES } from "../constants";
+import { Tooltip } from "../components/tooltip";
 import { useAuth } from "../components/auth";
+
+const VerifiedStatus = () => {
+  const { user } = useAuth();
+  if (user.verified) {
+    return <>verified</>;
+  } else {
+    return <>not verified</>;
+  }
+};
 
 const AccountPage = () => {
   const { user } = useAuth();
@@ -15,6 +27,7 @@ const AccountPage = () => {
   const [requests, setRequests] = useState([]);
 
   useEffect(() => {
+    console.log(user);
     axios
       .get(`/offers`)
       .then((response) => {
@@ -66,7 +79,36 @@ const AccountPage = () => {
         </DashboardColumn>
         <InformationColumn>
           <Heading>Account Information</Heading>
-          <p>Coming soon</p>
+          <ReadonlyData>
+            <p>
+              Email:&nbsp;
+              <Tooltip message="Please contact the administrator to update your email.">
+                {`${user.email}`}
+              </Tooltip>
+            </p>
+            <p>
+              Organization:&nbsp;
+              <Tooltip
+                message={
+                  "Please contact the administrator to update your organization."
+                }
+              >{`${user.organization}`}</Tooltip>
+            </p>
+            <p>
+              Verification:&nbsp;
+              <Tooltip
+                message={
+                  "Please contact the administrator to get the current status."
+                }
+              >
+                <VerifiedStatus />
+              </Tooltip>
+            </p>
+          </ReadonlyData>
+          <EditableData>
+            <UpdateUserInfoForm />
+            <UpdatePasswordForm />
+          </EditableData>
         </InformationColumn>
       </ResponsiveRow>
     </Wrapper>
@@ -135,5 +177,11 @@ const InformationColumn = styled.div`
   flex: 1;
   min-width: 320px;
 `;
+
+const ReadonlyData = styled.span`
+  font-size: 1.2rem;
+`;
+
+const EditableData = styled.span``;
 
 export default AccountPage;

@@ -37,6 +37,7 @@ TextInput.propTypes = {
 
 const InputWrapper = styled.div`
   display: flex;
+  width: 100%;
   flex-direction: column;
   gap: 4px;
 `;
@@ -44,14 +45,14 @@ const InputWrapper = styled.div`
 const StyledInput = styled.input`
   width: 100%;
   border: 1px solid var(--color-gray-800);
-  border: ${({ isError }) => isError && "1px solid red"};
+  border: ${({ isError }) => isError && "1px solid var(--color-error);"};
   border-radius: 8px;
   padding: 12px 16px;
   font-size: 1.1rem;
   height: ${({ height }) => getHeight({ height })};
 
   &:focus {
-    outline: ${({ isError }) => isError && "2px dotted red"};
+    outline: ${({ isError }) => isError && "2px dotted var(--color-error);"};
   }
 
   &::placeholder {
@@ -67,7 +68,7 @@ const ErrorMessage = styled.span`
   display: inline-flex;
   font-size: 1rem;
   margin-bottom: 8px;
-  color: red;
+  color: var(--color-error);
   justify-content: flex-end;
 `;
 

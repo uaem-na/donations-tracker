@@ -155,6 +155,63 @@ export const AuthProvider = ({ children }) => {
       .finally(() => setLoading(false));
   };
 
+  const updateUserInfo = (data, cb) => {
+    axios
+      .post(`/users/update`, data)
+      .then((res) => {
+        console.count("updateUserInfo");
+        // validate server response, this will throw error if schema validation fails
+        UserSchema.validateSync(res.data);
+        setUser(res.data);
+        if (error) {
+          setError(undefined);
+        }
+      })
+      .catch((err) => {
+        const { data } = err.response;
+        if (data && data.message) {
+          setError(data.message);
+          if (cb) cb(data.message);
+        } else if (data && data.error && typeof data.error === "string") {
+          setError(data.error);
+          if (cb) cb(data.error);
+        } else {
+          setError("An unknown error occurred.");
+          if (cb) cb("An unknown error occurred.");
+        }
+      });
+  };
+
+  const updatePassword = (data, cb) => {
+    axios
+      .post(`/users/password`, data)
+      .then((res) => {
+        console.count("updatePassword");
+        // validate server response, this will throw error if schema validation fails
+        UserSchema.validateSync(res.data);
+        setUser(res.data);
+        if (error) {
+          setError(undefined);
+        }
+        if (cb) {
+          cb();
+        }
+      })
+      .catch((err) => {
+        const { data } = err.response;
+        if (data && data.message) {
+          setError(data.message);
+          if (cb) cb(data.message);
+        } else if (data && data.error && typeof data.error === "string") {
+          setError(data.error);
+          if (cb) cb(data.error);
+        } else {
+          setError("An unknown error occurred.");
+          if (cb) cb("An unknown error occurred.");
+        }
+      });
+  };
+
   const memoedValue = useMemo(
     () => ({
       user,
@@ -166,7 +223,16 @@ export const AuthProvider = ({ children }) => {
 
   return (
     // render children only after we've checked for an active session
-    <AuthContext.Provider value={{ ...memoedValue, login, logout, register }}>
+    <AuthContext.Provider
+      value={{
+        ...memoedValue,
+        login,
+        logout,
+        register,
+        updateUserInfo,
+        updatePassword,
+      }}
+    >
       {!loadingInitial && children}
     </AuthContext.Provider>
   );

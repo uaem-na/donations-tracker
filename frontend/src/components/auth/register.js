@@ -21,7 +21,7 @@ const schema = yup.object().shape({
   password: yup
     .string()
     .min(8, "Must be 8 characters or more")
-    .max(256, "Must less than 256 characters")
+    .max(256, "Must be less than 256 characters")
     .minLowercase(1, "Must contain at least 1 lowercase letter")
     .minUppercase(1, "Must contain at least 1 uppercase letter")
     .minNumbers(1, "Must contain at least 1 number")
@@ -180,33 +180,23 @@ const RegisterForm = styled.form`
 
 const InputGroup = styled.div`
   display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-
-  label {
-    flex: 30%;
-  }
-
-  div {
-    flex: 70%;
-  }
+  width: 100%;
+  flex-direction: column;
 `;
 
 const InputLabel = styled(Label.Root)`
   display: inline-flex;
   font-size: 16px;
   font-weight: 500;
-  line-height: ${FIELD_HEIGHT};
-  justify-content: flex-end;
-  align-self: flex-start;
-  padding-right: 16px;
+  margin-top: 8px;
+  margin-bottom: 8px;
 `;
 
 const ServerMessage = styled.span`
   display: block;
   font-size: 1rem;
   margin-top: 16px;
-  color: red;
+  color: var(--color-error);
 `;
 
 export default Register;

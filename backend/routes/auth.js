@@ -29,6 +29,7 @@ router.post(
   passport.authenticate("local", {
     failureFlash: true,
     failWithError: true,
+    passReqToCallback: true,
   }),
   (req, res, next) => {
     req.session.save((err) => {
@@ -71,7 +72,7 @@ router.post("/register", (req, res, next) => {
       lastName,
       organization,
     }),
-    req.body.password,
+    password,
     (err, user) => {
       if (err) {
         return res.status(500).json({ error: err.message });
