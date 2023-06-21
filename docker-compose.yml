@@ -28,13 +28,14 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile.local
+      args:
+        REACT_APP_GOOGLE_MAPS_API_KEY: ${REACT_APP_GOOGLE_MAPS_API_KEY}
     container_name: donations-tracker-frontend
     environment:
       PORT: 8080
       WDS_SOCKET_HOST: 127.0.0.1 
       CHOKIDAR_USEPOLLING: true
       WATCHPACK_POLLING: true
-      REACT_APP_GOOGLE_MAPS_API_KEY: ${REACT_APP_GOOGLE_MAPS_API_KEY}
     ports:
       - 8080:8080
     networks:
