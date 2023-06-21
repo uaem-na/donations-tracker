@@ -1,14 +1,8 @@
 require("dotenv").config();
 
-const corsOptions = {
-  origin: process.env.CLIENT_ORIGIN || "http://localhost:8080",
-  credentials: true,
-};
-
 const debug = require("debug")("backend:app");
 const express = require("express");
 const cors = require("cors");
-const path = require("path");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
@@ -23,30 +17,68 @@ const reportsRouter = require("./routes/reports");
 const requestsRouter = require("./routes/requests");
 const usersRouter = require("./routes/users");
 
+const environment = process.env.NODE_ENV || "development";
+
 const app = express();
 
-app.use(logger("dev"));
+// * log requests to console
+if (environment === "development") {
+  // * output colored by response status for development use
+  app.use(logger("dev"));
+} else {
+  // * Apache combined format
+  app.use(logger("combined"));
+}
+
+const corsOptions = {
+  origin: process.env.CLIENT_ORIGIN || "http://localhost:8080",
+  credentials: true,
+};
+
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+// * remove headers that reveal server info
+app.disable("x-powered-by");
+app.disable("etag");
+app.disable("server");
+
+// * app hosted in Google Cloud Run, which prob uses lb
 app.set("trust proxy", 1);
 
-// set up session and passport local strategy in MongoDB
 const session = require("express-session");
-if (!process.env.CONNECTION_STRING) {
-  app.use(
-    session({
-      name: "__session",
-      secret:
-        process.env.SESSION_SECRET || crypto.randomBytes(20).toString("hex"),
-      resave: false,
-      saveUninitialized: false,
-    })
-  );
+const sessionName = process.env.SESSION_NAME || "__session";
+debug(`session name: ${sessionName}`);
 
-  app.use(flash());
+const cookieDomain = process.env.COOKIE_DOMAIN || "localhost";
+debug(`cookie domain: ${cookieDomain}`);
+
+const sessionSecret =
+  process.env.SESSION_SECRET || crypto.randomBytes(20).toString("hex");
+
+// ! we exit the process if there is no connection string to MongoDB
+const connectionString = process.env.CONNECTION_STRING;
+if (!connectionString) {
+  // * do not hide error message using debug since this is a fatal error
+  console.error("Missing CONNECTION_STRING environment variable");
+
+  process.exit(1);
 } else {
+  mongoose.connect(connectionString);
+
+  const connection = mongoose.connection;
+
+  // TODO: should we exit the process if there is an error?
+  connection.on("error", console.error.bind(console, "CONNECTION ERROR"));
+
+  connection.once("open", () => {
+    debug(
+      `Connected to MongoDB at ${connection.host}:${connection.port}/${connection.db.databaseName}`
+    );
+  });
+
   const MongoDBStore = require("connect-mongodb-session")(session);
   const sessionStore = new MongoDBStore({
     uri: process.env.CONNECTION_STRING,
@@ -56,57 +88,45 @@ if (!process.env.CONNECTION_STRING) {
   // set up sesion with MongoDB
   app.use(
     session({
-      name: "__session",
-      secret:
-        process.env.SESSION_SECRET || crypto.randomBytes(20).toString("hex"),
+      name: sessionName,
+      secret: sessionSecret,
       resave: false,
       saveUninitialized: false,
       cookie: {
-        secure: process.env.NODE_ENV === "production",
+        // ! set cookie domain via environment variable, default to localhost
+        domain: process.env.COOKIE_DOMAIN || "localhost",
+        // ! set secure to true for production
+        secure: environment === "production",
         maxAge: 60 * 60 * 1000,
-        // ! we need to set sameSite to none for cross-site requests
-        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+        // ! set sameSite to 'none' for cross-site requests, 'lax' for development
+        sameSite: environment === "production" ? "none" : "lax",
       },
       store: sessionStore,
     })
   );
-
-  app.use(flash());
-
-  // set up passport middleware
-  app.use(bodyParser.urlencoded({ extended: false }));
-  app.use(passport.initialize());
-  app.use(passport.session());
-
-  // set up passport local strategy
-  const { User } = require("./models/user");
-  passport.use(User.createStrategy());
-
-  // set up passport local serialization
-  passport.serializeUser(User.serializeUser());
-  passport.deserializeUser(User.deserializeUser());
 }
+
+// set up flash middleware
+app.use(flash());
+
+// set up passport middleware
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(passport.initialize());
+app.use(passport.session());
+
+// set up passport local strategy
+const { User } = require("./models/user");
+passport.use(User.createStrategy());
+
+// set up passport local serialization
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 app.use("/auth", authRouter);
 app.use("/offers", offersRouter);
 app.use("/reports", reportsRouter);
 app.use("/requests", requestsRouter);
 app.use("/users", usersRouter);
-
-const connectionString = process.env.CONNECTION_STRING;
-if (!connectionString) {
-  debug("Missing CONNECTION_STRING environment variable");
-} else {
-  mongoose.connect(connectionString);
-
-  const connection = mongoose.connection;
-  connection.on("error", console.error.bind(console, "CONNECTION ERROR"));
-  connection.once("open", () => {
-    debug(
-      `Connected to MongoDB at ${connection.host}:${connection.port}/${connection.db.databaseName}`
-    );
-  });
-}
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
