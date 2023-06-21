@@ -30,6 +30,7 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.set("trust proxy", 1);
 
 // set up session and passport local strategy in MongoDB
 const session = require("express-session");
