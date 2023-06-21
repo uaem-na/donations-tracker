@@ -36,6 +36,7 @@ const session = require("express-session");
 if (!process.env.CONNECTION_STRING) {
   app.use(
     session({
+      name: "__session",
       secret:
         process.env.SESSION_SECRET || crypto.randomBytes(20).toString("hex"),
       resave: false,
@@ -54,6 +55,7 @@ if (!process.env.CONNECTION_STRING) {
   // set up sesion with MongoDB
   app.use(
     session({
+      name: "__session",
       secret:
         process.env.SESSION_SECRET || crypto.randomBytes(20).toString("hex"),
       resave: false,
@@ -62,7 +64,7 @@ if (!process.env.CONNECTION_STRING) {
         secure: process.env.NODE_ENV === "production",
         maxAge: 60 * 60 * 1000,
         // ! we need to set sameSite to none for cross-site requests
-        sameSite: "none",
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       },
       store: sessionStore,
     })
