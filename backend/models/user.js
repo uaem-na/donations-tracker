@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const passportLocalMongoose = require("passport-local-mongoose");
 const { passwordStrength } = require("check-password-strength");
 
-const User = mongoose.Schema(
+const UserSchema = mongoose.Schema(
   {
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
@@ -15,7 +15,7 @@ const User = mongoose.Schema(
 );
 
 // email, salt and hash are added by passport-local-mongoose
-User.plugin(passportLocalMongoose, {
+UserSchema.plugin(passportLocalMongoose, {
   usernameField: "email",
   limitAttempts: true,
   maxAttempts: 10,
@@ -38,8 +38,6 @@ User.plugin(passportLocalMongoose, {
       })
       .every((value) => value > -1);
 
-    console.log(diversityTest);
-
     if (result.length >= 8 && diversityTest) {
       // password is strong enough, empty cb() for no error
       return cb(null);
@@ -52,4 +50,4 @@ User.plugin(passportLocalMongoose, {
   },
 });
 
-module.exports.User = mongoose.model("User", User);
+module.exports.User = mongoose.model("User", UserSchema);
