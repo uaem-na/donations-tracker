@@ -61,6 +61,8 @@ if (!process.env.CONNECTION_STRING) {
       cookie: {
         secure: process.env.NODE_ENV === "production",
         maxAge: 60 * 60 * 1000,
+        // ! we need to set sameSite to none for cross-site requests
+        sameSite: "none",
       },
       store: sessionStore,
     })
