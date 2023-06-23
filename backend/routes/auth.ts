@@ -1,6 +1,6 @@
-const express = require("express");
-const passport = require("passport");
-const router = express.Router();
+import passport from "passport";
+import { Router } from "express";
+const router = Router();
 const { User } = require("../models/user");
 
 // handle httpOnly cookie session
@@ -35,6 +35,10 @@ router.post(
     req.session.save((err) => {
       if (err) {
         return next(err);
+      }
+
+      if (!req.user) {
+        return res.status(500).json({ error: "Login failed." });
       }
 
       const { admin, email, firstName, lastName, organization, verified } =

@@ -1,5 +1,5 @@
-const express = require("express");
-const router = express.Router();
+import { Router } from "express";
+const router = Router();
 const ensureAuthenticated = require("../middlewares/ensureAuthenticated");
 let { User } = require("../models/user");
 

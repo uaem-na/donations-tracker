@@ -1,8 +1,8 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 const passportLocalMongoose = require("passport-local-mongoose");
 const { passwordStrength } = require("check-password-strength");
 
-const UserSchema = mongoose.Schema(
+const UserSchema = new mongoose.Schema(
   {
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
@@ -11,7 +11,7 @@ const UserSchema = mongoose.Schema(
     active: { type: Boolean, default: true }, // TODO: add deactivation mechanism
     verified: { type: Boolean, default: false }, // TODO: add veritifcation mechanism for admin
   },
-  { timestamp: true }
+  { timestamps: true }
 );
 
 // email, salt and hash are added by passport-local-mongoose

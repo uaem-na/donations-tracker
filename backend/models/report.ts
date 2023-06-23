@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
-const reportSchema = mongoose.Schema(
+const reportSchema = new mongoose.Schema(
   {
     userId: { type: String, required: true },
     reportedPostId: { type: String, required: true },

@@ -1,13 +1,14 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
-const offerSchema = new mongoose.Schema(
+const requestSchema = new mongoose.Schema(
   {
     userId: { type: String, required: true },
     ppeProfiles: { type: [], required: true },
+    status: { type: String, required: true },
     postalCode: { type: String, required: true },
     reportIds: { type: [], required: false },
   },
   { timestamps: true }
 );
 
-module.exports.Offer = mongoose.model("Offer", offerSchema);
+module.exports.Request = mongoose.model("Request", requestSchema);
