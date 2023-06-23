@@ -1,5 +1,5 @@
-const express = require("express");
-const router = express.Router();
+import { Router } from "express";
+const router = Router();
 var { Request } = require("../models/request");
 
 function parseBodyProfiles(req) {
@@ -120,7 +120,7 @@ function updatePpes(req, res) {
     return;
   }
 
-  Request.updateOne({ _id: id }, { ppeProfiles: ppeProfiles })
+  Request.updateOne({ _id: id }, { ppeProfiles: parseBodyProfiles(req) })
     .then((ret) => {
       if (ret.n == 0) {
         res

@@ -1,5 +1,5 @@
-const express = require("express");
-const router = express.Router();
+import { Router } from "express";
+const router = Router();
 let { Report } = require("../models/report");
 
 function postReport(req, res) {

@@ -119,7 +119,7 @@ function updatePpes(req, res) {
     return;
   }
 
-  Offer.updateOne({ _id: id }, { ppeProfiles: ppeProfiles })
+  Offer.updateOne({ _id: id }, { ppeProfiles: parseBodyProfiles(req) })
     .then((ret) => {
       if (ret.n == 0) {
         res
