@@ -14,6 +14,11 @@ import useAuth from "./useAuth";
 YupPassword(yup); // extend yup
 
 const schema = yup.object().shape({
+  username: yup
+    .string()
+    .min(3, "Must be 3 characters or more")
+    .max(32, "Must be less than 32 characters")
+    .required("Username is required"),
   email: yup
     .string()
     .email("Invalid email address")
@@ -59,6 +64,18 @@ const Register = () => {
         <Header>UAEM</Header>
         <Subheader>Register for an account</Subheader>
         <RegisterForm onSubmit={handleSubmit(onSubmit)}>
+          <InputGroup>
+            <InputLabel htmlFor="username">Username</InputLabel>
+            <TextInput
+              {...register("username")}
+              id="username"
+              type="text"
+              autoComplete="username"
+              placeholder="Username"
+              height={FIELD_HEIGHT}
+              errorMessage={errors.username?.message}
+            />
+          </InputGroup>
           <InputGroup>
             <InputLabel htmlFor="firstName">First name</InputLabel>
             <TextInput

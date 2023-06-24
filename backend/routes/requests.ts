@@ -1,6 +1,6 @@
 import { Router } from "express";
+import { Request } from "../models/request";
 const router = Router();
-var { Request } = require("../models/request");
 
 function parseBodyProfiles(req) {
   let errorMsg = "";
@@ -24,7 +24,7 @@ function parseBodyProfiles(req) {
 }
 
 function postRequest(req, res) {
-  var errorMsg = "";
+  let errorMsg = "";
 
   const userId = req.body.userId;
   if (userId === undefined || userId === "") {
@@ -106,7 +106,7 @@ router.get("/user/:userId", (req, res) => {
 });
 
 function updatePpes(req, res) {
-  var errorMsg = "";
+  let errorMsg = "";
   const id = req.params.id;
   if (id === undefined || id === "") {
     errorMsg += "Request ID cannot be empty.";
@@ -145,7 +145,7 @@ function updatePpes(req, res) {
 router.put("/ppes/:id", updatePpes);
 
 router.put("/status/:id", (req, res) => {
-  var errorMsg = "";
+  let errorMsg = "";
   const id = req.params.id;
   if (id === undefined || id === "") {
     errorMsg += "Request ID cannot be empty.\n";
@@ -186,7 +186,7 @@ router.put("/status/:id", (req, res) => {
 });
 
 router.put("/report/:id", (req, res) => {
-  var errorMsg = "";
+  let errorMsg = "";
   const id = req.params.id;
   if (id === undefined || id === "") {
     errorMsg += "Request ID cannot be empty.\n";

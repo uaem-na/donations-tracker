@@ -12,10 +12,11 @@ import { QUERIES } from "../../constants";
 import useAuth from "./useAuth";
 
 const schema = yup.object().shape({
-  email: yup
+  username: yup
     .string()
-    .email("Invalid email address")
-    .required("E-mail address is required for login"),
+    .min(3, "Must be 3 characters or more")
+    .max(32, "Must be less than 32 characters")
+    .required("Username is required"),
   password: yup.string().required("Password is required for login"),
 });
 
@@ -33,8 +34,8 @@ const Login = () => {
   });
 
   const onSubmit = (data) => {
-    const { email, password } = data;
-    loginApi(email, password);
+    const { username, password } = data;
+    loginApi(username, password);
   };
 
   return (
@@ -44,15 +45,15 @@ const Login = () => {
         <Subheader>Sign in to your account</Subheader>
         <LoginForm onSubmit={handleSubmit(onSubmit)}>
           <InputGroup>
-            <InputLabel htmlFor="email">E-mail</InputLabel>
+            <InputLabel htmlFor="username">Username</InputLabel>
             <TextInput
-              {...register("email")}
-              id="email"
-              type="email"
-              autoComplete="email"
-              placeholder="E-mail address"
+              {...register("username")}
+              id="username"
+              type="text"
+              autoComplete="username"
+              placeholder="Username"
               height={FIELD_HEIGHT}
-              errorMessage={errors.email?.message}
+              errorMessage={errors.username?.message}
             />
           </InputGroup>
           <InputGroup>

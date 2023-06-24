@@ -65,11 +65,11 @@ export const AuthProvider = ({ children }) => {
       .finally(() => setLoadingInitial(false));
   }, [refreshSession]); // refreshSession state used to force refresh of session
 
-  const login = (email, password) => {
+  const login = (username, password) => {
     setLoading(true);
 
     axios
-      .post("/auth/login", { email, password })
+      .post("/auth/login", { username, password })
       .then((res) => {
         console.count("login");
         if (res.data && !res.data.error) {

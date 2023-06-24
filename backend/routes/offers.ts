@@ -1,6 +1,6 @@
-const express = require("express");
-const router = express.Router();
-const { Offer } = require("../models/offer");
+import { Router } from "express";
+import { Offer } from "../models";
+const router = Router();
 
 function parseBodyProfiles(req) {
   let errorMsg = "";
@@ -24,7 +24,7 @@ function parseBodyProfiles(req) {
 }
 
 function postOffer(req, res) {
-  var errorMsg = "";
+  let errorMsg = "";
 
   const userId = req.body.userId;
   if (userId === undefined || userId === "") {
@@ -104,7 +104,7 @@ router.get("/user/:userId", (req, res) => {
 });
 
 function updatePpes(req, res) {
-  var errorMsg = "";
+  let errorMsg = "";
   const id = req.params.id;
   if (id === undefined || id === "") {
     errorMsg += "Offer ID cannot be empty.";
@@ -144,7 +144,7 @@ function updatePpes(req, res) {
 router.put("/ppes/:id", updatePpes);
 
 router.put("/report/:id", (req, res) => {
-  var errorMsg = "";
+  let errorMsg = "";
   const id = req.params.id;
   if (id === undefined || id === "") {
     errorMsg += "Offer ID cannot be empty.\n";

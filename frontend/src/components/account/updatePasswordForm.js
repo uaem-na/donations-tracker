@@ -21,10 +21,19 @@ const schema = yup.object().shape({
     .minNumbers(1, "Must contain at least 1 number")
     .minSymbols(1, "Must contain at least 1 symbol")
     .required("Password is required"),
-  confirmPassword: yup
+  newPassword: yup
+    .string()
+    .min(8, "Must be 8 characters or more")
+    .max(256, "Must be less than 256 characters")
+    .minLowercase(1, "Must contain at least 1 lowercase letter")
+    .minUppercase(1, "Must contain at least 1 uppercase letter")
+    .minNumbers(1, "Must contain at least 1 number")
+    .minSymbols(1, "Must contain at least 1 symbol")
+    .required("Password is required"),
+  confirmNewPassword: yup
     .string()
     .required("Confirm password is required")
-    .oneOf([yup.ref("password"), null], "Passwords must match"),
+    .oneOf([yup.ref("newPassword"), null], "Passwords must match"),
 });
 
 const FIELD_HEIGHT = "44px";
@@ -57,27 +66,41 @@ const UpdatePasswordForm = () => {
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
       <InputGroup>
-        <InputLabel htmlFor="password">New password</InputLabel>
+        <InputLabel htmlFor="password">Current password</InputLabel>
         <TextInput
           {...register("password")}
           id="password"
           type="password"
-          autoComplete="new-password"
-          placeholder="New password"
+          autoComplete="current-password"
+          placeholder="Current password"
           height={FIELD_HEIGHT}
           errorMessage={errors.password?.message}
         />
       </InputGroup>
       <InputGroup>
-        <InputLabel htmlFor="confirmPassword">Confirm new password</InputLabel>
+        <InputLabel htmlFor="newPassword">New password</InputLabel>
         <TextInput
-          {...register("confirmPassword")}
-          id="confirmPassword"
+          {...register("newPassword")}
+          id="newPassword"
+          type="password"
+          autoComplete="new-password"
+          placeholder="New password"
+          height={FIELD_HEIGHT}
+          errorMessage={errors.newPassword?.message}
+        />
+      </InputGroup>
+      <InputGroup>
+        <InputLabel htmlFor="confirmNewPassword">
+          Confirm new password
+        </InputLabel>
+        <TextInput
+          {...register("confirmNewPassword")}
+          id="confirmNewPassword"
           type="password"
           autoComplete="new-password"
           placeholder="Confirm your new password"
           height={FIELD_HEIGHT}
-          errorMessage={errors.confirmPassword?.message}
+          errorMessage={errors.confirmNewPassword?.message}
         />
       </InputGroup>
       <Button
