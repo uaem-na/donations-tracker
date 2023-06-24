@@ -1,14 +1,19 @@
 import debug from "debug";
 import expressAsyncHandler from "express-async-handler";
 import { body, param, validationResult } from "express-validator";
-import { ReportDto, UserDto } from "../dtos";
+import { ReportDto } from "../dtos";
 import { AuthorizationError, NotFoundError, ValidationError } from "../errors";
-import { ReportService } from "../services";
+import { PostService, ReportService, UserService } from "../services";
+import { hasUser } from "../utils";
 
 const log = debug("backend:report");
 
 export class ReportController {
-  constructor(private reportService: ReportService) {}
+  constructor(
+    private postService: PostService,
+    private reportService: ReportService,
+    private userService: UserService
+  ) {}
 
   getAllReports = expressAsyncHandler(async (req, res, next) => {
     const reports = await this.reportService.getReports();
@@ -18,9 +23,11 @@ export class ReportController {
   });
 
   createReport = expressAsyncHandler(async (req, res, next) => {
-    await body("userId").notEmpty().run(req);
+    if (!hasUser(req)) {
+      throw new AuthorizationError("User not logged in.");
+    }
+
     await body("postId").notEmpty().run(req);
-    await body("status").notEmpty().isIn(["resolved", "unresolved"]).run(req);
     await body("notes").notEmpty().run(req);
 
     const errors = validationResult(req);
@@ -28,19 +35,30 @@ export class ReportController {
       throw new ValidationError(errors.array());
     }
 
-    const { userId, postId, status, notes } = req.body;
-    const currentUser = req.user as UserDto;
-    const currentUserId = currentUser.id as string;
+    const { postId, notes } = req.body;
+
+    const reporter = await this.userService.getUserByUsername(
+      req.user.username
+    );
+    if (!reporter) {
+      throw new NotFoundError(`Error finding user ${req.user.username}.`);
+    }
+
+    const post = await this.postService.getPost(postId);
+    if (!post) {
+      throw new NotFoundError(`Error finding post with id ${postId}.`);
+    }
 
     const report = await this.reportService.createReport({
-      userId,
-      postId,
-      status,
+      reporter,
+      post,
+      status: "unresolved",
       notes,
-      reportedBy: currentUserId,
     });
 
-    log(`Created report ${report._id} for user ${userId} on post ${postId}.`);
+    log(
+      `Created report ${report._id} for user ${post.author.username} on post [${post.id}] ${post.title}.`
+    );
 
     res.status(201).json(ReportDto.fromDocument(report));
   });
@@ -83,6 +101,10 @@ export class ReportController {
   });
 
   deleteReport = expressAsyncHandler(async (req, res, next) => {
+    if (!hasUser(req)) {
+      throw new AuthorizationError("User not logged in.");
+    }
+
     await param("id").notEmpty().run(req);
 
     const errors = validationResult(req);
@@ -92,15 +114,11 @@ export class ReportController {
 
     const { id } = req.params;
     const report = await this.reportService.getReport(id);
-
     if (!report) {
       throw new NotFoundError(`Error finding report ${id}.`);
     }
 
-    const currentUser = req.user as UserDto;
-    const currentUserId = currentUser.id as string;
-
-    if (currentUserId !== report.reportedBy.toString()) {
+    if (req.user.username !== report.reporter.username.toString()) {
       throw new AuthorizationError(
         "User must be the one who filed the report to delete the report."
       );

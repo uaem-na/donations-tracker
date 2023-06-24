@@ -1,26 +1,24 @@
 import { Document } from "mongoose";
-import { IReport } from "../types";
+import { Report, ReportPost, ReportUser } from "../types";
 
 export class ReportDto {
-  userId: string;
-  postId: string;
+  reporter: ReportUser;
+  resolver: ReportUser;
+  post: ReportPost;
   status: "resolved" | "unresolved";
   notes: string;
-  reportedBy: string;
-  resolvedBy: string;
 
-  private constructor(report: IReport) {
-    const { userId, postId, status, notes, reportedBy, resolvedBy } = report;
-    this.userId = userId.toString();
-    this.postId = postId.toString();
+  private constructor(report: Report) {
+    const { reporter, resolver, post, status, notes } = report;
+    this.reporter = reporter;
+    this.resolver = resolver;
+    this.post = post;
     this.status = status;
     this.notes = notes;
-    this.reportedBy = reportedBy.toString();
-    this.resolvedBy = resolvedBy.toString();
   }
 
   static fromDocument(document: Document): ReportDto {
-    const report = document.toObject() as IReport;
+    const report = document.toObject() as Report;
     return new ReportDto(report);
   }
 }

@@ -1,42 +1,42 @@
-import { Document, Types } from "mongoose";
-import { IPost, IPostLocation } from "../types";
+import { Document } from "mongoose";
+import { Location, Post, PostAuthor, PostItem } from "../types";
+
+type PostItemDto = Omit<PostItem, "image"> & {
+  image?: string;
+};
 
 export class PostDto {
-  author: Types.ObjectId | string;
+  author: PostAuthor;
+  location: Location;
+  title: string;
+  items: PostItemDto[];
   type: "request" | "offer";
   status: "open" | "in-progress" | "closed";
-  title: string;
-  description: string;
-  location: IPostLocation;
-  tags: string[];
-  images: string[];
   views: number;
 
-  private constructor(post: IPost) {
-    const {
-      author,
-      type,
-      status,
-      title,
-      description,
-      location,
-      tags,
-      images,
-      views,
-    } = post;
+  private constructor(post: Post) {
+    const { author, location, title, items, type, status, views } = post;
     this.author = author;
+    this.location = location;
+    this.title = title;
+    this.items = items.map((item) => {
+      const { image, ...rest } = item;
+
+      // convert binary image data to base64 string
+      const b64Image = image.data.toString("base64");
+
+      return {
+        ...(b64Image && { image: b64Image }),
+        ...rest,
+      };
+    });
     this.type = type;
     this.status = status;
-    this.title = title;
-    this.description = description;
-    this.location = location;
-    this.tags = tags;
-    this.images = images.map((image) => image.data.toString("base64"));
     this.views = views;
   }
 
   static fromDocument(document: Document): PostDto {
-    const post = document.toObject() as IPost;
+    const post = document.toObject() as Post;
     return new PostDto(post);
   }
 }

@@ -10,12 +10,13 @@ import { object, string, boolean } from "yup";
 import axios from "../../common/http-common";
 
 const UserSchema = object().shape({
-  admin: boolean().required("Admin status is required"),
+  id: string().required("User ID is required"),
+  username: string().required("Username is required"),
   email: string().email("Invalid email address").required("Email is required"),
   firstName: string().required("First name is required"),
   lastName: string().required("Last name is required"),
-  organization: string().required("Organization is required"),
   verified: boolean().required("Verification status is required"),
+  admin: boolean(),
 });
 
 const AuthContext = createContext();
@@ -87,11 +88,13 @@ export const AuthProvider = ({ children }) => {
         }
       })
       .catch((err) => {
-        const { data } = err.response;
-        if (data && data.message) {
-          setError(data.message);
-        } else if (data && data.error && typeof data.error === "string") {
-          setError(data.error);
+        if (err && err.response) {
+          const { data } = err.response;
+          if (data && data.message) {
+            setError(data.message);
+          } else if (data && data.error && typeof data.error === "string") {
+            setError(data.error);
+          }
         } else {
           setError("An unknown error occurred.");
         }

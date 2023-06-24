@@ -1,47 +1,38 @@
 import { Document } from "mongoose";
-import { IUser } from "../types";
+import { Location, User } from "../types";
 
 export class UserDto {
   id?: string;
-  admin: boolean;
   username: string;
   email: string;
   firstName: string;
   lastName: string;
-  organization: string;
   verified: boolean;
+  location: Location;
 
-  private constructor(id: string, user: IUser) {
-    const {
-      admin,
-      username,
-      email,
-      firstName,
-      lastName,
-      organization,
-      verified,
-    } = user;
+  private constructor(id: string, user: User) {
+    const { username, email, firstName, lastName, verified, location } = user;
+
     this.id = id;
     this.username = username;
-    this.admin = admin;
     this.email = email;
     this.firstName = firstName;
     this.lastName = lastName;
-    this.organization = organization;
     this.verified = verified;
+    this.location = location;
   }
 
   static fromDocument(document: Document): UserDto {
-    const user = document.toObject() as IUser;
+    const user = document.toObject() as User;
     return new UserDto(document.id, user);
   }
 
   static fromRequest(req: Express.Request): UserDto | null {
-    if (!req.user || !req.user.id) {
+    if (!req.user || !req.user.id || !req.user.username || !req.user.email) {
       return null;
     }
 
-    const user = req.user as unknown as IUser;
+    const user = req.user as unknown as User;
     return new UserDto(req.user.id, user);
   }
 }

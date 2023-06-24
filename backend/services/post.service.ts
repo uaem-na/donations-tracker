@@ -1,49 +1,29 @@
-import { Post } from "../models";
-import { IPost, IPostDocument } from "../types";
+import { PostModel } from "../models";
+import { Post, PostDocument } from "../types";
 
 export class PostService {
-  async createPost(post: Partial<IPost>) {
-    const {
-      author: userId,
-      type,
-      status,
-      title,
-      description,
-      location,
-      tags,
-      images,
-      views,
-    } = post;
-
-    const newPost = new Post({
-      userId,
-      type,
-      status,
-      title,
-      description,
-      location,
-      tags,
-      images,
-      views,
+  async createPost(post: Partial<Post>) {
+    const newPost = new PostModel({
+      ...post,
     });
 
     return await newPost.save();
   }
 
-  async getPosts(): Promise<IPostDocument[]> {
+  async getPosts(): Promise<PostDocument[]> {
     // TODO: should we filter by some attributes?
-    const posts = await Post.find();
+    const posts = await PostModel.find();
 
     return posts;
   }
 
-  async getPost(id: string): Promise<IPostDocument | null> {
-    const post = await Post.findById(id);
+  async getPost(id: string): Promise<PostDocument | null> {
+    const post = await PostModel.findById(id);
 
     return post;
   }
 
-  async updatePost(id: string, update: Partial<IPost>) {
+  async updatePost(id: string, update: Partial<Post>) {
     const post = await this.getPost(id);
 
     if (!post) {
@@ -56,15 +36,15 @@ export class PostService {
   }
 
   async deletePost(id: string): Promise<void> {
-    const result = await Post.deleteOne({ _id: id });
+    const result = await PostModel.deleteOne({ _id: id });
 
     if (result.deletedCount === 0) {
       throw new Error(`Error deleting post ${id}.`);
     }
   }
 
-  async getUserPosts(userId: string): Promise<IPostDocument[]> {
-    const posts = await Post.find({ author: userId });
+  async getPostsByUsername(username: string): Promise<PostDocument[]> {
+    const posts = await PostModel.find({ "author.username": username });
 
     return posts;
   }

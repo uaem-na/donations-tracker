@@ -1,55 +1,107 @@
-import { Document, PassportLocalDocument, Types } from "mongoose";
+import { Document, PassportLocalDocument } from "mongoose";
+
+// * Common types
+export type Location = {
+  lat: number;
+  lng: number;
+  postalCode: string;
+};
+
+export type ImageFile = {
+  data: Buffer;
+  contentType: string;
+};
+
+export type Address = {
+  street: string;
+  city: string;
+  province: string;
+  postalCode: string;
+  country: string;
+};
+
+export type Organization = {
+  name: string;
+  address: Address;
+  phone: string;
+  type: string;
+};
 
 // * User model related types
-export type IUser = {
+export type User = {
   username: string;
   email: string;
+  recoveryEmail: string;
   firstName: string;
   lastName: string;
-  organization: string;
-  admin: boolean;
+  location: Location;
   active: boolean;
   verified: boolean;
   createdAt: Date;
   updatedAt: Date;
 };
 
-export type IUserDocument = IUser & PassportLocalDocument & Document;
+export type AdminUser = User & {
+  admin: boolean;
+};
+
+export type OrganizationUser = User & {
+  organization: Organization;
+};
+
+export type IndividualUser = User;
+
+export type UserDocument = User &
+  AdminUser &
+  OrganizationUser &
+  IndividualUser &
+  PassportLocalDocument &
+  Document & {
+    lat: number;
+    lng: number;
+  };
 
 // * Report model related types
-export type IReport = {
-  postId: Types.ObjectId | string;
-  userId: Types.ObjectId | string;
+export type ReportUser = Pick<
+  User,
+  "username" | "email" | "firstName" | "lastName"
+>;
+
+export type ReportPost = Pick<
+  Post,
+  "title" | "author" | "type" | "location" | "status"
+>;
+
+export type Report = {
+  reporter: ReportUser;
+  resolver: ReportUser;
+  post: ReportPost;
   status: "resolved" | "unresolved";
   notes: string;
-  reportedBy: Types.ObjectId | string;
-  resolvedBy: Types.ObjectId | string;
 };
 
-export type IReportDocument = IReport & Document;
+export type ReportDocument = Report & Document;
 
 // * Post model related types
-export type IPostImage = {
-  data: Buffer;
-  contentType: string;
-};
+export type PostAuthor = Pick<User, "username" | "email">;
 
-export type IPostLocation = {
-  lat?: number;
-  lng?: number;
-  postalCode?: string;
-};
-
-export type IPost = {
-  author: Types.ObjectId | string;
-  type: "request" | "offer";
-  status: "open" | "in-progress" | "closed";
-  title: string;
+export type PostItem = {
+  name: string;
+  quantity: number;
+  price: number;
   description: string;
-  location: IPostLocation;
-  tags: string[];
-  images: IPostImage[];
+  category: string;
+  image: ImageFile;
+};
+
+export type Post = {
+  title: string;
+  type: "request" | "offer";
+  items: PostItem[];
+  author: PostAuthor;
+  location: Location;
+  status: "open" | "in-progress" | "closed";
   views: number;
 };
 
-export type IPostDocument = IPost & Document;
+export type PostDocument = Post & Document;

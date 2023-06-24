@@ -6,24 +6,54 @@ import {
   model,
 } from "mongoose";
 import passportLocalMongoose from "passport-local-mongoose";
-import { IUserDocument } from "../types";
+import { UserDocument } from "../types";
+import { LocationSchema } from "./schemas";
 
 // ! TODO: reset password mechanism
-const UserSchema: Schema<IUserDocument & PassportLocalDocument> = new Schema(
+const UserSchema: Schema<UserDocument & PassportLocalDocument> = new Schema(
   {
-    email: { type: String, required: true },
-    firstName: { type: String, required: true },
-    lastName: { type: String, required: true },
-    organization: { type: String, required: true },
-    admin: { type: Boolean, default: false }, // TODO: add admin mechanism
+    email: {
+      type: String,
+      required: true,
+      validate: {
+        validator: (v: string) => {
+          return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+        },
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        message: (props: any) => `${props.value} is not a valid email address!`,
+      },
+    },
+    firstName: {
+      type: String,
+      required: true,
+      validate: {
+        validator: (v: string) => {
+          return /^[a-zA-ZÀ-ÖØ-öø-ÿ ]+$/.test(v);
+        },
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        message: (props: any) => `${props.value} is not a valid first name!`,
+      },
+    },
+    lastName: {
+      type: String,
+      required: true,
+      validate: {
+        validator: (v: string) => {
+          return /^[a-zA-ZÀ-ÖØ-öø-ÿ ]+$/.test(v);
+        },
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        message: (props: any) => `${props.value} is not a valid last name!`,
+      },
+    },
+    location: { type: LocationSchema, required: false },
     active: { type: Boolean, default: true }, // TODO: add deactivation mechanism
     verified: { type: Boolean, default: false }, // TODO: add veritifcation mechanism for admin
+    recoveryEmail: { type: String, required: false }, // TODO: add recovery email mechanism
   },
   { timestamps: true }
 );
 
-// TODO: I think we need to use username as login instead of email to easily support organization account
-// email, salt and hash are added by passport-local-mongoose
+// salt and hash added by passport-local-mongoose
 UserSchema.plugin(passportLocalMongoose, {
   usernameLowerCase: true,
   limitAttempts: true,
@@ -64,6 +94,16 @@ UserSchema.plugin(passportLocalMongoose, {
   },
 });
 
-export const User: PassportLocalModel<IUserDocument & PassportLocalDocument> =
-  model<IUserDocument & PassportLocalDocument>("User", UserSchema);
-export default User;
+UserSchema.virtual("postalCode").get(function (this: UserDocument) {
+  return (
+    this.location?.postalCode ||
+    this.organization?.address?.postalCode ||
+    "ERROR: no postal code found"
+  );
+});
+
+export const UserModel: PassportLocalModel<
+  UserDocument & PassportLocalDocument
+> = model<UserDocument & PassportLocalDocument>("User", UserSchema);
+
+export default UserModel;

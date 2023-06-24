@@ -1,25 +1,29 @@
 import { Model, model, Schema } from "mongoose";
-import { IPostDocument, IPostImage, IPostLocation } from "../types";
+import { Post, PostAuthor, PostDocument, PostItem } from "../types";
+import { ImageSchema, LocationSchema } from "./schemas";
 
-const ImageSchema: Schema<IPostImage> = new Schema({
-  data: { type: Buffer, required: true },
-  contentType: { type: String, required: true },
+const ItemSchema: Schema<PostItem> = new Schema({
+  name: { type: String, required: true },
+  quantity: { type: Number, required: true },
+  price: { type: Number, required: true },
+  description: { type: String, required: false },
+  category: { type: String, required: true },
+  image: { type: ImageSchema, required: false },
 });
 
-const LocationSchema: Schema<IPostLocation> = new Schema({
-  lat: { type: Number, required: false },
-  lng: { type: Number, required: false },
-  postalCode: { type: String, required: false },
+const AuthorSchema: Schema<PostAuthor> = new Schema({
+  username: { type: String, required: true, index: true },
+  email: { type: String, required: true },
 });
 
-const PostSchema: Schema<IPostDocument> = new Schema(
+// a post can have multiple "item"s
+const PostSchema: Schema<Post> = new Schema(
   {
-    title: { type: String, required: true },
-    description: { type: String, required: false },
-    images: { type: [ImageSchema], required: true },
+    author: { type: AuthorSchema, required: true, index: true },
     location: { type: LocationSchema, required: true },
+    title: { type: String, required: true },
+    items: { type: [ItemSchema], required: true },
     // * index for author and type for faster queries
-    author: { type: Schema.Types.ObjectId, required: true, index: true },
     type: {
       type: String,
       enum: ["request", "offer"],
@@ -32,11 +36,10 @@ const PostSchema: Schema<IPostDocument> = new Schema(
       default: "open",
       required: true,
     },
-    tags: { type: [String], required: true }, // TODO: is this scalable? should we use a separate collection for tags?
     views: { type: Number, default: 0 },
   },
   { timestamps: true }
 );
 
-export const Post: Model<IPostDocument> = model("Post", PostSchema);
-export default Post;
+export const PostModel: Model<PostDocument> = model("Post", PostSchema);
+export default PostModel;

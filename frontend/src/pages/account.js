@@ -27,19 +27,11 @@ const AccountPage = () => {
   const [requests, setRequests] = useState([]);
 
   useEffect(() => {
-    console.log(user);
     axios
-      .get(`/offers`)
+      .get(`/posts`)
       .then((response) => {
+        console.log(response.data);
         setOffers(response.data);
-      })
-      .catch((e) => {
-        console.error(e.response);
-      });
-    axios
-      .get(`/requests`)
-      .then((response) => {
-        setRequests(response.data);
       })
       .catch((e) => {
         console.error(e.response);

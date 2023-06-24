@@ -1,17 +1,24 @@
 import { Model, model, Schema } from "mongoose";
-import { IReportDocument } from "../types";
+import { ReportDocument, ReportUser } from "../types";
 
-const ReportSchema: Schema<IReportDocument> = new Schema(
+// embed reporter and resolver as subdocuments of Report
+const UserSchema: Schema<ReportUser> = new Schema({
+  username: { type: String, required: true },
+  email: { type: String, required: true },
+  firstName: { type: String, required: false },
+  lastName: { type: String, required: false },
+});
+
+const ReportSchema: Schema<ReportDocument> = new Schema(
   {
-    reportedBy: { type: Schema.Types.ObjectId, required: true },
-    postId: { type: Schema.Types.ObjectId, required: true },
-    userId: { type: Schema.Types.ObjectId, required: true },
+    reporter: { type: UserSchema, required: true },
+    resolver: { type: UserSchema, required: true },
+    post: { type: Schema.Types.ObjectId, ref: "Post", required: true },
     status: { type: String, enum: ["resolved", "unresolved"], required: true },
     notes: { type: String, required: true },
-    resolvedBy: { type: Schema.Types.ObjectId, required: false },
   },
   { timestamps: true }
 );
 
-export const Report: Model<IReportDocument> = model("Report", ReportSchema);
-export default Report;
+export const ReportModel: Model<ReportDocument> = model("Report", ReportSchema);
+export default ReportModel;

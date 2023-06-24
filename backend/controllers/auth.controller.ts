@@ -4,7 +4,7 @@ import { body } from "express-validator";
 import passport from "passport";
 import { UserDto } from "../dtos";
 import { InvalidOperationError } from "../errors";
-import { User } from "../models/user.model";
+import { UserModel } from "../models/user.model";
 import { AuthService } from "../services";
 
 const log = debug("backend:auth");
@@ -87,8 +87,8 @@ export class AuthController {
 
     const { username, email, firstName, lastName, organization, password } =
       req.body;
-    const user = await User.register(
-      new User({
+    const user = await UserModel.register(
+      new UserModel({
         username,
         email,
         firstName,

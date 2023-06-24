@@ -5,6 +5,8 @@ declare global {
   namespace Express {
     interface User extends UserDto {
       id: string;
+      email: string;
+      username: string;
     }
   }
 }

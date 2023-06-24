@@ -1,17 +1,23 @@
-import { User } from "../models/user.model";
-import { IUser, IUserDocument } from "../types";
+import { UserModel } from "../models/user.model";
+import { User, UserDocument } from "../types";
 
 export class UserService {
-  async getUsers(): Promise<IUserDocument[]> {
-    const users = await User.find({
+  async getUsers(): Promise<UserDocument[]> {
+    const users = await UserModel.find({
       active: true,
     });
 
     return users;
   }
 
-  async getUser(id: string): Promise<IUserDocument | null> {
-    const user = await User.findById(id);
+  async getUserById(id: string): Promise<UserDocument | null> {
+    const user = await UserModel.findById(id);
+
+    return user;
+  }
+
+  async getUserByUsername(username: string): Promise<UserDocument | null> {
+    const user = await UserModel.findByUsername(username, false);
 
     return user;
   }
@@ -20,8 +26,8 @@ export class UserService {
     id: string,
     oldPassword: string,
     newPassword: string
-  ): Promise<IUserDocument> {
-    const user = await this.getUser(id);
+  ): Promise<UserDocument> {
+    const user = await this.getUserById(id);
     if (!user) {
       throw new Error(`Error updating user. User does not exist.`);
     }
@@ -29,11 +35,11 @@ export class UserService {
     return (await user.changePassword(
       oldPassword,
       newPassword
-    )) as IUserDocument;
+    )) as UserDocument;
   }
 
-  async updateUser(id: string, update: Partial<IUser>): Promise<IUserDocument> {
-    const user = await this.getUser(id);
+  async updateUser(id: string, update: Partial<User>): Promise<UserDocument> {
+    const user = await this.getUserById(id);
 
     if (!user) {
       throw new Error(`Error updating user. User does not exist.`);
@@ -45,7 +51,7 @@ export class UserService {
   }
 
   async deleteUser(id: string): Promise<void> {
-    const result = await User.deleteOne({ _id: id });
+    const result = await UserModel.deleteOne({ _id: id });
 
     if (result.deletedCount === 0) {
       throw new Error(`Error deleting user ${id}.`);

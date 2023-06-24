@@ -1,7 +1,7 @@
 import debug from "debug";
 import { Express } from "express";
 import passport from "passport";
-import { User } from "../models/user.model";
+import { UserModel } from "../models/user.model";
 
 const log = debug("backend:passportjs");
 
@@ -12,10 +12,10 @@ export const configurePassportjs = (app: Express) => {
   app.use(passport.session());
 
   // set up passport local strategy
-  passport.use(User.createStrategy());
+  passport.use(UserModel.createStrategy());
 
   // set up passport local serialization
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  passport.serializeUser(User.serializeUser() as any);
-  passport.deserializeUser(User.deserializeUser());
+  passport.serializeUser(UserModel.serializeUser() as any);
+  passport.deserializeUser(UserModel.deserializeUser());
 };
