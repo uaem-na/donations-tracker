@@ -6,21 +6,17 @@ const baseUrl = process.env.REACT_APP_BACKEND_URL || "";
 // * Define a service using a base URL and expected endpoints
 export const postsApi = createApi({
   reducerPath: "posts",
-  baseQuery: fetchBaseQuery(`${baseUrl}`),
+  baseQuery: fetchBaseQuery({
+    baseUrl: `${baseUrl}/posts`,
+    withCredentials: true,
+  }),
   endpoints: (builder) => ({
     getPosts: builder.query({
       query: () => ({
-        url: "posts/",
+        url: "/",
         method: "GET",
-        withCredentials: true,
       }),
-      transformResponse: (response) => {
-        return response;
-      },
-      transformErrorRespons: (error) => {
-        return error;
-      },
-      providesTags: (result, error, arg) => [{ type: "allPosts" }],
+      providesTags: (result, error, arg) => [{ type: "posts", id: "list" }],
     }),
   }),
 });

@@ -6,13 +6,15 @@ const baseUrl = process.env.REACT_APP_BACKEND_URL || "";
 // * Define a service using a base URL and expected endpoints
 export const authApi = createApi({
   reducerPath: "auth",
-  baseQuery: fetchBaseQuery(`${baseUrl}`),
+  baseQuery: fetchBaseQuery({
+    baseUrl: `${baseUrl}/auth`,
+    withCredentials: true,
+  }),
   endpoints: (builder) => ({
     getSession: builder.query({
       query: () => ({
-        url: "auth/session",
+        url: "session",
         method: "GET",
-        withCredentials: true,
       }),
       transformResponse: (response) => {
         if (!response) {
@@ -24,19 +26,24 @@ export const authApi = createApi({
     }),
     login: builder.mutation({
       query: (credentials) => ({
-        url: "auth/login",
+        url: "login",
         method: "POST",
         body: credentials,
       }),
-      transformErrorResponse: (response) => {
-        return response;
-      },
       invalidatesTags: [{ type: "session", id: "current" }],
     }),
     logout: builder.mutation({
       query: () => ({
-        url: "auth/logout",
+        url: "logout",
         method: "POST",
+      }),
+      invalidatesTags: [{ type: "session", id: "current" }],
+    }),
+    register: builder.mutation({
+      query: (data) => ({
+        url: "register",
+        method: "POST",
+        body: data,
       }),
       invalidatesTags: [{ type: "session", id: "current" }],
     }),
@@ -50,4 +57,5 @@ export const {
   useLazyGetSessionQuery,
   useLoginMutation,
   useLogoutMutation,
+  useRegisterMutation,
 } = authApi;

@@ -2,15 +2,23 @@ import { Navigate, useLocation } from "react-router-dom";
 import { useGetSessionQuery } from "../../app/services/auth";
 
 export const RequireAuth = ({ children }) => {
-  const location = useLocation();
-  const { data, isLoading } = useGetSessionQuery();
+  const { pathname } = useLocation();
+  const { data: session, isLoading } = useGetSessionQuery();
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
 
-  if (!data) {
-    return <Navigate to="/login" state={{ from: location.pathname }} />;
+  if (!session) {
+    // session doesn't exist, redirect to login
+    return <Navigate to="/login" state={{ from: pathname }} />;
   }
 
+  // session exists, check pathname to see if already on login page
+  if (pathname === "/login") {
+    return <Navigate to="/account" />;
+  }
+
+  // render the children
   return <>{children}</>;
 };

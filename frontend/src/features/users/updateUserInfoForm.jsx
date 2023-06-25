@@ -1,23 +1,26 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Label } from "@radix-ui/react-label";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import * as yup from "yup";
-import { useAuth } from "../auth";
-import { Button } from "../button";
-import { TextInput } from "../textInput";
+import { useGetSessionQuery } from "../../app/services/auth";
+import { useUpdateUserMutation } from "../../app/services/users";
+import { Button } from "../../components/button";
+import { TextInput } from "../../components/textInput";
 
 const schema = yup.object().shape({
   firstName: yup.string().required("First name is required"),
   lastName: yup.string().required("Last name is required"),
 });
 
-const FIELD_HEIGHT = "44px";
-
-const UpdateUserInfoForm = () => {
-  const { user, loading, updateUserInfo: updateUserInfoApi } = useAuth();
-  const [error, setError] = useState();
+export const UpdateUserInfoForm = () => {
+  const { data: session } = useGetSessionQuery();
+  const [
+    updateUserApi,
+    { isLoading: isUpdating, isSuccess, isError, error: serverError },
+  ] = useUpdateUserMutation();
+  const [errorMessage, setErrorMessage] = useState("");
 
   const {
     register,
@@ -26,18 +29,35 @@ const UpdateUserInfoForm = () => {
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
-      firstName: user.firstName,
-      lastName: user.lastName,
+      firstName: session && session.firstName,
+      lastName: session && session.lastName,
     },
   });
 
   const onSubmit = (data) => {
-    updateUserInfoApi(data, (err) => {
-      if (err) {
-        setError(err);
-      }
-    });
+    updateUserApi(data);
   };
+
+  // handle successful request
+  useEffect(() => {
+    if (isSuccess) {
+      setErrorMessage("");
+      // TODO: display a success toast
+      alert("successfully updated");
+    }
+  }, [isSuccess]);
+
+  // handle server error message
+  useEffect(() => {
+    if (isError && serverError && serverError.data) {
+      let message = serverError.data.message;
+      if (serverError.data.errors && serverError.data.errors.length > 0) {
+        // TODO: better error message when multiple errors
+        message += serverError.data.errors.join(",");
+      }
+      setErrorMessage(message || "An error occurred");
+    }
+  }, [isError, serverError]);
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
@@ -49,7 +69,6 @@ const UpdateUserInfoForm = () => {
           type="text"
           autoComplete="given-name"
           placeholder="First name"
-          height={FIELD_HEIGHT}
           errorMessage={errors.firstName?.message}
         />
       </InputGroup>
@@ -61,14 +80,15 @@ const UpdateUserInfoForm = () => {
           type="text"
           autoComplete="family-name"
           placeholder="Last name"
-          height={FIELD_HEIGHT}
           errorMessage={errors.lastName?.message}
         />
       </InputGroup>
-      <Button diabled={loading} type="submit">
+      <Button diabled={isUpdating} type="submit">
         Update
       </Button>
-      {error && <ServerMessage role="alert">{error}</ServerMessage>}
+      {errorMessage && (
+        <ServerMessage role="alert">{errorMessage}</ServerMessage>
+      )}
     </Form>
   );
 };

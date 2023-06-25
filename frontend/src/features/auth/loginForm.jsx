@@ -14,6 +14,7 @@ import { Paper } from "../../components/paper";
 import { TextInput } from "../../components/textInput";
 import { QUERIES } from "../../constants";
 
+// TODO: central schema location
 const schema = yup.object().shape({
   username: yup
     .string()
@@ -24,9 +25,12 @@ const schema = yup.object().shape({
 });
 
 export const LoginForm = () => {
-  const [login, { isLoading: isLoggingIn }] = useLoginMutation();
-  const [getSession, { data: session }] = useLazyGetSessionQuery();
   const navigate = useNavigate();
+  const [
+    loginApi,
+    { isLoading: isLoggingIn, isSuccess, isError, error: serverError },
+  ] = useLoginMutation();
+  const [getSession, { data: session }] = useLazyGetSessionQuery();
   const [errorMessage, setErrorMessage] = useState("");
 
   const {
@@ -37,27 +41,38 @@ export const LoginForm = () => {
     resolver: yupResolver(schema),
   });
 
+  const onSubmit = async (data) => {
+    // TODO: property validation
+    const { username, password } = data;
+    loginApi({ username, password });
+  };
+
+  // handle successful request
+  useEffect(() => {
+    if (isSuccess) {
+      setErrorMessage("");
+      getSession();
+    }
+  }, [getSession, isSuccess]);
+
+  // handle server error message
+  useEffect(() => {
+    if (isError && serverError && serverError.data) {
+      let message = serverError.data.message;
+      if (serverError.data.errors && serverError.data.errors.length > 0) {
+        // TODO: better error message when multiple errors
+        message += serverError.data.errors.join(",");
+      }
+      setErrorMessage(message || "An error occurred");
+    }
+  }, [isError, serverError]);
+
+  // redirect to account page on session refresh
   useEffect(() => {
     if (session) {
       navigate("/account");
     }
   }, [session, navigate]);
-
-  const onSubmit = async (data) => {
-    const { username, password } = data;
-    try {
-      setErrorMessage("");
-      await login({ username, password }).unwrap();
-      await getSession().unwrap();
-    } catch (err) {
-      const { data } = err;
-      if (data && data.errors) {
-        setErrorMessage(data.errors.join(","));
-      } else {
-        setErrorMessage("An error occurred");
-      }
-    }
-  };
 
   return (
     <Wrapper>

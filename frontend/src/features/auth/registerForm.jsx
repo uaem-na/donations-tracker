@@ -1,10 +1,15 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Label from "@radix-ui/react-label";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import * as yup from "yup";
 import YupPassword from "yup-password";
-import useAuth from "../../components/auth/useAuth";
+import {
+  useLazyGetSessionQuery,
+  useRegisterMutation,
+} from "../../app/services/auth";
 import { Button } from "../../components/button";
 import { Paper } from "../../components/paper";
 import { TextInput } from "../../components/textInput";
@@ -12,6 +17,7 @@ import { QUERIES } from "../../constants";
 
 YupPassword(yup); // extend yup
 
+// TODO: central schema location
 const schema = yup.object().shape({
   username: yup
     .string()
@@ -41,7 +47,13 @@ const schema = yup.object().shape({
 });
 
 export const RegisterForm = () => {
-  const { register: registerApi, loading, error } = useAuth();
+  const navigate = useNavigate();
+  const [
+    registerApi,
+    { isLoading: isRegistering, isSuccess, isError, error: serverError },
+  ] = useRegisterMutation();
+  const [getSession, { data: session }] = useLazyGetSessionQuery();
+  const [errorMessage, setErrorMessage] = useState("");
 
   const {
     register,
@@ -52,8 +64,36 @@ export const RegisterForm = () => {
   });
 
   const onSubmit = (data) => {
+    // TODO: property validation
     registerApi(data);
   };
+
+  // handle successful request
+  useEffect(() => {
+    if (isSuccess) {
+      setErrorMessage("");
+      getSession();
+    }
+  }, [getSession, isSuccess]);
+
+  // handle server error message
+  useEffect(() => {
+    if (isError && serverError && serverError.data) {
+      let message = serverError.data.message;
+      if (serverError.data.errors && serverError.data.errors.length > 0) {
+        // TODO: better error message when multiple errors
+        message += serverError.data.errors.join(",");
+      }
+      setErrorMessage(message || "An error occurred");
+    }
+  }, [isError, serverError]);
+
+  // redirect to account page on session refresh
+  useEffect(() => {
+    if (session) {
+      navigate("/account");
+    }
+  });
 
   return (
     <Wrapper>
@@ -139,13 +179,15 @@ export const RegisterForm = () => {
             />
           </InputGroup>
           <Button
-            disabled={loading}
+            disabled={isRegistering}
             type="submit"
             style={{ marginTop: "28px" }}
           >
             Register
           </Button>
-          {error && <ServerMessage role="alert">{error}</ServerMessage>}
+          {errorMessage && (
+            <ServerMessage role="alert">{errorMessage}</ServerMessage>
+          )}
         </Form>
       </ResponsivePaper>
     </Wrapper>

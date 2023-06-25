@@ -1,13 +1,13 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Label } from "@radix-ui/react-label";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import * as yup from "yup";
 import YupPassword from "yup-password";
-import { useAuth } from "../auth";
-import { Button } from "../button";
-import { TextInput } from "../textInput";
+import { useChangePasswordMutation } from "../../app/services/users";
+import { Button } from "../../components/button";
+import { TextInput } from "../../components/textInput";
 
 YupPassword(yup); // extend yup
 
@@ -36,11 +36,12 @@ const schema = yup.object().shape({
     .oneOf([yup.ref("newPassword"), null], "Passwords must match"),
 });
 
-const FIELD_HEIGHT = "44px";
-
-const UpdatePasswordForm = () => {
-  const { loading, updatePassword: updatePasswordApi } = useAuth();
-  const [error, setError] = useState();
+export const UpdatePasswordForm = () => {
+  const [
+    changePasswordApi,
+    { isLoading: loading, isSuccess, isError, error: serverError },
+  ] = useChangePasswordMutation();
+  const [errorMessage, setErrorMessage] = useState("");
 
   const {
     register,
@@ -52,16 +53,39 @@ const UpdatePasswordForm = () => {
   });
 
   const onSubmit = (data) => {
-    updatePasswordApi(data, (err) => {
-      if (err) {
-        setError(err);
-      } else {
-        // succeeded
-        setError(undefined);
-        reset();
-      }
-    });
+    changePasswordApi(data);
+    // updatePasswordApi(data, (err) => {
+    //   if (err) {
+    //     setError(err);
+    //   } else {
+    //     // succeeded
+    //     setError(undefined);
+    //     reset();
+    //   }
+    // });
   };
+
+  // handle successful request
+  useEffect(() => {
+    if (isSuccess) {
+      setErrorMessage("");
+      reset();
+      // TODO: display a success toast
+      alert("successfully updated");
+    }
+  }, [isSuccess, reset]);
+
+  // handle server error message
+  useEffect(() => {
+    if (isError && serverError && serverError.data) {
+      let message = serverError.data.message;
+      if (serverError.data.errors && serverError.data.errors.length > 0) {
+        // TODO: better error message when multiple errors
+        message += serverError.data.errors.join(",");
+      }
+      setErrorMessage(message || "An error occurred");
+    }
+  }, [isError, serverError]);
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
@@ -73,7 +97,6 @@ const UpdatePasswordForm = () => {
           type="password"
           autoComplete="current-password"
           placeholder="Current password"
-          height={FIELD_HEIGHT}
           errorMessage={errors.password?.message}
         />
       </InputGroup>
@@ -85,7 +108,6 @@ const UpdatePasswordForm = () => {
           type="password"
           autoComplete="new-password"
           placeholder="New password"
-          height={FIELD_HEIGHT}
           errorMessage={errors.newPassword?.message}
         />
       </InputGroup>
@@ -99,7 +121,6 @@ const UpdatePasswordForm = () => {
           type="password"
           autoComplete="new-password"
           placeholder="Confirm your new password"
-          height={FIELD_HEIGHT}
           errorMessage={errors.confirmNewPassword?.message}
         />
       </InputGroup>
@@ -110,7 +131,9 @@ const UpdatePasswordForm = () => {
       >
         Change Password
       </Button>
-      {error && <ServerMessage role="alert">{error}</ServerMessage>}
+      {errorMessage && (
+        <ServerMessage role="alert">{errorMessage}</ServerMessage>
+      )}
     </Form>
   );
 };

@@ -8,6 +8,8 @@ import Offers from "../components/dashboard/offers";
 import Requests from "../components/dashboard/requests";
 import { Tooltip } from "../components/tooltip";
 import { DEVICES } from "../constants";
+import { UpdatePasswordForm } from "../features/users/updatePasswordForm";
+import { UpdateUserInfoForm } from "../features/users/updateUserInfoForm";
 
 const VerifiedStatus = () => {
   const { data: user } = useGetSessionQuery();
@@ -83,8 +85,8 @@ const AccountPage = () => {
             </p>
           </ReadonlyData>
           <EditableData>
-            {/* <UpdateUserInfoForm /> */}
-            {/* <UpdatePasswordForm /> */}
+            <UpdateUserInfoForm />
+            <UpdatePasswordForm />
           </EditableData>
         </InformationColumn>
       </ResponsiveRow>
