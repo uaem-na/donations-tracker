@@ -25,6 +25,7 @@ const GlobalStyles = createGlobalStyle`
     color: var(--color-secondary);
   }
   :root {
+    --height-input: 50px;
     --shadow-color: 212 20% 50%;
     --color-background: hsl(212deg, 33%, 96%);
     --color-text: hsl(212deg, 33%, 20%);

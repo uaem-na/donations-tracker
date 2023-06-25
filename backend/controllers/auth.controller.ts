@@ -21,7 +21,7 @@ export class AuthController {
       res.status(200).json(session);
     } else {
       // ! explicitly send 200 to allow anon users
-      res.status(200).json({ error: "Not logged in." });
+      res.status(200).json(false);
     }
   });
 

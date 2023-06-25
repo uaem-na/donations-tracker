@@ -2,8 +2,9 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import styled, { keyframes } from "styled-components";
-import { useAuth } from "../auth";
 import { UserAvatar } from "./userAvatar";
+import { useGetSessionQuery } from "../../app/services/auth";
+import { useLogoutMutation } from "../../app/services/auth";
 
 // define keyframes ahead of other styled components
 const slideUpAndFade = keyframes`
@@ -52,8 +53,10 @@ const slideLeftAndFade = keyframes`
 
 // UserMenu requires authentication
 export const UserMenu = () => {
+  const { data: user } = useGetSessionQuery();
+  const [logout] = useLogoutMutation();
   const navigate = useNavigate();
-  const { user, logout } = useAuth();
+
   return (
     <>
       {user ? (

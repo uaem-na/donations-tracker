@@ -1,29 +1,15 @@
 import React from "react";
 import "./assets/style/Main.css";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-  useLocation,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Landing from "./components/landing";
 import ReqOff from "./components/requestOfferPage/reqOff";
-import { Login, Register, AuthProvider, useAuth } from "./components/auth";
+import { AuthProvider } from "./components/auth";
 import { Layout } from "./components/layout";
 import { AboutUsPage, AccountPage, FaqPage } from "./pages";
 
-const RequireAuth = ({ children }) => {
-  const { user } = useAuth();
-  let location = useLocation();
-
-  if (!user) {
-    // If user is not logged in, redirect to login page with current path as redirect path
-    return <Navigate to="/login" state={{ from: location.pathname }} />;
-  }
-
-  return children;
-};
+import { RequireAuth } from "./features/auth/requireAuth";
+import { LoginForm } from "./features/auth/loginForm";
+import { RegisterForm } from "./features/auth/registerForm";
 
 function App() {
   return (
@@ -48,8 +34,8 @@ function App() {
               />
 
               {/* Authentication pages */}
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
+              <Route path="/login" element={<LoginForm />} />
+              <Route path="/register" element={<RegisterForm />} />
 
               {/* Others */}
               <Route

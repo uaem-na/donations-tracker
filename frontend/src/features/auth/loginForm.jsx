@@ -1,15 +1,19 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Label from "@radix-ui/react-label";
-import { Button } from "../button";
-import { Paper } from "../paper";
-import { TextInput } from "../textInput";
+import { Button } from "../../components/button";
+import { Paper } from "../../components/paper";
+import { TextInput } from "../../components/textInput";
 import { QUERIES } from "../../constants";
-import useAuth from "./useAuth";
+import {
+  useLazyGetSessionQuery,
+  useLoginMutation,
+} from "../../app/services/auth";
+import { useNavigate } from "react-router-dom";
 
 const schema = yup.object().shape({
   username: yup
@@ -20,10 +24,11 @@ const schema = yup.object().shape({
   password: yup.string().required("Password is required for login"),
 });
 
-const FIELD_HEIGHT = "44px";
-
-const Login = () => {
-  const { login: loginApi, loading, error } = useAuth();
+export const LoginForm = () => {
+  const [login, { isLoading: isLoggingIn }] = useLoginMutation();
+  const [getSession, { data: session }] = useLazyGetSessionQuery();
+  const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState("");
 
   const {
     register,
@@ -33,9 +38,26 @@ const Login = () => {
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = (data) => {
+  useEffect(() => {
+    if (session) {
+      navigate("/account");
+    }
+  }, [session, navigate]);
+
+  const onSubmit = async (data) => {
     const { username, password } = data;
-    loginApi(username, password);
+    try {
+      setErrorMessage("");
+      await login({ username, password }).unwrap();
+      await getSession().unwrap();
+    } catch (err) {
+      const { data } = err;
+      if (data && data.errors) {
+        setErrorMessage(data.errors.join(","));
+      } else {
+        setErrorMessage("An error occurred");
+      }
+    }
   };
 
   return (
@@ -43,7 +65,7 @@ const Login = () => {
       <ResponsivePaper>
         <Header>UAEM</Header>
         <Subheader>Sign in to your account</Subheader>
-        <LoginForm onSubmit={handleSubmit(onSubmit)}>
+        <Form onSubmit={handleSubmit(onSubmit)}>
           <InputGroup>
             <InputLabel htmlFor="username">Username</InputLabel>
             <TextInput
@@ -52,7 +74,6 @@ const Login = () => {
               type="text"
               autoComplete="username"
               placeholder="Username"
-              height={FIELD_HEIGHT}
               errorMessage={errors.username?.message}
             />
           </InputGroup>
@@ -64,16 +85,17 @@ const Login = () => {
               type="password"
               autoComplete="current-password"
               placeholder="Password"
-              height={FIELD_HEIGHT}
               errorMessage={errors.password?.message}
             />
           </InputGroup>
-          <Button disabled={loading} type="submit">
+          <Button disabled={isLoggingIn} type="submit">
             Sign in
           </Button>
           <RegisterLink to="/register">Need to register?</RegisterLink>
-          {error && <ServerMessage role="alert">{error}</ServerMessage>}
-        </LoginForm>
+          {errorMessage && (
+            <ServerMessage role="alert">{errorMessage}</ServerMessage>
+          )}
+        </Form>
       </ResponsivePaper>
     </Wrapper>
   );
@@ -105,7 +127,7 @@ const Subheader = styled.h3`
   font-weight: 500;
 `;
 
-const LoginForm = styled.form`
+const Form = styled.form`
   display: flex;
   flex-direction: column;
   margin-top: 32px;
@@ -145,4 +167,4 @@ const RegisterLink = styled(Link)`
   }
 `;
 
-export default Login;
+export default LoginForm;

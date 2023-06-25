@@ -5,11 +5,11 @@ import * as yup from "yup";
 import YupPassword from "yup-password";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Label from "@radix-ui/react-label";
-import { Button } from "../button";
-import { Paper } from "../paper";
-import { TextInput } from "../textInput";
+import { Button } from "../../components/button";
+import { Paper } from "../../components/paper";
+import { TextInput } from "../../components/textInput";
 import { QUERIES } from "../../constants";
-import useAuth from "./useAuth";
+import useAuth from "../../components/auth/useAuth";
 
 YupPassword(yup); // extend yup
 
@@ -41,9 +41,7 @@ const schema = yup.object().shape({
   lastName: yup.string().required("Last name is required"),
 });
 
-const FIELD_HEIGHT = "44px";
-
-const Register = () => {
+export const RegisterForm = () => {
   const { register: registerApi, loading, error } = useAuth();
 
   const {
@@ -63,7 +61,7 @@ const Register = () => {
       <ResponsivePaper>
         <Header>UAEM</Header>
         <Subheader>Register for an account</Subheader>
-        <RegisterForm onSubmit={handleSubmit(onSubmit)}>
+        <Form onSubmit={handleSubmit(onSubmit)}>
           <InputGroup>
             <InputLabel htmlFor="username">Username</InputLabel>
             <TextInput
@@ -72,7 +70,6 @@ const Register = () => {
               type="text"
               autoComplete="username"
               placeholder="Username"
-              height={FIELD_HEIGHT}
               errorMessage={errors.username?.message}
             />
           </InputGroup>
@@ -84,7 +81,6 @@ const Register = () => {
               type="text"
               autoComplete="given-name"
               placeholder="First name"
-              height={FIELD_HEIGHT}
               errorMessage={errors.firstName?.message}
             />
           </InputGroup>
@@ -96,7 +92,6 @@ const Register = () => {
               type="text"
               autoComplete="family-name"
               placeholder="Last name"
-              height={FIELD_HEIGHT}
               errorMessage={errors.lastName?.message}
             />
           </InputGroup>
@@ -108,7 +103,6 @@ const Register = () => {
               type="text"
               autoComplete="organization"
               placeholder="Organization"
-              height={FIELD_HEIGHT}
               errorMessage={errors.organization?.message}
             />
           </InputGroup>
@@ -120,7 +114,6 @@ const Register = () => {
               type="email"
               autoComplete="email"
               placeholder="E-mail"
-              height={FIELD_HEIGHT}
               errorMessage={errors.email?.message}
             />
           </InputGroup>
@@ -132,7 +125,6 @@ const Register = () => {
               type="password"
               autoComplete="new-password"
               placeholder="Password"
-              height={FIELD_HEIGHT}
               errorMessage={errors.password?.message}
             />
           </InputGroup>
@@ -144,7 +136,6 @@ const Register = () => {
               type="password"
               autoComplete="new-password"
               placeholder="Confirm your password"
-              height={FIELD_HEIGHT}
               errorMessage={errors.confirmPassword?.message}
             />
           </InputGroup>
@@ -156,7 +147,7 @@ const Register = () => {
             Register
           </Button>
           {error && <ServerMessage role="alert">{error}</ServerMessage>}
-        </RegisterForm>
+        </Form>
       </ResponsivePaper>
     </Wrapper>
   );
@@ -188,7 +179,7 @@ const Subheader = styled.h3`
   font-weight: 500;
 `;
 
-const RegisterForm = styled.form`
+const Form = styled.form`
   display: flex;
   flex-direction: column;
   margin-top: 32px;
@@ -216,4 +207,4 @@ const ServerMessage = styled.span`
   color: var(--color-error);
 `;
 
-export default Register;
+export default RegisterForm;

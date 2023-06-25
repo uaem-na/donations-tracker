@@ -12,7 +12,7 @@ const getHeight = ({ height }) => {
       return "48px";
     default:
       if (height && height.indexOf("px") > -1) return height;
-      else return "40px";
+      else return "var(--height-input)";
   }
 };
 

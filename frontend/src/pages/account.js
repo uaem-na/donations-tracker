@@ -10,10 +10,12 @@ import styled from "styled-components";
 import { Button } from "../components/button";
 import { DEVICES } from "../constants";
 import { Tooltip } from "../components/tooltip";
-import { useAuth } from "../components/auth";
+import { useGetSessionQuery } from "../app/services/auth";
+import { useGetPostsQuery } from "../app/services/posts";
 
 const VerifiedStatus = () => {
-  const { user } = useAuth();
+  const { data: user } = useGetSessionQuery();
+
   if (user.verified) {
     return <>verified</>;
   } else {
@@ -22,21 +24,8 @@ const VerifiedStatus = () => {
 };
 
 const AccountPage = () => {
-  const { user } = useAuth();
-  const [offers, setOffers] = useState([]);
-  const [requests, setRequests] = useState([]);
-
-  useEffect(() => {
-    axios
-      .get(`/posts`)
-      .then((response) => {
-        console.log(response.data);
-        setOffers(response.data);
-      })
-      .catch((e) => {
-        console.error(e.response);
-      });
-  }, []);
+  const { data: user } = useGetSessionQuery();
+  const { data: posts } = useGetPostsQuery();
 
   const handleMakeOfferClick = (event) => {
     event.preventDefault();
@@ -62,11 +51,11 @@ const AccountPage = () => {
         <DashboardColumn>
           <DashboardRow>
             <Heading>Offers</Heading>
-            <Offers offers={offers} />
+            <Offers offers={posts} />
           </DashboardRow>
           <DashboardRow>
             <Heading>Requests</Heading>
-            <Requests requests={requests} />
+            <Requests requests={posts} />
           </DashboardRow>
         </DashboardColumn>
         <InformationColumn>
@@ -98,8 +87,8 @@ const AccountPage = () => {
             </p>
           </ReadonlyData>
           <EditableData>
-            <UpdateUserInfoForm />
-            <UpdatePasswordForm />
+            {/* <UpdateUserInfoForm /> */}
+            {/* <UpdatePasswordForm /> */}
           </EditableData>
         </InformationColumn>
       </ResponsiveRow>
