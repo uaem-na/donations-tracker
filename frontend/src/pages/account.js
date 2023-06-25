@@ -1,17 +1,13 @@
 // [Private] My Account page component
 // Contains: dashboard, account information and actions to make offers/requests
-import Offers from "../components/dashboard/offers";
-import React, { useEffect, useState } from "react";
-import Requests from "../components/dashboard/requests";
-import UpdatePasswordForm from "../components/account/updatePasswordForm";
-import UpdateUserInfoForm from "../components/account/updateUserInfoForm";
-import axios from "../common/http-common";
 import styled from "styled-components";
-import { Button } from "../components/button";
-import { DEVICES } from "../constants";
-import { Tooltip } from "../components/tooltip";
 import { useGetSessionQuery } from "../app/services/auth";
 import { useGetPostsQuery } from "../app/services/posts";
+import { Button } from "../components/button";
+import Offers from "../components/dashboard/offers";
+import Requests from "../components/dashboard/requests";
+import { Tooltip } from "../components/tooltip";
+import { DEVICES } from "../constants";
 
 const VerifiedStatus = () => {
   const { data: user } = useGetSessionQuery();

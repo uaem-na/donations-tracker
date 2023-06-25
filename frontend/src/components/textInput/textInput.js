@@ -1,6 +1,6 @@
-import styled from "styled-components";
-import React, { forwardRef } from "react";
 import PropTypes from "prop-types";
+import { forwardRef } from "react";
+import styled from "styled-components";
 
 const getHeight = ({ height }) => {
   switch (height) {

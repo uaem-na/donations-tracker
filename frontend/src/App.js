@@ -1,15 +1,14 @@
-import React from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "./assets/style/Main.css";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Landing from "./components/landing";
-import ReqOff from "./components/requestOfferPage/reqOff";
 import { AuthProvider } from "./components/auth";
+import Landing from "./components/landing";
 import { Layout } from "./components/layout";
+import ReqOff from "./components/requestOfferPage/reqOff";
 import { AboutUsPage, AccountPage, FaqPage } from "./pages";
 
-import { RequireAuth } from "./features/auth/requireAuth";
 import { LoginForm } from "./features/auth/loginForm";
 import { RegisterForm } from "./features/auth/registerForm";
+import { RequireAuth } from "./features/auth/requireAuth";
 
 function App() {
   return (

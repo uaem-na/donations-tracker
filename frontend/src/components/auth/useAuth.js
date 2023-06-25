@@ -1,12 +1,6 @@
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { object, string, boolean } from "yup";
+import { boolean, object, string } from "yup";
 import axios from "../../common/http-common";
 
 const UserSchema = object().shape({

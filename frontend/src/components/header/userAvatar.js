@@ -1,6 +1,5 @@
-import React from "react";
-import PropTypes from "prop-types";
 import * as Avatar from "@radix-ui/react-avatar";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 
 export const UserAvatar = ({ firstName, imageSrc }) => {

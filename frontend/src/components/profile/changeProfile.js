@@ -8,23 +8,37 @@ Userfront.init("8nwrppdb");
 //   toolId: "mraonn"
 // })
 
-export const ChangeProfile = ({ name, setName, org, setOrg, email, handleSubmit }) => {
+export const ChangeProfile = ({
+  name,
+  setName,
+  org,
+  setOrg,
+  email,
+  handleSubmit,
+}) => {
   const navigate = useNavigate();
   const sendResetLink = async () => {
-    const res = await Userfront.sendResetLink(email)
+    const res = await Userfront.sendResetLink(email);
     //use hardcoded substring for now, will change to email reset link later when hosted.
-    navigate(res.result.url.substring(21))
+    navigate(res.result.url.substring(21));
     // Userfront.resetPassword({
     //   password: '65659898',
     // }).then((res) => {console.log(res + " reset link has been sent.")});
-  }
+  };
   return (
     <form className="text-left text-sm" onSubmit={handleSubmit}>
       <div className="p-2">
-        <p className="text-gray-500 select-none font-medium">User information:</p>
+        <p className="text-gray-500 select-none font-medium">
+          User information:
+        </p>
       </div>
       <div className="flex items-center border-2 py-2 px-3 rounded-2xl mb-2">
-        <label htmlFor="default" className="text-gray-500 select-none font-medium ">Name</label>
+        <label
+          htmlFor="default"
+          className="text-gray-500 select-none font-medium "
+        >
+          Name
+        </label>
         <input
           className="pl-2 outline-none border-none"
           type="text"
@@ -35,7 +49,12 @@ export const ChangeProfile = ({ name, setName, org, setOrg, email, handleSubmit 
         />
       </div>
       <div className="flex items-center border-2 py-2 px-3 rounded-2xl">
-        <label htmlFor="default" className="text-gray-500 select-none font-medium ">Organization</label>
+        <label
+          htmlFor="default"
+          className="text-gray-500 select-none font-medium "
+        >
+          Organization
+        </label>
         <input
           className="pl-2 outline-none border-none"
           type="text"
@@ -46,7 +65,9 @@ export const ChangeProfile = ({ name, setName, org, setOrg, email, handleSubmit 
         />
       </div>
       <div className="p-2">
-        <p className="text-gray-400 select-none font-medium text-sm">Please contact an admin to change your email.</p>
+        <p className="text-gray-400 select-none font-medium text-sm">
+          Please contact an admin to change your email.
+        </p>
       </div>
       <div className="flex items-center border-2 py-2 px-3 rounded-2xl">
         <svg
@@ -69,14 +90,17 @@ export const ChangeProfile = ({ name, setName, org, setOrg, email, handleSubmit 
           name=""
           id=""
           value={`${email}`}
-          disabled />
+          disabled
+        />
       </div>
       <div className="p-2">
-        <p className="text-gray-500 select-none font-medium">Set a new password:</p>
+        <p className="text-gray-500 select-none font-medium">
+          Set a new password:
+        </p>
       </div>
       <button
         onClick={sendResetLink}
-        type='button'
+        type="button"
         className="block w-full bg-indigo-600 mt-4 py-2 rounded-2xl text-white font-semibold mb-2"
       >
         Send password reset link
@@ -88,7 +112,7 @@ export const ChangeProfile = ({ name, setName, org, setOrg, email, handleSubmit 
         Save Changes
       </button>
     </form>
-  )
-}
+  );
+};
 
-export default ChangeProfile
+export default ChangeProfile;

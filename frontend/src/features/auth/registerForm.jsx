@@ -1,15 +1,14 @@
-import React from "react";
-import styled from "styled-components";
-import { useForm } from "react-hook-form";
-import * as yup from "yup";
-import YupPassword from "yup-password";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Label from "@radix-ui/react-label";
+import { useForm } from "react-hook-form";
+import styled from "styled-components";
+import * as yup from "yup";
+import YupPassword from "yup-password";
+import useAuth from "../../components/auth/useAuth";
 import { Button } from "../../components/button";
 import { Paper } from "../../components/paper";
 import { TextInput } from "../../components/textInput";
 import { QUERIES } from "../../constants";
-import useAuth from "../../components/auth/useAuth";
 
 YupPassword(yup); // extend yup
 

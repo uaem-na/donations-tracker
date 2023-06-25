@@ -1,6 +1,5 @@
-import React from "react";
-import styled from "styled-components";
 import { Outlet } from "react-router-dom";
+import styled from "styled-components";
 import { GlobalStyles } from "../globalStyles";
 import { Header } from "../header";
 

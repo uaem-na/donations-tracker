@@ -1,12 +1,12 @@
-import * as yup from "yup";
-import React, { useState } from "react";
-import styled from "styled-components";
-import { Button } from "../button";
-import { Label } from "@radix-ui/react-label";
-import { TextInput } from "../textInput";
-import { useAuth } from "../auth";
-import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { Label } from "@radix-ui/react-label";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import styled from "styled-components";
+import * as yup from "yup";
+import { useAuth } from "../auth";
+import { Button } from "../button";
+import { TextInput } from "../textInput";
 
 const schema = yup.object().shape({
   firstName: yup.string().required("First name is required"),

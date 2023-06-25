@@ -15,9 +15,9 @@ export const Landing = () => {
           Log me in!
         </Link>
       </div>
-        <div>
-          <Map />
-        </div>    
+      <div>
+        <Map />
+      </div>
     </div>
   );
 };

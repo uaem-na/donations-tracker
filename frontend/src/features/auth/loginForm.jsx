@@ -1,19 +1,18 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import styled from "styled-components";
-import { useForm } from "react-hook-form";
-import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Label from "@radix-ui/react-label";
-import { Button } from "../../components/button";
-import { Paper } from "../../components/paper";
-import { TextInput } from "../../components/textInput";
-import { QUERIES } from "../../constants";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { Link, useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import * as yup from "yup";
 import {
   useLazyGetSessionQuery,
   useLoginMutation,
 } from "../../app/services/auth";
-import { useNavigate } from "react-router-dom";
+import { Button } from "../../components/button";
+import { Paper } from "../../components/paper";
+import { TextInput } from "../../components/textInput";
+import { QUERIES } from "../../constants";
 
 const schema = yup.object().shape({
   username: yup

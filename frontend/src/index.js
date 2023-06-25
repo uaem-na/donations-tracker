@@ -1,9 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import "./assets/style/index-compiled.css";
+import { Provider } from "react-redux";
 import App from "./App";
 import configureAppStore from "./app/store";
-import { Provider } from "react-redux";
+import "./assets/style/index-compiled.css";
 
 const store = configureAppStore();
 

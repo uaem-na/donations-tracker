@@ -1,7 +1,6 @@
 // [Public] FAQ page component
 // Contains: list of frequently asked questions
 // Content available on Google Docs
-import React from "react";
 import styled from "styled-components";
 import {
   ExternalLink,
