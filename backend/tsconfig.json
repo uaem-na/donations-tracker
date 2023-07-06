@@ -1,5 +1,6 @@
 {
-  "include": ["**/*"],
+  "include": ["**/*.ts", "custom.d.ts"],
+  "exclude": ["node_modules", "**/*.spec.ts"],
   "watchOptions": {
     "fallbackPolling": "fixedinterval"
   },

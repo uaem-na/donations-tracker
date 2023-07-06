@@ -1,11 +1,11 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 import { HamburgerMenuIcon } from "@radix-ui/react-icons";
-import { UserMenu } from "./userMenu";
-import { DesktopNav } from "./desktopNav";
+import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
+import { useState } from "react";
+import styled from "styled-components";
 import { QUERIES } from "../../constants";
+import { DesktopNav } from "./desktopNav";
 import MobileNav from "./mobileNav";
+import { UserMenu } from "./userMenu";
 
 export const Header = () => {
   const [showMobileNav, setShowMobileNav] = useState(false);

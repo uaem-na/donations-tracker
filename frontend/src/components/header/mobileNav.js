@@ -1,9 +1,8 @@
-import React from "react";
-import styled, { css, keyframes } from "styled-components";
-import { NavLink } from "react-router-dom";
 import * as Dialog from "@radix-ui/react-dialog";
 import { Cross1Icon } from "@radix-ui/react-icons";
-import { siteLinks } from "../../common/siteLinks";
+import { NavLink } from "react-router-dom";
+import styled, { css, keyframes } from "styled-components";
+import { siteLinks } from "./siteLinks";
 
 const fadeIn = keyframes`
   from {

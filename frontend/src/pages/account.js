@@ -1,19 +1,19 @@
 // [Private] My Account page component
 // Contains: dashboard, account information and actions to make offers/requests
-import Offers from "../components/dashboard/offers";
-import React, { useEffect, useState } from "react";
-import Requests from "../components/dashboard/requests";
-import UpdatePasswordForm from "../components/account/updatePasswordForm";
-import UpdateUserInfoForm from "../components/account/updateUserInfoForm";
-import axios from "../common/http-common";
 import styled from "styled-components";
-import { Button } from "../components/button";
+import { Button } from "../components/common/button";
+import { Tooltip } from "../components/common/tooltip";
+import Offers from "../components/dashboard/offers";
+import Requests from "../components/dashboard/requests";
 import { DEVICES } from "../constants";
-import { Tooltip } from "../components/tooltip";
-import { useAuth } from "../components/auth";
+import { UpdatePasswordForm } from "../features/users/updatePasswordForm";
+import { UpdateUserInfoForm } from "../features/users/updateUserInfoForm";
+import { useGetSessionQuery } from "../store/services/auth";
+import { useGetPostsQuery } from "../store/services/posts";
 
 const VerifiedStatus = () => {
-  const { user } = useAuth();
+  const { data: user } = useGetSessionQuery();
+
   if (user.verified) {
     return <>verified</>;
   } else {
@@ -22,29 +22,8 @@ const VerifiedStatus = () => {
 };
 
 const AccountPage = () => {
-  const { user } = useAuth();
-  const [offers, setOffers] = useState([]);
-  const [requests, setRequests] = useState([]);
-
-  useEffect(() => {
-    console.log(user);
-    axios
-      .get(`/offers`)
-      .then((response) => {
-        setOffers(response.data);
-      })
-      .catch((e) => {
-        console.error(e.response);
-      });
-    axios
-      .get(`/requests`)
-      .then((response) => {
-        setRequests(response.data);
-      })
-      .catch((e) => {
-        console.error(e.response);
-      });
-  }, []);
+  const { data: user } = useGetSessionQuery();
+  const { data: posts } = useGetPostsQuery();
 
   const handleMakeOfferClick = (event) => {
     event.preventDefault();
@@ -70,11 +49,11 @@ const AccountPage = () => {
         <DashboardColumn>
           <DashboardRow>
             <Heading>Offers</Heading>
-            <Offers offers={offers} />
+            <Offers offers={posts} />
           </DashboardRow>
           <DashboardRow>
             <Heading>Requests</Heading>
-            <Requests requests={requests} />
+            <Requests requests={posts} />
           </DashboardRow>
         </DashboardColumn>
         <InformationColumn>

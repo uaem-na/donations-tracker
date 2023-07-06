@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
+import Userfront from "@userfront/core";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import EditPPE from "./sections/editppe";
 import Location from "./sections/location";
 import ViewPPE from "./sections/viewppe";
-import { useNavigate, useParams } from "react-router-dom";
-import axios from "../../common/http-common";
-import Userfront from "@userfront/core";
 
 Userfront.init("8nwrppdb");
 const userData = JSON.parse(JSON.stringify(Userfront.user, null, 2));

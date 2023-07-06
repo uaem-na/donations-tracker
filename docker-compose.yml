@@ -11,6 +11,7 @@ services:
     environment:
       CONNECTION_STRING: mongodb://donations-tracker-db:27017/dev
       CLIENT_ORIGIN: http://localhost:8080
+      SESSION_SECRET: top secret
       PORT: 8081
       DEBUG: backend:*
     ports:

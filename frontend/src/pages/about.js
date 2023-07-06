@@ -1,7 +1,6 @@
 // [Public] About page component
 // Contains: information about the website, UAEM, UAEM McGill, and the developers
 // Content available on Google Docs
-import React from "react";
 import styled from "styled-components";
 import {
   ExternalLink,
@@ -10,7 +9,7 @@ import {
   PageParagraph,
   PageSubtitle,
   PageTitle,
-} from "../components/typography";
+} from "../components/common/typography";
 
 export const AboutUsPage = () => {
   return (

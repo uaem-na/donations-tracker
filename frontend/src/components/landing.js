@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import mask from "../assets/media/ppe-mask.svg";
+import mask from "../images/ppe-mask.svg";
 import Map from "./map/Map";
 
 export const Landing = () => {
@@ -15,9 +15,9 @@ export const Landing = () => {
           Log me in!
         </Link>
       </div>
-        <div>
-          <Map />
-        </div>    
+      <div>
+        <Map />
+      </div>
     </div>
   );
 };

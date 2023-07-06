@@ -1,5 +1,5 @@
-import { Link } from "react-router-dom";
 import formatDistance from "date-fns/formatDistance";
+import { Link } from "react-router-dom";
 
 export const OfferLink = ({ id, postalCode, ppeProfiles, createdAt }) => {
   return (

@@ -1,7 +1,6 @@
 // [Public] FAQ page component
 // Contains: list of frequently asked questions
 // Content available on Google Docs
-import React from "react";
 import styled from "styled-components";
 import {
   ExternalLink,
@@ -10,7 +9,7 @@ import {
   PageParagraph,
   PageSubtitle,
   PageTitle,
-} from "../components/typography";
+} from "../components/common/typography";
 
 export const FaqPage = () => {
   return (
@@ -57,23 +56,23 @@ export const FaqPage = () => {
           authentication information is managed safely on our platform. Some of
           the methods that we have implemented to ensure you have a safe and
           secure experience are listed below.
-          <StyledList>
-            <li>
-              If a user registers as an organization, website administrators
-              will go through a mandatory authentication process to ensure that
-              the organization is legitimate. Only then will the registration be
-              completed, and the user would be able to use the website.
-            </li>
-            <li>
-              If you have reasonable doubt about another user's
-              reliability/legitimacy, you can always report them by clicking on
-              the <Highlight>Report User</Highlight> button, which can be found
-              on TBD . Once a user has been reported, their activity will be
-              temporarily blocked until the website administrators conduct a
-              background check.
-            </li>
-          </StyledList>
         </PageParagraph>
+        <StyledList>
+          <li>
+            If a user registers as an organization, website administrators will
+            go through a mandatory authentication process to ensure that the
+            organization is legitimate. Only then will the registration be
+            completed, and the user would be able to use the website.
+          </li>
+          <li>
+            If you have reasonable doubt about another user's
+            reliability/legitimacy, you can always report them by clicking on
+            the <Highlight>Report User</Highlight> button, which can be found on
+            TBD . Once a user has been reported, their activity will be
+            temporarily blocked until the website administrators conduct a
+            background check.
+          </li>
+        </StyledList>
         <PageSubtitle>
           If there are issues/errors with donations or monetary transactions,
           what should we do?
@@ -86,23 +85,25 @@ export const FaqPage = () => {
             arise with a transaction/donation.
           </em>{" "}
           Such errors/issues include but are not limited to:
-          <StyledList>
-            <li>
-              Damages to products - We encourage you to check that all products
-              are in their desired condition before completing the
-              transaction/donation.
-            </li>
-            <li>
-              Products that are different from their description on the website
-              - We encourage that you check all products are provided as posted
-              on the website.
-            </li>
-            <li>Not receiving the fee after selling the product.</li>
-            <li>
-              Errors with transactions - Please contact the corresponding bank
-              for any errors related to monetary transactions.
-            </li>
-          </StyledList>
+        </PageParagraph>
+        <StyledList>
+          <li>
+            Damages to products - We encourage you to check that all products
+            are in their desired condition before completing the
+            transaction/donation.
+          </li>
+          <li>
+            Products that are different from their description on the website -
+            We encourage that you check all products are provided as posted on
+            the website.
+          </li>
+          <li>Not receiving the fee after selling the product.</li>
+          <li>
+            Errors with transactions - Please contact the corresponding bank for
+            any errors related to monetary transactions.
+          </li>
+        </StyledList>
+        <PageParagraph>
           If during a donation/transaction, you find issues with a specific
           user, please report them using the “Report User” feature as soon as
           possible, so that the user's activity can be temporarily blocked.
