@@ -1,7 +1,7 @@
 import * as Tooltip from "@radix-ui/react-tooltip";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import { ELEVATIONS } from "../../constants";
+import { ELEVATIONS } from "../../../constants";
 
 const TooltipComponent = ({ children, message }) => {
   return (

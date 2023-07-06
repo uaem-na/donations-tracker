@@ -4,14 +4,14 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { Button } from "../../components/common/button";
+import { TextInput } from "../../components/common/inputs";
+import { Paper } from "../../components/paper";
+import { QUERIES } from "../../constants";
 import {
   useLazyGetSessionQuery,
   useLoginMutation,
-} from "../../app/services/auth";
-import { Button } from "../../components/button";
-import { TextInput } from "../../components/inputs";
-import { Paper } from "../../components/paper";
-import { QUERIES } from "../../constants";
+} from "../../store/services/auth";
 import { loginSchema } from "../yupSchemas";
 
 export const LoginForm = () => {

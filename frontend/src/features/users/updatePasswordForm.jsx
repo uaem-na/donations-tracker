@@ -3,9 +3,9 @@ import { Label } from "@radix-ui/react-label";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
-import { useChangePasswordMutation } from "../../app/services/users";
-import { Button } from "../../components/button";
-import { TextInput } from "../../components/inputs";
+import { Button } from "../../components/common/button";
+import { TextInput } from "../../components/common/inputs";
+import { useChangePasswordMutation } from "../../store/services/users";
 import { updatePasswordSchema } from "../yupSchemas";
 
 export const UpdatePasswordForm = () => {

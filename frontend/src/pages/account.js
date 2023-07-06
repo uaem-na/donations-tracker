@@ -1,15 +1,15 @@
 // [Private] My Account page component
 // Contains: dashboard, account information and actions to make offers/requests
 import styled from "styled-components";
-import { useGetSessionQuery } from "../app/services/auth";
-import { useGetPostsQuery } from "../app/services/posts";
-import { Button } from "../components/button";
+import { Button } from "../components/common/button";
+import { Tooltip } from "../components/common/tooltip";
 import Offers from "../components/dashboard/offers";
 import Requests from "../components/dashboard/requests";
-import { Tooltip } from "../components/tooltip";
 import { DEVICES } from "../constants";
 import { UpdatePasswordForm } from "../features/users/updatePasswordForm";
 import { UpdateUserInfoForm } from "../features/users/updateUserInfoForm";
+import { useGetSessionQuery } from "../store/services/auth";
+import { useGetPostsQuery } from "../store/services/posts";
 
 const VerifiedStatus = () => {
   const { data: user } = useGetSessionQuery();

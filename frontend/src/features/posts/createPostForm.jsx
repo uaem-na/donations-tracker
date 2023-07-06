@@ -5,10 +5,10 @@ import { useEffect, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { useLocation } from "react-router-dom";
 import styled from "styled-components";
-import { useCreatePostMutation } from "../../app/services/posts";
-import { Button } from "../../components/button";
-import { TextInput } from "../../components/inputs";
+import { Button } from "../../components/common/button";
+import { TextInput } from "../../components/common/inputs";
 import { Paper } from "../../components/paper";
+import { useCreatePostMutation } from "../../store/services/posts";
 import { createPostSchema } from "../yupSchemas";
 import AddItem from "./addItem";
 

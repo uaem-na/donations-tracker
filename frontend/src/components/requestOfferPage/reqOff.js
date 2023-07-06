@@ -1,7 +1,7 @@
 import Userfront from "@userfront/core";
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import axios from "../../common/http-common";
 import EditPPE from "./sections/editppe";
 import Location from "./sections/location";
 import ViewPPE from "./sections/viewppe";

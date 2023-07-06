@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 import styled from "styled-components";
-import { GlobalStyles } from "../globalStyles";
-import { Header } from "../header";
+import { GlobalStyles } from "../components/globalStyles";
+import { Header } from "../components/header";
 
 const Layout = () => {
   return (

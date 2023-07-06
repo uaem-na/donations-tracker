@@ -38,7 +38,7 @@
   "scripts": {
     "prepare": "cd .. && husky install frontend/.husky",
     "start": "npm run watch:css && react-scripts start",
-    "watch:css": "npx tailwindcss -i src/assets/style/index.css -o src/assets/style/index-compiled.css",
+    "watch:css": "npx tailwindcss -i src/styles/index.css -o src/styles/index-compiled.css",
     "build": "npm run watch:css && react-scripts build"
   },
   "lint-staged": {

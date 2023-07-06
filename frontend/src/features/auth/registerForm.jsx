@@ -4,14 +4,14 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { Button } from "../../components/common/button";
+import { TextInput } from "../../components/common/inputs";
+import { Paper } from "../../components/paper";
+import { QUERIES } from "../../constants";
 import {
   useLazyGetSessionQuery,
   useRegisterMutation,
-} from "../../app/services/auth";
-import { Button } from "../../components/button";
-import { TextInput } from "../../components/inputs";
-import { Paper } from "../../components/paper";
-import { QUERIES } from "../../constants";
+} from "../../store/services/auth";
 import { registerSchema } from "../yupSchemas";
 
 export const RegisterForm = () => {

@@ -9,7 +9,7 @@ import {
   PageParagraph,
   PageSubtitle,
   PageTitle,
-} from "../components/typography";
+} from "../components/common/typography";
 
 export const AboutUsPage = () => {
   return (

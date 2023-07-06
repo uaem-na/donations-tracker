@@ -2,8 +2,8 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 // * Various React page components
 import Landing from "./components/landing";
-import { Layout } from "./components/layout";
 import ReqOff from "./components/requestOfferPage/reqOff";
+import { Layout } from "./layout";
 import { AboutUsPage, AccountPage, FaqPage } from "./pages";
 
 // * Individual React components that are cross-cutting concerns
