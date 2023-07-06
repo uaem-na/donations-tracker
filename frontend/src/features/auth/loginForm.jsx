@@ -4,25 +4,15 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import * as yup from "yup";
 import {
   useLazyGetSessionQuery,
   useLoginMutation,
 } from "../../app/services/auth";
 import { Button } from "../../components/button";
+import { TextInput } from "../../components/inputs";
 import { Paper } from "../../components/paper";
-import { TextInput } from "../../components/textInput";
 import { QUERIES } from "../../constants";
-
-// TODO: central schema location
-const schema = yup.object().shape({
-  username: yup
-    .string()
-    .min(3, "Must be 3 characters or more")
-    .max(32, "Must be less than 32 characters")
-    .required("Username is required"),
-  password: yup.string().required("Password is required for login"),
-});
+import { loginSchema } from "../yupSchemas";
 
 export const LoginForm = () => {
   const navigate = useNavigate();
@@ -38,7 +28,7 @@ export const LoginForm = () => {
     formState: { errors },
     handleSubmit,
   } = useForm({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(loginSchema),
   });
 
   const onSubmit = async (data) => {

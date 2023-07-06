@@ -10,6 +10,7 @@ import { AboutUsPage, AccountPage, FaqPage } from "./pages";
 import { LoginForm } from "./features/auth/loginForm";
 import { RegisterForm } from "./features/auth/registerForm";
 import { RequireAuth } from "./features/auth/requireAuth";
+import { CreatePostForm } from "./features/posts/createPostForm";
 
 function App() {
   return (
@@ -31,6 +32,20 @@ function App() {
                 </RequireAuth>
               }
             />
+
+            {["/offers/new", "/requests/new"].map((path, index) => {
+              return (
+                <Route
+                  key={index}
+                  path={path}
+                  element={
+                    <RequireAuth>
+                      <CreatePostForm />
+                    </RequireAuth>
+                  }
+                />
+              );
+            })}
 
             {/* Authentication pages */}
             <Route path="/login" element={<LoginForm />} />

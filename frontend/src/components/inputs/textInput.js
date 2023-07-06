@@ -1,20 +1,7 @@
 import PropTypes from "prop-types";
 import { forwardRef } from "react";
 import styled from "styled-components";
-
-const getHeight = ({ height }) => {
-  switch (height) {
-    case "small":
-      return "32px";
-    case "medium":
-      return "40px";
-    case "large":
-      return "48px";
-    default:
-      if (height && height.indexOf("px") > -1) return height;
-      else return "var(--height-input)";
-  }
-};
+import { StyledInput } from "./styledInput";
 
 const TextInput = forwardRef(({ errorMessage, ...rest }, ref) => {
   return (
@@ -40,28 +27,6 @@ const InputWrapper = styled.div`
   width: 100%;
   flex-direction: column;
   gap: 4px;
-`;
-
-const StyledInput = styled.input`
-  width: 100%;
-  border: 1px solid var(--color-gray-800);
-  border: ${({ isError }) => isError && "1px solid var(--color-error);"};
-  border-radius: 8px;
-  padding: 12px 16px;
-  font-size: 1.1rem;
-  height: ${({ height }) => getHeight({ height })};
-
-  &:focus {
-    outline: ${({ isError }) => isError && "2px dotted var(--color-error);"};
-  }
-
-  &::placeholder {
-    color: var(--color-gray-500);
-  }
-
-  &:focus::placeholder {
-    color: transparent;
-  }
 `;
 
 const ErrorMessage = styled.span`

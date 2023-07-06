@@ -3,10 +3,10 @@ import { Post, PostAuthor, PostDocument, PostItem } from "../types";
 import { ImageSchema, LocationSchema } from "./schemas";
 
 const ItemSchema: Schema<PostItem> = new Schema({
-  name: { type: String, required: true },
-  quantity: { type: Number, required: true },
-  price: { type: Number, required: true },
-  description: { type: String, required: false },
+  name: { type: String, required: true, maxlength: 256 },
+  quantity: { type: Number, required: true, min: 1 },
+  price: { type: Number, required: true, min: 0 },
+  description: { type: String, required: false, maxlength: 1024 },
   category: { type: String, required: true },
   image: { type: ImageSchema, required: false },
 });
@@ -21,7 +21,7 @@ const PostSchema: Schema<Post> = new Schema(
   {
     author: { type: AuthorSchema, required: true, index: true },
     location: { type: LocationSchema, required: true },
-    title: { type: String, required: true },
+    title: { type: String, required: true, maxlength: 256 },
     items: { type: [ItemSchema], required: true },
     // * index for author and type for faster queries
     type: {

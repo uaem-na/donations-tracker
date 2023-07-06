@@ -4,47 +4,15 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import * as yup from "yup";
-import YupPassword from "yup-password";
 import {
   useLazyGetSessionQuery,
   useRegisterMutation,
 } from "../../app/services/auth";
 import { Button } from "../../components/button";
+import { TextInput } from "../../components/inputs";
 import { Paper } from "../../components/paper";
-import { TextInput } from "../../components/textInput";
 import { QUERIES } from "../../constants";
-
-YupPassword(yup); // extend yup
-
-// TODO: central schema location
-const schema = yup.object().shape({
-  username: yup
-    .string()
-    .min(3, "Must be 3 characters or more")
-    .max(32, "Must be less than 32 characters")
-    .required("Username is required"),
-  email: yup
-    .string()
-    .email("Invalid email address")
-    .required("E-mail address is required"),
-  password: yup
-    .string()
-    .min(8, "Must be 8 characters or more")
-    .max(256, "Must be less than 256 characters")
-    .minLowercase(1, "Must contain at least 1 lowercase letter")
-    .minUppercase(1, "Must contain at least 1 uppercase letter")
-    .minNumbers(1, "Must contain at least 1 number")
-    .minSymbols(1, "Must contain at least 1 symbol")
-    .required("Password is required"),
-  confirmPassword: yup
-    .string()
-    .required("Confirm password is required")
-    .oneOf([yup.ref("password"), null], "Passwords must match"),
-  organization: yup.string().required("Organization is required"),
-  firstName: yup.string().required("First name is required"),
-  lastName: yup.string().required("Last name is required"),
-});
+import { registerSchema } from "../yupSchemas";
 
 export const RegisterForm = () => {
   const navigate = useNavigate();
@@ -60,7 +28,7 @@ export const RegisterForm = () => {
     formState: { errors },
     handleSubmit,
   } = useForm({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(registerSchema),
   });
 
   const onSubmit = (data) => {

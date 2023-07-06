@@ -3,16 +3,11 @@ import { Label } from "@radix-ui/react-label";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
-import * as yup from "yup";
 import { useGetSessionQuery } from "../../app/services/auth";
 import { useUpdateUserMutation } from "../../app/services/users";
 import { Button } from "../../components/button";
-import { TextInput } from "../../components/textInput";
-
-const schema = yup.object().shape({
-  firstName: yup.string().required("First name is required"),
-  lastName: yup.string().required("Last name is required"),
-});
+import { TextInput } from "../../components/inputs";
+import { updateUserInfoSchema } from "../yupSchemas";
 
 export const UpdateUserInfoForm = () => {
   const { data: session } = useGetSessionQuery();
@@ -27,7 +22,7 @@ export const UpdateUserInfoForm = () => {
     formState: { errors },
     handleSubmit,
   } = useForm({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(updateUserInfoSchema),
     defaultValues: {
       firstName: session && session.firstName,
       lastName: session && session.lastName,
