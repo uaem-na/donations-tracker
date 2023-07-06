@@ -1,7 +1,7 @@
 import debug from "debug";
 import expressAsyncHandler from "express-async-handler";
 import { body, param, validationResult } from "express-validator";
-import { UserDto } from "../dtos";
+import { UserDto } from "../models/users";
 import { UserService } from "../services";
 
 const log = debug("backend:user");

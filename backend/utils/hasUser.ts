@@ -1,5 +1,5 @@
 import { Request } from "express";
-import { UserDto } from "../dtos";
+import { UserDto } from "../models/users";
 
 export const hasUser = (req: Request): req is Request & { user: UserDto } => {
   return Boolean(

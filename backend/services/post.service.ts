@@ -1,4 +1,4 @@
-import { PostModel } from "../models";
+import { PostModel } from "../models/posts";
 import { Post, PostDocument } from "../types";
 
 export class PostService {

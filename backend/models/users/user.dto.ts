@@ -1,5 +1,5 @@
 import { Document } from "mongoose";
-import { Location, User } from "../types";
+import { Location, User } from "../../types";
 
 export class UserDto {
   id?: string;

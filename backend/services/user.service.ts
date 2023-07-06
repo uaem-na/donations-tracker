@@ -1,4 +1,4 @@
-import { UserModel } from "../models/user.model";
+import { UserModel } from "../models/users";
 import { User, UserDocument } from "../types";
 
 export class UserService {

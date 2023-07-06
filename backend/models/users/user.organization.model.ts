@@ -1,6 +1,6 @@
 import { Model, Schema } from "mongoose";
-import { Organization, OrganizationUser, UserDocument } from "../types";
-import { AddressSchema } from "./schemas";
+import { Organization, OrganizationUser, UserDocument } from "../../types";
+import { AddressSchema } from "../common";
 import UserModel from "./user.model";
 
 const OrganizationSchema: Schema<Organization> = new Schema({

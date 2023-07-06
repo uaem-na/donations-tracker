@@ -2,9 +2,8 @@ import debug from "debug";
 import expressAsyncHandler from "express-async-handler";
 import { body } from "express-validator";
 import passport from "passport";
-import { UserDto } from "../dtos";
 import { InvalidOperationError } from "../errors";
-import { UserModel } from "../models/user.model";
+import { UserDto, UserModel } from "../models/users";
 import { AuthService } from "../services";
 
 const log = debug("backend:auth");

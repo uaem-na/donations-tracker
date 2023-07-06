@@ -1,4 +1,4 @@
-import { ReportModel } from "../models";
+import { ReportModel } from "../models/reports";
 import { Report, ReportDocument } from "../types";
 
 export class ReportService {

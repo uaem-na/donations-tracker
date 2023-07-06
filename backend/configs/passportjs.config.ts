@@ -1,7 +1,7 @@
 import debug from "debug";
 import { Express } from "express";
 import passport from "passport";
-import { UserModel } from "../models/user.model";
+import { UserModel } from "../models/users";
 
 const log = debug("backend:passportjs");
 

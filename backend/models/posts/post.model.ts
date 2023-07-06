@@ -1,6 +1,6 @@
 import { Model, model, Schema } from "mongoose";
-import { Post, PostAuthor, PostDocument, PostItem } from "../types";
-import { ImageSchema, LocationSchema } from "./schemas";
+import { Post, PostAuthor, PostDocument, PostItem } from "../../types";
+import { ImageSchema, LocationSchema } from "../common";
 
 const ItemSchema: Schema<PostItem> = new Schema({
   name: { type: String, required: true, maxlength: 256 },

@@ -1,8 +1,8 @@
 import debug from "debug";
 import expressAsyncHandler from "express-async-handler";
 import { body, param, validationResult } from "express-validator";
-import { PostDto } from "../dtos";
 import { AuthorizationError, NotFoundError, ValidationError } from "../errors";
+import { PostDto } from "../models/posts";
 import { PostService, UserService } from "../services";
 import { hasUser } from "../utils";
 

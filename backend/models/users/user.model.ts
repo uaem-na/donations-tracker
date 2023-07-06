@@ -6,8 +6,8 @@ import {
   model,
 } from "mongoose";
 import passportLocalMongoose from "passport-local-mongoose";
-import { UserDocument } from "../types";
-import { LocationSchema } from "./schemas";
+import { UserDocument } from "../../types";
+import { LocationSchema } from "../common";
 
 // ! TODO: reset password mechanism
 const UserSchema: Schema<UserDocument & PassportLocalDocument> = new Schema(

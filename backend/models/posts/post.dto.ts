@@ -1,5 +1,5 @@
 import { Document } from "mongoose";
-import { Location, Post, PostAuthor, PostItem } from "../types";
+import { Location, Post, PostAuthor, PostItem } from "../../types";
 
 type PostItemDto = Omit<PostItem, "image"> & {
   image?: string;

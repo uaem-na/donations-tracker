@@ -1,5 +1,5 @@
 import { Request } from "express";
-import { UserDto } from "../dtos";
+import { UserDto } from "../models/users";
 
 export class AuthService {
   getSession(req: Request): UserDto | null {

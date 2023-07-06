@@ -1,5 +1,5 @@
 import { Document } from "mongoose";
-import { Report, ReportPost, ReportUser } from "../types";
+import { Report, ReportPost, ReportUser } from "../../types";
 
 export class ReportDto {
   reporter: ReportUser;

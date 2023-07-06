@@ -1,5 +1,5 @@
 import { Model, model, Schema } from "mongoose";
-import { ReportDocument, ReportUser } from "../types";
+import { ReportDocument, ReportUser } from "../../types";
 
 // embed reporter and resolver as subdocuments of Report
 const UserSchema: Schema<ReportUser> = new Schema({
