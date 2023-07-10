@@ -25,10 +25,12 @@ export type Organization = {
   address: Address;
   phone: string;
   type: string;
+  verified: boolean;
 };
 
 // * User model related types
 export type User = {
+  kind: string; // ! discriminator key
   username: string;
   email: string;
   recoveryEmail: string;
@@ -36,14 +38,11 @@ export type User = {
   lastName: string;
   location: Location;
   active: boolean;
-  verified: boolean;
   createdAt: Date;
   updatedAt: Date;
 };
 
-export type AdminUser = User & {
-  admin: boolean;
-};
+export type AdminUser = User;
 
 export type OrganizationUser = User & {
   organization: Organization;

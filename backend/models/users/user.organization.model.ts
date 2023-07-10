@@ -8,6 +8,7 @@ const OrganizationSchema: Schema<Organization> = new Schema({
   address: { type: AddressSchema, required: true },
   phone: { type: String, required: true },
   type: { type: String, required: true },
+  verified: { type: Boolean, default: false, required: true },
 });
 
 const OrganizationUserSchema: Schema<OrganizationUser> = new Schema({

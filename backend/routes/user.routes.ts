@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { UserController } from "../controllers/user.controller";
-import { ensureAuthenticated } from "../middlewares";
+import { ensureAdmin, ensureAuthenticated } from "../middlewares";
 import { UserService } from "../services/user.service";
 
 // * middleware function to create route handlers
@@ -9,9 +9,17 @@ const userService = new UserService();
 const userController = new UserController(userService);
 
 // * wire up routes with controller
-router.get("/", ensureAuthenticated, userController.getAllUsers);
 router.post("/update", ensureAuthenticated, userController.updateUser);
 router.post("/password", ensureAuthenticated, userController.updatePassword);
 router.delete("/:id", ensureAuthenticated, userController.deleteUser);
+
+// * admin actions
+router.get("/", ensureAuthenticated, ensureAdmin, userController.getAllUsers);
+router.post(
+  "/verify",
+  ensureAuthenticated,
+  ensureAdmin,
+  userController.verifyUser
+);
 
 export default router;

@@ -94,4 +94,28 @@ export class UserController {
 
     res.status(200).json({ message: `Successfully deleted user ${id}.` });
   });
+
+  verifyUser = expressAsyncHandler(async (req, res, next) => {
+    await body("userId").notEmpty().run(req);
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      res.status(400).json({ errors: errors.array() });
+      return;
+    }
+
+    const { userId } = req.body;
+    if (!userId) {
+      res
+        .status(400)
+        .json({ error: `Error verifying user. User ID must be specified.` });
+      return;
+    }
+
+    await this.userService.verifyOrgniazationUser(userId);
+
+    log(`Verified user ${userId}.`);
+
+    res.status(200).json({ message: `Successfully verified user ${userId}.` });
+  });
 }

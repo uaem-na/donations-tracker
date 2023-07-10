@@ -3,7 +3,7 @@ import { Address } from "../../types";
 
 export const AddressSchema: Schema<Address> = new Schema({
   street: { type: String, required: true },
-  city: { type: String, required: true, enum: ["Montréal"] },
+  city: { type: String, required: true, enum: ["Montréal", "Montreal"] },
   province: {
     type: String,
     required: true,

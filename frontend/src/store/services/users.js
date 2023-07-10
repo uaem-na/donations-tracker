@@ -6,15 +6,21 @@ const baseUrl = process.env.REACT_APP_BACKEND_URL || "";
 // * Define a service using a base URL and expected endpoints
 export const usersApi = createApi({
   reducerPath: "users",
-  baseQuery: fetchBaseQuery({ baseUrl: `${baseUrl}/users` }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: `${baseUrl}/users`,
+    withCredentials: true,
+  }),
   endpoints: (builder) => ({
-    getUsers: builder.query({
-      query: () => ({ url: "", method: "GET" }),
-      providesTags: (result, error, id) => [{ type: "users", id: "list" }],
-    }),
     getUser: builder.query({
       query: ({ userId }) => ({ url: `${userId}`, method: "GET" }),
       providesTags: (result, error, id) => [{ type: "users", id }],
+    }),
+    getUsers: builder.query({
+      query: () => ({
+        url: "/",
+        method: "GET",
+      }),
+      providesTags: (result, error, id) => [{ type: "users", id: "list" }],
     }),
     updateUser: builder.mutation({
       query: (data) => ({
@@ -40,6 +46,14 @@ export const usersApi = createApi({
       }),
       providesTags: (result, error, id) => [{ type: "users", id }],
     }),
+    verifyUser: builder.mutation({
+      query: ({ userId }) => ({
+        url: "verify",
+        method: "POST",
+        body: { userId },
+      }),
+      providesTags: (result, error, id) => [{ type: "users", id }],
+    }),
   }),
 });
 
@@ -51,4 +65,5 @@ export const {
   useGetUserQuery,
   useGetUsersQuery,
   useUpdateUserMutation,
+  useVerifyUserMutation,
 } = usersApi;

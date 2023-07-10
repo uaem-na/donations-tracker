@@ -2,9 +2,14 @@ import { UserModel } from "../models/users";
 import { User, UserDocument } from "../types";
 
 export class UserService {
-  async getUsers(): Promise<UserDocument[]> {
+  /**
+   * Get all active users, optionally get all users when active is set to false
+   * @param active set to false to get all users including inactive users
+   * @returns returns a list of users
+   */
+  async getUsers(active = true): Promise<UserDocument[]> {
     const users = await UserModel.find({
-      active: true,
+      active,
     });
 
     return users;
@@ -56,5 +61,17 @@ export class UserService {
     if (result.deletedCount === 0) {
       throw new Error(`Error deleting user ${id}.`);
     }
+  }
+
+  async verifyOrgniazationUser(id: string): Promise<UserDocument> {
+    const user = await this.getUserById(id);
+
+    if (!user) {
+      throw new Error(`Error verifying user. User does not exist.`);
+    }
+
+    user.organization.verified = true;
+
+    return await user.save();
   }
 }
