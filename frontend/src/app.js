@@ -4,7 +4,12 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Landing from "./components/landing";
 import ReqOff from "./components/requestOfferPage/reqOff";
 import { Layout } from "./layout";
-import { AboutUsPage, AccountPage, FaqPage } from "./pages";
+import {
+  AboutUsPage,
+  AccountPage,
+  FaqPage,
+  UsersAdministrationPage,
+} from "./pages";
 
 // * Individual React components that are cross-cutting concerns
 import { LoginForm } from "./features/auth/loginForm";
@@ -22,6 +27,9 @@ function App() {
             <Route index element={<Landing />} />
             <Route path="/about-us" element={<AboutUsPage />} />
             <Route path="/faq" element={<FaqPage />} />
+
+            {/* Admin pages */}
+            <Route path="/admin/users" element={<UsersAdministrationPage />} />
 
             {/* Private pages */}
             <Route

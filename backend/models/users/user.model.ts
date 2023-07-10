@@ -47,10 +47,10 @@ const UserSchema: Schema<UserDocument & PassportLocalDocument> = new Schema(
     },
     location: { type: LocationSchema, required: false },
     active: { type: Boolean, default: true }, // TODO: add deactivation mechanism
-    verified: { type: Boolean, default: false }, // TODO: add veritifcation mechanism for admin
     recoveryEmail: { type: String, required: false }, // TODO: add recovery email mechanism
   },
-  { timestamps: true }
+  // ! when updating discriminatorKey, existing keys must be updated as well
+  { discriminatorKey: "kind", timestamps: true }
 );
 
 // salt and hash added by passport-local-mongoose

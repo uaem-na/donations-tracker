@@ -3,7 +3,7 @@ import expressAsyncHandler from "express-async-handler";
 import { body } from "express-validator";
 import passport from "passport";
 import { InvalidOperationError } from "../errors";
-import { UserDto, UserModel } from "../models/users";
+import { IndividualUserModel, UserDto, UserModel } from "../models/users";
 import { AuthService } from "../services";
 
 const log = debug("backend:auth");
@@ -86,8 +86,10 @@ export class AuthController {
 
     const { username, email, firstName, lastName, organization, password } =
       req.body;
+
+    // TODO: there must be a way for organization to sign up
     const user = await UserModel.register(
-      new UserModel({
+      new IndividualUserModel({
         username,
         email,
         firstName,
