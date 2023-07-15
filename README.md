@@ -31,6 +31,10 @@ To build without cache:
 - [ ] User emails must be verified
 - [ ] Post must be in private mode where only the author and admins can read before it goes public
 - [ ] When there is an activity on the post, authors must be notified
+- [ ] Human friendly error messages
+- [x] Seed users
+- [ ] Seed posts
+- [ ] Seed reports
 
 ### Admin features
 

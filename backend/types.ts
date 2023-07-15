@@ -16,8 +16,10 @@ export type Address = {
   street: string;
   city: string;
   province: string;
+  provinceCode: string;
   postalCode: string;
   country: string;
+  countryCode: string;
 };
 
 export type Organization = {
@@ -40,6 +42,10 @@ export type User = {
   active: boolean;
   createdAt: Date;
   updatedAt: Date;
+  role: string;
+  isAdmin: boolean;
+  isOrganization: boolean;
+  isIndividual: boolean;
 };
 
 export type AdminUser = User;

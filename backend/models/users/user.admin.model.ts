@@ -1,6 +1,20 @@
 import { Model, Schema } from "mongoose";
+import { UserDiscriminator, UserRole } from "../../constants";
 import { UserDocument } from "../../types";
-import UserModel from "./user.model";
+import UserModel from "./user.base.model";
+
+const AdminUserSchema: Schema<UserDocument> = new Schema({
+  isAdmin: { type: Boolean, default: true },
+});
+
+AdminUserSchema.pre("validate", function (next) {
+  this.role = UserRole.ADMIN;
+
+  next();
+});
 
 export const AdminUserModel: Model<UserDocument> =
-  UserModel.discriminator<UserDocument>("AdminUser", new Schema({}));
+  UserModel.discriminator<UserDocument>(
+    UserDiscriminator.ADMIN,
+    AdminUserSchema
+  );

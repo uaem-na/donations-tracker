@@ -1,7 +1,8 @@
 import { Model, Schema } from "mongoose";
+import { UserDiscriminator, UserRole } from "../../constants";
 import { Organization, OrganizationUser, UserDocument } from "../../types";
 import { AddressSchema } from "../common";
-import UserModel from "./user.model";
+import UserModel from "./user.base.model";
 
 const OrganizationSchema: Schema<Organization> = new Schema({
   name: { type: String, required: true },
@@ -13,10 +14,17 @@ const OrganizationSchema: Schema<Organization> = new Schema({
 
 const OrganizationUserSchema: Schema<OrganizationUser> = new Schema({
   organization: { type: OrganizationSchema, required: true },
+  isOrganization: { type: Boolean, default: true },
+});
+
+OrganizationUserSchema.pre("validate", function (next) {
+  this.role = UserRole.ORGANIZATION;
+
+  next();
 });
 
 export const OrganizationUserModel: Model<UserDocument> =
   UserModel.discriminator<UserDocument>(
-    "OrganizationUser",
+    UserDiscriminator.ORGANIZATION,
     OrganizationUserSchema
   );

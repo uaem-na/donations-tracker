@@ -1,20 +1,18 @@
-// [Public] About page component
-// Contains: information about the website, UAEM, UAEM McGill, and the developers
-// Content available on Google Docs
+// [Admin] Admin users page component
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { Button } from "../components/common/button";
+import { Button } from "../../components/common/button";
 import {
   PageParagraph,
   PageSubtitle,
   PageTitle,
-} from "../components/common/typography";
+} from "../../components/common/typography";
 import {
   useGetUsersQuery,
   useVerifyUserMutation,
-} from "../store/services/users";
+} from "../../store/services/users";
 
-export const UsersAdministrationPage = () => {
+export const AdminUsersPage = () => {
   const { data: users, isLoading, isSuccess } = useGetUsersQuery();
   const [
     verifyUserApi,
@@ -33,10 +31,10 @@ export const UsersAdministrationPage = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      setAdminUsers(users.filter((user) => user.isAdmin));
-      setIndividualUsers(users.filter((user) => user.isIndividual));
-      setOrgUsers(users.filter((user) => user.isOrganization));
-      setDanglingUsers(users.filter((user) => user.isDangling));
+      setAdminUsers(users.filter((user) => user.role === "admin"));
+      setIndividualUsers(users.filter((user) => user.role === "individual"));
+      setOrgUsers(users.filter((user) => user.role === "organization"));
+      setDanglingUsers(users.filter((user) => !user.role));
     }
   }, [isSuccess, users]);
 
@@ -189,4 +187,4 @@ const ContentWrapper = styled.div`
   max-width: 800px;
 `;
 
-export default UsersAdministrationPage;
+export default AdminUsersPage;
