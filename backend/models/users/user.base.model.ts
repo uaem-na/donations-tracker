@@ -6,52 +6,67 @@ import {
   model,
 } from "mongoose";
 import passportLocalMongoose from "passport-local-mongoose";
+import { ModelName, UserRole } from "../../constants";
 import { UserDocument } from "../../types";
 import { LocationSchema } from "../common";
 
 // ! TODO: reset password mechanism
-const UserSchema: Schema<UserDocument & PassportLocalDocument> = new Schema(
-  {
-    email: {
-      type: String,
-      required: true,
-      validate: {
-        validator: (v: string) => {
-          return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
-        },
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        message: (props: any) => `${props.value} is not a valid email address!`,
+const UserSchema: Schema<UserDocument & PassportLocalDocument> = new Schema({
+  email: {
+    type: String,
+    required: true,
+    validate: {
+      validator: (v: string) => {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
       },
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      message: (props: any) => `${props.value} is not a valid email address!`,
     },
-    firstName: {
-      type: String,
-      required: true,
-      validate: {
-        validator: (v: string) => {
-          return /^[a-zA-ZÀ-ÖØ-öø-ÿ ]+$/.test(v);
-        },
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        message: (props: any) => `${props.value} is not a valid first name!`,
-      },
-    },
-    lastName: {
-      type: String,
-      required: true,
-      validate: {
-        validator: (v: string) => {
-          return /^[a-zA-ZÀ-ÖØ-öø-ÿ ]+$/.test(v);
-        },
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        message: (props: any) => `${props.value} is not a valid last name!`,
-      },
-    },
-    location: { type: LocationSchema, required: false },
-    active: { type: Boolean, default: true }, // TODO: add deactivation mechanism
-    recoveryEmail: { type: String, required: false }, // TODO: add recovery email mechanism
   },
-  // ! when updating discriminatorKey, existing keys must be updated as well
-  { discriminatorKey: "kind", timestamps: true }
-);
+  firstName: {
+    type: String,
+    required: true,
+    validate: {
+      validator: (v: string) => {
+        return /^[a-zA-ZÀ-ÖØ-öø-ÿ-' ]+$/.test(v);
+      },
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      message: (props: any) => `${props.value} is not a valid first name!`,
+    },
+  },
+  lastName: {
+    type: String,
+    required: true,
+    validate: {
+      validator: (v: string) => {
+        return /^[a-zA-ZÀ-ÖØ-öø-ÿ-' ]+$/.test(v);
+      },
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      message: (props: any) => `${props.value} is not a valid last name!`,
+    },
+  },
+  location: { type: LocationSchema, required: true },
+  active: { type: Boolean, default: true }, // TODO: add deactivation mechanism
+  recoveryEmail: { type: String, required: false }, // TODO: add recovery email mechanism
+  role: {
+    type: String,
+    enum: [UserRole.ADMIN, UserRole.ORGANIZATION, UserRole.INDIVIDUAL],
+    required: true,
+    default: UserRole.INDIVIDUAL,
+  },
+});
+
+UserSchema.methods.isAdmin = function (): boolean {
+  return this.role === UserRole.ADMIN;
+};
+
+UserSchema.methods.isIndividual = function (): boolean {
+  return this.role === UserRole.INDIVIDUAL;
+};
+
+UserSchema.methods.isOrganization = function (): boolean {
+  return this.role === UserRole.ORGANIZATION;
+};
 
 // salt and hash added by passport-local-mongoose
 UserSchema.plugin(passportLocalMongoose, {
@@ -104,6 +119,8 @@ UserSchema.virtual("postalCode").get(function (this: UserDocument) {
 
 export const UserModel: PassportLocalModel<
   UserDocument & PassportLocalDocument
-> = model<UserDocument & PassportLocalDocument>("User", UserSchema);
+> = model<UserDocument & PassportLocalDocument>(ModelName.USER, UserSchema);
+
+export type UserModel = typeof UserModel;
 
 export default UserModel;

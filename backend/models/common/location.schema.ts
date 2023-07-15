@@ -4,7 +4,7 @@ import { Location } from "../../types";
 export const LocationSchema: Schema<Location> = new Schema({
   lat: {
     type: Number,
-    required: true,
+    required: false,
     validate: {
       validator: (v: number) => {
         return v >= -90 && v <= 90;
@@ -15,7 +15,7 @@ export const LocationSchema: Schema<Location> = new Schema({
   },
   lng: {
     type: Number,
-    required: true,
+    required: false,
     validate: {
       validator: (v: number) => {
         return v >= -180 && v <= 180;
