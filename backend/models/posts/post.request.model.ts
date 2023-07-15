@@ -21,10 +21,7 @@ export const RequestPostModel: Model<PostDocument> =
 export const fakeRequestPost = (author: UserDocument): PostDocument => {
   const request = new RequestPostModel({
     title: faker.lorem.words(3),
-    author: {
-      username: author.username,
-      email: author.email,
-    },
+    author: author,
     location: {
       lat: author.location.lat,
       lng: author.location.lng,

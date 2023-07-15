@@ -1,24 +1,46 @@
+import { faker } from "@faker-js/faker/locale/en_CA";
 import { Model, model, Schema } from "mongoose";
-import { ReportDocument, ReportUser } from "../../types";
-
-// embed reporter and resolver as subdocuments of Report
-const UserSchema: Schema<ReportUser> = new Schema({
-  username: { type: String, required: true },
-  email: { type: String, required: true },
-  firstName: { type: String, required: false },
-  lastName: { type: String, required: false },
-});
+import { ModelName, ReportStatus } from "../../constants";
+import { PostDocument, ReportDocument, UserDocument } from "../../types";
 
 const ReportSchema: Schema<ReportDocument> = new Schema(
   {
-    reporter: { type: UserSchema, required: true },
-    resolver: { type: UserSchema, required: true },
-    post: { type: Schema.Types.ObjectId, ref: "Post", required: true },
-    status: { type: String, enum: ["resolved", "unresolved"], required: true },
-    notes: { type: String, required: true },
+    reporter: {
+      type: Schema.Types.ObjectId,
+      ref: ModelName.USER,
+      required: true,
+    },
+    resolver: {
+      type: Schema.Types.ObjectId,
+      ref: ModelName.USER,
+    },
+    post: { type: Schema.Types.ObjectId, ref: ModelName.POST, required: true },
+    status: {
+      type: String,
+      enum: [ReportStatus.RESOLVED, ReportStatus.UNRESOLVED],
+      required: true,
+    },
+    notes: { type: String, required: true, maxlength: 2048 },
   },
   { timestamps: true }
 );
 
-export const ReportModel: Model<ReportDocument> = model("Report", ReportSchema);
+export const ReportModel: Model<ReportDocument> = model(
+  ModelName.REPORT,
+  ReportSchema
+);
 export default ReportModel;
+
+export const fakeReport = (
+  reporter: UserDocument,
+  post: PostDocument
+): ReportDocument => {
+  const report = new ReportModel({
+    reporter: reporter,
+    post: post,
+    status: ReportStatus.UNRESOLVED,
+    notes: faker.word.words({ count: { min: 5, max: 100 } }),
+  });
+
+  return report;
+};

@@ -1,6 +1,7 @@
 // seed the database with some data if it's empty
 import { connect, connection } from "mongoose";
 import { seedPosts } from "./seed.posts";
+import { seedReports } from "./seed.reports";
 import { seedUsers } from "./seed.users";
 
 const connectionString = "mongodb://127.0.0.1:27017/dev";
@@ -24,5 +25,6 @@ const seed = async (destroy = false) => {
   console.log("Seeding database...");
 
   const users = await seedUsers(destroy, 2);
-  await seedPosts(destroy, 2, users);
+  const posts = await seedPosts(destroy, 2, users);
+  const reports = await seedReports(destroy, users[0], posts);
 };

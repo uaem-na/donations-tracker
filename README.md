@@ -34,7 +34,7 @@ To build without cache:
 - [ ] Human friendly error messages
 - [x] Seed users
 - [x] Seed posts
-- [ ] Seed reports
+- [x] Seed reports
 
 ### Admin features
 

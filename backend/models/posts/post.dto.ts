@@ -1,12 +1,13 @@
 import { Document } from "mongoose";
-import { Location, Post, PostAuthor, PostItem } from "../../types";
+import { Location, Post, PostItem } from "../../types";
+import { UserDto } from "../users";
 
 type PostItemDto = Omit<PostItem, "image"> & {
   image?: string;
 };
 
 export class PostDto {
-  author: PostAuthor;
+  author: UserDto;
   location: Location;
   title: string;
   items: PostItemDto[];

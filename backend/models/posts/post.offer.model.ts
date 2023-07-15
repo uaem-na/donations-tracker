@@ -21,10 +21,7 @@ export const OfferPostModel: Model<PostDocument> =
 export const fakeOfferPost = (author: UserDocument): PostDocument => {
   return new OfferPostModel({
     title: faker.lorem.words(3),
-    author: {
-      username: author.username,
-      email: author.email,
-    },
+    author: author,
     location: {
       lat: author.location.lat,
       lng: author.location.lng,

@@ -6,7 +6,7 @@ import {
   model,
 } from "mongoose";
 import passportLocalMongoose from "passport-local-mongoose";
-import { UserRole } from "../../constants";
+import { ModelName, UserRole } from "../../constants";
 import { UserDocument } from "../../types";
 import { LocationSchema } from "../common";
 
@@ -119,7 +119,7 @@ UserSchema.virtual("postalCode").get(function (this: UserDocument) {
 
 export const UserModel: PassportLocalModel<
   UserDocument & PassportLocalDocument
-> = model<UserDocument & PassportLocalDocument>("User", UserSchema);
+> = model<UserDocument & PassportLocalDocument>(ModelName.USER, UserSchema);
 
 export type UserModel = typeof UserModel;
 

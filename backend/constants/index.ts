@@ -65,3 +65,14 @@ export enum CountryCode {
 export enum CountryName {
   CANADA = "Canada",
 }
+
+export enum ModelName {
+  POST = "Post",
+  USER = "User",
+  REPORT = "Report",
+}
+
+export enum ReportStatus {
+  RESOLVED = "resolved",
+  UNRESOLVED = "unresolved",
+}

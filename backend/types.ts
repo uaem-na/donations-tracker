@@ -67,20 +67,10 @@ export type UserDocument = User &
   };
 
 // * Report model related types
-export type ReportUser = Pick<
-  User,
-  "username" | "email" | "firstName" | "lastName"
->;
-
-export type ReportPost = Pick<
-  Post,
-  "title" | "author" | "type" | "location" | "status"
->;
-
 export type Report = {
-  reporter: ReportUser;
-  resolver: ReportUser;
-  post: ReportPost;
+  reporter: User;
+  resolver: User;
+  post: Post;
   status: "resolved" | "unresolved";
   notes: string;
 };
@@ -88,8 +78,6 @@ export type Report = {
 export type ReportDocument = Report & Document;
 
 // * Post model related types
-export type PostAuthor = Pick<User, "username" | "email">;
-
 export type PostItem = {
   name: string;
   quantity: number;
@@ -103,7 +91,7 @@ export type Post = {
   title: string;
   type: "request" | "offer";
   items: PostItem[];
-  author: PostAuthor;
+  author: User;
   location: Location;
   status: "open" | "in-progress" | "closed";
   views: number;
