@@ -1,3 +1,19 @@
+export enum PostDiscriminator {
+  OFFER = "OfferPost",
+  REQUEST = "RequestPost",
+}
+
+export enum PostType {
+  OFFER = "offer",
+  REQUEST = "request",
+}
+
+export enum PostStatus {
+  OPEN = "open",
+  IN_PROGRESS = "in-progress",
+  CLOSED = "closed",
+}
+
 export enum UserRole {
   ADMIN = "admin",
   ORGANIZATION = "organization",

@@ -1,4 +1,5 @@
 import { Model, model, Schema } from "mongoose";
+import { PostStatus, PostType } from "../../constants";
 import { Post, PostAuthor, PostDocument, PostItem } from "../../types";
 import { ImageSchema, LocationSchema } from "../common";
 
@@ -26,15 +27,15 @@ const PostSchema: Schema<Post> = new Schema(
     // * index for author and type for faster queries
     type: {
       type: String,
-      enum: ["request", "offer"],
+      enum: [PostType.OFFER, PostType.REQUEST],
       required: true,
       index: true,
     },
     status: {
       type: String,
-      enum: ["open", "in-progress", "closed"],
-      default: "open",
+      enum: [PostStatus.OPEN, PostStatus.IN_PROGRESS, PostStatus.CLOSED],
       required: true,
+      default: PostStatus.OPEN,
     },
     views: { type: Number, default: 0 },
   },
@@ -42,4 +43,7 @@ const PostSchema: Schema<Post> = new Schema(
 );
 
 export const PostModel: Model<PostDocument> = model("Post", PostSchema);
+
+export type PostModel = typeof PostModel;
+
 export default PostModel;

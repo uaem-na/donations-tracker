@@ -45,16 +45,28 @@ const UserSchema: Schema<UserDocument & PassportLocalDocument> = new Schema({
       message: (props: any) => `${props.value} is not a valid last name!`,
     },
   },
-  location: { type: LocationSchema, required: false },
+  location: { type: LocationSchema, required: true },
   active: { type: Boolean, default: true }, // TODO: add deactivation mechanism
   recoveryEmail: { type: String, required: false }, // TODO: add recovery email mechanism
   role: {
     type: String,
-    required: true,
     enum: [UserRole.ADMIN, UserRole.ORGANIZATION, UserRole.INDIVIDUAL],
+    required: true,
     default: UserRole.INDIVIDUAL,
   },
 });
+
+UserSchema.methods.isAdmin = function (): boolean {
+  return this.role === UserRole.ADMIN;
+};
+
+UserSchema.methods.isIndividual = function (): boolean {
+  return this.role === UserRole.INDIVIDUAL;
+};
+
+UserSchema.methods.isOrganization = function (): boolean {
+  return this.role === UserRole.ORGANIZATION;
+};
 
 // salt and hash added by passport-local-mongoose
 UserSchema.plugin(passportLocalMongoose, {

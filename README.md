@@ -33,7 +33,7 @@ To build without cache:
 - [ ] When there is an activity on the post, authors must be notified
 - [ ] Human friendly error messages
 - [x] Seed users
-- [ ] Seed posts
+- [x] Seed posts
 - [ ] Seed reports
 
 ### Admin features

@@ -43,9 +43,9 @@ export type User = {
   createdAt: Date;
   updatedAt: Date;
   role: string;
-  isAdmin: boolean;
-  isOrganization: boolean;
-  isIndividual: boolean;
+  isAdmin: () => boolean;
+  isOrganization: () => boolean;
+  isIndividual: () => boolean;
 };
 
 export type AdminUser = User;
@@ -108,5 +108,9 @@ export type Post = {
   status: "open" | "in-progress" | "closed";
   views: number;
 };
+
+export type OfferPost = Post;
+
+export type RequestPost = Post;
 
 export type PostDocument = Post & Document;
