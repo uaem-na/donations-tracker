@@ -18,6 +18,7 @@ export const CreatePostForm = () => {
   const [formHeader, setFormHeader] = useState("");
   const [formSubheader, setFormSubheader] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [showAddItem, setShowAddItem] = useState(false);
 
   useEffect(() => {
     let path = location.pathname;
@@ -65,6 +66,11 @@ export const CreatePostForm = () => {
 
   const onSubmit = (data) => {
     createPostApi(data);
+  };
+
+  const onItemAdd = (item) => {
+    append(item);
+    // setShowAddItem(false);
   };
 
   // handle successful request
@@ -116,10 +122,25 @@ export const CreatePostForm = () => {
           </InputGroup>
 
           {items.map((item, index) => {
-            return <>{item.name}</>;
+            return (
+              <>
+                <p key={index}>{item.name}</p>
+              </>
+            );
           })}
 
-          <AddItem onAdd={append} />
+          <Button
+            type="button"
+            title="Add Item"
+            onClick={() => setShowAddItem(true)}
+          >
+            Add Item
+          </Button>
+          <AddItem
+            isOpen={showAddItem}
+            onDismiss={() => setShowAddItem(false)}
+            onAdd={onItemAdd}
+          />
 
           <Button diabled={isUpdating} type="submit">
             {formHeader}

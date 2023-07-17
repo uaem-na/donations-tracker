@@ -10,7 +10,7 @@ import { AboutUsPage, AccountPage, AdminUsersPage, FaqPage } from "./pages";
 import { LoginForm } from "./features/auth/loginForm";
 import { RegisterForm } from "./features/auth/registerForm";
 import { RequireAuth } from "./features/auth/requireAuth";
-import { CreatePostForm } from "./features/posts/createPostForm";
+import { CreatePostPage } from "./pages/posts/create";
 
 function App() {
   return (
@@ -43,7 +43,7 @@ function App() {
                   path={path}
                   element={
                     <RequireAuth>
-                      <CreatePostForm />
+                      <CreatePostPage />
                     </RequireAuth>
                   }
                 />

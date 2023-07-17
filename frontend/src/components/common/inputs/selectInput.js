@@ -1,3 +1,8 @@
+import {
+  CheckIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
+} from "@radix-ui/react-icons";
 import * as Select from "@radix-ui/react-select";
 import PropTypes from "prop-types";
 import { forwardRef } from "react";
@@ -6,10 +11,12 @@ import { getHeight } from "./styledInput";
 
 const SelectItem = forwardRef(({ children, ...props }, forwardedRef) => {
   return (
-    <Select.Item {...props} ref={forwardedRef}>
+    <SelectItemWrapper {...props} ref={forwardedRef}>
       <Select.ItemText>{children}</Select.ItemText>
-      <Select.ItemIndicator>yo</Select.ItemIndicator>
-    </Select.Item>
+      <SelectItemIndicator>
+        <CheckIcon />
+      </SelectItemIndicator>
+    </SelectItemWrapper>
   );
 });
 
@@ -20,14 +27,19 @@ export const SelectInput = forwardRef((props, ref) => {
     listName,
     placeholder,
     options,
+    name,
     onChange,
-    onBlur,
-    value,
-    ...rest
+    required,
+    disabled,
   } = props;
   return (
     <InputWrapper>
-      <Select.Root>
+      <Select.Root
+        name={name}
+        onValueChange={(value) => onChange({ target: { name, value } })}
+        required={required}
+        disabled={disabled}
+      >
         <SelectTrigger
           aria-label={listName}
           aria-invalid={errorMessage ? "true" : "false"}
@@ -35,14 +47,16 @@ export const SelectInput = forwardRef((props, ref) => {
           $height={height}
         >
           <Select.Value placeholder={placeholder} />
-          <Select.Icon className="SelectIcon">down</Select.Icon>
+          <Select.Icon>
+            <ChevronDownIcon />
+          </Select.Icon>
         </SelectTrigger>
         <Select.Portal>
-          <SelectContent ref={ref}>
-            <Select.ScrollUpButton className="SelectScrollButton">
-              up
+          <SelectContent ref={ref} position="popper">
+            <Select.ScrollUpButton>
+              <ChevronUpIcon />
             </Select.ScrollUpButton>
-            <Select.Viewport className="SelectViewport">
+            <SelectViewport>
               <Select.Group>
                 {options &&
                   options.map((option, index) => {
@@ -57,9 +71,9 @@ export const SelectInput = forwardRef((props, ref) => {
                     );
                   })}
               </Select.Group>
-            </Select.Viewport>
-            <Select.ScrollDownButton className="SelectScrollButton">
-              down
+            </SelectViewport>
+            <Select.ScrollDownButton>
+              <ChevronDownIcon />
             </Select.ScrollDownButton>
           </SelectContent>
         </Select.Portal>
@@ -101,6 +115,51 @@ const ErrorMessage = styled.span`
   justify-content: flex-end;
 `;
 
+const SelectContent = styled(Select.Content)`
+  overflow: hidden;
+  background-color: white;
+  border-radius: 6px;
+  box-shadow: 0px 10px 38px -10px rgba(22, 23, 24, 0.35),
+    0px 10px 20px -15px rgba(22, 23, 24, 0.2);
+
+  width: var(--radix-select-trigger-width);
+  max-height: var(--radix-select-content-available-height);
+`;
+
+const SelectViewport = styled(Select.Viewport)`
+  padding: 10px;
+`;
+
+const SelectItemWrapper = styled(Select.Item)`
+  font-size: 16px;
+  line-height: 1;
+  color: var(--color-text);
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  height: 25px;
+  padding: 0 35px 0 25px;
+  position: relative;
+  user-select: none;
+
+  &[data-highlighted] {
+    background-color: var(--color-secondary);
+    color: white;
+  }
+`;
+
+const SelectItemIndicator = styled(Select.ItemIndicator)`
+  position: absolute;
+  left: 0;
+  width: 25px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+export default SelectInput;
+
+// ! this breaks code highlighting in vscode... putting it at end of file
 const SelectTrigger = styled(Select.Trigger).attrs((props) => ({
   $isError: props.$isError || false,
   $height: props.$height || "medium",
@@ -117,6 +176,10 @@ const SelectTrigger = styled(Select.Trigger).attrs((props) => ({
   color: inherit;
   height: ${({ $height }) => getHeight({ $height })};
 
+  &:hover {
+    background-color: var(--color-gray-900);
+  }
+
   &:focus {
     outline: ${({ $isError }) => $isError && "2px dotted var(--color-error);"};
   }
@@ -129,13 +192,3 @@ const SelectTrigger = styled(Select.Trigger).attrs((props) => ({
     color: transparent;
   }
 `;
-
-const SelectContent = styled(Select.Content)`
-  overflow: hidden;
-  background-color: white;
-  border-radius: 6px;
-  box-shadow: 0px 10px 38px -10px rgba(22, 23, 24, 0.35),
-    0px 10px 20px -15px rgba(22, 23, 24, 0.2);
-`;
-
-export default SelectInput;

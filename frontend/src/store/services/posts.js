@@ -7,24 +7,39 @@ const baseUrl = process.env.REACT_APP_BACKEND_URL || "";
 export const postsApi = createApi({
   reducerPath: "posts",
   baseQuery: fetchBaseQuery({
-    baseUrl: `${baseUrl}/posts`,
+    baseUrl: `${baseUrl}`,
     withCredentials: true,
   }),
   endpoints: (builder) => ({
     getPosts: builder.query({
       query: () => ({
-        url: "/",
+        url: "/posts",
         method: "GET",
       }),
-      providesTags: (result, error, arg) => [{ type: "posts", id: "list" }],
+      providesTags: (result = [], error, arg) => [
+        "posts",
+        ...result.map(({ id }) => ({ type: "posts", id })),
+      ],
+    }),
+    getPost: builder.query({
+      query: (postId) => `/posts/${postId}`,
+      providesTags: (result, error, arg) => [{ type: "posts", id: arg }],
     }),
     createPost: builder.mutation({
-      query: (body) => ({
-        url: "/posts",
+      query: (initialPost) => ({
+        url: `/posts`,
         method: "POST",
-        body,
+        body: initialPost,
       }),
-      providesTags: (result, error, arg) => [{ type: "posts", id: "id" }],
+      invalidatesTags: ["posts"],
+    }),
+    editPost: builder.mutation({
+      query: (post) => ({
+        url: `/posts/${post.id}`,
+        method: "POST",
+        body: post,
+      }),
+      invalidatesTags: (result, error, arg) => [{ type: "posts", id: arg.id }],
     }),
   }),
 });
