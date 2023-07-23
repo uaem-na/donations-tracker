@@ -1,15 +1,25 @@
+import { Sidebar, SidebarMobile } from "@components/layouts";
+import { Header } from "@components/layouts/header";
 import { Outlet } from "react-router-dom";
 import styled from "styled-components";
-import { Header } from "../components/header";
+import { siteLinks } from "../constants/siteLinks";
 
 const Layout = () => {
   return (
     <>
-      <Wrapper>
+      <SidebarMobile />
+      <Sidebar name="UAEM" siteLinks={siteLinks} />
+      <div className="lg:pl-20 h-[calc(100vh-64px)]">
         <Header />
         <Outlet />
-      </Wrapper>
+      </div>
     </>
+    // <>
+    //   <Wrapper>
+    //     <Header />
+    //     <Outlet />
+    //   </Wrapper>
+    // </>
   );
 };
 

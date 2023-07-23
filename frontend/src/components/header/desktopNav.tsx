@@ -1,7 +1,7 @@
+import { siteLinks } from "constants/siteLinks";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 import { QUERIES } from "../../constants";
-import { siteLinks } from "./siteLinks";
 
 export const DesktopNav = () => {
   return (
