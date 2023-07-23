@@ -1,29 +1,27 @@
-import styled from "styled-components";
+import { ButtonHTMLAttributes, FC, ReactNode } from "react";
 
-const Button = ({ children, ...rest }) => {
-  return <StyledButton {...rest}>{children}</StyledButton>;
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  children: ReactNode;
+  backgroundColor?: string;
+  color?: string;
+  height?: string;
+}
+
+export const Button: FC<ButtonProps> = ({
+  children,
+  backgroundColor = "bg-blue-950",
+  color = "text-white",
+  height = "h-[48px]",
+  ...rest
+}) => {
+  return (
+    <button
+      {...rest}
+      className={`px-4 py-2 rounded-lg ${backgroundColor} ${color} ${height} hover:brightness-95 outline-black outline-offset-1 hover:outline-2 hover:outline-dashed`}
+    >
+      {children}
+    </button>
+  );
 };
-
-const StyledButton = styled.button`
-  background-color: ${(props) =>
-    props.backgroundColor || "var(--color-primary)"};
-  color: ${(props) => props.color || "var(--color-gray-1000)"};
-  border-radius: 8px;
-  font-size: 1.2rem;
-  font-weight: 500;
-  line-height: 1.25rem;
-  margin-top: 8px;
-  padding: 8px 16px;
-  height: 48px;
-  transition: background-color 0.3s ease-in-out;
-
-  &:hover {
-    filter: brightness(0.9);
-  }
-
-  &:focus {
-    outline: 2px dotted hsl(212deg, 33%, 40%);
-  }
-`;
 
 export default Button;

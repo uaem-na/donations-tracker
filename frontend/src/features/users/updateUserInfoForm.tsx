@@ -10,12 +10,10 @@ import { useUpdateUserMutation } from "../../store/services/users";
 import { updateUserInfoSchema } from "../yupSchemas";
 
 export const UpdateUserInfoForm = () => {
-  const { data: session } = useGetSessionQuery();
-  const [
-    updateUserApi,
-    { isLoading: isUpdating, isSuccess, isError, error: serverError },
-  ] = useUpdateUserMutation();
-  const [errorMessage, setErrorMessage] = useState("");
+  const { data: session } = useGetSessionQuery({});
+  const [updateUserApi, { isLoading: isUpdating, isSuccess, error }] =
+    useUpdateUserMutation();
+  const [serverMessage, setServerMessage] = useState("");
 
   const {
     register,
@@ -23,10 +21,12 @@ export const UpdateUserInfoForm = () => {
     handleSubmit,
   } = useForm({
     resolver: yupResolver(updateUserInfoSchema),
-    defaultValues: {
-      firstName: session && session.firstName,
-      lastName: session && session.lastName,
-    },
+    ...(session && {
+      defaultValues: {
+        firstName: session.firstName,
+        lastName: session.lastName,
+      },
+    }),
   });
 
   const onSubmit = (data) => {
@@ -36,7 +36,7 @@ export const UpdateUserInfoForm = () => {
   // handle successful request
   useEffect(() => {
     if (isSuccess) {
-      setErrorMessage("");
+      setServerMessage("");
       // TODO: display a success toast
       alert("successfully updated");
     }
@@ -44,15 +44,15 @@ export const UpdateUserInfoForm = () => {
 
   // handle server error message
   useEffect(() => {
-    if (isError && serverError && serverError.data) {
-      let message = serverError.data.message;
-      if (serverError.data.errors && serverError.data.errors.length > 0) {
-        // TODO: better error message when multiple errors
-        message += serverError.data.errors.join(",");
+    if (error) {
+      if ("status" in error) {
+        const err: any = "error" in error ? error.error : error.data;
+        setServerMessage(err.errors.join(",") ?? "An error occurred");
+      } else {
+        setServerMessage(error.message ?? "An error occurred");
       }
-      setErrorMessage(message || "An error occurred");
     }
-  }, [isError, serverError]);
+  }, [error]);
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
@@ -78,11 +78,11 @@ export const UpdateUserInfoForm = () => {
           errorMessage={errors.lastName?.message}
         />
       </InputGroup>
-      <Button diabled={isUpdating} type="submit">
+      <Button disabled={isUpdating} type="submit">
         Update
       </Button>
-      {errorMessage && (
-        <ServerMessage role="alert">{errorMessage}</ServerMessage>
+      {serverMessage && (
+        <ServerMessage role="alert">{serverMessage}</ServerMessage>
       )}
     </Form>
   );

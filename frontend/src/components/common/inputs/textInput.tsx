@@ -1,9 +1,20 @@
-import PropTypes from "prop-types";
-import { forwardRef } from "react";
+import {
+  ForwardRefRenderFunction,
+  InputHTMLAttributes,
+  forwardRef,
+} from "react";
 import styled from "styled-components";
 import { StyledInput } from "./styledInput";
 
-const TextInput = forwardRef(({ errorMessage, ...rest }, ref) => {
+interface TextInputProps extends InputHTMLAttributes<HTMLInputElement> {
+  height?: string;
+  errorMessage?: string;
+}
+
+const TextInput: ForwardRefRenderFunction<HTMLInputElement, TextInputProps> = (
+  { errorMessage, ...rest },
+  ref
+) => {
   return (
     <InputWrapper>
       <StyledInput
@@ -15,11 +26,6 @@ const TextInput = forwardRef(({ errorMessage, ...rest }, ref) => {
       {errorMessage && <ErrorMessage role="alert">{errorMessage}</ErrorMessage>}
     </InputWrapper>
   );
-});
-
-TextInput.propTypes = {
-  height: PropTypes.string,
-  errorMessage: PropTypes.string,
 };
 
 const InputWrapper = styled.div`
@@ -37,4 +43,4 @@ const ErrorMessage = styled.span`
   justify-content: flex-end;
 `;
 
-export default TextInput;
+export default forwardRef(TextInput);

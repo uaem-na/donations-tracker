@@ -34,7 +34,7 @@ export const registerSchema = yup.object().shape({
   confirmPassword: yup
     .string()
     .required("Confirm password is required")
-    .oneOf([yup.ref("password"), null], "Passwords must match"),
+    .oneOf([yup.ref("password")], "Passwords must match"),
   organization: yup.string().required("Organization is required"),
   firstName: yup.string().required("First name is required"),
   lastName: yup.string().required("Last name is required"),
@@ -62,7 +62,7 @@ export const updatePasswordSchema = yup.object().shape({
   confirmNewPassword: yup
     .string()
     .required("Confirm password is required")
-    .oneOf([yup.ref("newPassword"), null], "Passwords must match"),
+    .oneOf([yup.ref("newPassword")], "Passwords must match"),
 });
 
 export const updateUserInfoSchema = yup.object().shape({
@@ -106,13 +106,13 @@ export const createPostSchema = yup.object().shape({
         .mixed()
         .nullable()
         .test("fileSize", "File size too large (1MB or less)", (value) => {
-          if (value) {
+          if (value && "size" in value && typeof value.size === "number") {
             return value.size <= 1024 * 1024 * 1; // * 1MB or less
           }
           return true;
         })
         .test("fileType", "Unsupported File Format", (value) => {
-          if (value) {
+          if (value && "type" in value && typeof value.type === "string") {
             return ["image/jpeg", "image/png", "image/jpg"].includes(
               value.type
             );
@@ -151,13 +151,13 @@ export const addItemSchema = yup.object().shape({
     .mixed()
     .nullable()
     .test("fileSize", "File size too large (1MB or less)", (value) => {
-      if (value) {
+      if (value && "size" in value && typeof value.size === "number") {
         return value.size <= 1024 * 1024 * 1; // * 1MB or less
       }
       return true;
     })
     .test("fileType", "Unsupported File Format", (value) => {
-      if (value) {
+      if (value && "type" in value && typeof value.type === "string") {
         return ["image/jpeg", "image/png", "image/jpg"].includes(value.type);
       }
       return true;

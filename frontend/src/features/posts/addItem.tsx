@@ -1,11 +1,10 @@
+import { Button } from "@common/button";
 import { keyframes } from "@emotion/react";
 import styled from "@emotion/styled";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Button } from "@mui/material";
 import * as Dialog from "@radix-ui/react-dialog";
 import { Cross1Icon } from "@radix-ui/react-icons";
 import { useForm } from "react-hook-form";
-import { FormInputText } from "../../components/common/inputs";
 import { ELEVATIONS } from "../../constants";
 import { addItemSchema } from "../yupSchemas";
 
@@ -39,7 +38,7 @@ export const AddItem = ({ onAdd, isOpen, onDismiss }) => {
               </CloseButton>
             </Dialog.Close>
             <Form onSubmit={handleSubmit(onSubmit, onError)}>
-              <FormInputText
+              {/* <FormInputText
                 name="name"
                 control={control}
                 label={"Name"}
@@ -92,10 +91,8 @@ export const AddItem = ({ onAdd, isOpen, onDismiss }) => {
                     {option.label}
                   </option>
                 ))}
-              </FormInputText>
-              <Button type="submit" variant="filled" color="secondary">
-                Add
-              </Button>
+              </FormInputText> */}
+              <Button type="submit">Add</Button>
             </Form>
           </Content>
         </Dialog.Portal>

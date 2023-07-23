@@ -21,6 +21,10 @@
 
 import styled from "styled-components";
 
+interface InputProps {
+  isError: boolean;
+}
+
 export const getHeight = ({ height }) => {
   height = height || "medium";
   switch (height) {
@@ -36,7 +40,7 @@ export const getHeight = ({ height }) => {
   }
 };
 
-export const StyledInput = styled.input`
+export const StyledInput = styled.input<InputProps>`
   width: 100%;
   border: 1px solid var(--color-gray-800);
   border: ${({ isError }) => isError && "1px solid var(--color-error);"};

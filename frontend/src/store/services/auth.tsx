@@ -3,6 +3,21 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const baseUrl = import.meta.env.VITE_API_URL || "";
 
+// * Define args and result types for query
+type Session = {
+  id: string;
+  username: string;
+  email: string;
+  role: string;
+  firstName: string;
+  lastName: string;
+} | null;
+
+type LoginArgs = {
+  username: string;
+  password: string;
+};
+
 // * Define a service using a base URL and expected endpoints
 export const authApi = createApi({
   reducerPath: "auth",
@@ -12,24 +27,21 @@ export const authApi = createApi({
   }),
   tagTypes: ["session"],
   endpoints: (builder) => ({
-    getSession: builder.query({
+    getSession: builder.query<Session, unknown>({
       query: () => ({
         url: "session",
         method: "GET",
       }),
-      transformResponse: (response) => {
-        if (!response) {
-          return null;
-        }
-        return response;
-      },
       providesTags: (result, error, id) => [{ type: "session", id: "current" }],
     }),
-    login: builder.mutation({
-      query: (credentials) => ({
+    login: builder.mutation<Session, LoginArgs>({
+      query: ({ username, password }) => ({
         url: "login",
         method: "POST",
-        body: credentials,
+        body: {
+          username,
+          password,
+        },
       }),
       invalidatesTags: [{ type: "session", id: "current" }],
     }),

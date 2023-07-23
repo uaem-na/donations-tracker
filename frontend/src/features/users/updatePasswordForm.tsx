@@ -9,11 +9,9 @@ import { useChangePasswordMutation } from "../../store/services/users";
 import { updatePasswordSchema } from "../yupSchemas";
 
 export const UpdatePasswordForm = () => {
-  const [
-    changePasswordApi,
-    { isLoading: loading, isSuccess, isError, error: serverError },
-  ] = useChangePasswordMutation();
-  const [errorMessage, setErrorMessage] = useState("");
+  const [changePasswordApi, { isLoading: loading, isSuccess, error }] =
+    useChangePasswordMutation();
+  const [serverMessage, setServerMessage] = useState("");
 
   const {
     register,
@@ -26,21 +24,12 @@ export const UpdatePasswordForm = () => {
 
   const onSubmit = (data) => {
     changePasswordApi(data);
-    // updatePasswordApi(data, (err) => {
-    //   if (err) {
-    //     setError(err);
-    //   } else {
-    //     // succeeded
-    //     setError(undefined);
-    //     reset();
-    //   }
-    // });
   };
 
   // handle successful request
   useEffect(() => {
     if (isSuccess) {
-      setErrorMessage("");
+      setServerMessage("");
       reset();
       // TODO: display a success toast
       alert("successfully updated");
@@ -49,15 +38,15 @@ export const UpdatePasswordForm = () => {
 
   // handle server error message
   useEffect(() => {
-    if (isError && serverError && serverError.data) {
-      let message = serverError.data.message;
-      if (serverError.data.errors && serverError.data.errors.length > 0) {
-        // TODO: better error message when multiple errors
-        message += serverError.data.errors.join(",");
+    if (error) {
+      if ("status" in error) {
+        const err: any = "error" in error ? error.error : error.data;
+        setServerMessage(err.errors.join(",") ?? "An error occurred");
+      } else {
+        setServerMessage(error.message ?? "An error occurred");
       }
-      setErrorMessage(message || "An error occurred");
     }
-  }, [isError, serverError]);
+  }, [error]);
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
@@ -103,8 +92,8 @@ export const UpdatePasswordForm = () => {
       >
         Change Password
       </Button>
-      {errorMessage && (
-        <ServerMessage role="alert">{errorMessage}</ServerMessage>
+      {serverMessage && (
+        <ServerMessage role="alert">{serverMessage}</ServerMessage>
       )}
     </Form>
   );

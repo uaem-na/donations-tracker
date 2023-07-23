@@ -1,11 +1,12 @@
-import styled from "@emotion/styled";
+import { Button } from "@common/button";
+import { Paper } from "@common/paper";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Button, Paper } from "@mui/material";
+import * as Label from "@radix-ui/react-label";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { FormInputText } from "../../components/common/inputs";
-import { QUERIES } from "../../constants";
+import styled from "styled-components";
+import { TextInput } from "../../components/common/inputs";
 import {
   useLazyGetSessionQuery,
   useRegisterMutation,
@@ -14,41 +15,42 @@ import { registerSchema } from "../yupSchemas";
 
 export const RegisterForm = () => {
   const navigate = useNavigate();
-  const [
-    registerApi,
-    { isLoading: isRegistering, isSuccess, isError, error: serverError },
-  ] = useRegisterMutation();
+  const [registerApi, { isLoading: isRegistering, isSuccess, error }] =
+    useRegisterMutation();
   const [getSession, { data: session }] = useLazyGetSessionQuery();
-  const [errorMessage, setErrorMessage] = useState("");
+  const [serverMessage, setServerMessage] = useState("");
 
-  const { handleSubmit, control } = useForm({
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm({
     resolver: yupResolver(registerSchema),
   });
 
   const onSubmit = (data) => {
-    // TODO: property validation
     registerApi(data);
   };
 
   // handle successful request
   useEffect(() => {
     if (isSuccess) {
-      setErrorMessage("");
-      getSession();
+      setServerMessage("");
+      getSession({});
     }
   }, [getSession, isSuccess]);
 
   // handle server error message
   useEffect(() => {
-    if (isError && serverError && serverError.data) {
-      let message = serverError.data.message;
-      if (serverError.data.errors && serverError.data.errors.length > 0) {
-        // TODO: better error message when multiple errors
-        message += serverError.data.errors.join(",");
+    if (error) {
+      if ("status" in error) {
+        const err: any = "error" in error ? error.error : error.data;
+        setServerMessage(err.errors.join(",") ?? "An error occurred");
+      } else {
+        setServerMessage(error.message ?? "An error occurred");
       }
-      setErrorMessage(message || "An error occurred");
     }
-  }, [isError, serverError]);
+  }, [error]);
 
   // redirect to account page on session refresh
   useEffect(() => {
@@ -59,67 +61,84 @@ export const RegisterForm = () => {
 
   return (
     <Wrapper>
-      <StyledPaper elevation={3}>
+      <Paper>
         <Header>UAEM</Header>
         <Subheader>Register for an account</Subheader>
         <Form onSubmit={handleSubmit(onSubmit)}>
-          <FormInputText
-            name="username"
-            control={control}
-            label={"Username"}
-            variant="outlined"
-            autoComplete="username"
-          />
-          <FormInputText
-            name="firstName"
-            control={control}
-            label={"First name"}
-            variant="outlined"
-            autoComplete="given-name"
-          />
-          <FormInputText
-            name="lastName"
-            control={control}
-            label={"Last name"}
-            variant="outlined"
-            autoComplete="family-name"
-          />
-          <FormInputText
-            name="email"
-            control={control}
-            label={"E-mail"}
-            variant="outlined"
-            autoComplete="email"
-          />
-          <FormInputText
-            name="password"
-            control={control}
-            label={"Password"}
-            variant="outlined"
-            type="password"
-            autoComplete="new-password"
-          />
-          <FormInputText
-            name="confirmPassword"
-            control={control}
-            label={"Confirm password"}
-            variant="outlined"
-            type="password"
-            autoComplete="new-password"
-          />
-          <Button
-            variant="contained"
-            size="large"
-            disabled={isRegistering}
-            type="submit"
-          >
+          <InputGroup>
+            <InputLabel htmlFor="username">Username</InputLabel>
+            <TextInput
+              {...register("username")}
+              id="username"
+              type="text"
+              autoComplete="username"
+              placeholder="Username"
+              errorMessage={errors.username?.message}
+            />
+          </InputGroup>
+          <InputGroup>
+            <InputLabel htmlFor="firstName">First name</InputLabel>
+            <TextInput
+              {...register("firstName")}
+              id="firstName"
+              type="text"
+              autoComplete="given-name"
+              placeholder="First name"
+              errorMessage={errors.firstName?.message}
+            />
+          </InputGroup>
+          <InputGroup>
+            <InputLabel htmlFor="lastName">Last name</InputLabel>
+            <TextInput
+              {...register("lastName")}
+              id="lastName"
+              type="text"
+              autoComplete="family-name"
+              placeholder="Last name"
+              errorMessage={errors.lastName?.message}
+            />
+          </InputGroup>
+          <InputGroup>
+            <InputLabel htmlFor="email">E-mail</InputLabel>
+            <TextInput
+              {...register("email")}
+              id="email"
+              type="email"
+              autoComplete="email"
+              placeholder="E-mail"
+              errorMessage={errors.email?.message}
+            />
+          </InputGroup>
+          <InputGroup>
+            <InputLabel htmlFor="password">Password</InputLabel>
+            <TextInput
+              {...register("password")}
+              id="password"
+              type="password"
+              autoComplete="new-password"
+              placeholder="Password"
+              errorMessage={errors.password?.message}
+            />
+          </InputGroup>
+          <InputGroup>
+            <InputLabel htmlFor="confirmPassword">Confirm password</InputLabel>
+            <TextInput
+              {...register("confirmPassword")}
+              id="confirmPassword"
+              type="password"
+              autoComplete="new-password"
+              placeholder="Confirm your password"
+              errorMessage={errors.confirmPassword?.message}
+            />
+          </InputGroup>
+          <Button disabled={isRegistering} type="submit">
             Register
           </Button>
-          {errorMessage && (
-            <ServerMessage role="alert">{errorMessage}</ServerMessage>
+          {serverMessage && (
+            <ServerMessage role="alert">{serverMessage}</ServerMessage>
           )}
         </Form>
-      </StyledPaper>
+      </Paper>
     </Wrapper>
   );
 };
@@ -129,15 +148,6 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-`;
-
-const StyledPaper = styled(Paper)`
-  @media ${QUERIES.phoneAndSmaller} {
-    width: clamp(300px, 80vw, 600px);
-  }
-  width: 600px;
-  padding: 24px;
-  border-radius: 20px;
 `;
 
 const Header = styled.h1`
@@ -157,6 +167,20 @@ const Form = styled.form`
   flex-direction: column;
   margin-top: 32px;
   gap: 16px;
+`;
+
+const InputGroup = styled.div`
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+`;
+
+const InputLabel = styled(Label.Root)`
+  display: inline-flex;
+  font-size: 16px;
+  font-weight: 500;
+  margin-top: 8px;
+  margin-bottom: 8px;
 `;
 
 const ServerMessage = styled.span`
