@@ -1,8 +1,8 @@
 import { GoogleMap, useLoadScript } from "@react-google-maps/api";
 
 import { useCallback, useRef, useState } from "react";
-import "./index.css";
 import mapStyles from "./MapStyles";
+import "./index.css";
 
 import InfoBox from "./InfoBox";
 import Locate from "./Locate";
@@ -29,7 +29,7 @@ const options = {
 };
 
 export default function Map() {
-  const KEY = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
+  const KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: KEY,
     libraries,

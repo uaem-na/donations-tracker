@@ -1,15 +1,16 @@
 // * Need to use the React-specific entry point to import createApi
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-const baseUrl = process.env.REACT_APP_BACKEND_URL || "";
+const baseUrl = import.meta.env.VITE_API_URL || "";
 
 // * Define a service using a base URL and expected endpoints
 export const authApi = createApi({
   reducerPath: "auth",
   baseQuery: fetchBaseQuery({
     baseUrl: `${baseUrl}/auth`,
-    withCredentials: true,
+    credentials: "include",
   }),
+  tagTypes: ["session"],
   endpoints: (builder) => ({
     getSession: builder.query({
       query: () => ({

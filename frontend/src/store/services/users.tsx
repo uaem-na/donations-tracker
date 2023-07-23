@@ -1,15 +1,16 @@
 // * Need to use the React-specific entry point to import createApi
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-const baseUrl = process.env.REACT_APP_BACKEND_URL || "";
+const baseUrl = import.meta.env.VITE_API_URL || "";
 
 // * Define a service using a base URL and expected endpoints
 export const usersApi = createApi({
   reducerPath: "users",
   baseQuery: fetchBaseQuery({
     baseUrl: `${baseUrl}/users`,
-    withCredentials: true,
+    credentials: "include",
   }),
+  tagTypes: ["users"],
   endpoints: (builder) => ({
     getUser: builder.query({
       query: ({ userId }) => ({ url: `${userId}`, method: "GET" }),
@@ -28,7 +29,7 @@ export const usersApi = createApi({
         method: "POST",
         body: data,
       }),
-      providesTags: (result, error, id) => [{ type: "users", id }],
+      invalidatesTags: (result, error, id) => [{ type: "users", id }],
     }),
     changePassword: builder.mutation({
       query: (data) => ({
@@ -36,7 +37,7 @@ export const usersApi = createApi({
         method: "POST",
         body: data,
       }),
-      providesTags: (result, error, id) => [{ type: "users", id }],
+      invalidatesTags: (result, error, id) => [{ type: "users", id }],
     }),
     deleteUser: builder.mutation({
       query: ({ userId }) => ({
@@ -44,7 +45,7 @@ export const usersApi = createApi({
         method: "DELETE",
         params: { userId },
       }),
-      providesTags: (result, error, id) => [{ type: "users", id }],
+      invalidatesTags: (result, error, id) => [{ type: "users", id }],
     }),
     verifyUser: builder.mutation({
       query: ({ userId }) => ({
@@ -52,7 +53,7 @@ export const usersApi = createApi({
         method: "POST",
         body: { userId },
       }),
-      providesTags: (result, error, id) => [{ type: "users", id }],
+      invalidatesTags: (result, error, id) => [{ type: "users", id }],
     }),
   }),
 });

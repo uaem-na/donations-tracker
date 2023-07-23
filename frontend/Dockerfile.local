@@ -1,8 +1,12 @@
 FROM node:lts-alpine
 
 # get argument for Google Maps API key
-ARG REACT_APP_GOOGLE_MAPS_API_KEY
-ENV REACT_APP_GOOGLE_MAPS_API_KEY=$REACT_APP_GOOGLE_MAPS_API_KEY
+ARG VITE_GOOGLE_MAPS_API_KEY
+ENV VITE_GOOGLE_MAPS_API_KEY=$VITE_GOOGLE_MAPS_API_KEY
+
+# get argument for backend url
+ARG VITE_API_URL
+ENV VITE_API_URL=$VITE_API_URL
 
 # set working directory for running dev server
 WORKDIR /app
