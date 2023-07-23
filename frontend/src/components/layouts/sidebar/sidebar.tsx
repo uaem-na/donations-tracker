@@ -30,7 +30,7 @@ const NavItem = ({ to, name, icon }) => {
       <NavLink
         to={to}
         className={({ isActive }) =>
-          `flex gap-x-3 rounded-md p-3 text-sm leading-6 font-semibold group ${
+          `group flex gap-x-3 rounded-md p-3 text-sm leading-6 font-semibold  ${
             isActive
               ? "bg-gray-800 text-white"
               : "text-gray-400 hover:text-white hover:bg-gray-800"

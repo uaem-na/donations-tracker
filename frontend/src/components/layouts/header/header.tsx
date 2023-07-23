@@ -1,10 +1,20 @@
 import { Profile } from "@components/layouts/header/profile/profile";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useContext } from "react";
+import { LayoutContext, LayoutContextType } from "../../../layout/layout";
 
 const OpenSidebarButton = () => {
+  const { updateMobileNavIsOpen } = useContext(
+    LayoutContext
+  ) as LayoutContextType;
+
   return (
-    <button type="button" className="-m-2.5 p-2.5 text-gray-700 lg:hidden">
+    <button
+      type="button"
+      className="-m-2.5 p-2.5 text-gray-700 lg:hidden"
+      onClick={() => updateMobileNavIsOpen()}
+    >
       <span className="sr-only">Open sidebar</span>
       <FontAwesomeIcon icon={faBars} className="h-6 w-6" />
     </button>
