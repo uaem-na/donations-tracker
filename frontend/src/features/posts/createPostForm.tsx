@@ -1,11 +1,11 @@
 import { Button } from "@common/button";
 import { Paper } from "@common/paper";
-import styled from "@emotion/styled";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { useEffect, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { useLocation } from "react-router-dom";
+import styled from "styled-components";
 import { useCreatePostMutation } from "../../store/services/posts";
 import { createPostSchema } from "../yupSchemas";
 import AddItem from "./addItem";
