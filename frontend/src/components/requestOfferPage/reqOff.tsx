@@ -1,4 +1,4 @@
-import Userfront from "@userfront/core";
+// import Userfront from "@userfront/core";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -6,8 +6,8 @@ import EditPPE from "./sections/editppe";
 import Location from "./sections/location";
 import ViewPPE from "./sections/viewppe";
 
-Userfront.init("8nwrppdb");
-const userData = JSON.parse(JSON.stringify(Userfront.user, null, 2));
+// Userfront.init("8nwrppdb");
+// const userData = JSON.parse(JSON.stringify(Userfront.user, null, 2));
 
 function validPostal(value) {
   var regex =
@@ -87,7 +87,7 @@ export const ReqOff = ({ offer, edit }) => {
       if (offer) {
         axios
           .post("/offers", {
-            userId: userData.username,
+            // userId: userData.username,
             ppeProfiles: ppe,
             postalCode: postal,
           })
@@ -102,7 +102,7 @@ export const ReqOff = ({ offer, edit }) => {
       } else {
         axios
           .post("/requests", {
-            userId: userData.username,
+            // userId: userData.username,
             ppeProfiles: ppe,
             postalCode: postal,
           })

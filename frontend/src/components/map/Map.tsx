@@ -8,7 +8,6 @@ import InfoBox from "./InfoBox";
 import Locate from "./Locate";
 import Offer from "./Offer";
 import Request from "./Request";
-import Search from "./Search";
 
 const libraries = ["places"];
 
@@ -127,7 +126,7 @@ export default function Map() {
       <h1>UAEM McGill</h1>
 
       <Locate panTo={panTo} />
-      <Search panTo={panTo} />
+      {/* <Search panTo={panTo} /> */}
 
       <GoogleMap
         id="map"
