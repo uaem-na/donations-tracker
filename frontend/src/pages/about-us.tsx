@@ -1,8 +1,10 @@
 // [Public] About page component
-import { useState } from "react";
 // Contains: information about the website, UAEM, UAEM McGill, and the developers
 // Content available on Google Docs
+
+import { useState } from "react";
 import { ExternalLink } from "../components/common/typography";
+import { getColorByString, initial } from "../utils";
 
 const Hero = () => {
   return (
@@ -216,28 +218,11 @@ const AboutUsContent = () => {
 };
 
 const TeamAvatar = (props) => {
-  function getRandomColor(str, s = 60, l = 40) {
-    let hash = 0;
-    for (let i = 0; i < str.length; i++) {
-      hash = str.charCodeAt(i) + ((hash << 4) - hash);
-    }
-    const h = hash % 360;
-    return {
-      color: "hsl(" + h + ", " + s + "%, " + l + "%)",
-    };
-  }
-
-  const initial = (name) =>
-    name
-      .match(/(?<=\s|^)\p{L}\p{Mn}*/gu)
-      ?.filter((el, i, array) => i === 0 || i === array.length - 1)
-      .join("") || "";
-
   return (
     <li>
       <span
         className="inline-flex mx-auto h-24 w-24 items-center justify-center rounded-full"
-        style={{ background: getRandomColor(props.name).color }}
+        style={{ background: getColorByString(props.name).color }}
       >
         <span className="text-xl font-medium leading-none text-white">
           {initial(props.name)}
