@@ -1,12 +1,10 @@
+import styled from "@emotion/styled";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as Label from "@radix-ui/react-label";
+import { Button, Paper } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import { Button } from "../../components/common/button";
-import { TextInput } from "../../components/common/inputs";
-import { Paper } from "../../components/paper";
+import { FormInputText } from "../../components/common/inputs";
 import { QUERIES } from "../../constants";
 import {
   useLazyGetSessionQuery,
@@ -23,11 +21,7 @@ export const RegisterForm = () => {
   const [getSession, { data: session }] = useLazyGetSessionQuery();
   const [errorMessage, setErrorMessage] = useState("");
 
-  const {
-    register,
-    formState: { errors },
-    handleSubmit,
-  } = useForm({
+  const { handleSubmit, control } = useForm({
     resolver: yupResolver(registerSchema),
   });
 
@@ -65,91 +59,59 @@ export const RegisterForm = () => {
 
   return (
     <Wrapper>
-      <ResponsivePaper>
+      <StyledPaper elevation={3}>
         <Header>UAEM</Header>
         <Subheader>Register for an account</Subheader>
         <Form onSubmit={handleSubmit(onSubmit)}>
-          <InputGroup>
-            <InputLabel htmlFor="username">Username</InputLabel>
-            <TextInput
-              {...register("username")}
-              id="username"
-              type="text"
-              autoComplete="username"
-              placeholder="Username"
-              errorMessage={errors.username?.message}
-            />
-          </InputGroup>
-          <InputGroup>
-            <InputLabel htmlFor="firstName">First name</InputLabel>
-            <TextInput
-              {...register("firstName")}
-              id="firstName"
-              type="text"
-              autoComplete="given-name"
-              placeholder="First name"
-              errorMessage={errors.firstName?.message}
-            />
-          </InputGroup>
-          <InputGroup>
-            <InputLabel htmlFor="lastName">Last name</InputLabel>
-            <TextInput
-              {...register("lastName")}
-              id="lastName"
-              type="text"
-              autoComplete="family-name"
-              placeholder="Last name"
-              errorMessage={errors.lastName?.message}
-            />
-          </InputGroup>
-          <InputGroup>
-            <InputLabel htmlFor="organization">Organization</InputLabel>
-            <TextInput
-              {...register("organization")}
-              id="organization"
-              type="text"
-              autoComplete="organization"
-              placeholder="Organization"
-              errorMessage={errors.organization?.message}
-            />
-          </InputGroup>
-          <InputGroup>
-            <InputLabel htmlFor="email">E-mail</InputLabel>
-            <TextInput
-              {...register("email")}
-              id="email"
-              type="email"
-              autoComplete="email"
-              placeholder="E-mail"
-              errorMessage={errors.email?.message}
-            />
-          </InputGroup>
-          <InputGroup>
-            <InputLabel htmlFor="password">Password</InputLabel>
-            <TextInput
-              {...register("password")}
-              id="password"
-              type="password"
-              autoComplete="new-password"
-              placeholder="Password"
-              errorMessage={errors.password?.message}
-            />
-          </InputGroup>
-          <InputGroup>
-            <InputLabel htmlFor="confirmPassword">Confirm password</InputLabel>
-            <TextInput
-              {...register("confirmPassword")}
-              id="confirmPassword"
-              type="password"
-              autoComplete="new-password"
-              placeholder="Confirm your password"
-              errorMessage={errors.confirmPassword?.message}
-            />
-          </InputGroup>
+          <FormInputText
+            name="username"
+            control={control}
+            label={"Username"}
+            variant="outlined"
+            autoComplete="username"
+          />
+          <FormInputText
+            name="firstName"
+            control={control}
+            label={"First name"}
+            variant="outlined"
+            autoComplete="given-name"
+          />
+          <FormInputText
+            name="lastName"
+            control={control}
+            label={"Last name"}
+            variant="outlined"
+            autoComplete="family-name"
+          />
+          <FormInputText
+            name="email"
+            control={control}
+            label={"E-mail"}
+            variant="outlined"
+            autoComplete="email"
+          />
+          <FormInputText
+            name="password"
+            control={control}
+            label={"Password"}
+            variant="outlined"
+            type="password"
+            autoComplete="new-password"
+          />
+          <FormInputText
+            name="confirmPassword"
+            control={control}
+            label={"Confirm password"}
+            variant="outlined"
+            type="password"
+            autoComplete="new-password"
+          />
           <Button
+            variant="contained"
+            size="large"
             disabled={isRegistering}
             type="submit"
-            style={{ marginTop: "28px" }}
           >
             Register
           </Button>
@@ -157,7 +119,7 @@ export const RegisterForm = () => {
             <ServerMessage role="alert">{errorMessage}</ServerMessage>
           )}
         </Form>
-      </ResponsivePaper>
+      </StyledPaper>
     </Wrapper>
   );
 };
@@ -169,11 +131,13 @@ const Wrapper = styled.div`
   align-items: center;
 `;
 
-const ResponsivePaper = styled(Paper)`
+const StyledPaper = styled(Paper)`
   @media ${QUERIES.phoneAndSmaller} {
     width: clamp(300px, 80vw, 600px);
   }
   width: 600px;
+  padding: 24px;
+  border-radius: 20px;
 `;
 
 const Header = styled.h1`
@@ -192,21 +156,7 @@ const Form = styled.form`
   display: flex;
   flex-direction: column;
   margin-top: 32px;
-  gap: 12px;
-`;
-
-const InputGroup = styled.div`
-  display: flex;
-  width: 100%;
-  flex-direction: column;
-`;
-
-const InputLabel = styled(Label.Root)`
-  display: inline-flex;
-  font-size: 16px;
-  font-weight: 500;
-  margin-top: 8px;
-  margin-bottom: 8px;
+  gap: 16px;
 `;
 
 const ServerMessage = styled.span`

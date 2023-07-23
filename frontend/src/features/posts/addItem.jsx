@@ -1,25 +1,21 @@
+import { keyframes } from "@emotion/react";
+import styled from "@emotion/styled";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { Button } from "@mui/material";
 import * as Dialog from "@radix-ui/react-dialog";
 import { Cross1Icon } from "@radix-ui/react-icons";
-import { Label } from "@radix-ui/react-label";
 import { useForm } from "react-hook-form";
-import styled, { keyframes } from "styled-components";
-import { Button } from "../../components/common/button";
-import { SelectInput, TextInput } from "../../components/common/inputs";
+import { FormInputText } from "../../components/common/inputs";
 import { ELEVATIONS } from "../../constants";
 import { addItemSchema } from "../yupSchemas";
 
 export const AddItem = ({ onAdd, isOpen, onDismiss }) => {
-  const {
-    reset,
-    register,
-    formState: { errors },
-    handleSubmit,
-  } = useForm({
+  const { reset, handleSubmit, control } = useForm({
     resolver: yupResolver(addItemSchema),
   });
 
   const onSubmit = (data) => {
+    console.log(data);
     onAdd(data);
     reset();
 
@@ -43,51 +39,46 @@ export const AddItem = ({ onAdd, isOpen, onDismiss }) => {
               </CloseButton>
             </Dialog.Close>
             <Form onSubmit={handleSubmit(onSubmit, onError)}>
-              <InputGroup>
-                <InputLabel htmlFor="name">Name</InputLabel>
-                <TextInput
-                  {...register("name")}
-                  id="name"
-                  type="text"
-                  placeholder="name"
-                  errorMessage={errors.name?.message}
-                />
-              </InputGroup>
-              <InputGroup>
-                <InputLabel htmlFor="description">Description</InputLabel>
-                <TextInput
-                  {...register("description")}
-                  id="description"
-                  type="textarea"
-                  placeholder="description"
-                  errorMessage={errors.description?.message}
-                />
-              </InputGroup>
-              <InputGroup>
-                <InputLabel htmlFor="quantity">Quantity</InputLabel>
-                <TextInput
-                  {...register("quantity")}
-                  id="quantity"
-                  type="number"
-                  placeholder="quantity"
-                  errorMessage={errors.quantity?.message}
-                />
-                <InputLabel htmlFor="price">Price</InputLabel>
-                <TextInput
-                  {...register("price")}
-                  id="price"
-                  type="number"
-                  placeholder="price"
-                  errorMessage={errors.price?.message}
-                />
-              </InputGroup>
-              <SelectInput
-                {...register("category")}
-                id="category"
-                placeholder="Select a category"
-                listName="Category"
-                errorMessage={errors.category?.message}
-                options={[
+              <FormInputText
+                name="name"
+                control={control}
+                label={"Name"}
+                variant="outlined"
+              />
+              <FormInputText
+                name="description"
+                control={control}
+                label={"Description"}
+                variant="outlined"
+                multiline
+              />
+              <FormInputText
+                name="quantity"
+                control={control}
+                label={"Quantity"}
+                variant="outlined"
+                inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
+              />
+              <FormInputText
+                name="price"
+                control={control}
+                label={"Price"}
+                variant="outlined"
+                inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
+              />
+              <FormInputText
+                name="category"
+                control={control}
+                label={"Category"}
+                variant="outlined"
+                select
+                helperText="Please select a category"
+                defaultValue="masks"
+                SelectProps={{
+                  native: true,
+                }}
+              >
+                {[
                   {
                     label: "Masks",
                     value: "masks",
@@ -96,9 +87,15 @@ export const AddItem = ({ onAdd, isOpen, onDismiss }) => {
                     label: "Gloves",
                     value: "gloves",
                   },
-                ]}
-              />
-              <Button type="submit">Add</Button>
+                ].map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </FormInputText>
+              <Button type="submit" variant="filled" color="secondary">
+                Add
+              </Button>
             </Form>
           </Content>
         </Dialog.Portal>
@@ -112,20 +109,6 @@ const Form = styled.form`
   flex-direction: column;
   margin-top: 16px;
   gap: 12px;
-`;
-
-const InputGroup = styled.div`
-  display: flex;
-  width: 100%;
-  flex-direction: column;
-`;
-
-const InputLabel = styled(Label)`
-  display: inline-flex;
-  font-size: 16px;
-  font-weight: 500;
-  margin-top: 8px;
-  margin-bottom: 8px;
 `;
 
 const fadeIn = keyframes`
@@ -156,9 +139,8 @@ const Content = styled(Dialog.Content)`
   max-width: 400px;
   max-height: 90vh;
   padding: 32px;
-  box-shadow: ${ELEVATIONS.medium};
+  box-shadow: ${ELEVATIONS.large};
   border-radius: 8px;
-  background-color: hsl(212deg, 33%, 95%);
 
   @media (prefers-reduced-motion: no-preference) {
     &[data-state="open"] {

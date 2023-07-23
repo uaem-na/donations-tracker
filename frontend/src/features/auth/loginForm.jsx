@@ -1,12 +1,10 @@
+import styled from "@emotion/styled";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as Label from "@radix-ui/react-label";
+import { Button, Link as MuiLink, Paper } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import { Button } from "../../components/common/button";
-import { TextInput } from "../../components/common/inputs";
-import { Paper } from "../../components/paper";
+import { FormInputText } from "../../components/common/inputs";
 import { QUERIES } from "../../constants";
 import {
   useLazyGetSessionQuery,
@@ -21,13 +19,9 @@ export const LoginForm = () => {
     { isLoading: isLoggingIn, isSuccess, isError, error: serverError },
   ] = useLoginMutation();
   const [getSession, { data: session }] = useLazyGetSessionQuery();
-  const [errorMessage, setErrorMessage] = useState("");
+  const [serverMessage, setServerMessage] = useState("");
 
-  const {
-    register,
-    formState: { errors },
-    handleSubmit,
-  } = useForm({
+  const { handleSubmit, control } = useForm({
     resolver: yupResolver(loginSchema),
   });
 
@@ -40,7 +34,7 @@ export const LoginForm = () => {
   // handle successful request
   useEffect(() => {
     if (isSuccess) {
-      setErrorMessage("");
+      setServerMessage("");
       getSession();
     }
   }, [getSession, isSuccess]);
@@ -53,7 +47,7 @@ export const LoginForm = () => {
         // TODO: better error message when multiple errors
         message += serverError.data.errors.join(",");
       }
-      setErrorMessage(message || "An error occurred");
+      setServerMessage(message || "An error occurred");
     }
   }, [isError, serverError]);
 
@@ -66,41 +60,41 @@ export const LoginForm = () => {
 
   return (
     <Wrapper>
-      <ResponsivePaper>
+      <StyledPaper elevation={3}>
         <Header>UAEM</Header>
         <Subheader>Sign in to your account</Subheader>
         <Form onSubmit={handleSubmit(onSubmit)}>
-          <InputGroup>
-            <InputLabel htmlFor="username">Username</InputLabel>
-            <TextInput
-              {...register("username")}
-              id="username"
-              type="text"
-              autoComplete="username"
-              placeholder="Username"
-              errorMessage={errors.username?.message}
-            />
-          </InputGroup>
-          <InputGroup>
-            <InputLabel htmlFor="password">Password</InputLabel>
-            <TextInput
-              {...register("password")}
-              id="password"
-              type="password"
-              autoComplete="current-password"
-              placeholder="Password"
-              errorMessage={errors.password?.message}
-            />
-          </InputGroup>
-          <Button disabled={isLoggingIn} type="submit">
+          <FormInputText
+            name="username"
+            control={control}
+            label={"Username"}
+            variant="outlined"
+            autoComplete="username"
+          />
+          <FormInputText
+            name="password"
+            control={control}
+            label={"Password"}
+            variant="outlined"
+            type="password"
+            autoComplete="current-password"
+          />
+          <Button
+            variant="contained"
+            size="large"
+            disabled={isLoggingIn}
+            type="submit"
+          >
             Sign in
           </Button>
-          <RegisterLink to="/register">Need to register?</RegisterLink>
-          {errorMessage && (
-            <ServerMessage role="alert">{errorMessage}</ServerMessage>
+          <RegisterLink component={Link} to="/register">
+            Need to register?
+          </RegisterLink>
+          {serverMessage && (
+            <ServerMessage role="alert">{serverMessage}</ServerMessage>
           )}
         </Form>
-      </ResponsivePaper>
+      </StyledPaper>
     </Wrapper>
   );
 };
@@ -112,11 +106,13 @@ const Wrapper = styled.div`
   align-items: center;
 `;
 
-const ResponsivePaper = styled(Paper)`
+const StyledPaper = styled(Paper)`
   @media ${QUERIES.phoneAndSmaller} {
     width: clamp(300px, 80vw, 600px);
   }
   width: 600px;
+  padding: 24px;
+  border-radius: 20px;
 `;
 
 const Header = styled.h1`
@@ -135,39 +131,25 @@ const Form = styled.form`
   display: flex;
   flex-direction: column;
   margin-top: 32px;
-  gap: 12px;
-`;
-
-const InputGroup = styled.div`
-  display: flex;
-  width: 100%;
-  flex-direction: column;
-`;
-
-const InputLabel = styled(Label.Root)`
-  display: inline-flex;
-  font-size: 16px;
-  font-weight: 500;
-  margin-top: 8px;
-  margin-bottom: 8px;
+  gap: 16px;
 `;
 
 const ServerMessage = styled.span`
   display: block;
   font-size: 1rem;
   margin-top: 16px;
-  color: var(--color-error);
+  color: var(--mui-palette-error-main);
 `;
 
-const RegisterLink = styled(Link)`
-  color: var(--color-gray-300);
-  font-size: 1.2rem;
-  font-weight: 700;
+const RegisterLink = styled(MuiLink)`
+  color: var(--mui-palette-grey-600);
+  font-size: 1.1rem;
+  font-weight: 600;
   width: fit-content;
   align-self: center;
 
   &:hover {
-    color: var(--color-gray-100);
+    color: var(--mui-palette-grey-800);
   }
 `;
 

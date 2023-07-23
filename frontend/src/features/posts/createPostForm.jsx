@@ -1,13 +1,11 @@
+import styled from "@emotion/styled";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Label } from "@radix-ui/react-label";
+import { Button, Paper } from "@mui/material";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { useEffect, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { useLocation } from "react-router-dom";
-import styled from "styled-components";
-import { Button } from "../../components/common/button";
-import { TextInput } from "../../components/common/inputs";
-import { Paper } from "../../components/paper";
+import { FormInputText } from "../../components/common/inputs";
 import { useCreatePostMutation } from "../../store/services/posts";
 import { createPostSchema } from "../yupSchemas";
 import AddItem from "./addItem";
@@ -17,7 +15,7 @@ export const CreatePostForm = () => {
   const [postType, setPostType] = useState("request");
   const [formHeader, setFormHeader] = useState("");
   const [formSubheader, setFormSubheader] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
+  const [serverMessage, setServerMessage] = useState("");
   const [showAddItem, setShowAddItem] = useState(false);
 
   useEffect(() => {
@@ -51,15 +49,7 @@ export const CreatePostForm = () => {
     resolver: yupResolver(createPostSchema),
   });
 
-  const {
-    fields: items,
-    append,
-    prepend,
-    remove,
-    swap,
-    move,
-    insert,
-  } = useFieldArray({
+  const { fields: items, append } = useFieldArray({
     control,
     name: "postItems", // unique name for your Field Array
   });
@@ -76,7 +66,7 @@ export const CreatePostForm = () => {
   // handle successful request
   useEffect(() => {
     if (isSuccess) {
-      setErrorMessage("");
+      setServerMessage("");
       // TODO: display a success toast
       alert("successfully updated");
     }
@@ -100,26 +90,22 @@ export const CreatePostForm = () => {
         // TODO: better error message when multiple errors
         message += serverError.data.errors.join(",");
       }
-      setErrorMessage(message || "An error occurred");
+      setServerMessage(message || "An error occurred");
     }
   }, [isError, serverError]);
 
   return (
     <Wrapper>
-      <StyledPaper>
+      <StyledPaper elevation={3}>
         <Header>{formHeader}</Header>
         <Subheader>{formSubheader}</Subheader>
         <Form onSubmit={handleSubmit(onSubmit)}>
-          <InputGroup>
-            <InputLabel htmlFor="title">Title</InputLabel>
-            <TextInput
-              {...register("title")}
-              id="title"
-              type="text"
-              placeholder="Title"
-              errorMessage={errors.title?.message}
-            />
-          </InputGroup>
+          <FormInputText
+            name="title"
+            control={control}
+            label={"Title"}
+            variant="outlined"
+          />
 
           {items.map((item, index) => {
             return (
@@ -129,25 +115,35 @@ export const CreatePostForm = () => {
             );
           })}
 
-          <Button
-            type="button"
+          <StyledButton
+            variant="contained"
+            size="large"
             title="Add Item"
+            color="secondary"
             onClick={() => setShowAddItem(true)}
           >
             Add Item
-          </Button>
+          </StyledButton>
+
           <AddItem
             isOpen={showAddItem}
             onDismiss={() => setShowAddItem(false)}
             onAdd={onItemAdd}
           />
 
-          <Button diabled={isUpdating} type="submit">
+          <StyledButton
+            variant="contained"
+            size="large"
+            disabled={isUpdating}
+            type="submit"
+          >
             {formHeader}
-          </Button>
-          {errorMessage && (
-            <ServerMessage role="alert">{errorMessage}</ServerMessage>
+          </StyledButton>
+
+          {serverMessage && (
+            <ServerMessage role="alert">{serverMessage}</ServerMessage>
           )}
+
           <VisuallyHidden>
             <input
               type="hidden"
@@ -172,6 +168,8 @@ const Wrapper = styled.div`
 
 const StyledPaper = styled(Paper)`
   width: 100%;
+  padding: 24px;
+  border-radius: 20px;
 `;
 
 const Header = styled.h1`
@@ -193,18 +191,9 @@ const Form = styled.form`
   gap: 12px;
 `;
 
-const InputGroup = styled.div`
-  display: flex;
-  width: 100%;
-  flex-direction: column;
-`;
-
-const InputLabel = styled(Label)`
-  display: inline-flex;
-  font-size: 16px;
-  font-weight: 500;
-  margin-top: 8px;
-  margin-bottom: 8px;
+const StyledButton = styled(Button)`
+  width: clamp(200px, 50vw, 800px);
+  align-self: center;
 `;
 
 const ServerMessage = styled.span`
