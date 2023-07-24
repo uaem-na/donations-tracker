@@ -4,7 +4,6 @@ import {
   forwardRef,
 } from "react";
 import styled from "styled-components";
-import { StyledInput } from "./styledInput";
 
 interface TextInputProps extends InputHTMLAttributes<HTMLInputElement> {
   height?: string;
@@ -17,11 +16,10 @@ const TextInput: ForwardRefRenderFunction<HTMLInputElement, TextInputProps> = (
 ) => {
   return (
     <InputWrapper>
-      <StyledInput
+      <input
         ref={ref}
         {...rest}
         aria-invalid={errorMessage ? "true" : "false"}
-        isError={errorMessage ? true : false}
       />
       {errorMessage && <ErrorMessage role="alert">{errorMessage}</ErrorMessage>}
     </InputWrapper>
