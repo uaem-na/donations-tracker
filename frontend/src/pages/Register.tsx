@@ -1,11 +1,10 @@
 import { RegisterForm } from "@features/auth";
-import background from "../../public/login_img.png";
 
 export const RegisterPage = () => {
   return (
     <div
       className="flex flex-col min-h-full bg-no-repeat bg-cover bg-center"
-      style={{ backgroundImage: `url(${background})` }}
+      style={{ backgroundImage: `url('login_img.png')` }}
     >
       <div className="my-auto sm:mx-auto sm:w-full sm:max-w-[650px]">
         <div className="bg-white px-6 py-12 shadow sm:rounded-md sm:px-12">
