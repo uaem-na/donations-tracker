@@ -118,4 +118,36 @@ export class UserController {
 
     res.status(200).json({ message: `Successfully verified user ${userId}.` });
   });
+
+  setActive = expressAsyncHandler(async (req, res, next) => {
+    await param("id").notEmpty().run(req);
+    await body("active").notEmpty().run(req);
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      res.status(400).json({ errors: errors.array() });
+      return;
+    }
+
+    const { id } = req.params;
+    const { active } = req.body;
+    if (!id) {
+      res
+        .status(400)
+        .json({
+          error: `Error setting user active status. User ID must be specified.`,
+        });
+      return;
+    }
+
+    await this.userService.setActive(id, active);
+
+    log(`Set user ${id} active status to ${active}.`);
+
+    res
+      .status(200)
+      .json({
+        message: `Successfully set user ${id} active status to ${active}.`,
+      });
+  });
 }

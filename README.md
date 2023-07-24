@@ -28,19 +28,19 @@ To build without cache:
 
 ### Housekeeping
 
-- [ ] User emails must be verified
 - [ ] Post must be in private mode where only the author and admins can read before it goes public
-- [ ] When there is an activity on the post, authors must be notified
 - [ ] Human friendly error messages
 - [x] Seed users
 - [x] Seed posts
 - [x] Seed reports
+- [ ] User emails must be verified (depends on email service provider such as Amazon SES)
+- [ ] When there is an activity on the post, authors must be notified
 
 ### Admin features
 
 - [x] As an admin, I should be able to view a list of all users grouped by type (admin, organization, individual)
+- [x] As an admin, I should be able to activate/deactivate any account
 - [ ] As an admin, I should be able to verify/unverify an organization account
-- [ ] As an admin, I should be able to enable/disable any account
 - [ ] As an admin, I should be able to check whether users have any associated reports
 - [ ] Add pagination, sorting, and filtering to admin/users page
 

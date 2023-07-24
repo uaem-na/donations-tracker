@@ -74,4 +74,16 @@ export class UserService {
 
     return await user.save();
   }
+
+  async setActive(id: string, active: boolean): Promise<UserDocument> {
+    const user = await this.getUserById(id);
+
+    if (!user) {
+      throw new Error(`Error updating user. User does not exist.`);
+    }
+
+    user.active = active;
+
+    return await user.save();
+  }
 }
