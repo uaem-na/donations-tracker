@@ -1,6 +1,6 @@
+import { ISiteLinks } from "@constants/siteLinks";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { NavLink } from "react-router-dom";
-import { ISiteLinks } from "../../../constants/siteLinks";
 
 const SidebarLogo = ({ name }) => {
   return (

@@ -1,18 +1,15 @@
-import { Button } from "@common/button";
-import { Link } from "@common/link";
-import { Paper } from "@common/paper";
+import { Button } from "@components/common/button";
+import { TextInput } from "@components/common/inputs";
+import { Link } from "@components/common/link";
+import { Paper } from "@components/common/paper";
+import { loginSchema } from "@features/yupSchemas";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Label from "@radix-ui/react-label";
+import { useLazyGetSessionQuery, useLoginMutation } from "@services/auth";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { TextInput } from "../../components/common/inputs";
-import {
-  useLazyGetSessionQuery,
-  useLoginMutation,
-} from "../../store/services/auth";
-import { loginSchema } from "../yupSchemas";
 
 export const LoginForm = () => {
   const navigate = useNavigate();

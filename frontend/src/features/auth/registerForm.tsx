@@ -1,17 +1,14 @@
-import { Button } from "@common/button";
-import { Paper } from "@common/paper";
+import { Button } from "@components/common/button";
+import { TextInput } from "@components/common/inputs";
+import { Paper } from "@components/common/paper";
+import { registerSchema } from "@features/yupSchemas";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Label from "@radix-ui/react-label";
+import { useLazyGetSessionQuery, useRegisterMutation } from "@services/auth";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { TextInput } from "../../components/common/inputs";
-import {
-  useLazyGetSessionQuery,
-  useRegisterMutation,
-} from "../../store/services/auth";
-import { registerSchema } from "../yupSchemas";
 
 export const RegisterForm = () => {
   const navigate = useNavigate();

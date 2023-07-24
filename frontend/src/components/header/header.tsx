@@ -1,8 +1,8 @@
+import { QUERIES } from "@constants";
 import { HamburgerMenuIcon } from "@radix-ui/react-icons";
 import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 import { useState } from "react";
 import styled from "styled-components";
-import { QUERIES } from "../../constants";
 import { DesktopNav } from "./desktopNav";
 import MobileNav from "./mobileNav";
 import { UserMenu } from "./userMenu";

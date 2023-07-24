@@ -2,40 +2,10 @@
 // Contains: list of frequently asked questions
 // Content available on Google Docs
 
+import { CollapseIcon, ExpandIcon } from "@components/common/icons";
+import { ExternalLink, Highlight } from "@components/common/typography";
 import autoAnimate from "@formkit/auto-animate";
 import { useEffect, useRef, useState } from "react";
-import { ExternalLink, Highlight } from "../components/common/typography";
-
-/* TODO: Move to components folder? */
-const CollapseIcon = (props) => {
-  return (
-    <svg
-      className="h-6 w-6"
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth="1.5"
-      stroke="currentColor"
-      aria-hidden="true"
-    >
-      <path strokeLinecap="round" strokeLinejoin="round" d="M18 12H6" />
-    </svg>
-  );
-};
-
-const ExpandIcon = (props) => {
-  return (
-    <svg
-      className="h-6 w-6"
-      fill="none"
-      viewBox="0 0 24 24"
-      strokeWidth="1.5"
-      stroke="currentColor"
-      aria-hidden="true"
-    >
-      <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m6-6H6" />
-    </svg>
-  );
-};
 
 const FaqItem = (props) => {
   const [isExpanded, setIsExpanded] = useState(false);

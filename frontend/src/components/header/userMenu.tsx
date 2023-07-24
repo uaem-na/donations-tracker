@@ -1,11 +1,8 @@
 import { Avatar } from "@components/common/avatar";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
+import { useGetSessionQuery, useLogoutMutation } from "@services/auth";
 import { Link, useNavigate } from "react-router-dom";
 import styled, { keyframes } from "styled-components";
-import {
-  useGetSessionQuery,
-  useLogoutMutation,
-} from "../../store/services/auth";
 
 // define keyframes ahead of other styled components
 const slideUpAndFade = keyframes`

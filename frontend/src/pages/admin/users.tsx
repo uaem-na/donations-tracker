@@ -1,19 +1,16 @@
 // [Admin] Admin users page component
-import { useEffect, useState } from "react";
-import styled from "styled-components";
-import { Button } from "../../components/common/button";
+import { Button } from "@components/common/button";
 import {
   PageParagraph,
   PageSubtitle,
   PageTitle,
-} from "../../components/common/typography";
-import {
-  useGetUsersQuery,
-  useVerifyUserMutation,
-} from "../../store/services/users";
+} from "@components/common/typography";
+import { useGetUsersQuery, useVerifyUserMutation } from "@services/users";
+import { useEffect, useState } from "react";
+import styled from "styled-components";
 
 export const AdminUsersPage = () => {
-  const { data: users, isLoading, isSuccess } = useGetUsersQuery();
+  const { data: users, isLoading, isSuccess } = useGetUsersQuery({});
   const [
     verifyUserApi,
     {

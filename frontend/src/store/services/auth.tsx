@@ -11,6 +11,7 @@ type Session = {
   role: string;
   firstName: string;
   lastName: string;
+  verified: boolean;
 } | null;
 
 type LoginArgs = {

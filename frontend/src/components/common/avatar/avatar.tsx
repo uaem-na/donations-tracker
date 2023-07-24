@@ -1,5 +1,5 @@
+import { getColorByString, initial } from "@utils";
 import PropTypes from "prop-types";
-import { getColorByString, initial } from "../../../utils";
 
 export interface AvatarProps {
   src?: string;

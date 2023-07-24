@@ -1,7 +1,7 @@
+import { QUERIES } from "@constants";
 import { siteLinks } from "constants/siteLinks";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
-import { QUERIES } from "../../constants";
 
 export const DesktopNav = () => {
   return (

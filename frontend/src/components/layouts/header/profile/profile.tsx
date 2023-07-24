@@ -1,4 +1,4 @@
-import { Avatar } from "@common/avatar";
+import { Avatar } from "@components/common";
 import { faHandshake, faUser } from "@fortawesome/free-regular-svg-icons";
 import {
   faArrowRightFromBracket,
@@ -6,12 +6,9 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
+import { useGetSessionQuery, useLogoutMutation } from "@services/auth";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import {
-  useGetSessionQuery,
-  useLogoutMutation,
-} from "../../../../store/services/auth";
 
 const ProfileMenu = () => {
   const { data: user } = useGetSessionQuery({});
@@ -65,7 +62,10 @@ const ProfileMenu = () => {
                 </DropdownMenu.Item>
               </DropdownMenu.Group>
               <DropdownMenu.Separator className="h-px bg-gray-900/10 m-0.5" />
-              <DropdownMenu.Item className="block px-3 py-1 text-sm leading-6 font-light text-gray-900 cursor-pointer hover:bg-gray-50">
+              <DropdownMenu.Item
+                onSelect={() => logout({})}
+                className="block px-3 py-1 text-sm leading-6 font-light text-gray-900 cursor-pointer hover:bg-gray-50"
+              >
                 <FontAwesomeIcon
                   icon={faArrowRightFromBracket}
                   className="mr-2 w-[20px]"

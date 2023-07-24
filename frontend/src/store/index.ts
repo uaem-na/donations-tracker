@@ -1,8 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query";
-import { authApi } from "./services/auth";
-import { postsApi } from "./services/posts";
-import { usersApi } from "./services/users";
+import { authApi } from "@services/auth";
+import { postsApi } from "@services/posts";
+import { usersApi } from "@services/users";
 
 export default function configureAppStore(preloadedState) {
   const store = configureStore({

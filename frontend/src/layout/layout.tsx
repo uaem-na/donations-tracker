@@ -1,8 +1,8 @@
 import { Sidebar, SidebarMobile } from "@components/layouts";
 import { Header } from "@components/layouts/header";
+import { siteLinks } from "@constants/siteLinks";
 import { createContext, useState } from "react";
 import { Outlet } from "react-router-dom";
-import { siteLinks } from "../constants/siteLinks";
 
 export type LayoutContextType = {
   mobileNavIsOpen: boolean;
