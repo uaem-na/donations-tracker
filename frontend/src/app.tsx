@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
 // * Various React page components
 import Landing from "./components/landing";
@@ -7,9 +7,9 @@ import { Layout } from "./layout";
 import { AboutUsPage, AccountPage, AdminUsersPage, FaqPage } from "./pages";
 
 // * Individual React components that are cross-cutting concerns
-import { LoginForm } from "./features/auth/loginForm";
 import { RegisterForm } from "./features/auth/registerForm";
 import { RequireAuth } from "./features/auth/requireAuth";
+import { LoginPage } from "./pages/login";
 import { CreatePostPage } from "./pages/posts/create";
 
 function App() {
@@ -51,7 +51,7 @@ function App() {
             })}
 
             {/* Authentication pages */}
-            <Route path="/login" element={<LoginForm />} />
+            <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterForm />} />
 
             {/* Others */}

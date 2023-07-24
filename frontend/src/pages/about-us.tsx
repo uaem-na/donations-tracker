@@ -273,7 +273,7 @@ export const AboutUsPage = () => {
   return (
     <>
       <main className="isolate">
-        <div className="relative isolate">
+        <div className="relative isolate -z-10">
           <Hero />
         </div>
         <AboutUsContent />
