@@ -1,11 +1,11 @@
-import { Button } from "@common/button";
+import { Button } from "@components/common";
+import { ELEVATIONS } from "@constants";
+import { addItemSchema } from "@features/yupSchemas";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Dialog from "@radix-ui/react-dialog";
 import { Cross1Icon } from "@radix-ui/react-icons";
 import { useForm } from "react-hook-form";
 import styled, { keyframes } from "styled-components";
-import { ELEVATIONS } from "../../constants";
-import { addItemSchema } from "../yupSchemas";
 
 export const AddItem = ({ onAdd, isOpen, onDismiss }) => {
   const { reset, handleSubmit, control } = useForm({

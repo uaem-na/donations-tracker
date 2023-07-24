@@ -1,8 +1,8 @@
+import { LayoutContext, LayoutContextType } from "@/layout/layout";
 import { Profile } from "@components/layouts/header/profile/profile";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useContext } from "react";
-import { LayoutContext, LayoutContextType } from "../../../layout/layout";
 
 const OpenSidebarButton = () => {
   const { updateMobileNavIsOpen } = useContext(

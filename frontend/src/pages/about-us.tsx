@@ -2,9 +2,9 @@
 // Contains: information about the website, UAEM, UAEM McGill, and the developers
 // Content available on Google Docs
 
+import { ExternalLink } from "@components/common/typography";
+import { getColorByString, initial } from "@utils";
 import { useState } from "react";
-import { ExternalLink } from "../components/common/typography";
-import { getColorByString, initial } from "../utils";
 
 const Hero = () => {
   return (

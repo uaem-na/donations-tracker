@@ -1,5 +1,5 @@
-import { Link } from "@common/link";
-import LoginForm from "../features/auth/login-form";
+import { Link } from "@components/common/link";
+import { LoginForm } from "@features/auth";
 
 export const LoginPage = () => {
   return (

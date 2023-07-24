@@ -1,16 +1,16 @@
+import { Button } from "@components/common/button";
+import { TextInput } from "@components/common/inputs";
+import { updateUserInfoSchema } from "@features/yupSchemas";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Label } from "@radix-ui/react-label";
+import { useGetSessionQuery } from "@services/auth";
+import { useUpdateUserMutation } from "@services/users";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
-import { Button } from "../../components/common/button";
-import { TextInput } from "../../components/common/inputs";
-import { useGetSessionQuery } from "../../store/services/auth";
-import { useUpdateUserMutation } from "../../store/services/users";
-import { updateUserInfoSchema } from "../yupSchemas";
 
 export const UpdateUserInfoForm = () => {
-  const { data: session } = useGetSessionQuery({});
+  const { data: session } = useGetSessionQuery();
   const [updateUserApi, { isLoading: isUpdating, isSuccess, error }] =
     useUpdateUserMutation();
   const [serverMessage, setServerMessage] = useState("");

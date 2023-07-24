@@ -1,16 +1,13 @@
 // [Admin] Admin users page component
-import { useEffect, useState } from "react";
-import styled from "styled-components";
-import { Button } from "../../components/common/button";
+import { Button } from "@components/common/button";
 import {
   PageParagraph,
   PageSubtitle,
   PageTitle,
-} from "../../components/common/typography";
-import {
-  useGetUsersQuery,
-  useVerifyUserMutation,
-} from "../../store/services/users";
+} from "@components/common/typography";
+import { User, useGetUsersQuery, useVerifyUserMutation } from "@services/users";
+import { useEffect, useState } from "react";
+import styled from "styled-components";
 
 export const AdminUsersPage = () => {
   const { data: users, isLoading, isSuccess } = useGetUsersQuery();
@@ -24,10 +21,10 @@ export const AdminUsersPage = () => {
     },
   ] = useVerifyUserMutation();
 
-  const [adminUsers, setAdminUsers] = useState([]);
-  const [individualUsers, setIndividualUsers] = useState([]);
-  const [orgUsers, setOrgUsers] = useState([]);
-  const [danglingUsers, setDanglingUsers] = useState([]);
+  const [adminUsers, setAdminUsers] = useState<User[]>([]);
+  const [individualUsers, setIndividualUsers] = useState<User[]>([]);
+  const [orgUsers, setOrgUsers] = useState<User[]>([]);
+  const [danglingUsers, setDanglingUsers] = useState<User[]>([]);
 
   useEffect(() => {
     if (isSuccess) {

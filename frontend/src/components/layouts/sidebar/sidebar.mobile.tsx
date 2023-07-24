@@ -1,9 +1,9 @@
+import { LayoutContext, LayoutContextType } from "@/layout/layout";
+import { ISiteLinks } from "@constants/siteLinks";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useContext } from "react";
 import { NavLink } from "react-router-dom";
-import { ISiteLinks } from "../../../constants/siteLinks";
-import { LayoutContext, LayoutContextType } from "../../../layout/layout";
 
 const NavList = ({ siteLinks }) => {
   return (

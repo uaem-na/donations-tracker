@@ -1,12 +1,12 @@
+import { Button } from "@components/common/button";
+import { TextInput } from "@components/common/inputs";
+import { updatePasswordSchema } from "@features/yupSchemas";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Label } from "@radix-ui/react-label";
+import { useChangePasswordMutation } from "@services/users";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
-import { Button } from "../../components/common/button";
-import { TextInput } from "../../components/common/inputs";
-import { useChangePasswordMutation } from "../../store/services/users";
-import { updatePasswordSchema } from "../yupSchemas";
 
 export const UpdatePasswordForm = () => {
   const [changePasswordApi, { isLoading: loading, isSuccess, error }] =

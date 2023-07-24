@@ -14,6 +14,8 @@ export class PostDto {
   type: "request" | "offer";
   status: "open" | "in-progress" | "closed";
   views: number;
+  createdAt: Date;
+  updatedAt: Date;
 
   private constructor(post: Post) {
     const { author, location, title, items, type, status, views } = post;
@@ -24,7 +26,7 @@ export class PostDto {
       const { image, ...rest } = item;
 
       // convert binary image data to base64 string
-      const b64Image = image.data.toString("base64");
+      const b64Image = image?.data.toString("base64");
 
       return {
         ...(b64Image && { image: b64Image }),
@@ -34,6 +36,8 @@ export class PostDto {
     this.type = type;
     this.status = status;
     this.views = views;
+    this.createdAt = post.createdAt;
+    this.updatedAt = post.updatedAt;
   }
 
   static fromDocument(document: Document): PostDto {

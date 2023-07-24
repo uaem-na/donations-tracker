@@ -1,13 +1,13 @@
-import { Button } from "@common/button";
-import { Paper } from "@common/paper";
+import { Button } from "@components/common/button";
+import { Paper } from "@components/common/paper";
+import { createPostSchema } from "@features/yupSchemas";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import { useCreatePostMutation } from "@services/posts";
 import { useEffect, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { useLocation } from "react-router-dom";
 import styled from "styled-components";
-import { useCreatePostMutation } from "../../store/services/posts";
-import { createPostSchema } from "../yupSchemas";
 import AddItem from "./addItem";
 
 export const CreatePostForm = () => {
@@ -20,7 +20,7 @@ export const CreatePostForm = () => {
 
   useEffect(() => {
     let path = location.pathname;
-    if (/^\/offers/.test(path)) {
+    if (path.startsWith("/offers")) {
       setPostType("offer");
       setFormHeader("Create an offer");
       setFormSubheader(

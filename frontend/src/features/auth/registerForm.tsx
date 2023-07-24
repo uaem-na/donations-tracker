@@ -1,23 +1,26 @@
-import { Button } from "@common/button";
-import { Paper } from "@common/paper";
+import { Button } from "@components/common/button";
+import { TextInput } from "@components/common/inputs";
+import { Paper } from "@components/common/paper";
+import { registerSchema } from "@features/yupSchemas";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Label from "@radix-ui/react-label";
+import {
+  useGetSessionQuery,
+  useLazyGetSessionQuery,
+  useRegisterMutation,
+} from "@services/auth";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { TextInput } from "../../components/common/inputs";
-import {
-  useLazyGetSessionQuery,
-  useRegisterMutation,
-} from "../../store/services/auth";
-import { registerSchema } from "../yupSchemas";
 
 export const RegisterForm = () => {
   const navigate = useNavigate();
+  const { data: currentSession, isLoading } = useGetSessionQuery();
+  const [getSessionAfterRegister, { data: afterRegisterSession }] =
+    useLazyGetSessionQuery();
   const [registerApi, { isLoading: isRegistering, isSuccess, error }] =
     useRegisterMutation();
-  const [getSession, { data: session }] = useLazyGetSessionQuery();
   const [serverMessage, setServerMessage] = useState("");
 
   const {
@@ -36,9 +39,9 @@ export const RegisterForm = () => {
   useEffect(() => {
     if (isSuccess) {
       setServerMessage("");
-      getSession({});
+      getSessionAfterRegister();
     }
-  }, [getSession, isSuccess]);
+  }, [getSessionAfterRegister, isSuccess]);
 
   // handle server error message
   useEffect(() => {
@@ -54,10 +57,20 @@ export const RegisterForm = () => {
 
   // redirect to account page on session refresh
   useEffect(() => {
-    if (session) {
+    if (afterRegisterSession) {
       navigate("/account");
     }
   });
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (currentSession) {
+    // session exists, redirect to account page
+    navigate("/account");
+    return null;
+  }
 
   return (
     <Wrapper>

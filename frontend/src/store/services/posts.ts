@@ -3,6 +3,17 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const baseUrl = import.meta.env.VITE_API_URL || "";
 
+// * Define args and result types for query
+export type Post = {
+  id: string;
+  title: string;
+  content: string;
+};
+
+type GetPostArgs = {
+  postId: string;
+};
+
 // * Define a service using a base URL and expected endpoints
 export const postsApi = createApi({
   reducerPath: "posts",
@@ -12,19 +23,22 @@ export const postsApi = createApi({
   }),
   tagTypes: ["posts"],
   endpoints: (builder) => ({
-    getPosts: builder.query({
+    getPosts: builder.query<Post[], void>({
       query: () => ({
         url: "/posts",
         method: "GET",
       }),
-      providesTags: (result = [], error, arg) => [
-        "posts",
-        ...result.map(({ id }) => ({ type: "posts", id })),
-      ],
+      providesTags: (result, error, arg) =>
+        result
+          ? [
+              ...result.map(({ id }) => ({ type: "posts" as const, id })),
+              { type: "posts", id: "LIST" },
+            ]
+          : [{ type: "posts", id: "LIST" }],
     }),
-    getPost: builder.query({
-      query: (postId) => `/posts/${postId}`,
-      providesTags: (result, error, arg) => [{ type: "posts", id: arg }],
+    getPost: builder.query<Post, GetPostArgs>({
+      query: ({ postId }) => `/posts/${postId}`,
+      providesTags: (result, error, arg) => [{ type: "posts", id: arg.postId }],
     }),
     createPost: builder.mutation({
       query: (initialPost) => ({

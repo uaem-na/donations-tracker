@@ -1,27 +1,25 @@
 // [Private] My Account page component
 // Contains: dashboard, account information and actions to make offers/requests
+import { Button, Tooltip } from "@components/common";
+import Offers from "@components/dashboard/offers";
+import Requests from "@components/dashboard/requests";
+import { DEVICES } from "@constants";
+import { UpdatePasswordForm, UpdateUserInfoForm } from "@features/users";
+import { useGetSessionQuery } from "@services/auth";
+import { useGetPostsQuery } from "@services/posts";
 import styled from "styled-components";
-import { Button } from "../components/common/button";
-import { Tooltip } from "../components/common/tooltip";
-import Offers from "../components/dashboard/offers";
-import Requests from "../components/dashboard/requests";
-import { DEVICES } from "../constants";
-import { UpdatePasswordForm } from "../features/users/updatePasswordForm";
-import { UpdateUserInfoForm } from "../features/users/updateUserInfoForm";
-import { useGetSessionQuery } from "../store/services/auth";
-import { useGetPostsQuery } from "../store/services/posts";
 
 const VerifiedStatus = () => {
   const { data: user } = useGetSessionQuery();
 
-  if (user.verified) {
+  if (user?.verified) {
     return <>verified</>;
   } else {
     return <>not verified</>;
   }
 };
 
-const AccountPage = () => {
+export const AccountPage = () => {
   const { data: user } = useGetSessionQuery();
   const { data: posts } = useGetPostsQuery();
 
@@ -62,7 +60,7 @@ const AccountPage = () => {
             <p>
               Email:&nbsp;
               <Tooltip message="Please contact the administrator to update your email.">
-                {`${user.email}`}
+                {`${user?.email}`}
               </Tooltip>
             </p>
             <p>
@@ -71,7 +69,7 @@ const AccountPage = () => {
                 message={
                   "Please contact the administrator to update your organization."
                 }
-              >{`${user.organization}`}</Tooltip>
+              >{`coming soon`}</Tooltip>
             </p>
             <p>
               Verification:&nbsp;

@@ -88,13 +88,15 @@ export type PostItem = {
 };
 
 export type Post = {
-  title: string;
-  type: "request" | "offer";
-  items: PostItem[];
   author: User;
   location: Location;
+  title: string;
+  items: PostItem[];
   status: "open" | "in-progress" | "closed";
   views: number;
+  createdAt: Date;
+  updatedAt: Date;
+  type: "request" | "offer";
 };
 
 export type OfferPost = Post;

@@ -1,5 +1,5 @@
+import { useGetSessionQuery } from "@services/auth";
 import { Navigate, useLocation } from "react-router-dom";
-import { useGetSessionQuery } from "../../store/services/auth";
 
 export const RequireAuth = ({ children }) => {
   const { pathname } = useLocation();

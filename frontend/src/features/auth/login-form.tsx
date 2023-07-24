@@ -1,20 +1,23 @@
 import { Alert } from "@components/alert";
 import { Input, Label } from "@components/forms";
+import { loginSchema } from "@features/yupSchemas";
 import { yupResolver } from "@hookform/resolvers/yup";
+import {
+  useGetSessionQuery,
+  useLazyGetSessionQuery,
+  useLoginMutation,
+} from "@services/auth";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import {
-  useLazyGetSessionQuery,
-  useLoginMutation,
-} from "../../store/services/auth";
-import { loginSchema } from "../yupSchemas";
 
 export const LoginForm = () => {
   const navigate = useNavigate();
+  const { data: currentSession, isLoading } = useGetSessionQuery();
+  const [getSessionAfterLogin, { data: afterLoginSession }] =
+    useLazyGetSessionQuery();
   const [loginApi, { isLoading: isLoggingIn, isSuccess, error }] =
     useLoginMutation();
-  const [getSession, { data: session }] = useLazyGetSessionQuery();
   const [serverMessage, setServerMessage] = useState("");
 
   const {
@@ -34,9 +37,9 @@ export const LoginForm = () => {
   useEffect(() => {
     if (isSuccess) {
       setServerMessage("");
-      getSession({});
+      getSessionAfterLogin();
     }
-  }, [getSession, isSuccess]);
+  }, [getSessionAfterLogin, isSuccess]);
 
   // handle server error message
   useEffect(() => {
@@ -52,10 +55,20 @@ export const LoginForm = () => {
 
   // redirect to account page on session refresh
   useEffect(() => {
-    if (session) {
+    if (afterLoginSession) {
       navigate("/account");
     }
-  }, [session, navigate]);
+  }, [afterLoginSession, navigate]);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (currentSession) {
+    // session exists, redirect to account page
+    navigate("/account");
+    return null;
+  }
 
   return (
     <>

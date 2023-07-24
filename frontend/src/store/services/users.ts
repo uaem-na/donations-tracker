@@ -3,6 +3,21 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const baseUrl = import.meta.env.VITE_API_URL || "";
 
+// * Define args and result types for query
+export type User = {
+  id: string;
+  username: string;
+  email: string;
+  role: string;
+  firstName: string;
+  lastName: string;
+  verified: boolean;
+};
+
+type GetUserArgs = {
+  userId: string;
+};
+
 // * Define a service using a base URL and expected endpoints
 export const usersApi = createApi({
   reducerPath: "users",
@@ -12,16 +27,24 @@ export const usersApi = createApi({
   }),
   tagTypes: ["users"],
   endpoints: (builder) => ({
-    getUser: builder.query({
+    getUser: builder.query<User, GetUserArgs>({
       query: ({ userId }) => ({ url: `${userId}`, method: "GET" }),
-      providesTags: (result, error, id) => [{ type: "users", id }],
+      providesTags: (result, error, args) => [
+        { type: "users" as const, id: args.userId },
+      ],
     }),
-    getUsers: builder.query({
+    getUsers: builder.query<User[], void>({
       query: () => ({
         url: "/",
         method: "GET",
       }),
-      providesTags: (result, error, id) => [{ type: "users", id: "list" }],
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.map(({ id }) => ({ type: "users" as const, id })),
+              { type: "users", id: "LIST" },
+            ]
+          : [{ type: "users", id: "LIST" }],
     }),
     updateUser: builder.mutation({
       query: (data) => ({

@@ -1,0 +1,9 @@
+export { AboutUsPage } from "./about-us";
+export { AccountPage } from "./account";
+export { AdminUsersPage } from "./admin/users";
+export { FaqPage } from "./faq";
+export { LandingPage } from "./landing";
+export { LoginPage } from "./login";
+export { CreatePostPage } from "./posts/create";
+export { RegisterPage } from "./register";
+export { ReqOffPage } from "./requestOfferPage/reqOff";

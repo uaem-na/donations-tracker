@@ -123,8 +123,6 @@ export default function Map() {
 
   return (
     <div>
-      <h1>UAEM McGill</h1>
-
       <Locate panTo={panTo} />
       {/* <Search panTo={panTo} /> */}
 

@@ -15,7 +15,7 @@ function validPostal(value) {
   return regex.exec(value);
 }
 
-export const ReqOff = ({ offer, edit }) => {
+export const ReqOffPage = ({ offer, edit }) => {
   const navigate = useNavigate();
   const params = useParams();
   const [ppe, setPPE] = useState([]);
@@ -224,4 +224,4 @@ export const ReqOff = ({ offer, edit }) => {
   );
 };
 
-export default ReqOff;
+export default ReqOffPage;
