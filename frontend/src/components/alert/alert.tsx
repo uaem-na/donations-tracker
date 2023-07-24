@@ -7,6 +7,7 @@ interface IAlertProps {
   heading?: string;
 }
 
+/* TODO: Add support for other alert type*/
 export const Alert = ({
   type,
   heading,
@@ -23,9 +24,7 @@ export const Alert = ({
         </div>
         <div className="ml-3">
           {heading && (
-            <h3 className="text-sm font-medium text-red-800">
-              There were 2 errors with your submission
-            </h3>
+            <h3 className="text-sm font-medium text-red-800">{heading}</h3>
           )}
           <div className={`text-sm text-red-700 ${heading && "mt-2"}`}>
             {children}
