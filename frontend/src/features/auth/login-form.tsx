@@ -1,10 +1,7 @@
-import { Button } from "@components/common/button";
-import { TextInput } from "@components/common/inputs";
-import { Link } from "@components/common/link";
-import { Paper } from "@components/common/paper";
+import { Alert } from "@components/alert";
+import { Input, Label } from "@components/forms";
 import { loginSchema } from "@features/yupSchemas";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as Label from "@radix-ui/react-label";
 import {
   useGetSessionQuery,
   useLazyGetSessionQuery,
@@ -13,7 +10,6 @@ import {
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
 
 export const LoginForm = () => {
   const navigate = useNavigate();
@@ -75,93 +71,53 @@ export const LoginForm = () => {
   }
 
   return (
-    <Wrapper>
-      <Paper>
-        <Header>UAEM</Header>
-        <Subheader>Sign in to your account</Subheader>
-        <Form onSubmit={handleSubmit(onSubmit)}>
-          <InputGroup>
-            <InputLabel htmlFor="username">Username</InputLabel>
-            <TextInput
+    <>
+      <form className="space-y-6" onSubmit={handleSubmit(onSubmit)} noValidate>
+        {serverMessage && <Alert type="error">{serverMessage}</Alert>}
+
+        <div>
+          <Label htmlFor="username">Username</Label>
+          <div className="mt-2">
+            <Input
               {...register("username")}
               id="username"
+              name="username"
               type="text"
               autoComplete="username"
               placeholder="Username"
+              required
               errorMessage={errors.username?.message}
             />
-          </InputGroup>
-          <InputGroup>
-            <InputLabel htmlFor="password">Password</InputLabel>
-            <TextInput
+          </div>
+        </div>
+
+        <div>
+          <Label htmlFor="password">Password</Label>
+          <div className="mt-2">
+            <Input
               {...register("password")}
               id="password"
               type="password"
               autoComplete="current-password"
               placeholder="Password"
+              required
               errorMessage={errors.password?.message}
             />
-          </InputGroup>
-          <Button disabled={isLoggingIn} type="submit">
+          </div>
+        </div>
+
+        <div>
+          <button
+            disabled={isLoggingIn}
+            type="submit"
+            className="flex w-full justify-center rounded-md bg-purple-800 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-purple-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-600"
+          >
             Sign in
-          </Button>
-          <Link to="/register" className="text-lg self-center">
-            Need to register?
-          </Link>
-          {serverMessage && (
-            <ServerMessage role="alert">{serverMessage}</ServerMessage>
-          )}
-        </Form>
-      </Paper>
-    </Wrapper>
+          </button>
+        </div>
+      </form>
+    </>
   );
 };
-
-const Wrapper = styled.div`
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const Header = styled.h1`
-  font-size: 3rem;
-  text-align: center;
-  font-weight: 700;
-`;
-
-const Subheader = styled.h3`
-  font-size: 2rem;
-  text-align: center;
-  font-weight: 500;
-`;
-
-const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-  margin-top: 32px;
-  gap: 16px;
-`;
-
-const InputGroup = styled.div`
-  display: flex;
-  width: 100%;
-  flex-direction: column;
-`;
-
-const InputLabel = styled(Label.Root)`
-  display: inline-flex;
-  font-size: 16px;
-  font-weight: 500;
-  margin-top: 8px;
-  margin-bottom: 8px;
-`;
-
-const ServerMessage = styled.span`
-  display: block;
-  font-size: 1rem;
-  margin-top: 16px;
-  color: var(--mui-palette-error-main);
-`;
 
 export default LoginForm;
