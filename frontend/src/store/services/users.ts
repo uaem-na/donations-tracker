@@ -12,6 +12,7 @@ export type User = {
   firstName: string;
   lastName: string;
   verified: boolean;
+  active: boolean;
 };
 
 type GetUserArgs = {

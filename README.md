@@ -38,10 +38,11 @@ To build without cache:
 
 ### Admin features
 
-- [ ] *As an admin, I should be able to view a list of all users grouped by type (admin, organization, individual)*
-- [ ] *As an admin, I should be able to verify/unverify an organization account*
-- [ ] *As an admin, I should be able to enable/disable any account*
+- [x] As an admin, I should be able to view a list of all users grouped by type (admin, organization, individual)
+- [ ] As an admin, I should be able to verify/unverify an organization account
+- [ ] As an admin, I should be able to enable/disable any account
 - [ ] As an admin, I should be able to check whether users have any associated reports
+- [ ] Add pagination, sorting, and filtering to admin/users page
 
 ### User features
 

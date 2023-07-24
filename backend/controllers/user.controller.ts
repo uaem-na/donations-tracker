@@ -10,7 +10,7 @@ export class UserController {
   constructor(private userService: UserService) {}
 
   getAllUsers = expressAsyncHandler(async (req, res, next) => {
-    const users = await this.userService.getUsers();
+    const users = await this.userService.getUsers(false);
     const userDtos = users.map((user) => UserDto.fromDocument(user));
 
     res.json(userDtos || []);
