@@ -1,6 +1,12 @@
+import { UserRole } from "@/constants";
 import { ISiteLinks } from "@constants/siteLinks";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useGetSessionQuery } from "@services/auth";
 import { NavLink } from "react-router-dom";
+
+interface SidebarLogoProps {
+  name: string;
+}
 
 const SidebarLogo = ({ name }) => {
   return (
@@ -10,12 +16,17 @@ const SidebarLogo = ({ name }) => {
   );
 };
 
-const NavList = ({ siteLinks }) => {
+interface NavListProps {
+  siteLinks: ISiteLinks[];
+  isUserAdmin?: boolean;
+}
+
+const NavList = ({ siteLinks, isUserAdmin = false }: NavListProps) => {
   return (
     <nav className="mt-8">
       <ul className="flex flex-col items-center space-y-1">
         {siteLinks
-          .filter(({ menu }) => menu)
+          .filter(({ menu, adminOnly }) => menu && (!adminOnly || isUserAdmin))
           .map(({ name, path, icon }) => (
             <NavItem key={name} to={path} name={name} icon={icon}></NavItem>
           ))}
@@ -24,7 +35,14 @@ const NavList = ({ siteLinks }) => {
   );
 };
 
-const NavItem = ({ to, name, icon }) => {
+interface NavItemProps {
+  to: string;
+  name: string;
+  icon: any;
+}
+
+// TODO: Add active class to nav item
+const NavItem = ({ to, name, icon }: NavItemProps) => {
   return (
     <li>
       <NavLink
@@ -50,10 +68,19 @@ interface ISidebarProps {
 }
 
 export const Sidebar = ({ name, siteLinks }: ISidebarProps) => {
+  const { data: session, isLoading } = useGetSessionQuery();
+
+  if (isLoading) {
+    return <div className="hidden">Loading...</div>;
+  }
+
   return (
     <div className="hidden lg:fixed lg:inset-y-0 lg:left-0 lg:z-50 lg:block lg:w-20 lg:overflow-y-auto lg:bg-gray-900 lg:pb-4">
       <SidebarLogo name={name} />
-      <NavList siteLinks={siteLinks} />
+      <NavList
+        siteLinks={siteLinks}
+        isUserAdmin={session?.role?.includes(UserRole.ADMIN)}
+      />
     </div>
   );
 };

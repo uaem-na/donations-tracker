@@ -1,3 +1,9 @@
+export const UserRole = {
+  ADMIN: "admin" as const,
+  ORGANIZATION: "organization" as const,
+  INDIVIDUAL: "individual" as const,
+};
+
 const size = {
   mobileS: "320px",
   mobileM: "375px",

@@ -1,6 +1,7 @@
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
 // * Various React page components
+import { UserRole } from "@constants";
 import { RequireAuth } from "@features/auth";
 import {
   AboutUsPage,
@@ -27,7 +28,14 @@ function App() {
             <Route path="/faq" element={<FaqPage />} />
 
             {/* Admin pages */}
-            <Route path="/admin/users" element={<AdminUsersPage />} />
+            <Route
+              path="/admin/users"
+              element={
+                <RequireAuth role={UserRole.ADMIN}>
+                  <AdminUsersPage />
+                </RequireAuth>
+              }
+            />
 
             {/* Private pages */}
             <Route

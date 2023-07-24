@@ -3,6 +3,7 @@ import {
   faCircleQuestion,
   faHome,
   faPersonCircleQuestion,
+  faUsers,
 } from "@fortawesome/free-solid-svg-icons";
 
 export interface ISiteLinks {
@@ -10,6 +11,7 @@ export interface ISiteLinks {
   path: string;
   menu: boolean;
   icon?: IconDefinition;
+  adminOnly?: boolean;
 }
 
 export const siteLinks: ISiteLinks[] = [
@@ -21,4 +23,11 @@ export const siteLinks: ISiteLinks[] = [
     icon: faPersonCircleQuestion,
   },
   { name: "FAQ", path: "/faq", menu: true, icon: faCircleQuestion },
+  {
+    name: "Users",
+    path: "/admin/users",
+    menu: true,
+    icon: faUsers,
+    adminOnly: true,
+  },
 ];

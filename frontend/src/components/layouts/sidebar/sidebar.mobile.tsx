@@ -1,16 +1,23 @@
+import { UserRole } from "@/constants";
 import { LayoutContext, LayoutContextType } from "@/layout/layout";
 import { ISiteLinks } from "@constants/siteLinks";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useGetSessionQuery } from "@services/auth";
 import { useContext } from "react";
 import { NavLink } from "react-router-dom";
 
-const NavList = ({ siteLinks }) => {
+interface NavListProps {
+  siteLinks: ISiteLinks[];
+  isUserAdmin?: boolean;
+}
+
+const NavList = ({ siteLinks, isUserAdmin = false }: NavListProps) => {
   return (
     <nav className="flex flex-1 flex-col">
       <ul className="-mx-2 flex-1 space-y-1">
         {siteLinks
-          .filter(({ menu }) => menu)
+          .filter(({ menu, adminOnly }) => menu && (!adminOnly || isUserAdmin))
           .map(({ name, path }) => (
             <NavItem key={name} to={path} name={name}></NavItem>
           ))}
@@ -49,9 +56,14 @@ interface ISidebarMobileProps {
 }
 
 export const SidebarMobile = ({ name, siteLinks }: ISidebarMobileProps) => {
+  const { data: session, isLoading } = useGetSessionQuery();
   const { mobileNavIsOpen, updateMobileNavIsOpen } = useContext(
     LayoutContext
   ) as LayoutContextType;
+
+  if (isLoading) {
+    return <div className="hidden">Loading...</div>;
+  }
 
   return (
     mobileNavIsOpen && (
@@ -82,7 +94,10 @@ export const SidebarMobile = ({ name, siteLinks }: ISidebarMobileProps) => {
                 </div>
               </div>
 
-              <NavList siteLinks={siteLinks} />
+              <NavList
+                siteLinks={siteLinks}
+                isUserAdmin={session?.role?.includes(UserRole.ADMIN)}
+              />
             </div>
           </div>
         </div>
