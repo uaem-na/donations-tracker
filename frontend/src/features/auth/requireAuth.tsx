@@ -3,7 +3,7 @@ import { Navigate, useLocation } from "react-router-dom";
 
 export const RequireAuth = ({ children }) => {
   const { pathname } = useLocation();
-  const { data: session, isLoading } = useGetSessionQuery({});
+  const { data: session, isLoading } = useGetSessionQuery();
 
   if (isLoading) {
     return <div>Loading...</div>;

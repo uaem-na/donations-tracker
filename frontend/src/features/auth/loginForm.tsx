@@ -5,7 +5,11 @@ import { Paper } from "@components/common/paper";
 import { loginSchema } from "@features/yupSchemas";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Label from "@radix-ui/react-label";
-import { useLazyGetSessionQuery, useLoginMutation } from "@services/auth";
+import {
+  useGetSessionQuery,
+  useLazyGetSessionQuery,
+  useLoginMutation,
+} from "@services/auth";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -13,9 +17,11 @@ import styled from "styled-components";
 
 export const LoginForm = () => {
   const navigate = useNavigate();
+  const { data: currentSession, isLoading } = useGetSessionQuery();
+  const [getSessionAfterLogin, { data: afterLoginSession }] =
+    useLazyGetSessionQuery();
   const [loginApi, { isLoading: isLoggingIn, isSuccess, error }] =
     useLoginMutation();
-  const [getSession, { data: session }] = useLazyGetSessionQuery();
   const [serverMessage, setServerMessage] = useState("");
 
   const {
@@ -35,9 +41,9 @@ export const LoginForm = () => {
   useEffect(() => {
     if (isSuccess) {
       setServerMessage("");
-      getSession({});
+      getSessionAfterLogin();
     }
-  }, [getSession, isSuccess]);
+  }, [getSessionAfterLogin, isSuccess]);
 
   // handle server error message
   useEffect(() => {
@@ -53,10 +59,20 @@ export const LoginForm = () => {
 
   // redirect to account page on session refresh
   useEffect(() => {
-    if (session) {
+    if (afterLoginSession) {
       navigate("/account");
     }
-  }, [session, navigate]);
+  }, [afterLoginSession, navigate]);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (currentSession) {
+    // session exists, redirect to account page
+    navigate("/account");
+    return null;
+  }
 
   return (
     <Wrapper>

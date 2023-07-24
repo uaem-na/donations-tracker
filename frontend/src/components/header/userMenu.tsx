@@ -51,7 +51,7 @@ const slideLeftAndFade = keyframes`
 
 // UserMenu requires authentication
 export const UserMenu = () => {
-  const { data: user } = useGetSessionQuery({});
+  const { data: user } = useGetSessionQuery();
   const [logout] = useLogoutMutation();
   const navigate = useNavigate();
 
@@ -89,7 +89,7 @@ export const UserMenu = () => {
               </DropdownMenu.Group>
               <DropdownMenuSeparator />
               <DropdownMenu.Group>
-                <DropdownMenuItem onSelect={() => logout({})}>
+                <DropdownMenuItem onSelect={() => logout()}>
                   <LogoutText>Logout</LogoutText>
                 </DropdownMenuItem>
               </DropdownMenu.Group>

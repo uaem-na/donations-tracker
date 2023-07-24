@@ -35,9 +35,11 @@ export const RequestLink = ({
           <h3 className="text-gray-700">Requested PPE:</h3>
           <div className="mb-2">
             <ul className="list-disc">
-              {ppeProfiles.map((ppe) => (
-                <li className="ml-4">{ppe.description}</li>
-              ))}
+              {/* {ppeProfiles.map((ppe) => (
+                <li key={ppe.id} className="ml-4">
+                  {ppe.description}
+                </li>
+              ))} */}
             </ul>
           </div>
           <h3 className="text-gray-600">Postal:</h3>

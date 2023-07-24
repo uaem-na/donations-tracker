@@ -11,7 +11,7 @@ import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const ProfileMenu = () => {
-  const { data: user } = useGetSessionQuery({});
+  const { data: user } = useGetSessionQuery();
   const [logout] = useLogoutMutation();
   const navigate = useNavigate();
 
@@ -63,7 +63,7 @@ const ProfileMenu = () => {
               </DropdownMenu.Group>
               <DropdownMenu.Separator className="h-px bg-gray-900/10 m-0.5" />
               <DropdownMenu.Item
-                onSelect={() => logout({})}
+                onSelect={() => logout()}
                 className="block px-3 py-1 text-sm leading-6 font-light text-gray-900 cursor-pointer hover:bg-gray-50"
               >
                 <FontAwesomeIcon

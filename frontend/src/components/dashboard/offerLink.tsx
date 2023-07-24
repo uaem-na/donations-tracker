@@ -12,9 +12,11 @@ export const OfferLink = ({ id, postalCode, ppeProfiles, createdAt }) => {
           <h3 className="text-gray-700">Offered PPE:</h3>
           <div className="mb-2">
             <ul className="list-disc">
-              {ppeProfiles.map((ppe) => (
-                <li className="ml-4">{ppe.description}</li>
-              ))}
+              {/* {ppeProfiles.map((ppe) => (
+                <li key={ppe.id} className="ml-4">
+                  {ppe.description}
+                </li>
+              ))} */}
             </ul>
           </div>
           <h3 className="text-gray-600">Postal:</h3>

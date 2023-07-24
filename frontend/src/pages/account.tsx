@@ -10,7 +10,7 @@ import { useGetPostsQuery } from "@services/posts";
 import styled from "styled-components";
 
 const VerifiedStatus = () => {
-  const { data: user } = useGetSessionQuery({});
+  const { data: user } = useGetSessionQuery();
 
   if (user?.verified) {
     return <>verified</>;
@@ -20,8 +20,8 @@ const VerifiedStatus = () => {
 };
 
 export const AccountPage = () => {
-  const { data: user } = useGetSessionQuery({});
-  const { data: posts } = useGetPostsQuery({});
+  const { data: user } = useGetSessionQuery();
+  const { data: posts } = useGetPostsQuery();
 
   const handleMakeOfferClick = (event) => {
     event.preventDefault();
@@ -69,7 +69,7 @@ export const AccountPage = () => {
                 message={
                   "Please contact the administrator to update your organization."
                 }
-              >{`${user?.organization}`}</Tooltip>
+              >{`coming soon`}</Tooltip>
             </p>
             <p>
               Verification:&nbsp;

@@ -10,7 +10,7 @@ import { useForm } from "react-hook-form";
 import styled from "styled-components";
 
 export const UpdateUserInfoForm = () => {
-  const { data: session } = useGetSessionQuery({});
+  const { data: session } = useGetSessionQuery();
   const [updateUserApi, { isLoading: isUpdating, isSuccess, error }] =
     useUpdateUserMutation();
   const [serverMessage, setServerMessage] = useState("");

@@ -1,7 +1,7 @@
 import { Sidebar, SidebarMobile } from "@components/layouts";
 import { Header } from "@components/layouts/header";
 import { siteLinks } from "@constants/siteLinks";
-import { createContext, useState } from "react";
+import { createContext, useMemo, useState } from "react";
 import { Outlet } from "react-router-dom";
 
 export type LayoutContextType = {
@@ -14,13 +14,15 @@ const LayoutProvider = ({ children }) => {
   const [mobileNavIsOpen, setMobileNavIsOpen] = useState(false);
 
   const updateMobileNavIsOpen = (state?: boolean) => {
-    setMobileNavIsOpen(state || !mobileNavIsOpen);
+    setMobileNavIsOpen(state ?? !mobileNavIsOpen);
   };
 
+  const value = useMemo(() => {
+    return { mobileNavIsOpen, updateMobileNavIsOpen };
+  }, [mobileNavIsOpen, updateMobileNavIsOpen]);
+
   return (
-    <LayoutContext.Provider value={{ mobileNavIsOpen, updateMobileNavIsOpen }}>
-      {children}
-    </LayoutContext.Provider>
+    <LayoutContext.Provider value={value}>{children}</LayoutContext.Provider>
   );
 };
 

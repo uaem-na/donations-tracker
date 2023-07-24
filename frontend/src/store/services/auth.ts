@@ -28,7 +28,7 @@ export const authApi = createApi({
   }),
   tagTypes: ["session"],
   endpoints: (builder) => ({
-    getSession: builder.query<Session, unknown>({
+    getSession: builder.query<Session, void>({
       query: () => ({
         url: "session",
         method: "GET",
@@ -46,7 +46,7 @@ export const authApi = createApi({
       }),
       invalidatesTags: [{ type: "session", id: "current" }],
     }),
-    logout: builder.mutation({
+    logout: builder.mutation<void, void>({
       query: () => ({
         url: "logout",
         method: "POST",
