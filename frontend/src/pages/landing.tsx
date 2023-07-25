@@ -1,9 +1,9 @@
-import Map from "@components/map/Map";
+import { GoogleMapWrapper } from "@/components/map/GoogleMapWrapper";
 
 export const LandingPage = () => {
   return (
     <>
-      <Map />
+      <GoogleMapWrapper />
     </>
   );
 };

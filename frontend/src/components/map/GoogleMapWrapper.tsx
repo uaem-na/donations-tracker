@@ -1,21 +1,18 @@
 import { GoogleMap, useLoadScript } from "@react-google-maps/api";
-
 import { useCallback, useRef, useState } from "react";
-import mapStyles from "./MapStyles";
-import "./index.css";
-
 import InfoBox from "./InfoBox";
 import Locate from "./Locate";
+import mapStyles from "./MapStyles";
 import Offer from "./Offer";
 import Request from "./Request";
+import "./index.css";
 
-const libraries = ["places"];
-
-const mapContainerStyle = {
-  width: "100vw",
-  height: "90vh",
+type LatLng = {
+  lat: number;
+  lng: number;
 };
-const center = {
+
+const center: LatLng = {
   lat: 45.504717,
   lng: -73.576456,
 };
@@ -27,18 +24,20 @@ const options = {
   clickableIcons: false,
 };
 
-export default function Map() {
+// TODO: add calling posts API to get posts in area
+// TODO: add search integration
+// TODO: fix map click to geolocate to postal code
+export const GoogleMapWrapper = () => {
   const KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: KEY,
-    libraries,
+    libraries: ["places" as const],
   });
 
   const [selected, setSelected] = useState(null);
-
   const [offers, setOffers] = useState([]);
   const [requests, setRequests] = useState([]);
-  const [infoBox, setInfoBox] = useState(null);
+  const [infoBox, setInfoBox] = useState<LatLng | null>(null);
 
   const onMapClick = useCallback((e) => {
     setInfoBox({
@@ -49,7 +48,6 @@ export default function Map() {
   }, []);
 
   // const onMapClick = useCallback((e) => {
-
   //   const lat = e.latLng.lat()
   //   const lng = e.latLng.lng()
   //   const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${KEY}`
@@ -108,32 +106,39 @@ export default function Map() {
   //   setSelected(null);
   // }, []);
 
-  const mapRef = new useRef();
-  const onMapLoad = useCallback((map) => {
+  const mapRef = useRef<google.maps.Map | null>(null);
+
+  const onLoad = useCallback((map) => {
     mapRef.current = map;
   }, []);
 
-  const panTo = useCallback(({ lat, lng }) => {
-    mapRef.current.panTo({ lat, lng });
-    mapRef.current.setZoom(16);
-  }, []);
+  const panTo = useCallback(
+    ({ lat, lng }) => {
+      if (!mapRef?.current) {
+        return;
+      }
+      mapRef.current.panTo({ lat, lng });
+      mapRef.current.setZoom(16);
+    },
+    [mapRef]
+  );
 
   if (loadError) return "Error loading maps";
   if (!isLoaded) return "Loading Maps";
 
   return (
-    <div>
+    <div className="w-full h-full">
       <Locate panTo={panTo} />
       {/* <Search panTo={panTo} /> */}
 
       <GoogleMap
         id="map"
-        mapContainerStyle={mapContainerStyle}
+        mapContainerClassName="w-full h-full"
         zoom={12}
         center={center}
         options={options}
         onClick={onMapClick}
-        onLoad={onMapLoad}
+        onLoad={onLoad}
         onDblClick={() => {
           setInfoBox(null);
         }}
@@ -168,4 +173,4 @@ export default function Map() {
       </GoogleMap>
     </div>
   );
-}
+};
