@@ -1,4 +1,4 @@
-import { UserTable } from "./components/user-table";
+import { UserTable } from "./components/UserTable";
 
 export const AdminUsersPage = () => {
   return (

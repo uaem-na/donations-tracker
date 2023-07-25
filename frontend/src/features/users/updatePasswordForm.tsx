@@ -1,6 +1,6 @@
-import { Button } from "@components/common/button";
-import { TextInput } from "@components/common/inputs";
-import { updatePasswordSchema } from "@features/yupSchemas";
+import { Button } from "@components/Button";
+import { TextInput } from "@components/TextInput";
+import { updatePasswordSchema } from "@features/YupSchemas";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Label } from "@radix-ui/react-label";
 import { useChangePasswordMutation } from "@services/users";

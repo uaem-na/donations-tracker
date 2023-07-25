@@ -1,6 +1,5 @@
-import { Sidebar, SidebarMobile } from "@components/layouts";
-import { Header } from "@components/layouts/header";
-import { siteLinks } from "@constants/siteLinks";
+import { Header, Sidebar, SidebarMobile } from "@components/Layouts";
+import { siteLinks } from "@constants/SiteLinks";
 import { createContext, useMemo, useState } from "react";
 import { Outlet } from "react-router-dom";
 
@@ -26,8 +25,6 @@ const LayoutProvider = ({ children }) => {
   );
 };
 
-export { LayoutProvider };
-
 const Layout = () => {
   const name = "UAEM";
 
@@ -43,4 +40,4 @@ const Layout = () => {
   );
 };
 
-export default Layout;
+export { Layout, LayoutProvider };

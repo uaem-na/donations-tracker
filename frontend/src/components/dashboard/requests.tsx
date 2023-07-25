@@ -1,4 +1,4 @@
-import RequestLink from "./requestLink";
+import RequestLink from "./RequestLink";
 
 export const Requests = ({ requests }) => {
   const EmptyRequests = () => {

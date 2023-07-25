@@ -1,7 +1,7 @@
-import { LayoutContext, LayoutContextType } from "@/layout/layout";
-import { Profile } from "@components/layouts/header/profile/profile";
+import { Profile } from "@components/Layouts/Header/Profile";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { LayoutContext, LayoutContextType } from "@layout";
 import { useContext } from "react";
 
 const OpenSidebarButton = () => {

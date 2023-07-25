@@ -1,4 +1,4 @@
-import { Tooltip } from "@/components/common";
+import { Tooltip } from "@components";
 import { ISiteLinks, UserRole } from "@constants";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useGetSessionQuery } from "@services/auth";

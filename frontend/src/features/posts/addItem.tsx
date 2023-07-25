@@ -1,6 +1,6 @@
-import { Button } from "@components/common";
+import { Button } from "@components";
 import { ELEVATIONS } from "@constants";
-import { addItemSchema } from "@features/yupSchemas";
+import { addItemSchema } from "@features/YupSchemas";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Dialog from "@radix-ui/react-dialog";
 import { Cross1Icon } from "@radix-ui/react-icons";

@@ -1,6 +1,6 @@
-import { Button } from "@components/common/button";
-import { Paper } from "@components/common/paper";
-import { createPostSchema } from "@features/yupSchemas";
+import { Button } from "@components/Button";
+import { Paper } from "@components/Paper";
+import { createPostSchema } from "@features/YupSchemas";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { useCreatePostMutation } from "@services/posts";
@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { useLocation } from "react-router-dom";
 import styled from "styled-components";
-import AddItem from "./addItem";
+import AddItem from "./AddItem";
 
 export const CreatePostForm = () => {
   const location = useLocation();

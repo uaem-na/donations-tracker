@@ -1,2 +1,2 @@
-export { UpdatePasswordForm } from "./updatePasswordForm";
-export { UpdateUserInfoForm } from "./updateUserInfoForm";
+export { UpdatePasswordForm } from "./UpdatePasswordForm";
+export { UpdateUserInfoForm } from "./UpdateUserInfoForm";

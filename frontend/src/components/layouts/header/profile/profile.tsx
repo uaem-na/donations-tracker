@@ -1,4 +1,4 @@
-import { Avatar } from "@components/common";
+import { Avatar } from "@components";
 import { faHandshake, faUser } from "@fortawesome/free-regular-svg-icons";
 import {
   faArrowRightFromBracket,

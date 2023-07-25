@@ -1,4 +1,4 @@
-import { PostTable } from "./components/post-table";
+import { PostTable } from "./components/PostTable";
 
 export const OffersPage = () => {
   return (

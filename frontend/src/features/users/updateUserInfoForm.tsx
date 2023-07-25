@@ -1,6 +1,6 @@
-import { Button } from "@components/common/button";
-import { TextInput } from "@components/common/inputs";
-import { updateUserInfoSchema } from "@features/yupSchemas";
+import { Button } from "@components/Button";
+import { TextInput } from "@components/TextInput";
+import { updateUserInfoSchema } from "@features/YupSchemas";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Label } from "@radix-ui/react-label";
 import { useGetSessionQuery } from "@services/auth";

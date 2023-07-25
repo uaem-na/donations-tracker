@@ -1,4 +1,4 @@
-import OfferLink from "./offerLink";
+import OfferLink from "./OfferLink";
 
 const EmptyOffers = () => {
   return (
