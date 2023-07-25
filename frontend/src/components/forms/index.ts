@@ -1,2 +1,2 @@
-export * from "./label/label";
-export * from "./textbox/textbox";
+export * from "./label/Label";
+export * from "./textbox/Textbox";

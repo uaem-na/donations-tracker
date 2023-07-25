@@ -11,15 +11,12 @@ export const LoginPage = () => {
               Sign in to your account
             </h2>
             <p className="mt-2 text-sm leading-6 text-gray-500">
-              {/*TODO: Fix Link styling */}
               Not a member? <Link to="/register">Click here to register</Link>
             </p>
           </div>
 
           <div className="mt-10">
-            <div>
-              <LoginForm />
-            </div>
+            <LoginForm />
           </div>
         </div>
       </div>

@@ -1,4 +1,5 @@
 import { Alert } from "@components/alert";
+import { Button } from "@components/common/button";
 import { Input, Label } from "@components/forms";
 import { loginSchema } from "@features/yupSchemas";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -73,7 +74,9 @@ export const LoginForm = () => {
   return (
     <>
       <form className="space-y-6" onSubmit={handleSubmit(onSubmit)} noValidate>
-        {serverMessage && <Alert type="error">{serverMessage}</Alert>}
+        <div>
+          {serverMessage && <Alert type="error">{serverMessage}</Alert>}
+        </div>
 
         <div>
           <Label htmlFor="username">Username</Label>
@@ -107,13 +110,13 @@ export const LoginForm = () => {
         </div>
 
         <div>
-          <button
+          <Button
             disabled={isLoggingIn}
             type="submit"
-            className="flex w-full justify-center rounded-md bg-purple-800 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-purple-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-600"
+            className="flex w-full justify-center"
           >
             Sign in
-          </button>
+          </Button>
         </div>
       </form>
     </>
