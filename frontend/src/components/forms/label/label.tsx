@@ -7,7 +7,7 @@ export const Label = forwardRef<
 >(({ ...props }, ref) => {
   return (
     <RadixLabel.Root
-      className={`block text-sm font-medium leading-6 text-gray-900 ${props.className}`}
+      className="block text-sm font-medium leading-6 text-gray-900"
       {...props}
       ref={ref}
     >
