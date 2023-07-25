@@ -21,7 +21,7 @@ export const registerSchema = yup.object().shape({
   email: yup
     .string()
     .email("Invalid email address")
-    .required("E-mail address is required"),
+    .required("Email address is required"),
   password: yup
     .string()
     .min(8, "Must be 8 characters or more")
@@ -35,7 +35,7 @@ export const registerSchema = yup.object().shape({
     .string()
     .required("Confirm password is required")
     .oneOf([yup.ref("password")], "Passwords must match"),
-  organization: yup.string().required("Organization is required"),
+  // organization: yup.string().required("Organization is required"),
   firstName: yup.string().required("First name is required"),
   lastName: yup.string().required("Last name is required"),
 });
