@@ -11,8 +11,10 @@ import {
   FaqPage,
   LandingPage,
   LoginPage,
+  OffersPage,
   RegisterPage,
   ReqOffPage,
+  RequestsPage,
 } from "@pages";
 import { Layout } from "layout";
 
@@ -26,6 +28,8 @@ function App() {
             <Route index element={<LandingPage />} />
             <Route path="/about-us" element={<AboutUsPage />} />
             <Route path="/faq" element={<FaqPage />} />
+            <Route path="/offers" element={<OffersPage />} />
+            <Route path="/requests" element={<RequestsPage />} />
 
             {/* Admin pages */}
             <Route

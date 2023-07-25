@@ -1,5 +1,5 @@
-import { UserRole } from "@/constants";
-import { ISiteLinks } from "@constants/siteLinks";
+import { Tooltip } from "@/components/common";
+import { ISiteLinks, UserRole } from "@constants";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useGetSessionQuery } from "@services/auth";
 import { NavLink } from "react-router-dom";
@@ -8,7 +8,7 @@ interface SidebarLogoProps {
   name: string;
 }
 
-const SidebarLogo = ({ name }) => {
+const SidebarLogo = ({ name }: SidebarLogoProps) => {
   return (
     <div className="flex h-16 shrink-0 items-center justify-center">
       <div className="h-8 w-auto text-gray-100 font-light">{name}</div>
@@ -45,19 +45,21 @@ interface NavItemProps {
 const NavItem = ({ to, name, icon }: NavItemProps) => {
   return (
     <li>
-      <NavLink
-        to={to}
-        className={({ isActive }) =>
-          `group flex gap-x-3 rounded-md p-3 text-sm leading-6 font-semibold  ${
-            isActive
-              ? "bg-gray-800 text-white"
-              : "text-gray-400 hover:text-white hover:bg-gray-800"
-          }`
-        }
-      >
-        <FontAwesomeIcon icon={icon} className="h-6 w-6 shrink-0" />
-        <span className="sr-only">{name}</span>
-      </NavLink>
+      <Tooltip message={name} side="right" delayDuration={0}>
+        <NavLink
+          to={to}
+          className={({ isActive }) =>
+            `group flex gap-x-3 rounded-md p-3 text-sm leading-6 font-semibold  ${
+              isActive
+                ? "bg-gray-800 text-white"
+                : "text-gray-400 hover:text-white hover:bg-gray-800"
+            }`
+          }
+        >
+          <FontAwesomeIcon icon={icon} className="h-6 w-6 shrink-0" />
+          <span className="sr-only">{name}</span>
+        </NavLink>
+      </Tooltip>
     </li>
   );
 };

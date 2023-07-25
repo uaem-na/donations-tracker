@@ -2,6 +2,7 @@ import { IconDefinition } from "@fortawesome/free-regular-svg-icons";
 import {
   faCircleQuestion,
   faHome,
+  faListUl,
   faPersonCircleQuestion,
   faUsers,
 } from "@fortawesome/free-solid-svg-icons";
@@ -21,6 +22,18 @@ export const siteLinks: ISiteLinks[] = [
     path: "/about-us",
     menu: true,
     icon: faPersonCircleQuestion,
+  },
+  {
+    name: "Offers",
+    path: "/offers",
+    menu: true,
+    icon: faListUl,
+  },
+  {
+    name: "Requests",
+    path: "/requests",
+    menu: true,
+    icon: faListUl,
   },
   { name: "FAQ", path: "/faq", menu: true, icon: faCircleQuestion },
   {
