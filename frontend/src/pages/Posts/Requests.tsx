@@ -3,7 +3,7 @@ import { PostTable } from "./components/PostTable";
 export const RequestsPage = () => {
   return (
     <>
-      <PostTable type="requests" />
+      <PostTable type="request" />
     </>
   );
 };

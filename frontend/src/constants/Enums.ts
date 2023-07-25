@@ -5,6 +5,6 @@ export const UserRole = {
 };
 
 export const PostType = {
-  OFFER: "offers" as const,
-  REQUEST: "requests" as const,
+  OFFER: "offer" as const,
+  REQUEST: "request" as const,
 };
