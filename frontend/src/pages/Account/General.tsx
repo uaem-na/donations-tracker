@@ -9,7 +9,7 @@ import { DEVICES } from "@constants";
 import { UpdatePasswordForm, UpdateUserInfoForm } from "@features/users";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { AccountLayout } from "@pages/Account/AccountLayout";
+import { AccountLayout } from "@pages/Account/components/AccountLayout";
 import { useGetSessionQuery } from "@services/auth";
 import { useGetPostsQuery } from "@services/posts";
 import styled from "styled-components";
@@ -24,7 +24,7 @@ const VerifiedStatus = () => {
   }
 };
 
-export const AccountPage = () => {
+export const GeneralPage = () => {
   const { data: user } = useGetSessionQuery();
   const { data: posts } = useGetPostsQuery();
 
@@ -105,6 +105,7 @@ export const AccountPage = () => {
                   }
                 >
                   <FontAwesomeIcon
+                    tabIndex={0}
                     className=" text-gray-6400"
                     icon={faInfoCircle}
                   />
@@ -299,5 +300,3 @@ const ReadonlyData = styled.span`
 `;
 
 const EditableData = styled.span``;
-
-export default AccountPage;

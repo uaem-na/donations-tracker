@@ -1,5 +1,5 @@
 export { AboutUsPage } from "./AboutUs";
-export { AccountPage } from "./Account";
+export { DashboardPage, GeneralPage, SecurityPage } from "./Account";
 export { AdminUsersPage } from "./Admin";
 export { FaqPage } from "./Faq";
 export { LandingPage } from "./Landing";

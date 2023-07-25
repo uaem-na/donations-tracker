@@ -1,5 +1,6 @@
 import { Tooltip } from "@components";
 import { ISiteLinks, UserRole } from "@constants";
+import { IconDefinition } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useGetSessionQuery } from "@services/auth";
 import { NavLink } from "react-router-dom";
@@ -38,7 +39,7 @@ const NavList = ({ siteLinks, isUserAdmin = false }: NavListProps) => {
 interface NavItemProps {
   to: string;
   name: string;
-  icon: any;
+  icon?: IconDefinition;
 }
 
 // TODO: Add active class to nav item
@@ -57,7 +58,7 @@ const NavItem = ({ to, name, icon }: NavItemProps) => {
           }
           tabIndex={-1}
         >
-          <FontAwesomeIcon icon={icon} className="h-6 w-6 shrink-0" />
+          {icon && <FontAwesomeIcon icon={icon} className="h-6 w-6 shrink-0" />}
           <span className="sr-only">{name}</span>
         </NavLink>
       </Tooltip>
