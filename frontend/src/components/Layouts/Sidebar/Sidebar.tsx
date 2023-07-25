@@ -55,6 +55,7 @@ const NavItem = ({ to, name, icon }: NavItemProps) => {
                 : "text-gray-400 hover:text-white hover:bg-gray-800"
             }`
           }
+          tabIndex={-1}
         >
           <FontAwesomeIcon icon={icon} className="h-6 w-6 shrink-0" />
           <span className="sr-only">{name}</span>
