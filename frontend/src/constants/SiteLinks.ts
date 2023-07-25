@@ -1,8 +1,11 @@
-import { IconDefinition } from "@fortawesome/free-regular-svg-icons";
+import {
+  faHandshake,
+  IconDefinition,
+} from "@fortawesome/free-regular-svg-icons";
 import {
   faCircleQuestion,
+  faFileSignature,
   faHome,
-  faListUl,
   faPersonCircleQuestion,
   faUsers,
 } from "@fortawesome/free-solid-svg-icons";
@@ -27,13 +30,13 @@ export const siteLinks: ISiteLinks[] = [
     name: "Offers",
     path: "/offers",
     menu: true,
-    icon: faListUl,
+    icon: faHandshake,
   },
   {
     name: "Requests",
     path: "/requests",
     menu: true,
-    icon: faListUl,
+    icon: faFileSignature,
   },
   { name: "FAQ", path: "/faq", menu: true, icon: faCircleQuestion },
   {

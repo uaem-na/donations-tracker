@@ -1,4 +1,4 @@
-import { Button } from "@components/Button";
+import { Button } from "@components/Controls";
 import { TextInput } from "@components/TextInput";
 import { updatePasswordSchema } from "@features/YupSchemas";
 import { yupResolver } from "@hookform/resolvers/yup";

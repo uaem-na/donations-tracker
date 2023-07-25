@@ -1,4 +1,4 @@
-import { Tooltip } from "@components";
+import { Tooltip } from "@components/Controls";
 import { ISiteLinks, UserRole } from "@constants";
 import { IconDefinition } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

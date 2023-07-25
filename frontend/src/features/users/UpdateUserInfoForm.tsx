@@ -1,5 +1,5 @@
-import { Alert, Button, Tooltip } from "@components";
-import { Input } from "@components/Forms";
+import { Alert } from "@components";
+import { Button, Input, Tooltip } from "@components/Controls";
 import { updateUserInfoSchema } from "@features/YupSchemas";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -139,7 +139,7 @@ export const UpdateUserInfoForm = () => {
                 type="email"
                 autoComplete="email"
                 disabled={true}
-                value={user?.email}
+                // value={user?.email}
               />
             </div>
           </div>

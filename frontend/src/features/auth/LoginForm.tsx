@@ -1,6 +1,5 @@
 import { Alert } from "@components/Alert";
-import { Button } from "@components/Button";
-import { Input, Label } from "@components/forms";
+import { Button, Input, Label } from "@components/Controls";
 import { loginSchema } from "@features/YupSchemas";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
@@ -57,7 +56,7 @@ export const LoginForm = () => {
   // redirect to account page on session refresh
   useEffect(() => {
     if (afterLoginSession) {
-      navigate("/account");
+      navigate("/account/dashboard");
     }
   }, [afterLoginSession, navigate]);
 
@@ -67,7 +66,7 @@ export const LoginForm = () => {
 
   if (currentSession) {
     // session exists, redirect to account page
-    navigate("/account");
+    navigate("/account/dashboard");
     return null;
   }
 

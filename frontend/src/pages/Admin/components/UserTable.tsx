@@ -1,4 +1,4 @@
-import { Button } from "@components/Button";
+import { Button } from "@components/Controls";
 import { UserRole } from "@constants";
 import { useGetSessionQuery } from "@services/auth";
 import { useGetUsersQuery, useSetUserActiveMutation } from "@services/users";

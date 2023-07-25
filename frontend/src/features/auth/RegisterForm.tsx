@@ -1,6 +1,5 @@
 import { Alert } from "@components/Alert";
-import { Button } from "@components/Button";
-import { Input, Label } from "@components/forms";
+import { Button, Input, Label } from "@components/Controls";
 import { registerSchema } from "@features/YupSchemas";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {

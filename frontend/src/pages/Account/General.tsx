@@ -1,10 +1,9 @@
 // [Private] My Account page component
 // Contains: dashboard, account information and actions to make offers/requests
 
-import { Button, Tooltip } from "@components";
-import { Offers, Requests } from "@components/Dashboard";
+import { Button } from "@components/Controls";
 import { DEVICES } from "@constants";
-import { UpdatePasswordForm, UpdateUserInfoForm } from "@features/users";
+import { UpdateUserInfoForm } from "@features/users";
 import { AccountLayout } from "@pages/Account/components/AccountLayout";
 import { useGetSessionQuery } from "@services/auth";
 import { useGetPostsQuery } from "@services/posts";
@@ -36,67 +35,69 @@ export const GeneralPage = () => {
 
   return (
     <AccountLayout>
-      <form className="grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-4 sm:px-6 md:grid-cols-3 lg:px-8">
-        <div className="md:col-span-3">
-          <Wrapper>
-            <ActionsWrapper>
-              <FlexButton type="button" onClick={handleMakeOfferClick}>
-                Make Offer
-              </FlexButton>
-              <FlexButton type="button" onClick={handleMakeRequestClick}>
-                Make Request
-              </FlexButton>
-            </ActionsWrapper>
-            <ResponsiveRow>
-              <DashboardColumn>
-                <DashboardRow>
-                  <Heading>Offers</Heading>
-                  <Offers offers={posts} />
-                </DashboardRow>
-                <DashboardRow>
-                  <Heading>Requests</Heading>
-                  <Requests requests={posts} />
-                </DashboardRow>
-              </DashboardColumn>
-              <InformationColumn>
-                <Heading>Account Information</Heading>
-                <ReadonlyData>
-                  <p>
-                    Email:&nbsp;
-                    <Tooltip message="Please contact the administrator to update your email.">
-                      <span>{`${user?.email}`}</span>
-                    </Tooltip>
-                  </p>
-                  <p>
-                    Organization:&nbsp;
-                    <Tooltip
-                      message={
-                        "Please contact the administrator to update your organization."
-                      }
-                    >
-                      <span>{`coming soon`}</span>
-                    </Tooltip>
-                  </p>
-                  <p>
-                    Verification:&nbsp;
-                    <Tooltip
-                      message={
-                        "Please contact the administrator to get the current status."
-                      }
-                    >
-                      <VerifiedStatus />
-                    </Tooltip>
-                  </p>
-                </ReadonlyData>
-                <EditableData>
-                  <UpdateUserInfoForm />
-                  <UpdatePasswordForm />
-                </EditableData>
-              </InformationColumn>
-            </ResponsiveRow>
-          </Wrapper>
-        </div>
-      </form>
+      <UpdateUserInfoForm />
+
+      {/*<div className="grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-4 sm:px-6 md:grid-cols-3 lg:px-8">*/}
+      {/*  <div className="md:col-span-3">*/}
+      {/*    <Wrapper>*/}
+      {/*      <ActionsWrapper>*/}
+      {/*        <FlexButton type="button" onClick={handleMakeOfferClick}>*/}
+      {/*          Make Offer*/}
+      {/*        </FlexButton>*/}
+      {/*        <FlexButton type="button" onClick={handleMakeRequestClick}>*/}
+      {/*          Make Request*/}
+      {/*        </FlexButton>*/}
+      {/*      </ActionsWrapper>*/}
+      {/*      <ResponsiveRow>*/}
+      {/*        <DashboardColumn>*/}
+      {/*          <DashboardRow>*/}
+      {/*            <Heading>Offers</Heading>*/}
+      {/*            <Offers offers={posts} />*/}
+      {/*          </DashboardRow>*/}
+      {/*          <DashboardRow>*/}
+      {/*            <Heading>Requests</Heading>*/}
+      {/*            <Requests requests={posts} />*/}
+      {/*          </DashboardRow>*/}
+      {/*        </DashboardColumn>*/}
+      {/*        <InformationColumn>*/}
+      {/*          <Heading>Account Information</Heading>*/}
+      {/*          <ReadonlyData>*/}
+      {/*            <p>*/}
+      {/*              Email:&nbsp;*/}
+      {/*              <Tooltip message="Please contact the administrator to update your email.">*/}
+      {/*                <span>{`${user?.email}`}</span>*/}
+      {/*              </Tooltip>*/}
+      {/*            </p>*/}
+      {/*            <p>*/}
+      {/*              Organization:&nbsp;*/}
+      {/*              <Tooltip*/}
+      {/*                message={*/}
+      {/*                  "Please contact the administrator to update your organization."*/}
+      {/*                }*/}
+      {/*              >*/}
+      {/*                <span>{`coming soon`}</span>*/}
+      {/*              </Tooltip>*/}
+      {/*            </p>*/}
+      {/*            <p>*/}
+      {/*              Verification:&nbsp;*/}
+      {/*              <Tooltip*/}
+      {/*                message={*/}
+      {/*                  "Please contact the administrator to get the current status."*/}
+      {/*                }*/}
+      {/*              >*/}
+      {/*                <VerifiedStatus />*/}
+      {/*              </Tooltip>*/}
+      {/*            </p>*/}
+      {/*          </ReadonlyData>*/}
+      {/*          <EditableData>*/}
+      {/*            <UpdateUserInfoForm />*/}
+      {/*            <UpdatePasswordForm />*/}
+      {/*          </EditableData>*/}
+      {/*        </InformationColumn>*/}
+      {/*      </ResponsiveRow>*/}
+      {/*    </Wrapper>*/}
+      {/*  </div>*/}
+      {/*</div>*/}
     </AccountLayout>
   );
 };
