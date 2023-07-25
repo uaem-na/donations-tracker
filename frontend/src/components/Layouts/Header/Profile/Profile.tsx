@@ -37,7 +37,7 @@ const ProfileMenu = () => {
                 <DropdownMenu.Item
                   className="block px-3 py-1 text-sm leading-6 font-light text-gray-900 cursor-pointer hover:bg-gray-50"
                   onSelect={() => {
-                    navigate("/account");
+                    navigate("/account/dashboard");
                   }}
                 >
                   <FontAwesomeIcon icon={faUser} className="mr-2 w-[20px]" />

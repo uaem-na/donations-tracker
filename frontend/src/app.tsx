@@ -5,16 +5,18 @@ import { UserRole } from "@constants";
 import { RequireAuth } from "@features/auth";
 import {
   AboutUsPage,
-  AccountPage,
   AdminUsersPage,
   CreatePostPage,
+  DashboardPage,
   FaqPage,
+  GeneralPage,
   LandingPage,
   LoginPage,
   OffersPage,
   RegisterPage,
   ReqOffPage,
   RequestsPage,
+  SecurityPage,
 } from "@pages";
 import { Layout } from "layout";
 
@@ -42,11 +44,28 @@ function App() {
             />
 
             {/* Private pages */}
+            {/* Account Pages */}
             <Route
-              path="/account"
+              path="/account/dashboard"
               element={
                 <RequireAuth>
-                  <AccountPage />
+                  <DashboardPage />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/account/general"
+              element={
+                <RequireAuth>
+                  <GeneralPage />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/account/security"
+              element={
+                <RequireAuth>
+                  <SecurityPage />
                 </RequireAuth>
               }
             />

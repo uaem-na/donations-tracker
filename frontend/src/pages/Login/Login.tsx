@@ -1,4 +1,4 @@
-import { Link } from "@components/link";
+import { Link } from "@components/Controls";
 import { LoginForm } from "@features/auth";
 
 export const LoginPage = () => {

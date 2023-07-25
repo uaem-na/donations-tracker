@@ -1,4 +1,4 @@
-import { Button } from "@components/Button";
+import { Button } from "@components/Controls";
 import { Paper } from "@components/Paper";
 import { createPostSchema } from "@features/YupSchemas";
 import { yupResolver } from "@hookform/resolvers/yup";
