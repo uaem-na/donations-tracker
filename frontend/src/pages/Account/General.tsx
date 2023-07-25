@@ -2,13 +2,9 @@
 // Contains: dashboard, account information and actions to make offers/requests
 
 import { Button, Tooltip } from "@components";
-import { Alert } from "@components/Alert";
 import { Offers, Requests } from "@components/Dashboard";
-import { Input, Label } from "@components/forms";
 import { DEVICES } from "@constants";
 import { UpdatePasswordForm, UpdateUserInfoForm } from "@features/users";
-import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { AccountLayout } from "@pages/Account/components/AccountLayout";
 import { useGetSessionQuery } from "@services/auth";
 import { useGetPostsQuery } from "@services/posts";
@@ -41,133 +37,6 @@ export const GeneralPage = () => {
   return (
     <AccountLayout>
       <form className="grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-4 sm:px-6 md:grid-cols-3 lg:px-8">
-        <div className="md:col-span-1">
-          <h2 className="text-base font-semibold leading-7 text-gray-900">
-            Personal Information
-          </h2>
-        </div>
-
-        <div className="md:col-span-2">
-          <div className="grid grid-cols-1 gap-x-6 gap-y-8 sm:max-w-xl sm:grid-cols-6">
-            <div className="col-span-full">
-              <label
-                htmlFor="username"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                Username
-              </label>
-              <div className="mt-2">
-                <Input
-                  type="text"
-                  name="username"
-                  id="username"
-                  autoComplete="username"
-                  placeholder="username"
-                  disabled={true}
-                  value={user?.username}
-                />
-              </div>
-            </div>
-
-            <div className="sm:col-span-3">
-              <Label htmlFor="first-name">First name</Label>
-              <div className="mt-2">
-                <Input
-                  type="text"
-                  name="first-name"
-                  id="first-name"
-                  autoComplete="given-name"
-                  value={user?.firstName}
-                />
-              </div>
-            </div>
-
-            <div className="sm:col-span-3">
-              <Label htmlFor="last-name">Last name</Label>
-              <div className="mt-2">
-                <Input
-                  type="text"
-                  name="last-name"
-                  id="last-name"
-                  autoComplete="family-name"
-                  value={user?.lastName}
-                />
-              </div>
-            </div>
-
-            <div className="col-span-full">
-              <Label htmlFor="email">
-                <span className="mr-2">Email</span>
-                <Tooltip
-                  asChild
-                  message={
-                    "Please contact the administrator to update your email."
-                  }
-                >
-                  <FontAwesomeIcon
-                    tabIndex={0}
-                    className=" text-gray-6400"
-                    icon={faInfoCircle}
-                  />
-                </Tooltip>
-              </Label>
-              <div className="mt-2">
-                <Input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  disabled={true}
-                  value={user?.email}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="md:col-span-1">
-          <h2 className="text-base font-semibold leading-7 text-gray-900">
-            Organization
-          </h2>
-        </div>
-
-        <div className="md:col-span-2">
-          <div className="col-span-full">
-            {/*<Label htmlFor="organization">*/}
-            {/*  <span className="mr-2">Organization</span>*/}
-            {/*  <Tooltip*/}
-            {/*    asChild*/}
-            {/*    message={*/}
-            {/*      "Please contact the administrator to update your organization."*/}
-            {/*    }*/}
-            {/*  >*/}
-            {/*    <FontAwesomeIcon*/}
-            {/*      className=" text-gray-6400"*/}
-            {/*      icon={faInfoCircle}*/}
-            {/*    />*/}
-            {/*  </Tooltip>*/}
-            {/*</Label>*/}
-            {/*<div className="mt-2">*/}
-            {/*  <Input*/}
-            {/*    id="organization"*/}
-            {/*    name="organization"*/}
-            {/*    type="text"*/}
-            {/*    disabled={true}*/}
-            {/*    placeholder="Set your organization"*/}
-            {/*  />*/}
-            {/*</div>*/}
-            <div className="mt-2">
-              <Alert type="info">Coming soon!</Alert>
-            </div>
-          </div>
-        </div>
-
-        <div className="md:col-start-2">
-          <div className="mt-8 flex">
-            <Button type="submit">Save</Button>
-          </div>
-        </div>
-
         <div className="md:col-span-3">
           <Wrapper>
             <ActionsWrapper>
