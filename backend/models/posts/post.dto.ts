@@ -7,6 +7,7 @@ type PostItemDto = Omit<PostItem, "image"> & {
 };
 
 export class PostDto {
+  id: string;
   author: UserDto;
   location: Location;
   title: string;
@@ -14,11 +15,12 @@ export class PostDto {
   type: "request" | "offer";
   status: "open" | "in-progress" | "closed";
   views: number;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
 
-  private constructor(post: Post) {
+  private constructor(id: string, post: Post) {
     const { author, location, title, items, type, status, views } = post;
+    this.id = id;
     this.author = author;
     this.location = location;
     this.title = title;
@@ -36,12 +38,16 @@ export class PostDto {
     this.type = type;
     this.status = status;
     this.views = views;
-    this.createdAt = post.createdAt;
-    this.updatedAt = post.updatedAt;
+    this.createdAt = post.createdAt.toISOString();
+    this.updatedAt = post.updatedAt.toISOString();
   }
 
   static fromDocument(document: Document): PostDto {
     const post = document.toObject() as Post;
-    return new PostDto(post);
+    return new PostDto(document.id, post);
+  }
+
+  static fromPost(post: Post): PostDto {
+    return new PostDto(post.id, post);
   }
 }

@@ -9,6 +9,7 @@ export class UserDto {
   lastName: string;
   location: Location;
   role: string;
+  active: boolean;
 
   private constructor(id: string, user: User) {
     const { username, email, firstName, lastName, location, role } = user;
@@ -20,6 +21,7 @@ export class UserDto {
     this.lastName = lastName;
     this.location = location;
     this.role = role;
+    this.active = user.active;
   }
 
   static fromDocument(document: Document): UserDto {
@@ -28,7 +30,7 @@ export class UserDto {
   }
 
   static fromRequest(req: Express.Request): UserDto | null {
-    if (!req.user || !req.user.id || !req.user.username || !req.user.email) {
+    if (!req.user?.id || !req.user.username || !req.user.email) {
       return null;
     }
 

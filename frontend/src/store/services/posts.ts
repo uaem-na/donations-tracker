@@ -4,10 +4,31 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 const baseUrl = import.meta.env.VITE_API_URL || "";
 
 // * Define args and result types for query
-export type Post = {
+export type PostApiResponse = {
   id: string;
   title: string;
   content: string;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+  type: string;
+  items: PostItemApiResponse[];
+};
+
+export type PostItemApiResponse = {
+  category: string;
+  description: string;
+  price: number;
+  quantity: number;
+  _id: string;
+};
+
+export type Post = Omit<PostApiResponse, "items"> & {
+  items: PostItem[];
+};
+
+export type PostItem = Omit<PostItemApiResponse, "_id"> & {
+  id: string;
 };
 
 type GetPostArgs = {
@@ -21,6 +42,7 @@ export const postsApi = createApi({
     baseUrl: `${baseUrl}`,
     credentials: "include",
   }),
+
   tagTypes: ["posts"],
   endpoints: (builder) => ({
     getPosts: builder.query<Post[], void>({
@@ -28,6 +50,19 @@ export const postsApi = createApi({
         url: "/posts",
         method: "GET",
       }),
+      transformResponse: (posts: PostApiResponse[]): Post[] => {
+        return posts.map((post) => ({
+          ...post,
+          createdAt: new Date(post.createdAt).toLocaleDateString(),
+          updatedAt: new Date(post.updatedAt).toLocaleDateString(),
+          items: post.items.map(
+            (item): PostItem => ({
+              ...item,
+              id: item._id,
+            })
+          ),
+        }));
+      },
       providesTags: (result, error, arg) =>
         result
           ? [
