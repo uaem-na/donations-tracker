@@ -8,5 +8,4 @@ export { LandingPage } from "./landing";
 export { CreatePostPage } from "./posts/create";
 export { OffersPage } from "./posts/offers";
 export { RequestsPage } from "./posts/requests";
-export { RegisterPage } from "./register";
 export { ReqOffPage } from "./requestOfferPage/reqOff";
