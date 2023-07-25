@@ -11,6 +11,7 @@ export type PostApiResponse = {
   status: string;
   createdAt: string;
   updatedAt: string;
+  type: string;
   items: PostItemApiResponse[];
 };
 

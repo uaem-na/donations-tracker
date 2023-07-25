@@ -1,7 +1,7 @@
-import { Alert } from "@components/alert";
-import { Button } from "@components/common/button";
+import { Alert } from "@components/Alert";
+import { Button } from "@components/Button";
 import { Input, Label } from "@components/forms";
-import { loginSchema } from "@features/yupSchemas";
+import { loginSchema } from "@features/YupSchemas";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
   useGetSessionQuery,

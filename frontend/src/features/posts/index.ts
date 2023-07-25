@@ -1,1 +1,1 @@
-export { CreatePostForm } from "./createPostForm";
+export { CreatePostForm } from "./CreatePostForm";
