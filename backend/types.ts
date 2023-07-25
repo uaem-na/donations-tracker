@@ -68,6 +68,7 @@ export type UserDocument = User &
 
 // * Report model related types
 export type Report = {
+  id: string;
   reporter: User;
   resolver: User;
   post: Post;
@@ -79,6 +80,7 @@ export type ReportDocument = Report & Document;
 
 // * Post model related types
 export type PostItem = {
+  id: string;
   name: string;
   quantity: number;
   price: number;
@@ -88,6 +90,7 @@ export type PostItem = {
 };
 
 export type Post = {
+  id: string;
   author: User;
   location: Location;
   title: string;

@@ -6,4 +6,6 @@ export { AdminUsersPage } from "./admin/users";
 export { FaqPage } from "./faq";
 export { LandingPage } from "./landing";
 export { CreatePostPage } from "./posts/create";
+export { OffersPage } from "./posts/offers";
+export { RequestsPage } from "./posts/requests";
 export { ReqOffPage } from "./requestOfferPage/reqOff";

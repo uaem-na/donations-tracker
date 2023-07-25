@@ -1,3 +1,14 @@
+export const UserRole = {
+  ADMIN: "admin" as const,
+  ORGANIZATION: "organization" as const,
+  INDIVIDUAL: "individual" as const,
+};
+
+export const PostType = {
+  OFFER: "offers" as const,
+  REQUEST: "requests" as const,
+};
+
 const size = {
   mobileS: "320px",
   mobileM: "375px",
@@ -54,3 +65,5 @@ export const ELEVATIONS = {
     16px 32px 32px hsl(var(--shadow-color) / 0.2)
   `,
 };
+
+export * from "./siteLinks";

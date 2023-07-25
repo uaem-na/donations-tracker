@@ -12,10 +12,16 @@ export type User = {
   firstName: string;
   lastName: string;
   verified: boolean;
+  active: boolean;
 };
 
 type GetUserArgs = {
   userId: string;
+};
+
+type SetUserActiveArgs = {
+  userId: string;
+  active: boolean;
 };
 
 // * Define a service using a base URL and expected endpoints
@@ -78,6 +84,16 @@ export const usersApi = createApi({
       }),
       invalidatesTags: (result, error, id) => [{ type: "users", id }],
     }),
+    setUserActive: builder.mutation<User, SetUserActiveArgs>({
+      query: ({ userId, active }) => ({
+        url: `${userId}/active`,
+        method: "PUT",
+        body: { active },
+      }),
+      invalidatesTags: (result, error, { userId }) => [
+        { type: "users", id: userId },
+      ],
+    }),
   }),
 });
 
@@ -90,4 +106,5 @@ export const {
   useGetUsersQuery,
   useUpdateUserMutation,
   useVerifyUserMutation,
+  useSetUserActiveMutation,
 } = usersApi;

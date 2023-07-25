@@ -3,13 +3,27 @@ import * as Tooltip from "@radix-ui/react-tooltip";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 
-const TooltipComponent = ({ children, message }) => {
+interface TooltipComponentProps {
+  children: React.ReactNode;
+  message: string;
+  delayDuration?: number;
+  side?: "top" | "bottom" | "left" | "right";
+  align?: "start" | "center" | "end";
+}
+
+const TooltipComponent = ({
+  children,
+  message,
+  delayDuration = 500,
+  side = "top",
+  align = "center",
+}: TooltipComponentProps) => {
   return (
-    <Tooltip.Provider>
+    <Tooltip.Provider delayDuration={delayDuration}>
       <Tooltip.Root>
         <TooltipTrigger>{children}</TooltipTrigger>
         <Tooltip.Portal>
-          <TooltipContent>
+          <TooltipContent side={side} align={align}>
             {message}
             <TooltipArrow />
           </TooltipContent>
@@ -41,6 +55,7 @@ const TooltipContent = styled(Tooltip.Content)`
   animation-duration: 400ms;
   animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
   will-change: transform, opacity;
+  z-index: 9999;
 `;
 
 const TooltipArrow = styled(Tooltip.Arrow)`

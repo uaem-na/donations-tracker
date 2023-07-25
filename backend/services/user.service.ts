@@ -4,15 +4,15 @@ import { User, UserDocument } from "../types";
 export class UserService {
   /**
    * Get all active users, optionally get all users when active is set to false
-   * @param active set to false to get all users including inactive users
+   * @param filterInactive set to false to get all users including inactive users
    * @returns returns a list of users
    */
-  async getUsers(active = true): Promise<UserDocument[]> {
-    const users = await UserModel.find({
-      active,
-    });
+  async getUsers(filterInactive = true): Promise<UserDocument[]> {
+    if (filterInactive) {
+      return await UserModel.find({ active: true });
+    }
 
-    return users;
+    return await UserModel.find();
   }
 
   async getUserById(id: string): Promise<UserDocument | null> {
@@ -71,6 +71,18 @@ export class UserService {
     }
 
     user.organization.verified = true;
+
+    return await user.save();
+  }
+
+  async setActive(id: string, active: boolean): Promise<UserDocument> {
+    const user = await this.getUserById(id);
+
+    if (!user) {
+      throw new Error(`Error updating user. User does not exist.`);
+    }
+
+    user.active = active;
 
     return await user.save();
   }

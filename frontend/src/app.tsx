@@ -1,6 +1,7 @@
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
 // * Various React page components
+import { UserRole } from "@constants";
 import { RequireAuth } from "@features/auth";
 import {
   AboutUsPage,
@@ -10,8 +11,10 @@ import {
   FaqPage,
   LandingPage,
   LoginPage,
+  OffersPage,
   RegisterPage,
   ReqOffPage,
+  RequestsPage,
 } from "@pages";
 import { Layout } from "layout";
 
@@ -25,9 +28,18 @@ function App() {
             <Route index element={<LandingPage />} />
             <Route path="/about-us" element={<AboutUsPage />} />
             <Route path="/faq" element={<FaqPage />} />
+            <Route path="/offers" element={<OffersPage />} />
+            <Route path="/requests" element={<RequestsPage />} />
 
             {/* Admin pages */}
-            <Route path="/admin/users" element={<AdminUsersPage />} />
+            <Route
+              path="/admin/users"
+              element={
+                <RequireAuth role={UserRole.ADMIN}>
+                  <AdminUsersPage />
+                </RequireAuth>
+              }
+            />
 
             {/* Private pages */}
             <Route
