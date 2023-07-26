@@ -1,9 +1,9 @@
-import { CreatePostForm } from "@features/posts";
+import { CreatePostForm } from "./components/CreatePostForm";
 
 export const CreatePostPage = () => {
   return (
     <>
-      <CreatePostForm />
+      <CreatePostForm type="offer" />
     </>
   );
 };

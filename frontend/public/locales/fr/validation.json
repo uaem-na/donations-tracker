@@ -1,0 +1,15 @@
+{
+  "field_required": "{{field}} est requis",
+  "string": {
+    "too_short": "Doit contenir au moins {{min}} caractère",
+    "too_long": "Doit contenir au maximum {{max}} caractères"
+  },
+  "number": {
+    "field_too_small": "Doit être au moins {{min}}",
+    "field_too_large": "Doit être au maximum {{max}}"
+  },
+  "file": {
+    "too_big": "La taille du fichier doit être au maximum de {{max}} Mo",
+    "not_supported": "Le type de fichier n'est pas supporté"
+  }
+}

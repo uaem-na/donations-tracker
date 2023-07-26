@@ -1,0 +1,21 @@
+{
+  "title": "Titre",
+  "add": "Ajouter",
+  "remove": "Supprimer",
+  "submit": "Soumettre",
+  "activate": "Activer",
+  "deactivate": "Désactiver",
+  "posts": {
+    "type": "Type",
+    "offer": "Offre",
+    "request": "Demande",
+    "items": "Articles",
+    "name": "Nom",
+    "quantity": "Quantité",
+    "description": "Description",
+    "price": "Prix",
+    "category": "Catégorie",
+    "create": "Créer",
+    "select_post_type": "Sélectionnez un type de publication"
+  }
+}

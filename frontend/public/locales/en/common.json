@@ -1,0 +1,21 @@
+{
+  "title": "Title",
+  "add": "Add",
+  "remove": "Remove",
+  "submit": "Submit",
+  "activate": "Activate",
+  "deactivate": "Deactivate",
+  "posts": {
+    "type": "Type",
+    "offer": "Offer",
+    "request": "Request",
+    "items": "Items",
+    "name": "Name",
+    "quantity": "Quantity",
+    "description": "Description",
+    "price": "Price",
+    "category": "Category",
+    "create": "Create",
+    "select_post_type": "Select a post type"
+  }
+}
