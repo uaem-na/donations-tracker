@@ -50,14 +50,24 @@ const ProfileMenu = () => {
               </DropdownMenu.Group>
               <DropdownMenu.Separator className="h-px bg-gray-900/10 m-0.5" />
               <DropdownMenu.Group>
-                <DropdownMenu.Item className="block px-3 py-1 text-sm leading-6 font-light text-gray-900 cursor-pointer hover:bg-gray-50">
+                <DropdownMenu.Item
+                  onSelect={() => {
+                    navigate("/offers/new");
+                  }}
+                  className="block px-3 py-1 text-sm leading-6 font-light text-gray-900 cursor-pointer hover:bg-gray-50"
+                >
                   <FontAwesomeIcon
                     icon={faHandshake}
                     className="mr-2 w-[20px]"
                   />
                   {t("user_actions.make_offer")}
                 </DropdownMenu.Item>
-                <DropdownMenu.Item className="block px-3 py-1 text-sm leading-6 font-light text-gray-900 cursor-pointer hover:bg-gray-50">
+                <DropdownMenu.Item
+                  onSelect={() => {
+                    navigate("/requests/new");
+                  }}
+                  className="block px-3 py-1 text-sm leading-6 font-light text-gray-900 cursor-pointer hover:bg-gray-50"
+                >
                   <FontAwesomeIcon
                     icon={faFileSignature}
                     className="mr-2 w-[20px]"

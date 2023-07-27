@@ -1,9 +1,9 @@
 import { CreatePostForm } from "./components/CreatePostForm";
 
-export const CreatePostPage = () => {
+export const CreateRequestPage = () => {
   return (
     <>
-      <CreatePostForm type="offer" />
+      <CreatePostForm type="request" />
     </>
   );
 };

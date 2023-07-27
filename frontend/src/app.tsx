@@ -6,7 +6,8 @@ import { RequireAuth } from "@features/auth";
 import {
   AboutUsPage,
   AdminUsersPage,
-  CreatePostPage,
+  CreateOfferPage,
+  CreateRequestPage,
   DashboardPage,
   FaqPage,
   GeneralPage,
@@ -70,19 +71,23 @@ function App() {
               }
             />
 
-            {["/offers/new", "/requests/new"].map((path) => {
-              return (
-                <Route
-                  key={path}
-                  path={path}
-                  element={
-                    <RequireAuth>
-                      <CreatePostPage />
-                    </RequireAuth>
-                  }
-                />
-              );
-            })}
+            <Route
+              path="/offers/new"
+              element={
+                <RequireAuth>
+                  <CreateOfferPage />
+                </RequireAuth>
+              }
+            />
+
+            <Route
+              path="/requests/new"
+              element={
+                <RequireAuth>
+                  <CreateRequestPage />
+                </RequireAuth>
+              }
+            />
 
             {/* Authentication pages */}
             <Route path="/login" element={<LoginPage />} />
@@ -96,22 +101,6 @@ function App() {
             <Route
               path="/offer/:id"
               element={<ReqOffPage offer={true} edit={false} />}
-            />
-            <Route
-              path="/new-request"
-              element={
-                <RequireAuth>
-                  <ReqOffPage offer={false} edit={true} />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="/new-offer"
-              element={
-                <RequireAuth>
-                  <ReqOffPage offer={true} edit={true} />
-                </RequireAuth>
-              }
             />
           </Route>
         </Routes>

@@ -1,7 +1,7 @@
 import { Button, Input, Label } from "@components/Controls";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { TFunction } from "i18next";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import * as yup from "yup";
@@ -84,12 +84,6 @@ export const AddItemFakeForm = ({ onAdd }: AddItemFakeFormProps) => {
 
     console.count("handleAdd");
   };
-
-  // ! required for on the fly language change
-  useEffect(() => {
-    // translate validation messages immediately, (wrap task to microtask always)
-    setTimeout(trigger, 0);
-  }, [t]);
 
   // TODO: category should be a select input not a textbox
   return (

@@ -3,7 +3,7 @@ import { Button, Input, Label } from "@components/Controls";
 import { PostType } from "@constants";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { TFunction } from "i18next";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import * as yup from "yup";
@@ -107,12 +107,6 @@ export const CreatePostForm = ({ type }: PostTableProps) => {
     control,
     name: "items", // unique name for your Field Array
   });
-
-  // ! required for on the fly language change
-  useEffect(() => {
-    // translate validation messages immediately, (wrap task to microtask always)
-    setTimeout(trigger, 0);
-  }, [t]);
 
   const onItemAdd = (item) => {
     append(item);
