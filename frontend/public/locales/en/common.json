@@ -17,5 +17,14 @@
     "category": "Category",
     "create": "Create",
     "select_post_type": "Select a post type"
+  },
+  "user_actions": {
+    "open_user_menu": "Open user menu",
+    "your_account": "Your account",
+    "make_offer": "Make an offer",
+    "make_request": "Make a request",
+    "login": "Login",
+    "logout": "Logout",
+    "register": "Register"
   }
 }

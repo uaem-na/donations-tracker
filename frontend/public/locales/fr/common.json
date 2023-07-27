@@ -17,5 +17,14 @@
     "category": "Catégorie",
     "create": "Créer",
     "select_post_type": "Sélectionnez un type de publication"
+  },
+  "user_actions": {
+    "open_user_menu": "Ouvrir le menu utilisateur",
+    "your_account": "Votre compte",
+    "make_offer": "Faire une offre",
+    "make_request": "Faire une demande",
+    "login": "S'identifier",
+    "logout": "Se déconnecter",
+    "register": "S'inscrire"
   }
 }
