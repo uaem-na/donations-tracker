@@ -40,7 +40,7 @@ type GetPostArgs = {
 export const postsApi = createApi({
   reducerPath: "posts",
   baseQuery: fetchBaseQuery({
-    baseUrl: `${baseUrl}`,
+    baseUrl: `${baseUrl}/posts`,
     credentials: "include",
   }),
 
@@ -48,7 +48,7 @@ export const postsApi = createApi({
   endpoints: (builder) => ({
     getPosts: builder.query<Post[], void>({
       query: () => ({
-        url: "/posts",
+        url: `/`,
         method: "GET",
       }),
       transformResponse: (posts: PostApiResponse[]): Post[] => {
@@ -78,7 +78,7 @@ export const postsApi = createApi({
     }),
     createPost: builder.mutation({
       query: (initialPost) => ({
-        url: `/posts`,
+        url: `/`,
         method: "POST",
         body: initialPost,
       }),
@@ -86,7 +86,7 @@ export const postsApi = createApi({
     }),
     editPost: builder.mutation({
       query: (post) => ({
-        url: `/posts/${post.id}`,
+        url: `/${post.id}`,
         method: "POST",
         body: post,
       }),
@@ -97,4 +97,9 @@ export const postsApi = createApi({
 
 // * Export hooks for usage in functional components, which are
 // * auto-generated based on the defined endpoints
-export const { useCreatePostMutation, useGetPostsQuery } = postsApi;
+export const {
+  useCreatePostMutation,
+  useEditPostMutation,
+  useGetPostQuery,
+  useGetPostsQuery,
+} = postsApi;

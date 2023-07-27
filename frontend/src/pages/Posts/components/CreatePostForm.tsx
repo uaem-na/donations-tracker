@@ -2,13 +2,12 @@ import { Alert } from "@components";
 import { Button, Input, Label } from "@components/Controls";
 import { PostType } from "@constants";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { TFunction } from "i18next";
-import { useMemo, useState } from "react";
+import { useCreatePostMutation } from "@services/posts";
+import { useEffect, useMemo, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import * as yup from "yup";
-import { AddItemFakeForm } from "./AddItemForm";
-import { SelectInput } from "./SelectInput";
+import { useNavigate } from "react-router-dom";
+import { getCreatePostFormSchema } from "./schemas/CreatePostFormSchema";
 
 type Type = (typeof PostType)[keyof typeof PostType];
 
@@ -16,81 +15,12 @@ interface PostTableProps {
   type: Type;
 }
 
-const getSchema = (t: TFunction) => {
-  return yup.object().shape({
-    title: yup
-      .string()
-      .min(1, t("validation:string.too_short", { min: 1 }))
-      .max(256, t("validation:string.too_long", { max: 256 }))
-      .required(t("validation:field_required", { field: t("title") })),
-    type: yup
-      .string()
-      .oneOf(["request", "offer"])
-      .required(t("validation:field_required", { field: t("posts.type") })),
-    items: yup.array().of(
-      yup.object().shape({
-        name: yup
-          .string()
-          .min(1, t("validation:string.too_short", { min: 1 }))
-          .max(256, t("validation:string.too_long", { max: 256 }))
-          .required(t("validation:field_required", { field: t("posts.name") })),
-        quantity: yup
-          .number()
-          .default(1)
-          .min(1, t("validation:number.too_small", { min: 1 }))
-          .required(
-            t("validation:field_required", { field: t("posts.quantity") })
-          ),
-        // * price is required for offers, but is not required for requests (set to 0)
-        price: yup
-          .number()
-          .default(0)
-          .min(0, t("validation:number.too_small", { min: 0 }))
-          .required(
-            t("validation:field_required", { field: t("posts.price") })
-          ),
-        description: yup
-          .string()
-          .min(1, t("validation:string.too_short", { min: 1 }))
-          .max(1024, t("validation:string.too_long", { max: 1024 }))
-          .required(
-            t("validation:field_required", { field: t("posts.description") })
-          ),
-        category: yup
-          .string()
-          .required(
-            t("validation:field_required", { field: t("posts.category") })
-          ),
-        // ! we do not support image upload yet... perhaps need Google Cloud Storage
-        image: yup
-          .mixed()
-          .nullable()
-          .test(
-            "fileSize",
-            t("validation:file.too_big", { max: 1 }),
-            (value) => {
-              if (value && "size" in value && typeof value.size === "number") {
-                return value.size <= 1024 * 1024 * 1; // * 1MB or less
-              }
-              return true;
-            }
-          )
-          .test("fileType", t("validation:file.not_supported"), (value) => {
-            if (value && "type" in value && typeof value.type === "string") {
-              return ["image/jpeg", "image/png", "image/jpg"].includes(
-                value.type
-              );
-            }
-            return true;
-          }),
-      })
-    ),
-  });
-};
-
 export const CreatePostForm = ({ type }: PostTableProps) => {
+  const navigate = useNavigate();
   const { t } = useTranslation();
-  const schema = useMemo(() => getSchema(t), [t]); // ! required for on the fly language change
+  const schema = useMemo(() => getCreatePostFormSchema(t), [t]); // ! required for on the fly language change
+  const [createPostApi, { isLoading: isCreating, isSuccess, error }] =
+    useCreatePostMutation();
   const [serverMessage, setServerMessage] = useState("");
 
   const {
@@ -98,7 +28,6 @@ export const CreatePostForm = ({ type }: PostTableProps) => {
     control,
     formState: { errors },
     handleSubmit,
-    trigger,
   } = useForm({
     resolver: yupResolver(schema),
   });
@@ -106,15 +35,61 @@ export const CreatePostForm = ({ type }: PostTableProps) => {
   const { fields: items, append } = useFieldArray({
     control,
     name: "items", // unique name for your Field Array
+    rules: {
+      required: true,
+      minLength: 1,
+    },
   });
 
-  const onItemAdd = (item) => {
-    append(item);
+  const EMPTY_ITEM = {
+    name: "",
+    quantity: 1,
+    price: 0,
+    description: "",
+    category: "",
   };
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
+    // append type to data
+    data.type = type;
+
+    createPostApi(data);
   };
+
+  // handle successful request
+  useEffect(() => {
+    if (isSuccess) {
+      navigate(`/${type}s`);
+    }
+  }, [isSuccess]);
+
+  // handle server error message
+  useEffect(() => {
+    if (error) {
+      if (!("status" in error)) {
+        setServerMessage(error.message ?? t("errors.unknown_server_error"));
+        return;
+      }
+
+      const err: any = "error" in error ? error.error : error.data;
+      if (err.name === "ValidationError") {
+        // error in errors has msg, path, location, value, type
+        const errorMessages = err.errors.map(
+          (error) =>
+            `${error.msg}: ${error.location}.${error.path} = ${JSON.stringify(
+              error.value
+            )}`
+        );
+        setServerMessage(errorMessages.join(","));
+      } else {
+        err.errors.length > 0
+          ? setServerMessage(
+              err.errors.join(",") ?? t("errors.unknown_server_error")
+            )
+          : setServerMessage(err.message ?? t("errors.unknown_server_error"));
+      }
+    }
+  }, [error]);
 
   return (
     <form className="space-y-6" onSubmit={handleSubmit(onSubmit)} noValidate>
@@ -126,35 +101,81 @@ export const CreatePostForm = ({ type }: PostTableProps) => {
           <Input
             {...register("title")}
             id="title"
-            name="title"
             type="text"
-            required
             errorMessage={errors.title?.message}
           />
         </div>
       </div>
 
-      <div>
-        <SelectInput
-          name={t("posts.type")}
-          placeholder={t("posts.select_post_type")}
-          options={[
-            {
-              label: t("posts.request"),
-              value: "request" as const,
-            },
-            {
-              label: t("posts.offer"),
-              value: "offer" as const,
-            },
-          ]}
-        />
-      </div>
+      {items.map((item, index) => {
+        return (
+          <div key={item.id} className="space-y-6">
+            <div>
+              <Label htmlFor="name">{t("posts.name")}</Label>
+              <div className="mt-2">
+                <Input
+                  {...register(`items.${index}.name` as const)}
+                  id="name"
+                  type="text"
+                  errorMessage={errors.items?.[index]?.name?.message}
+                />
+              </div>
+            </div>
+            <div>
+              <Label htmlFor="quantity">{t("posts.quantity")}</Label>
+              <div className="mt-2">
+                <Input
+                  {...register(`items.${index}.quantity` as const)}
+                  id="quantity"
+                  type="number"
+                  errorMessage={errors.items?.[index]?.quantity?.message}
+                />
+              </div>
+            </div>
+            <div>
+              <Label htmlFor="price">{t("posts.price")}</Label>
+              <div className="mt-2">
+                <Input
+                  {...register(`items.${index}.price` as const)}
+                  id="price"
+                  type="number"
+                  errorMessage={errors.items?.[index]?.price?.message}
+                />
+              </div>
+            </div>
+            <div>
+              <Label htmlFor="description">{t("posts.description")}</Label>
+              <div className="mt-2">
+                <Input
+                  {...register(`items.${index}.description` as const)}
+                  id="description"
+                  type="text"
+                  errorMessage={errors.items?.[index]?.description?.message}
+                />
+              </div>
+            </div>
+            <div>
+              <Label htmlFor="category">{t("posts.category")}</Label>
+              <div className="mt-2">
+                <Input
+                  {...register(`items.${index}.category` as const)}
+                  id="category"
+                  type="text"
+                  errorMessage={errors.items?.[index]?.category?.message}
+                />
+              </div>
+            </div>
+          </div>
+        );
+      })}
+      <Button onClick={() => append(EMPTY_ITEM)}>{t("posts.add_item")}</Button>
 
-      <AddItemFakeForm onAdd={onItemAdd} />
-
       <div>
-        <Button type="submit" className="flex w-full justify-center">
+        <Button
+          disabled={isCreating}
+          type="submit"
+          className="flex w-full justify-center"
+        >
           {t("posts.create")}
         </Button>
       </div>

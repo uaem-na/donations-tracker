@@ -16,7 +16,7 @@
     "price": "Prix",
     "category": "Catégorie",
     "create": "Créer",
-    "select_post_type": "Sélectionnez un type de publication"
+    "add_item": "Ajouter un article"
   },
   "user_actions": {
     "open_user_menu": "Ouvrir le menu utilisateur",
@@ -26,5 +26,8 @@
     "login": "S'identifier",
     "logout": "Se déconnecter",
     "register": "S'inscrire"
+  },
+  "errors": {
+    "unknown_server_error": "An error occurred"
   }
 }

@@ -16,7 +16,7 @@
     "price": "Price",
     "category": "Category",
     "create": "Create",
-    "select_post_type": "Select a post type"
+    "add_item": "Add an item"
   },
   "user_actions": {
     "open_user_menu": "Open user menu",
@@ -26,5 +26,8 @@
     "login": "Login",
     "logout": "Logout",
     "register": "Register"
+  },
+  "errors": {
+    "unknown_server_error": "An error occurred"
   }
 }
