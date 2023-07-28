@@ -4,8 +4,14 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 const baseUrl = import.meta.env.VITE_API_URL || "";
 
 // * Define args and result types for query
+export type PostAuthorApiResponse = {
+  firstName: string;
+  id: string;
+  lastName: string;
+};
+
 export type PostApiResponse = {
-  author: string; // TODO: this is now an object, need to update
+  author: PostAuthorApiResponse;
   createdAt: string;
   id: string;
   items: PostItemApiResponse[];
