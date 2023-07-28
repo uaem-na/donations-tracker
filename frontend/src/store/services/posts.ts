@@ -5,15 +5,23 @@ const baseUrl = import.meta.env.VITE_API_URL || "";
 
 // * Define args and result types for query
 export type PostApiResponse = {
-  id: string;
-  title: string;
-  content: string;
-  status: string;
-  author: string;
+  author: string; // TODO: this is now an object, need to update
   createdAt: string;
-  updatedAt: string;
-  type: string;
+  id: string;
   items: PostItemApiResponse[];
+  location: PostLocationApiResponse;
+  status: string;
+  title: string;
+  type: string;
+  updatedAt: string;
+  views: number;
+};
+
+export type PostLocationApiResponse = {
+  lat?: number;
+  lng?: number;
+  postalCode?: string;
+  _id: string;
 };
 
 export type PostItemApiResponse = {
@@ -24,17 +32,24 @@ export type PostItemApiResponse = {
   _id: string;
 };
 
-export type Post = Omit<PostApiResponse, "items"> & {
+export type Post = Omit<PostApiResponse, "items" | "location"> & {
   items: PostItem[];
+  location: PostLocation;
 };
 
 export type PostItem = Omit<PostItemApiResponse, "_id"> & {
   id: string;
 };
 
+export type PostLocation = Omit<PostLocationApiResponse, "_id"> & {
+  id: string;
+};
+
 type GetPostArgs = {
   postId: string;
 };
+
+// TODO: probably rename _id to id
 
 // * Define a service using a base URL and expected endpoints
 export const postsApi = createApi({
@@ -62,6 +77,10 @@ export const postsApi = createApi({
               id: item._id,
             })
           ),
+          location: {
+            ...post.location,
+            id: post.location._id,
+          },
         }));
       },
       providesTags: (result, error, arg) =>
@@ -73,7 +92,22 @@ export const postsApi = createApi({
           : [{ type: "posts", id: "LIST" }],
     }),
     getPost: builder.query<Post, GetPostArgs>({
-      query: ({ postId }) => `/posts/${postId}`,
+      query: ({ postId }) => `/${postId}`,
+      transformResponse: (post: PostApiResponse): Post => ({
+        ...post,
+        createdAt: new Date(post.createdAt).toLocaleDateString(),
+        updatedAt: new Date(post.updatedAt).toLocaleDateString(),
+        items: post.items.map(
+          (item): PostItem => ({
+            ...item,
+            id: item._id,
+          })
+        ),
+        location: {
+          ...post.location,
+          id: post.location._id,
+        },
+      }),
       providesTags: (result, error, arg) => [{ type: "posts", id: arg.postId }],
     }),
     createPost: builder.mutation({
@@ -86,7 +120,7 @@ export const postsApi = createApi({
     }),
     editPost: builder.mutation({
       query: (post) => ({
-        url: `/${post.id}`,
+        url: `${post.id}`,
         method: "POST",
         body: post,
       }),

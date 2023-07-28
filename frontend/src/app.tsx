@@ -13,9 +13,11 @@ import {
   GeneralPage,
   LandingPage,
   LoginPage,
+  OfferDetailsPage,
   OffersPage,
   RegisterPage,
   ReqOffPage,
+  RequestDetailsPage,
   RequestsPage,
   SecurityPage,
 } from "@pages";
@@ -88,6 +90,10 @@ function App() {
                 </RequireAuth>
               }
             />
+
+            {/* Hybrid pages (public vs user might see a different view) */}
+            <Route path="/requests/:id" element={<RequestDetailsPage />} />
+            <Route path="/offers/:id" element={<OfferDetailsPage />} />
 
             {/* Authentication pages */}
             <Route path="/login" element={<LoginPage />} />

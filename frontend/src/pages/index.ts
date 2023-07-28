@@ -7,7 +7,9 @@ export { LoginPage } from "./Login";
 export {
   CreateOfferPage,
   CreateRequestPage,
+  OfferDetailsPage,
   OffersPage,
+  RequestDetailsPage,
   RequestsPage,
 } from "./Posts";
 export { RegisterPage } from "./Register";

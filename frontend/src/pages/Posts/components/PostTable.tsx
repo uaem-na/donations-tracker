@@ -1,6 +1,7 @@
 import { PostType } from "@constants";
 import { useGetPostsQuery } from "@services/posts";
 import { capitalizeFirstLetter } from "@utils";
+import { Link } from "react-router-dom";
 
 type Type = (typeof PostType)[keyof typeof PostType];
 
@@ -64,7 +65,7 @@ export const PostTable = ({ type }: PostTableProps) => {
                       <tr key={post.id}>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="text-sm text-gray-900">
-                            {post.title}
+                            <Link to={`${post.id}`}>{post.title}</Link>
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
