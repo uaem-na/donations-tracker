@@ -1,6 +1,6 @@
-import { IndividualRegistrationForm } from "@features/auth";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { IndividualRegistrationForm } from "@pages/Register/components/IndividualRegistrationForm";
 import { Link } from "react-router-dom";
 
 export const IndividualAccount = () => {

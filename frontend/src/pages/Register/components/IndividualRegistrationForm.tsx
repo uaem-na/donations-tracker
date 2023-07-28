@@ -1,7 +1,6 @@
 import { Alert } from "@components/Alert";
 import { Button, Input, Label } from "@components/Controls";
 import { UserDiscriminator } from "@constants";
-import { registerSchema } from "@features/YupSchemas";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
   useGetSessionQuery,
@@ -11,6 +10,7 @@ import {
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { registerIndividualSchema } from "./schemas/RegisterIndividualSchema";
 
 export const IndividualRegistrationForm = () => {
   const navigate = useNavigate();
@@ -26,7 +26,7 @@ export const IndividualRegistrationForm = () => {
     formState: { errors },
     handleSubmit,
   } = useForm({
-    resolver: yupResolver(registerSchema),
+    resolver: yupResolver(registerIndividualSchema),
   });
 
   const onSubmit = (data) => {

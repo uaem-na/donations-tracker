@@ -1,5 +1,6 @@
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { OrganizationRegistrationForm } from "@pages/Register/components/OrganizationRegistrationForm";
 import { Link } from "react-router-dom";
 
 export const OrganizationAccount = () => {
@@ -21,7 +22,9 @@ export const OrganizationAccount = () => {
             <h1 className="text-center text-2xl font-semibold leading-9 tracking-tight text-gray-900">
               Registering as an organization
             </h1>
-            <div className="mt-10"></div>
+            <div className="mt-10">
+              <OrganizationRegistrationForm />
+            </div>
           </div>
         </div>
       </div>
