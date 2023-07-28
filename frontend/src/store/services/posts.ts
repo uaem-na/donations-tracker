@@ -9,6 +9,7 @@ export type PostApiResponse = {
   title: string;
   content: string;
   status: string;
+  author: string;
   createdAt: string;
   updatedAt: string;
   type: string;

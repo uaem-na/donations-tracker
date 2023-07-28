@@ -1,5 +1,6 @@
 import { Alert } from "@components";
 import { Button, Input, Tooltip } from "@components/Controls";
+import { useToast } from "@components/Toast";
 import { updateUserInfoSchema } from "@features/YupSchemas";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -9,9 +10,9 @@ import { useGetSessionQuery } from "@services/auth";
 import { useUpdateUserMutation } from "@services/users";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import styled from "styled-components";
 
 export const UpdateUserInfoForm = () => {
+  const toast = useToast();
   const { data: session } = useGetSessionQuery();
   const [updateUserApi, { isLoading: isUpdating, isSuccess, error }] =
     useUpdateUserMutation();
@@ -39,8 +40,11 @@ export const UpdateUserInfoForm = () => {
   useEffect(() => {
     if (isSuccess) {
       setServerMessage("");
-      // TODO: display a success toast
-      alert("successfully updated");
+      toast.open({
+        type: "success",
+        duration: 5,
+        content: "Your personal information has been successfully changed!",
+      });
     }
   }, [isSuccess]);
 
@@ -56,27 +60,28 @@ export const UpdateUserInfoForm = () => {
     }
   }, [error]);
 
+  const Heading = (text: string) => {
+    return (
+      <div className="md:col-span-1">
+        <h2 className="text-base font-semibold leading-7 text-gray-900">
+          {text}
+        </h2>
+      </div>
+    );
+  };
+
   return (
     <form
       className="grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-4 sm:px-6 md:grid-cols-3 lg:px-8"
       onSubmit={handleSubmit(onSubmit)}
       noValidate
     >
-      <div className="md:col-span-1">
-        <h2 className="text-base font-semibold leading-7 text-gray-900">
-          Personal Information
-        </h2>
-      </div>
+      {Heading("Personal Information")}
 
       <div className="md:col-span-2">
         <div className="grid grid-cols-1 gap-x-6 gap-y-8 sm:max-w-xl sm:grid-cols-6">
           <div className="col-span-full">
-            <label
-              htmlFor="username"
-              className="block text-sm font-medium leading-6 text-gray-900"
-            >
-              Username
-            </label>
+            <Label htmlFor="username">Username</Label>
             <div className="mt-2">
               <Input
                 type="text"
@@ -85,6 +90,7 @@ export const UpdateUserInfoForm = () => {
                 autoComplete="username"
                 placeholder="username"
                 disabled={true}
+                value={session?.username}
               />
             </div>
           </div>
@@ -105,13 +111,16 @@ export const UpdateUserInfoForm = () => {
           </div>
 
           <div className="sm:col-span-3">
-            <Label htmlFor="last-name">Last name</Label>
+            <Label htmlFor="lastName">Last name</Label>
             <div className="mt-2">
               <Input
+                {...register("lastName")}
                 type="text"
-                name="last-name"
-                id="last-name"
+                name="lastName"
+                id="lastName"
                 autoComplete="family-name"
+                placeholder="Last name"
+                errorMessage={errors.lastName?.message}
               />
             </div>
           </div>
@@ -138,19 +147,16 @@ export const UpdateUserInfoForm = () => {
                 name="email"
                 type="email"
                 autoComplete="email"
+                placeholder="Email"
                 disabled={true}
-                // value={user?.email}
+                value={session?.email}
               />
             </div>
           </div>
         </div>
       </div>
 
-      <div className="md:col-span-1">
-        <h2 className="text-base font-semibold leading-7 text-gray-900">
-          Organization
-        </h2>
-      </div>
+      {Heading("Organization")}
 
       <div className="md:col-span-2">
         <div className="col-span-full">
@@ -183,70 +189,15 @@ export const UpdateUserInfoForm = () => {
         </div>
       </div>
 
-      <div className="md:col-start-2">
-        <div className="mt-8 flex">
-          <Button type="submit">Save</Button>
+      <div className="md:col-start-2 md:col-span-2">
+        {serverMessage && <Alert type="error">{serverMessage}</Alert>}
+
+        <div className="mt-2 flex">
+          <Button type="submit" disabled={isUpdating}>
+            Save
+          </Button>
         </div>
       </div>
     </form>
-    // <Form onSubmit={handleSubmit(onSubmit)}>
-    //   <InputGroup>
-    //     <InputLabel htmlFor="firstName">First name</InputLabel>
-    //     <TextInput
-    //       {...register("firstName")}
-    //       id="firstName"
-    //       type="text"
-    //       autoComplete="given-name"
-    //       placeholder="First name"
-    //       errorMessage={errors.firstName?.message}
-    //     />
-    //   </InputGroup>
-    //   <InputGroup>
-    //     <InputLabel htmlFor="lastName">Last name</InputLabel>
-    //     <TextInput
-    //       {...register("lastName")}
-    //       id="lastName"
-    //       type="text"
-    //       autoComplete="family-name"
-    //       placeholder="Last name"
-    //       errorMessage={errors.lastName?.message}
-    //     />
-    //   </InputGroup>
-    //   <Button disabled={isUpdating} type="submit">
-    //     Update
-    //   </Button>
-    //   {serverMessage && (
-    //     <ServerMessage role="alert">{serverMessage}</ServerMessage>
-    //   )}
-    // </Form>
   );
 };
-
-const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-  margin-top: 16px;
-  gap: 12px;
-`;
-
-const InputGroup = styled.div`
-  display: flex;
-  width: 100%;
-  flex-direction: column;
-`;
-
-const InputLabel = styled(Label)`
-  display: inline-flex;
-  font-size: 16px;
-  font-weight: 500;
-  margin-top: 8px;
-  margin-bottom: 8px;
-`;
-
-const ServerMessage = styled.span`
-  display: block;
-  font-size: 1rem;
-  color: var(--color-error);
-`;
-
-export default UpdateUserInfoForm;

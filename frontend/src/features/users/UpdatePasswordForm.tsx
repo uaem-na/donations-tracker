@@ -1,14 +1,15 @@
-import { Button } from "@components/Controls";
-import { TextInput } from "@components/TextInput";
+import { Alert } from "@components";
+import { Button, Input } from "@components/Controls";
+import { useToast } from "@components/Toast";
 import { updatePasswordSchema } from "@features/YupSchemas";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Label } from "@radix-ui/react-label";
 import { useChangePasswordMutation } from "@services/users";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import styled from "styled-components";
 
 export const UpdatePasswordForm = () => {
+  const toast = useToast();
   const [changePasswordApi, { isLoading: loading, isSuccess, error }] =
     useChangePasswordMutation();
   const [serverMessage, setServerMessage] = useState("");
@@ -31,8 +32,11 @@ export const UpdatePasswordForm = () => {
     if (isSuccess) {
       setServerMessage("");
       reset();
-      // TODO: display a success toast
-      alert("successfully updated");
+      toast.open({
+        type: "success",
+        duration: 5,
+        content: "Your password has been successfully changed!",
+      });
     }
   }, [isSuccess, reset]);
 
@@ -48,82 +52,81 @@ export const UpdatePasswordForm = () => {
     }
   }, [error]);
 
+  const Heading = (text: string) => {
+    return (
+      <div className="md:col-span-1">
+        <h2 className="text-base font-semibold leading-7 text-gray-900">
+          {text}
+        </h2>
+      </div>
+    );
+  };
+
   return (
-    <Form onSubmit={handleSubmit(onSubmit)}>
-      <InputGroup>
-        <InputLabel htmlFor="password">Current password</InputLabel>
-        <TextInput
-          {...register("password")}
-          id="password"
-          type="password"
-          autoComplete="current-password"
-          placeholder="Current password"
-          errorMessage={errors.password?.message}
-        />
-      </InputGroup>
-      <InputGroup>
-        <InputLabel htmlFor="newPassword">New password</InputLabel>
-        <TextInput
-          {...register("newPassword")}
-          id="newPassword"
-          type="password"
-          autoComplete="new-password"
-          placeholder="New password"
-          errorMessage={errors.newPassword?.message}
-        />
-      </InputGroup>
-      <InputGroup>
-        <InputLabel htmlFor="confirmNewPassword">
-          Confirm new password
-        </InputLabel>
-        <TextInput
-          {...register("confirmNewPassword")}
-          id="confirmNewPassword"
-          type="password"
-          autoComplete="new-password"
-          placeholder="Confirm your new password"
-          errorMessage={errors.confirmNewPassword?.message}
-        />
-      </InputGroup>
-      <Button
-        backgroundColor={"var(--color-warn)"}
-        disabled={loading}
-        type="submit"
+    <>
+      <form
+        className="grid max-w-7xl grid-cols-1 gap-x-8 gap-y-10 px-4 sm:px-6 md:grid-cols-3 lg:px-8"
+        onSubmit={handleSubmit(onSubmit)}
+        noValidate
       >
-        Change Password
-      </Button>
-      {serverMessage && (
-        <ServerMessage role="alert">{serverMessage}</ServerMessage>
-      )}
-    </Form>
+        {Heading("Change password")}
+
+        <div className="md:col-span-2">
+          <div className="grid grid-cols-1 gap-x-6 gap-y-8 sm:max-w-xl sm:grid-cols-6">
+            <div className="col-span-full">
+              <Label htmlFor="password">Current password</Label>
+              <div className="mt-2">
+                <Input
+                  {...register("password")}
+                  id="password"
+                  type="password"
+                  autoComplete="current-password"
+                  placeholder="Current password"
+                  errorMessage={errors.password?.message}
+                />
+              </div>
+            </div>
+
+            <div className="col-span-full">
+              <Label htmlFor="newPassword">New password</Label>
+              <div className="mt-2">
+                <Input
+                  {...register("newPassword")}
+                  id="newPassword"
+                  type="password"
+                  autoComplete="new-password"
+                  placeholder="New password"
+                  errorMessage={errors.newPassword?.message}
+                />
+              </div>
+            </div>
+
+            <div className="col-span-full">
+              <Label htmlFor="confirmNewPassword">Confirm new password</Label>
+              <div className="mt-2">
+                <Input
+                  {...register("confirmNewPassword")}
+                  id="confirmNewPassword"
+                  type="password"
+                  autoComplete="new-password"
+                  placeholder="Confirm your new password"
+                  errorMessage={errors.confirmNewPassword?.message}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="md:col-start-2 md:col-span-2">
+          {serverMessage && <Alert type="error">{serverMessage}</Alert>}
+
+          <div className="mt-2 flex">
+            <Button type="submit" disabled={loading}>
+              Save
+            </Button>
+          </div>
+        </div>
+      </form>
+    </>
   );
 };
-
-const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-  margin-top: 16px;
-  gap: 12px;
-`;
-
-const InputGroup = styled.div`
-  display: flex;
-  width: 100%;
-  flex-direction: column;
-`;
-
-const InputLabel = styled(Label)`
-  display: inline-flex;
-  font-size: 16px;
-  font-weight: 500;
-  margin-top: 8px;
-  margin-bottom: 8px;
-`;
-
-const ServerMessage = styled.span`
-  display: block;
-  font-size: 1rem;
-  color: var(--color-error);
-`;
-
-export default UpdatePasswordForm;

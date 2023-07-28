@@ -1,3 +1,4 @@
+import { ToastProvider } from "@components/Toast";
 import "@styles/index.css";
 import App from "app";
 import React from "react";
@@ -16,7 +17,9 @@ const root = createRoot(container);
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <ToastProvider>
+        <App />
+      </ToastProvider>
     </Provider>
   </React.StrictMode>
 );
