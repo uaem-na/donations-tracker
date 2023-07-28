@@ -5,7 +5,7 @@ const baseUrl = import.meta.env.VITE_API_URL || "";
 
 // * Define args and result types for query
 export type PostApiResponse = {
-  author: string; // TODO: this is now an object, need to update
+  author: { id: string }; // TODO: this is now an object, need to update
   createdAt: string;
   id: string;
   items: PostItemApiResponse[];
