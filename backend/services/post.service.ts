@@ -1,3 +1,4 @@
+import { PostCategory } from "../constants";
 import { PostModel } from "../models/posts";
 import { Post, PostDocument } from "../types";
 
@@ -18,7 +19,7 @@ export class PostService {
   }
 
   async getPost(id: string): Promise<PostDocument | null> {
-    const post = await PostModel.findById(id);
+    const post = await PostModel.findById(id).populate("author");
 
     return post;
   }
@@ -47,5 +48,9 @@ export class PostService {
     const posts = await PostModel.find({ "author.username": username });
 
     return posts;
+  }
+
+  getItemCategories(): string[] {
+    return Object.values(PostCategory);
   }
 }

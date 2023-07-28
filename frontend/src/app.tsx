@@ -6,15 +6,18 @@ import { RequireAuth } from "@features/auth";
 import {
   AboutUsPage,
   AdminUsersPage,
-  CreatePostPage,
+  CreateOfferPage,
+  CreateRequestPage,
   DashboardPage,
   FaqPage,
   GeneralPage,
   LandingPage,
   LoginPage,
+  OfferDetailsPage,
   OffersPage,
   RegisterPage,
   ReqOffPage,
+  RequestDetailsPage,
   RequestsPage,
   SecurityPage,
 } from "@pages";
@@ -70,19 +73,27 @@ function App() {
               }
             />
 
-            {["/offers/new", "/requests/new"].map((path) => {
-              return (
-                <Route
-                  key={path}
-                  path={path}
-                  element={
-                    <RequireAuth>
-                      <CreatePostPage />
-                    </RequireAuth>
-                  }
-                />
-              );
-            })}
+            <Route
+              path="/offers/new"
+              element={
+                <RequireAuth>
+                  <CreateOfferPage />
+                </RequireAuth>
+              }
+            />
+
+            <Route
+              path="/requests/new"
+              element={
+                <RequireAuth>
+                  <CreateRequestPage />
+                </RequireAuth>
+              }
+            />
+
+            {/* Hybrid pages (public vs user might see a different view) */}
+            <Route path="/requests/:id" element={<RequestDetailsPage />} />
+            <Route path="/offers/:id" element={<OfferDetailsPage />} />
 
             {/* Authentication pages */}
             <Route path="/login" element={<LoginPage />} />
@@ -96,22 +107,6 @@ function App() {
             <Route
               path="/offer/:id"
               element={<ReqOffPage offer={true} edit={false} />}
-            />
-            <Route
-              path="/new-request"
-              element={
-                <RequireAuth>
-                  <ReqOffPage offer={false} edit={true} />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="/new-offer"
-              element={
-                <RequireAuth>
-                  <ReqOffPage offer={true} edit={true} />
-                </RequireAuth>
-              }
             />
           </Route>
         </Routes>

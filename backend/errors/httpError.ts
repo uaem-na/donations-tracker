@@ -1,28 +1,13 @@
 export class HttpError extends Error {
-  private _status: number | undefined;
-  private _errors?: unknown[];
+  status: number;
+  errors?: unknown[];
 
   constructor(message: string, status?: number, errors?: unknown[]) {
     super(message);
     this.name = "HttpError"; // this can be overridden by Object.assign
-    this._status = status;
-    this._errors = errors;
-  }
-
-  get status(): number {
-    return this._status || 500;
-  }
-
-  set status(value: number) {
-    this._status = value || 500;
-  }
-
-  get errors(): unknown[] {
-    return this._errors || [];
-  }
-
-  set errors(value: unknown[]) {
-    this._errors = value || [];
+    this.status = status ?? 500;
+    this.errors = errors ?? [];
+    Error.captureStackTrace(this, this.constructor);
   }
 
   toJSON() {

@@ -12,6 +12,7 @@ const postController = new PostController(postService, userService);
 // * wire up public routes with controller
 router.get("/", postController.getAllPosts);
 router.get("/:id", postController.getPost);
+router.get("/items/categories", postController.getItemCategories);
 
 // * wire up protected routes with controller
 router.post("/", ensureAuthenticated, postController.createPost);

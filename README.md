@@ -48,10 +48,10 @@ To build without cache:
 
 - [X] As a user, I should be able to view a list of public requests
 - [X] As a user, I should be able to view a list of public offers
+- [x] As a user, I should be able to set a category for post (clothes, food, personal protective equipment, book, cutlery, stationary, furniture, toy, other - screend by admin)
 - [ ] Add pagination, sorting, and filtering to public requests/offers page
 - [ ] As a user, I should be able to click a button to leave my contact info on a post
 - [ ] As an organization, I should be able to sign up using organization details
-- [ ] As a user, I should be able to set a category for post (clothes, food, personal protective equipment, book, cutlery, stationary, furniture, toy, other - screend by admin)
 - [ ] As a user, I should be able to set donate or sell on making a post for offer
 - [ ] As a user, I should be able to set donate or purchase on making a post for request
 - [ ] As a user, I should be able to track certain posts by adding them to account dashboard

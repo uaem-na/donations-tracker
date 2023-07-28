@@ -1,13 +1,17 @@
 import { Document } from "mongoose";
 import { Location, User } from "../../types";
 
+type UserLocationDto = Omit<Location, "_id"> & {
+  id: string;
+};
+
 export class UserDto {
-  id?: string;
+  id: string;
   username: string;
   email: string;
   firstName: string;
   lastName: string;
-  location: Location;
+  location: UserLocationDto | undefined;
   role: string;
   active: boolean;
 
@@ -19,9 +23,17 @@ export class UserDto {
     this.email = email;
     this.firstName = firstName;
     this.lastName = lastName;
-    this.location = location;
     this.role = role;
     this.active = user.active;
+
+    if (location) {
+      // convert location._id to location.id
+      const { _id: locationId, ...rest } = location;
+      this.location = {
+        id: locationId,
+        ...rest,
+      };
+    }
   }
 
   static fromDocument(document: Document): UserDto {
@@ -36,5 +48,9 @@ export class UserDto {
 
     const user = req.user as unknown as User;
     return new UserDto(req.user.id, user);
+  }
+
+  static fromUser(user: User): UserDto {
+    return new UserDto(user._id, user);
   }
 }

@@ -2,17 +2,20 @@ import { Document, PassportLocalDocument } from "mongoose";
 
 // * Common types
 export type Location = {
+  _id: string;
   lat: number;
   lng: number;
   postalCode: string;
 };
 
 export type ImageFile = {
+  _id: string;
   data: Buffer;
   contentType: string;
 };
 
 export type Address = {
+  _id: string;
   street: string;
   city: string;
   province: string;
@@ -23,6 +26,7 @@ export type Address = {
 };
 
 export type Organization = {
+  _id: string;
   name: string;
   address: Address;
   phone: string;
@@ -32,6 +36,7 @@ export type Organization = {
 
 // * User model related types
 export type User = {
+  _id: string;
   kind: string; // ! discriminator key
   username: string;
   email: string;
@@ -68,7 +73,7 @@ export type UserDocument = User &
 
 // * Report model related types
 export type Report = {
-  id: string;
+  _id: string;
   reporter: User;
   resolver: User;
   post: Post;
@@ -80,7 +85,7 @@ export type ReportDocument = Report & Document;
 
 // * Post model related types
 export type PostItem = {
-  id: string;
+  _id: string;
   name: string;
   quantity: number;
   price: number;
@@ -90,7 +95,7 @@ export type PostItem = {
 };
 
 export type Post = {
-  id: string;
+  _id: string;
   author: User;
   location: Location;
   title: string;
