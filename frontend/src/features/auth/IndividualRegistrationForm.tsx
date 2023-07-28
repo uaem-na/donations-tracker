@@ -1,5 +1,6 @@
 import { Alert } from "@components/Alert";
 import { Button, Input, Label } from "@components/Controls";
+import { UserDiscriminator } from "@constants";
 import { registerSchema } from "@features/YupSchemas";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
@@ -11,7 +12,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
-export const RegisterForm = () => {
+export const IndividualRegistrationForm = () => {
   const navigate = useNavigate();
   const { data: currentSession, isLoading } = useGetSessionQuery();
   const [getSessionAfterRegister, { data: afterRegisterSession }] =
@@ -29,6 +30,10 @@ export const RegisterForm = () => {
   });
 
   const onSubmit = (data) => {
+    data = {
+      ...data,
+      type: UserDiscriminator.INDIVIDUAL,
+    };
     registerApi(data);
   };
 
@@ -57,18 +62,12 @@ export const RegisterForm = () => {
   // redirect to account page on session refresh
   useEffect(() => {
     if (afterRegisterSession) {
-      navigate("/account");
+      navigate("/account/dashboard");
     }
   });
 
   if (isLoading) {
     return <div>Loading...</div>;
-  }
-
-  if (currentSession) {
-    // session exists, redirect to account page
-    navigate("/account");
-    return null;
   }
 
   return (
@@ -89,31 +88,33 @@ export const RegisterForm = () => {
         </div>
       </div>
 
-      <div>
-        <Label htmlFor="firstName">First name</Label>
-        <div className="mt-2">
-          <Input
-            {...register("firstName")}
-            id="firstName"
-            type="text"
-            autoComplete="given-name"
-            placeholder="First name"
-            errorMessage={errors.firstName?.message}
-          />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-6">
+        <div>
+          <Label htmlFor="firstName">First name</Label>
+          <div className="mt-2">
+            <Input
+              {...register("firstName")}
+              id="firstName"
+              type="text"
+              autoComplete="given-name"
+              placeholder="First name"
+              errorMessage={errors.firstName?.message}
+            />
+          </div>
         </div>
-      </div>
 
-      <div>
-        <Label htmlFor="lastName">Last name</Label>
-        <div className="mt-2">
-          <Input
-            {...register("lastName")}
-            id="lastName"
-            type="text"
-            autoComplete="family-name"
-            placeholder="Last name"
-            errorMessage={errors.lastName?.message}
-          />
+        <div>
+          <Label htmlFor="lastName">Last name</Label>
+          <div className="mt-2">
+            <Input
+              {...register("lastName")}
+              id="lastName"
+              type="text"
+              autoComplete="family-name"
+              placeholder="Last name"
+              errorMessage={errors.lastName?.message}
+            />
+          </div>
         </div>
       </div>
 

@@ -1,7 +1,11 @@
 import debug from "debug";
+import { NextFunction, Request, Response } from "express";
 import expressAsyncHandler from "express-async-handler";
+import { ParamsDictionary } from "express-serve-static-core";
 import { body } from "express-validator";
 import passport from "passport";
+import QueryString from "qs";
+import { UserDiscriminator } from "../constants";
 import { InvalidOperationError } from "../errors";
 import { IndividualUserModel, UserDto, UserModel } from "../models/users";
 import { AuthService } from "../services";
@@ -77,24 +81,41 @@ export class AuthController {
   });
 
   register = expressAsyncHandler(async (req, res, next) => {
+    await body("type").notEmpty().run(req);
     await body("username").notEmpty().run(req);
     await body("email").notEmpty().isEmail().run(req);
     await body("firstName").notEmpty().run(req);
     await body("lastName").notEmpty().run(req);
-    await body("organization").notEmpty().run(req);
     await body("password").notEmpty().run(req);
 
-    const { username, email, firstName, lastName, organization, password } =
-      req.body;
+    const { type } = req.body;
 
-    // TODO: there must be a way for organization to sign up
+    if (type === UserDiscriminator.ORGANIZATION) {
+      await body("address").notEmpty().run(req);
+    }
+
+    switch (type) {
+      case UserDiscriminator.INDIVIDUAL:
+        await this.registerIndividualUser(req, res, next);
+        break;
+
+      case UserDiscriminator.ORGANIZATION:
+        break;
+    }
+  });
+
+  private async registerIndividualUser<P, ResBody, ReqBody, ReqQuery>(
+    req: Request<ParamsDictionary, any, any, QueryString.ParsedQs>,
+    res: Response,
+    next: NextFunction
+  ) {
+    const { username, email, firstName, lastName, password } = req.body;
     const user = await UserModel.register(
       new IndividualUserModel({
         username,
         email,
         firstName,
         lastName,
-        organization,
       }),
       password
     );
@@ -104,11 +125,9 @@ export class AuthController {
         if (err) {
           return next(err);
         }
-
         log(`User ${user.id} registered.`);
-
         res.status(200).json(UserDto.fromDocument(user));
       });
     });
-  });
+  }
 }

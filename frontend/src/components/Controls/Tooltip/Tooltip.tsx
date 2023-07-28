@@ -26,7 +26,7 @@ const TooltipComponent = ({
           <Tooltip.Content
             side={side}
             align={align}
-            className="px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm dark:bg-gray-700"
+            className="px-3 py-2 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm dark:bg-gray-700 z-50"
           >
             {message}
             <Tooltip.Arrow />
