@@ -90,16 +90,13 @@ export class AuthController {
 
     const { type } = req.body;
 
-    if (type === UserDiscriminator.ORGANIZATION) {
-      await body("address").notEmpty().run(req);
-    }
-
     switch (type) {
       case UserDiscriminator.INDIVIDUAL:
         await this.registerIndividualUser(req, res, next);
         break;
 
       case UserDiscriminator.ORGANIZATION:
+        await this.registerOrganizationUser(req, res, next);
         break;
     }
   });
@@ -129,5 +126,35 @@ export class AuthController {
         res.status(200).json(UserDto.fromDocument(user));
       });
     });
+  }
+
+  private async registerOrganizationUser<P, ResBody, ReqBody, ReqQuery>(
+    req: Request<ParamsDictionary, any, any, QueryString.ParsedQs>,
+    res: Response,
+    next: NextFunction
+  ) {
+    await body("organization").notEmpty().run(req);
+    await body("streetAddress").notEmpty().run(req);
+    await body("postalCode").notEmpty().run(req);
+    await body("city").notEmpty().run(req);
+    await body("province").notEmpty().run(req);
+    const {
+      username,
+      email,
+      firstName,
+      lastName,
+      password,
+      organization,
+      streetAddress,
+      postalCode,
+      city,
+      province,
+    } = req.body;
+
+    // const organizationUser = await UserModel.register(
+    //   new OrganizationUserModel(null, password)
+    // );
+
+    console.log(req.body);
   }
 }

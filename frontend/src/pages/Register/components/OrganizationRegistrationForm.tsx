@@ -1,6 +1,7 @@
 import { Alert } from "@components";
 import { Button, Input, Label } from "@components/Controls";
 import { SelectInput } from "@components/Controls/Select";
+import { UserDiscriminator } from "@constants";
 import { ProvinceCode, ProvinceName } from "@constants/Provinces";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
@@ -8,7 +9,7 @@ import {
   useLazyGetSessionQuery,
   useRegisterMutation,
 } from "@services/auth";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { registerOrganizationSchema } from "./schemas/RegisterOrganizationSchema";
@@ -26,12 +27,71 @@ export const OrganizationRegistrationForm = () => {
     register,
     formState: { errors },
     handleSubmit,
+    setValue,
   } = useForm({
     resolver: yupResolver(registerOrganizationSchema),
   });
 
   const onSubmit = (data) => {
+    data = {
+      ...data,
+      type: UserDiscriminator.ORGANIZATION,
+    };
     registerApi(data);
+  };
+
+  // handle successful request
+  useEffect(() => {
+    if (isSuccess) {
+      setServerMessage("");
+      getSessionAfterRegister();
+    }
+  }, [getSessionAfterRegister, isSuccess]);
+
+  // handle server error message
+  useEffect(() => {
+    if (error) {
+      if ("status" in error) {
+        const err: any = "error" in error ? error.error : error.data;
+        err.errors.length > 0
+          ? setServerMessage(err.errors.join(",") ?? "An error occurred")
+          : setServerMessage(err.message ?? "An error occurred");
+      } else {
+        setServerMessage(error.message ?? "An error occurred");
+      }
+    }
+  }, [error]);
+
+  useEffect(() => {
+    if (afterRegisterSession) {
+      navigate("/account/dashboard");
+    }
+  });
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  /*
+   * AUTO-FORMATTING
+   * We want to keep the value consistence for phone and postal code
+   * */
+  const phoneFormatting = (event) => {
+    const phoneRegex = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+    const value = event.target.value;
+    if (phoneRegex.test(value)) {
+      const formatted = value.replace(phoneRegex, "($1) $2-$3");
+      setValue("phone", formatted);
+    }
+  };
+
+  const postalCodeFormatting = (event) => {
+    const postalCodeRegex = /^([A-Za-z]\d[A-Za-z])[ -]?(\d[A-Za-z]\d)$/;
+    const value = event.target.value;
+    if (postalCodeRegex.test(value)) {
+      const formatted = value.toUpperCase().replace(postalCodeRegex, "$1 $2");
+      setValue("postalCode", formatted);
+    }
   };
 
   return (
@@ -83,6 +143,21 @@ export const OrganizationRegistrationForm = () => {
       </div>
 
       <div>
+        <Label htmlFor="phone">Phone</Label>
+        <div className="mt-2">
+          <Input
+            {...register("phone")}
+            onBlur={phoneFormatting}
+            id="phone"
+            type="phone"
+            autoComplete="tel"
+            placeholder="Phone"
+            errorMessage={errors.phone?.message}
+          />
+        </div>
+      </div>
+
+      <div>
         <Label htmlFor="email">Email</Label>
         <div className="mt-2">
           <Input
@@ -103,7 +178,7 @@ export const OrganizationRegistrationForm = () => {
             {...register("organization")}
             id="organization"
             type="organization"
-            autoComplete=""
+            autoComplete="organization-title"
             placeholder="Organization"
             errorMessage={errors.organization?.message}
           />
@@ -118,7 +193,7 @@ export const OrganizationRegistrationForm = () => {
               {...register("streetAddress")}
               id="streetAddress"
               type="text"
-              autoComplete=""
+              autoComplete="street-address"
               placeholder="Street address"
               errorMessage={errors.streetAddress?.message}
             />
@@ -130,9 +205,10 @@ export const OrganizationRegistrationForm = () => {
           <div className="mt-2">
             <Input
               {...register("postalCode")}
+              onBlur={postalCodeFormatting}
               id="postalCode"
               type="text"
-              autoComplete=""
+              autoComplete="postal-code"
               placeholder="Postal code"
               errorMessage={errors.postalCode?.message}
             />
@@ -148,9 +224,9 @@ export const OrganizationRegistrationForm = () => {
               {...register("city")}
               id="city"
               type="text"
-              autoComplete=""
+              autoComplete="address-level2"
               placeholder="City"
-              errorMessage={errors.firstName?.message}
+              errorMessage={errors.city?.message}
             />
           </div>
         </div>
@@ -162,6 +238,7 @@ export const OrganizationRegistrationForm = () => {
             id="province"
             name="province"
             placeholder="Select a province"
+            autoComplete="address-level1"
             options={Object.keys(ProvinceName).map((p) => {
               return {
                 label: ProvinceName[p],

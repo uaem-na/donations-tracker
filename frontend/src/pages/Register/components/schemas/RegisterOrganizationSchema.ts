@@ -28,6 +28,13 @@ export const registerOrganizationSchema = yup.object().shape({
     .oneOf([yup.ref("password")], "Passwords must match"),
   firstName: yup.string().required("First name is required"),
   lastName: yup.string().required("Last name is required"),
+  phone: yup
+    .string()
+    .matches(
+      /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/,
+      (obj) => `${obj.value} is not a valid phone number`
+    )
+    .required("Phone is required"),
   organization: yup
     .string()
     .min(3, "Must be 3 characters or more")
