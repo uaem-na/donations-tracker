@@ -1,0 +1,34 @@
+{
+  "title": "Titre",
+  "add": "Ajouter",
+  "remove": "Supprimer",
+  "submit": "Soumettre",
+  "activate": "Activer",
+  "deactivate": "Désactiver",
+  "posts": {
+    "type": "Type",
+    "offer": "Offre",
+    "request": "Demande",
+    "items": "Articles",
+    "name": "Nom",
+    "quantity": "Quantité",
+    "description": "Description",
+    "price": "Prix",
+    "category": "Catégorie",
+    "create": "Créer",
+    "add_item": "Ajouter un article",
+    "select_category": "Sélectionnez une catégorie"
+  },
+  "user_actions": {
+    "open_user_menu": "Ouvrir le menu utilisateur",
+    "your_account": "Votre compte",
+    "make_offer": "Faire une offre",
+    "make_request": "Faire une demande",
+    "login": "S'identifier",
+    "logout": "Se déconnecter",
+    "register": "S'inscrire"
+  },
+  "errors": {
+    "unknown_server_error": "An error occurred"
+  }
+}

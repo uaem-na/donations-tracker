@@ -4,16 +4,18 @@ import { PostDto } from "../posts";
 import { UserDto } from "../users";
 
 export class ReportDto {
+  id: string;
   reporter: UserDto;
   resolver: UserDto;
   post: PostDto;
   status: "resolved" | "unresolved";
   notes: string;
 
-  private constructor(report: Report) {
+  private constructor(id: string, report: Report) {
     const { reporter, resolver, post, status, notes } = report;
-    this.reporter = reporter;
-    this.resolver = resolver;
+    this.id = id;
+    this.reporter = UserDto.fromUser(reporter);
+    this.resolver = UserDto.fromUser(resolver);
     this.post = PostDto.fromPost(post);
     this.status = status;
     this.notes = notes;
@@ -21,6 +23,6 @@ export class ReportDto {
 
   static fromDocument(document: Document): ReportDto {
     const report = document.toObject() as Report;
-    return new ReportDto(report);
+    return new ReportDto(document.id, report);
   }
 }

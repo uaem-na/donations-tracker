@@ -5,30 +5,31 @@ const baseUrl = import.meta.env.VITE_API_URL || "";
 
 // * Define args and result types for query
 export type PostApiResponse = {
-  id: string;
-  title: string;
-  content: string;
-  status: string;
-  author: string;
+  author: string; // TODO: this is now an object, need to update
   createdAt: string;
-  updatedAt: string;
-  type: string;
+  id: string;
   items: PostItemApiResponse[];
+  location: PostLocationApiResponse;
+  status: string;
+  title: string;
+  type: string;
+  updatedAt: string;
+  views: number;
+};
+
+export type PostLocationApiResponse = {
+  lat?: number;
+  lng?: number;
+  postalCode?: string;
+  id: string;
 };
 
 export type PostItemApiResponse = {
+  name: string;
   category: string;
   description: string;
   price: number;
   quantity: number;
-  _id: string;
-};
-
-export type Post = Omit<PostApiResponse, "items"> & {
-  items: PostItem[];
-};
-
-export type PostItem = Omit<PostItemApiResponse, "_id"> & {
   id: string;
 };
 
@@ -36,32 +37,35 @@ type GetPostArgs = {
   postId: string;
 };
 
+// TODO: probably rename _id to id
+
 // * Define a service using a base URL and expected endpoints
 export const postsApi = createApi({
   reducerPath: "posts",
   baseQuery: fetchBaseQuery({
-    baseUrl: `${baseUrl}`,
+    baseUrl: `${baseUrl}/posts`,
     credentials: "include",
   }),
-
-  tagTypes: ["posts"],
+  tagTypes: ["posts", "posts.items.categories"],
   endpoints: (builder) => ({
-    getPosts: builder.query<Post[], void>({
+    getPosts: builder.query<PostApiResponse[], void>({
       query: () => ({
-        url: "/posts",
+        url: `/`,
         method: "GET",
       }),
-      transformResponse: (posts: PostApiResponse[]): Post[] => {
+      transformResponse: (posts: PostApiResponse[]): PostApiResponse[] => {
         return posts.map((post) => ({
           ...post,
           createdAt: new Date(post.createdAt).toLocaleDateString(),
           updatedAt: new Date(post.updatedAt).toLocaleDateString(),
           items: post.items.map(
-            (item): PostItem => ({
+            (item): PostItemApiResponse => ({
               ...item,
-              id: item._id,
             })
           ),
+          location: {
+            ...post.location,
+          },
         }));
       },
       providesTags: (result, error, arg) =>
@@ -72,13 +76,13 @@ export const postsApi = createApi({
             ]
           : [{ type: "posts", id: "LIST" }],
     }),
-    getPost: builder.query<Post, GetPostArgs>({
-      query: ({ postId }) => `/posts/${postId}`,
+    getPost: builder.query<PostApiResponse, GetPostArgs>({
+      query: ({ postId }) => `/${postId}`,
       providesTags: (result, error, arg) => [{ type: "posts", id: arg.postId }],
     }),
     createPost: builder.mutation({
       query: (initialPost) => ({
-        url: `/posts`,
+        url: `/`,
         method: "POST",
         body: initialPost,
       }),
@@ -86,15 +90,30 @@ export const postsApi = createApi({
     }),
     editPost: builder.mutation({
       query: (post) => ({
-        url: `/posts/${post.id}`,
+        url: `${post.id}`,
         method: "POST",
         body: post,
       }),
       invalidatesTags: (result, error, arg) => [{ type: "posts", id: arg.id }],
+    }),
+    getItemCategories: builder.query<string[], void>({
+      query: () => ({
+        url: `/items/categories`,
+        method: "GET",
+      }),
+      providesTags: (result, error, arg) => [
+        { type: "posts.items.categories" },
+      ],
     }),
   }),
 });
 
 // * Export hooks for usage in functional components, which are
 // * auto-generated based on the defined endpoints
-export const { useCreatePostMutation, useGetPostsQuery } = postsApi;
+export const {
+  useCreatePostMutation,
+  useEditPostMutation,
+  useGetPostQuery,
+  useGetPostsQuery,
+  useGetItemCategoriesQuery,
+} = postsApi;

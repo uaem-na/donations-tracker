@@ -28,7 +28,11 @@ export class PostController {
 
     await body("title").notEmpty().run(req);
     await body("type").notEmpty().isIn(["request", "offer"]).run(req);
-    await body("items").isArray().run(req);
+    await body("items")
+      .isArray({
+        min: 1,
+      })
+      .run(req);
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -161,5 +165,11 @@ export class PostController {
     const posts = await this.postService.getPostsByUsername(user.username);
 
     res.json(posts.map((post) => PostDto.fromDocument(post)));
+  });
+
+  getItemCategories = expressAsyncHandler(async (req, res, next) => {
+    const categories = this.postService.getItemCategories();
+
+    res.json(categories);
   });
 }
