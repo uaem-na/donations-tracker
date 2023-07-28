@@ -166,4 +166,10 @@ export class PostController {
 
     res.json(posts.map((post) => PostDto.fromDocument(post)));
   });
+
+  getItemCategories = expressAsyncHandler(async (req, res, next) => {
+    const categories = this.postService.getItemCategories();
+
+    res.json(categories);
+  });
 }

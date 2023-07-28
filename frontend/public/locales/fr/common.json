@@ -16,7 +16,8 @@
     "price": "Prix",
     "category": "Catégorie",
     "create": "Créer",
-    "add_item": "Ajouter un article"
+    "add_item": "Ajouter un article",
+    "select_category": "Sélectionnez une catégorie"
   },
   "user_actions": {
     "open_user_menu": "Ouvrir le menu utilisateur",

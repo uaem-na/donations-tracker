@@ -1,5 +1,5 @@
 import { Model, model, Schema } from "mongoose";
-import { ModelName, PostStatus, PostType } from "../../constants";
+import { ModelName, PostCategory, PostStatus, PostType } from "../../constants";
 import { Post, PostDocument, PostItem } from "../../types";
 import { ImageSchema, LocationSchema } from "../common";
 
@@ -8,7 +8,22 @@ const ItemSchema: Schema<PostItem> = new Schema({
   quantity: { type: Number, required: true, min: 1 },
   price: { type: Number, required: true, min: 0 },
   description: { type: String, required: false, maxlength: 1024 },
-  category: { type: String, required: true },
+  category: {
+    type: String,
+    required: true,
+    enum: [
+      PostCategory.BOOK,
+      PostCategory.CLOTHING,
+      PostCategory.CUTLERY,
+      PostCategory.ELECTRONICS,
+      PostCategory.FOOD,
+      PostCategory.FURNITURE,
+      PostCategory.PPE,
+      PostCategory.STATIONARY,
+      PostCategory.TOY,
+      PostCategory.OTHER,
+    ],
+  },
   image: { type: ImageSchema, required: false },
 });
 

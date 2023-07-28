@@ -76,3 +76,16 @@ export enum ReportStatus {
   RESOLVED = "resolved",
   UNRESOLVED = "unresolved",
 }
+
+export enum PostCategory {
+  BOOK = "book",
+  CLOTHING = "clothing",
+  CUTLERY = "cutlery",
+  ELECTRONICS = "electronics",
+  FOOD = "food",
+  FURNITURE = "furniture",
+  PPE = "ppe",
+  STATIONARY = "stationary",
+  TOY = "toy",
+  OTHER = "other",
+}

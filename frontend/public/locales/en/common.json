@@ -16,7 +16,8 @@
     "price": "Price",
     "category": "Category",
     "create": "Create",
-    "add_item": "Add an item"
+    "add_item": "Add an item",
+    "select_category": "Select a category"
   },
   "user_actions": {
     "open_user_menu": "Open user menu",

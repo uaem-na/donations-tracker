@@ -21,27 +21,15 @@ export type PostLocationApiResponse = {
   lat?: number;
   lng?: number;
   postalCode?: string;
-  _id: string;
+  id: string;
 };
 
 export type PostItemApiResponse = {
+  name: string;
   category: string;
   description: string;
   price: number;
   quantity: number;
-  _id: string;
-};
-
-export type Post = Omit<PostApiResponse, "items" | "location"> & {
-  items: PostItem[];
-  location: PostLocation;
-};
-
-export type PostItem = Omit<PostItemApiResponse, "_id"> & {
-  id: string;
-};
-
-export type PostLocation = Omit<PostLocationApiResponse, "_id"> & {
   id: string;
 };
 
@@ -58,28 +46,25 @@ export const postsApi = createApi({
     baseUrl: `${baseUrl}/posts`,
     credentials: "include",
   }),
-
-  tagTypes: ["posts"],
+  tagTypes: ["posts", "posts.items.categories"],
   endpoints: (builder) => ({
-    getPosts: builder.query<Post[], void>({
+    getPosts: builder.query<PostApiResponse[], void>({
       query: () => ({
         url: `/`,
         method: "GET",
       }),
-      transformResponse: (posts: PostApiResponse[]): Post[] => {
+      transformResponse: (posts: PostApiResponse[]): PostApiResponse[] => {
         return posts.map((post) => ({
           ...post,
           createdAt: new Date(post.createdAt).toLocaleDateString(),
           updatedAt: new Date(post.updatedAt).toLocaleDateString(),
           items: post.items.map(
-            (item): PostItem => ({
+            (item): PostItemApiResponse => ({
               ...item,
-              id: item._id,
             })
           ),
           location: {
             ...post.location,
-            id: post.location._id,
           },
         }));
       },
@@ -91,23 +76,8 @@ export const postsApi = createApi({
             ]
           : [{ type: "posts", id: "LIST" }],
     }),
-    getPost: builder.query<Post, GetPostArgs>({
+    getPost: builder.query<PostApiResponse, GetPostArgs>({
       query: ({ postId }) => `/${postId}`,
-      transformResponse: (post: PostApiResponse): Post => ({
-        ...post,
-        createdAt: new Date(post.createdAt).toLocaleDateString(),
-        updatedAt: new Date(post.updatedAt).toLocaleDateString(),
-        items: post.items.map(
-          (item): PostItem => ({
-            ...item,
-            id: item._id,
-          })
-        ),
-        location: {
-          ...post.location,
-          id: post.location._id,
-        },
-      }),
       providesTags: (result, error, arg) => [{ type: "posts", id: arg.postId }],
     }),
     createPost: builder.mutation({
@@ -126,6 +96,15 @@ export const postsApi = createApi({
       }),
       invalidatesTags: (result, error, arg) => [{ type: "posts", id: arg.id }],
     }),
+    getItemCategories: builder.query<string[], void>({
+      query: () => ({
+        url: `/items/categories`,
+        method: "GET",
+      }),
+      providesTags: (result, error, arg) => [
+        { type: "posts.items.categories" },
+      ],
+    }),
   }),
 });
 
@@ -136,4 +115,5 @@ export const {
   useEditPostMutation,
   useGetPostQuery,
   useGetPostsQuery,
+  useGetItemCategoriesQuery,
 } = postsApi;

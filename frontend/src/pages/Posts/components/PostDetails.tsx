@@ -35,6 +35,7 @@ export const PostDetails = ({ id, type }: PostDetailsProps) => {
           return (
             <div key={item.id}>
               <p>{item.id}</p>
+              <p>{item.name}</p>
               <p>{item.category}</p>
               <p>{item.description}</p>
               <p>{item.price}</p>

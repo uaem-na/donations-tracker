@@ -1,8 +1,12 @@
 import { Alert } from "@components";
 import { Button, Input, Label } from "@components/Controls";
+import { SelectInput } from "@components/Controls/Select";
 import { PostType } from "@constants";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useCreatePostMutation } from "@services/posts";
+import {
+  useCreatePostMutation,
+  useGetItemCategoriesQuery,
+} from "@services/posts";
 import { useEffect, useMemo, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -19,6 +23,7 @@ export const CreatePostForm = ({ type }: PostTableProps) => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const schema = useMemo(() => getCreatePostFormSchema(t), [t]); // ! required for on the fly language change
+  const { data: categories } = useGetItemCategoriesQuery();
   const [createPostApi, { isLoading: isCreating, isSuccess, error }] =
     useCreatePostMutation();
   const [serverMessage, setServerMessage] = useState("");
@@ -157,11 +162,18 @@ export const CreatePostForm = ({ type }: PostTableProps) => {
             <div>
               <Label htmlFor="category">{t("posts.category")}</Label>
               <div className="mt-2">
-                <Input
+                <SelectInput
                   {...register(`items.${index}.category` as const)}
                   id="category"
-                  type="text"
                   errorMessage={errors.items?.[index]?.category?.message}
+                  placeholder={t("posts.select_category")}
+                  options={
+                    // TODO: i18n based on category string values (these are from backend)
+                    categories?.map((category) => ({
+                      value: category,
+                      label: category,
+                    })) ?? []
+                  }
                 />
               </div>
             </div>

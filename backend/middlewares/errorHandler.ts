@@ -43,7 +43,7 @@ export class ErrorHandler {
   }
 
   static handle(err: Error, req: Request, res: Response, next: NextFunction) {
-    const httpError = Object.create(Object.getPrototypeOf(err));
+    const httpError = new HttpError(err.message);
     Object.defineProperties(httpError, Object.getOwnPropertyDescriptors(err));
 
     ErrorHandler.consumeFlash(httpError, req);
