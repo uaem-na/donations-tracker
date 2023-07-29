@@ -1,5 +1,6 @@
 import { GoogleMap, useLoadScript } from "@react-google-maps/api";
-import { useCallback, useRef, useState } from "react";
+import { PostApiResponse } from "@services/posts";
+import { useCallback, useEffect, useRef, useState } from "react";
 import InfoBox from "./InfoBox";
 import Locate from "./Locate";
 import mapStyles from "./MapStyles";
@@ -27,7 +28,12 @@ const options = {
 // TODO: add calling posts API to get posts in area
 // TODO: add search integration
 // TODO: fix map click to geolocate to postal code
-export const GoogleMapWrapper = () => {
+
+interface IGoogleMapWrapperProps {
+  post: PostApiResponse | null;
+}
+
+export const GoogleMapWrapper = ({ post }: IGoogleMapWrapperProps) => {
   const KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: KEY,
@@ -38,6 +44,10 @@ export const GoogleMapWrapper = () => {
   const [offers, setOffers] = useState([]);
   const [requests, setRequests] = useState([]);
   const [infoBox, setInfoBox] = useState<LatLng | null>(null);
+
+  useEffect(() => {
+    console.log(post);
+  }, [post]);
 
   const onMapClick = useCallback((e) => {
     setInfoBox({
