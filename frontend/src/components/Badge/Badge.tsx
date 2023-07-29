@@ -1,3 +1,5 @@
+import { useCallback } from "react";
+
 interface IBadgeProps {
   color:
     | "gray"
@@ -12,7 +14,7 @@ interface IBadgeProps {
 }
 
 export const Badge = ({ color, text }: IBadgeProps) => {
-  const badgeColor = () => {
+  const badgeColor = useCallback(() => {
     switch (color) {
       case "red":
         return "bg-red-50 text-red-700 ring-red-500/10";
@@ -32,7 +34,7 @@ export const Badge = ({ color, text }: IBadgeProps) => {
       default:
         return "bg-gray-50 text-gray-600 ring-gray-500/10";
     }
-  };
+  }, []);
 
   return (
     <span

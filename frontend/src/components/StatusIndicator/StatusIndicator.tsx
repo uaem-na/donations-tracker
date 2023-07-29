@@ -1,9 +1,11 @@
+import { useCallback } from "react";
+
 interface IStatusIndicatorProps {
   status?: "offline" | "online" | "busy" | "away";
 }
 
 export const StatusIndicator = ({ status }: IStatusIndicatorProps) => {
-  const statusColor = () => {
+  const statusColor = useCallback(() => {
     switch (status) {
       case "online":
         return "text-green-400 bg-green-400/10";
@@ -15,7 +17,7 @@ export const StatusIndicator = ({ status }: IStatusIndicatorProps) => {
       default:
         return "text-gray-500 bg-gray-100/10";
     }
-  };
+  }, []);
 
   return (
     <div className={`flex-none rounded-full p-1 ${statusColor()}`}>
