@@ -1,9 +1,18 @@
 import debug from "debug";
+import { Request } from "express";
 import expressAsyncHandler from "express-async-handler";
+import { ParamsDictionary } from "express-serve-static-core";
 import { body } from "express-validator";
 import passport from "passport";
+import QueryString from "qs";
+import { ProvinceCode, ProvinceName, UserDiscriminator } from "../constants";
 import { InvalidOperationError } from "../errors";
-import { IndividualUserModel, UserDto, UserModel } from "../models/users";
+import {
+  IndividualUserModel,
+  OrganizationUserModel,
+  UserDto,
+  UserModel,
+} from "../models/users";
 import { AuthService } from "../services";
 
 const log = debug("backend:auth");
@@ -77,38 +86,101 @@ export class AuthController {
   });
 
   register = expressAsyncHandler(async (req, res, next) => {
+    await body("type").notEmpty().run(req);
     await body("username").notEmpty().run(req);
     await body("email").notEmpty().isEmail().run(req);
     await body("firstName").notEmpty().run(req);
     await body("lastName").notEmpty().run(req);
-    await body("organization").notEmpty().run(req);
     await body("password").notEmpty().run(req);
 
-    const { username, email, firstName, lastName, organization, password } =
-      req.body;
+    const { type } = req.body;
 
-    // TODO: there must be a way for organization to sign up
-    const user = await UserModel.register(
+    let user;
+
+    switch (type) {
+      case UserDiscriminator.INDIVIDUAL:
+        user = await this.registerIndividualUser(req);
+        break;
+
+      case UserDiscriminator.ORGANIZATION:
+        user = await this.registerOrganizationUser(req);
+        break;
+    }
+
+    if (user) {
+      passport.authenticate("local")(req, res, () => {
+        req.session.save((err) => {
+          if (err) {
+            return next(err);
+          }
+          log(`User ${user.id} registered.`);
+          res.status(200).json(UserDto.fromDocument(user));
+        });
+      });
+    } else {
+      res.status(500).json("Unable to create user");
+    }
+  });
+
+  private async registerIndividualUser<P, ResBody, ReqBody, ReqQuery>(
+    req: Request<ParamsDictionary, any, any, QueryString.ParsedQs>
+  ) {
+    const { username, email, firstName, lastName, password } = req.body;
+    return await UserModel.register(
       new IndividualUserModel({
         username,
         email,
         firstName,
         lastName,
-        organization,
       }),
       password
     );
+  }
 
-    passport.authenticate("local")(req, res, () => {
-      req.session.save((err) => {
-        if (err) {
-          return next(err);
-        }
+  private async registerOrganizationUser<P, ResBody, ReqBody, ReqQuery>(
+    req: Request<ParamsDictionary, any, any, QueryString.ParsedQs>
+  ) {
+    await body("phone").notEmpty().run(req);
+    await body("organization").notEmpty().run(req);
+    await body("streetAddress").notEmpty().run(req);
+    await body("postalCode").notEmpty().run(req);
+    await body("city").notEmpty().run(req);
+    await body("province").notEmpty().run(req);
+    const {
+      type,
+      username,
+      email,
+      firstName,
+      lastName,
+      password,
+      phone,
+      organization,
+      streetAddress,
+      postalCode,
+      city,
+      province,
+    } = req.body;
 
-        log(`User ${user.id} registered.`);
-
-        res.status(200).json(UserDto.fromDocument(user));
-      });
-    });
-  });
+    return await UserModel.register(
+      new OrganizationUserModel({
+        username,
+        email,
+        firstName,
+        lastName,
+        organization: {
+          type,
+          name: organization,
+          phone,
+          address: {
+            street: streetAddress,
+            postalCode,
+            city,
+            provinceCode: ProvinceCode[province],
+            province: ProvinceName[province],
+          },
+        },
+      }),
+      password
+    );
+  }
 }

@@ -1,3 +1,5 @@
+import { IndividualAccount } from "@pages/Register/IndividualAccount";
+import { OrganizationAccount } from "@pages/Register/OrganizationAccount";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
 // * Various React page components
@@ -122,6 +124,14 @@ function App() {
             {/* Authentication pages */}
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
+            <Route
+              path="/register/individual-account"
+              element={<IndividualAccount />}
+            />
+            <Route
+              path="/register/organization-account"
+              element={<OrganizationAccount />}
+            />
 
             {/* Others */}
             <Route

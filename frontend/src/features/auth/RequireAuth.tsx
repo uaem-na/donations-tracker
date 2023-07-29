@@ -25,13 +25,13 @@ export const RequireAuth = ({ children, role }: RequireAuthProps) => {
     // role prop is passed, check if user has role
     if (!session.role.includes(role)) {
       // user doesn't have role, redirect to account page
-      return <Navigate to="/account" />;
+      return <Navigate to="/account/dashboard" />;
     }
   }
 
   // session exists, check pathname to see if already on login page
   if (pathname === "/login") {
-    return <Navigate to="/account" />;
+    return <Navigate to="/account/dashboard" />;
   }
 
   // render the children

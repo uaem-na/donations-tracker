@@ -8,3 +8,8 @@ export const PostType = {
   OFFER: "offer" as const,
   REQUEST: "request" as const,
 };
+
+export const UserDiscriminator = {
+  ORGANIZATION: "OrganizationUser" as const,
+  INDIVIDUAL: "IndividualUser" as const,
+};

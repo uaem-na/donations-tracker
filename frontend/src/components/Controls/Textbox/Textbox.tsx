@@ -13,7 +13,7 @@ export const Input = forwardRef<
           ref={ref}
           {...props}
           aria-invalid={errorMessage ? "true" : "false"}
-          className={`form-input block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6 ${
+          className={`form-input block w-full rounded-md text-sm border-0 py-1.5 shadow-sm ring-1 ring-inset focus:ring-2 focus:ring-inset sm:leading-6 ${
             props.className
           } ${
             errorMessage

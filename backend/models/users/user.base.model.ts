@@ -45,7 +45,7 @@ const UserSchema: Schema<UserDocument & PassportLocalDocument> = new Schema({
       message: (props: any) => `${props.value} is not a valid last name!`,
     },
   },
-  location: { type: LocationSchema, required: true },
+  location: { type: LocationSchema, required: false },
   active: { type: Boolean, default: true }, // TODO: add deactivation mechanism
   recoveryEmail: { type: String, required: false }, // TODO: add recovery email mechanism
   role: {
