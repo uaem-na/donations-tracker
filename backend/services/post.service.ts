@@ -13,7 +13,12 @@ export class PostService {
 
   async getPosts(): Promise<PostDocument[]> {
     // TODO: should we filter by some attributes?
-    const posts = await PostModel.find();
+    const posts = await PostModel.find().populate(
+      "author",
+      "firstName lastName userName -__t"
+    );
+
+    console.log(posts);
 
     return posts;
   }

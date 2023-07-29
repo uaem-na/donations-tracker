@@ -1,7 +1,7 @@
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { AccountLayout } from "@pages/Account/components/AccountLayout";
-import { Post, useGetPostsQuery } from "@services/posts";
+import { PostApiResponse, useGetPostsQuery } from "@services/posts";
 
 /*
  * Work in progress, temporary design for dashboard. Selecting on an item will bring user to another page? or dialog popup?
@@ -22,8 +22,9 @@ export const DashboardPage = () => {
           <select
             name="tabs"
             className="block w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+            defaultValue={"Requests"}
           >
-            <option selected>Requests</option>
+            <option>Requests</option>
             <option>Offers</option>
           </select>
         </div>
@@ -50,10 +51,13 @@ export const DashboardPage = () => {
         className="divide-y divide-gray-100 overflow-hidden bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl mt-2"
       >
         {posts
-          ?.filter((post: Post) => post.type === "request")
-          .map((post: Post) => {
+          ?.filter((post: PostApiResponse) => post.type === "request")
+          .map((post: PostApiResponse) => {
             return (
-              <li className="relative flex justify-between gap-x-6 px-4 py-5 hover:bg-gray-50 sm:px-6 lg:px-8">
+              <li
+                key={post.id}
+                className="relative flex justify-between gap-x-6 px-4 py-5 hover:bg-gray-50 sm:px-6 lg:px-8"
+              >
                 <div className="flex gap-x-4">
                   <div className="min-w-0 flex-auto">
                     <p className="text-sm font-semibold leading-6 text-gray-900">
@@ -64,7 +68,7 @@ export const DashboardPage = () => {
                     </p>
                     <p className="mt-1 flex text-xs leading-5 text-gray-500">
                       <span className="relative truncate hover:underline"></span>
-                      {post.author}
+                      {post.author.firstName} {post.author.lastName}
                     </p>
                   </div>
                 </div>

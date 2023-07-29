@@ -1,6 +1,8 @@
 {
   "title": "Title",
   "add": "Add",
+  "edit": "Edit",
+  "delete": "Delete",
   "remove": "Remove",
   "submit": "Submit",
   "activate": "Activate",
@@ -17,7 +19,8 @@
     "category": "Category",
     "create": "Create",
     "add_item": "Add an item",
-    "select_category": "Select a category"
+    "select_category": "Select a category",
+    "no_items": "No items"
   },
   "user_actions": {
     "open_user_menu": "Open user menu",

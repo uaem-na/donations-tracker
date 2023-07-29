@@ -1,7 +1,7 @@
 import { TFunction } from "i18next";
 import * as yup from "yup";
 
-export const getCreatePostFormSchema = (t: TFunction) => {
+export const getEditPostFormSchema = (t: TFunction) => {
   return yup.object().shape({
     title: yup
       .string()
