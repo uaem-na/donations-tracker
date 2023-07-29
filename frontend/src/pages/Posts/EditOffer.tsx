@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { PostDetails } from "./components/PostDetails";
+import { EditPostForm } from "./components/EditPostForm";
 
-export const RequestDetailsPage = () => {
+export const EditOfferPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
@@ -20,7 +20,7 @@ export const RequestDetailsPage = () => {
 
   return (
     <>
-      <PostDetails id={id} type="request" onError={handleError} />
+      <EditPostForm id={id} type="offer" onError={handleError} />
     </>
   );
 };

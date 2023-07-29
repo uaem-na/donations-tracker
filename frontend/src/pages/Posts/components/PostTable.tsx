@@ -1,7 +1,9 @@
 import { PostType } from "@constants";
+import { useGetSessionQuery } from "@services/auth";
 import { useGetPostsQuery } from "@services/posts";
 import { capitalizeFirstLetter } from "@utils";
-import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { Link, NavLink } from "react-router-dom";
 
 type Type = (typeof PostType)[keyof typeof PostType];
 
@@ -11,7 +13,10 @@ interface PostTableProps {
 
 // TODO: add pagination, sorting, filtering
 export const PostTable = ({ type }: PostTableProps) => {
+  const { t } = useTranslation();
+  const { data: user } = useGetSessionQuery();
   const { data: posts, isLoading } = useGetPostsQuery();
+
   if (isLoading) {
     return <>Loading...</>;
   }
@@ -70,7 +75,9 @@ export const PostTable = ({ type }: PostTableProps) => {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="text-sm text-gray-900">
-                            TODO: list of items summary
+                            {post.items.length > 0
+                              ? post.items.map((item) => item.name).join(", ")
+                              : t("posts.no_items")}
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
@@ -84,18 +91,16 @@ export const PostTable = ({ type }: PostTableProps) => {
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                          <a
-                            href="#"
-                            className="text-indigo-600 hover:text-indigo-900"
-                          >
-                            Edit (for author/admin)
-                          </a>
-                          <a
-                            href="#"
-                            className="ml-4 text-red-600 hover:text-red-900"
-                          >
-                            Delete (for author/admin)
-                          </a>
+                          {user?.id === post.author.id && (
+                            <>
+                              <NavLink
+                                to={`/${post.type}s/${post.id}/edit`}
+                                className="text-indigo-600 hover:text-indigo-900"
+                              >
+                                {t("edit")}
+                              </NavLink>
+                            </>
+                          )}
                         </td>
                       </tr>
                     );
