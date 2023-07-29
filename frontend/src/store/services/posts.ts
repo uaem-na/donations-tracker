@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const baseUrl = import.meta.env.VITE_API_URL || "";
 
-// * Define args and result types for query
+// * Define API response types
 export type PostAuthorApiResponse = {
   firstName: string;
   id: string;
@@ -39,9 +39,28 @@ export type PostItemApiResponse = {
   id: string;
 };
 
+// * Define args
 type GetPostArgs = {
   postId: string;
 };
+
+type CreaetOrEditPostArgs = Omit<
+  PostApiResponse,
+  | "id"
+  | "author"
+  | "createdAt"
+  | "updatedAt"
+  | "views"
+  | "location"
+  | "items"
+  | "status"
+> & {
+  location: Omit<PostLocationApiResponse, "id">;
+  items: Omit<PostItemApiResponse, "id">[];
+  id?: string; // * for edit
+};
+
+type DeletePostArgs = Pick<PostApiResponse, "id">;
 
 // TODO: probably rename _id to id
 
@@ -86,19 +105,26 @@ export const postsApi = createApi({
       query: ({ postId }) => `/${postId}`,
       providesTags: (result, error, arg) => [{ type: "posts", id: arg.postId }],
     }),
-    createPost: builder.mutation({
-      query: (initialPost) => ({
+    createPost: builder.mutation<unknown, CreaetOrEditPostArgs>({
+      query: (post) => ({
         url: `/`,
         method: "POST",
-        body: initialPost,
+        body: post,
       }),
-      invalidatesTags: ["posts"],
+      invalidatesTags: (result, error, arg) => [{ type: "posts", id: "LIST" }],
     }),
-    editPost: builder.mutation({
+    editPost: builder.mutation<unknown, CreaetOrEditPostArgs>({
       query: (post) => ({
         url: `${post.id}`,
         method: "POST",
         body: post,
+      }),
+      invalidatesTags: (result, error, arg) => [{ type: "posts", id: arg.id }],
+    }),
+    deletePost: builder.mutation<unknown, DeletePostArgs>({
+      query: ({ id }) => ({
+        url: `/${id}`,
+        method: "DELETE",
       }),
       invalidatesTags: (result, error, arg) => [{ type: "posts", id: arg.id }],
     }),
@@ -117,9 +143,11 @@ export const postsApi = createApi({
 // * Export hooks for usage in functional components, which are
 // * auto-generated based on the defined endpoints
 export const {
-  useCreatePostMutation,
-  useEditPostMutation,
   useGetPostQuery,
+  useLazyGetPostQuery,
   useGetPostsQuery,
   useGetItemCategoriesQuery,
+  useCreatePostMutation,
+  useDeletePostMutation,
+  useEditPostMutation,
 } = postsApi;

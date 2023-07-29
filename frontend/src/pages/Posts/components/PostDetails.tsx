@@ -1,25 +1,32 @@
 import { PostType } from "@constants";
 import { useGetPostQuery } from "@store/services/posts";
+import { useEffect } from "react";
 
 type Type = (typeof PostType)[keyof typeof PostType];
 
 interface PostDetailsProps {
   id: string;
   type: Type;
+  onError: (err) => void;
 }
 
-export const PostDetails = ({ id, type }: PostDetailsProps) => {
-  const { data: post, isLoading, isError } = useGetPostQuery({ postId: id });
+export const PostDetails = ({ id, type, onError }: PostDetailsProps) => {
+  const {
+    data: post,
+    isLoading,
+    isError,
+    error: postError,
+  } = useGetPostQuery({ postId: id });
+
+  useEffect(() => {
+    if (isError) {
+      onError(postError);
+    }
+  }, [isError]);
 
   if (isLoading) {
     return <p>Loading...</p>;
   }
-
-  if (isError) {
-    return <p>Error</p>;
-  }
-
-  console.log(post);
 
   // display post and its properties and add labels for each property
   return (
