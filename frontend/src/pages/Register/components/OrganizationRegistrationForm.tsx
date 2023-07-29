@@ -2,7 +2,7 @@ import { Alert } from "@components";
 import { Button, Input, Label } from "@components/Controls";
 import { SelectInput } from "@components/Controls/Select";
 import { UserDiscriminator } from "@constants";
-import { ProvinceCode, ProvinceName } from "@constants/Provinces";
+import { ProvinceName } from "@constants/Provinces";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
   useGetSessionQuery,
@@ -242,7 +242,7 @@ export const OrganizationRegistrationForm = () => {
             options={Object.keys(ProvinceName).map((p) => {
               return {
                 label: ProvinceName[p],
-                value: ProvinceCode[p],
+                value: p,
               };
             })}
             errorMessage={errors.province?.message}
