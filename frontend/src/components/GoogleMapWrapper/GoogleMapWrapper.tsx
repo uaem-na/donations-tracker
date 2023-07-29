@@ -127,7 +127,7 @@ export const GoogleMapWrapper = () => {
   if (!isLoaded) return "Loading Maps";
 
   return (
-    <div className="w-full h-full">
+    <div className="relative w-full h-full">
       <Locate panTo={panTo} />
       {/* <Search panTo={panTo} /> */}
 
