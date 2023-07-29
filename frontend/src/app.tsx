@@ -11,8 +11,11 @@ import {
   CreateOfferPage,
   CreateRequestPage,
   DashboardPage,
+  EditOfferPage,
+  EditRequestPage,
   FaqPage,
   GeneralPage,
+  InternalServerErrorPage,
   LandingPage,
   LoginPage,
   OfferDetailsPage,
@@ -21,6 +24,7 @@ import {
   ReqOffPage,
   RequestDetailsPage,
   RequestsPage,
+  ResourceNotFoundErrorPage,
   SecurityPage,
 } from "@pages";
 import { Layout } from "layout";
@@ -37,6 +41,8 @@ function App() {
             <Route path="/faq" element={<FaqPage />} />
             <Route path="/offers" element={<OffersPage />} />
             <Route path="/requests" element={<RequestsPage />} />
+            <Route path="/errors/404" element={<ResourceNotFoundErrorPage />} />
+            <Route path="/errors/500" element={<InternalServerErrorPage />} />
 
             {/* Admin pages */}
             <Route
@@ -89,6 +95,24 @@ function App() {
               element={
                 <RequireAuth>
                   <CreateRequestPage />
+                </RequireAuth>
+              }
+            />
+
+            <Route
+              path="/offers/:id/edit"
+              element={
+                <RequireAuth>
+                  <EditOfferPage />
+                </RequireAuth>
+              }
+            />
+
+            <Route
+              path="/requests/:id/edit"
+              element={
+                <RequireAuth>
+                  <EditRequestPage />
                 </RequireAuth>
               }
             />

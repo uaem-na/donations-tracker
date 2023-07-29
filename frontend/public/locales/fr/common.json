@@ -1,6 +1,8 @@
 {
   "title": "Titre",
   "add": "Ajouter",
+  "edit": "Modifier",
+  "delete": "Supprimer",
   "remove": "Supprimer",
   "submit": "Soumettre",
   "activate": "Activer",
@@ -17,7 +19,8 @@
     "category": "Catégorie",
     "create": "Créer",
     "add_item": "Ajouter un article",
-    "select_category": "Sélectionnez une catégorie"
+    "select_category": "Sélectionnez une catégorie",
+    "no_items": "Aucun article"
   },
   "user_actions": {
     "open_user_menu": "Ouvrir le menu utilisateur",

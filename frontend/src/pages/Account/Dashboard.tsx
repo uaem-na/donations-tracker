@@ -1,7 +1,7 @@
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { AccountLayout } from "@pages/Account/components/AccountLayout";
-import { useGetPostsQuery } from "@services/posts";
+import { PostApiResponse, useGetPostsQuery } from "@services/posts";
 
 /*
  * Work in progress, temporary design for dashboard. Selecting on an item will bring user to another page? or dialog popup?
@@ -22,10 +22,10 @@ export const DashboardPage = () => {
           <select
             name="tabs"
             className="block w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
-            defaultValue="request"
+            defaultValue={"Requests"}
           >
-            <option value="request">Requests</option>
-            <option value="offer">Offers</option>
+            <option>Requests</option>
+            <option>Offers</option>
           </select>
         </div>
         <div className="hidden sm:block">
@@ -51,8 +51,8 @@ export const DashboardPage = () => {
         className="divide-y divide-gray-100 overflow-hidden bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl mt-2"
       >
         {posts
-          ?.filter((post) => post.type === "request")
-          .map((post) => {
+          ?.filter((post: PostApiResponse) => post.type === "request")
+          .map((post: PostApiResponse) => {
             return (
               <li
                 key={post.id}
@@ -68,7 +68,7 @@ export const DashboardPage = () => {
                     </p>
                     <p className="mt-1 flex text-xs leading-5 text-gray-500">
                       <span className="relative truncate hover:underline"></span>
-                      {post.author.id}
+                      {post.author.firstName} {post.author.lastName}
                     </p>
                   </div>
                 </div>
