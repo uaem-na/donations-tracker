@@ -19,8 +19,8 @@ RUN npm install -g typescript
 # copy the rest of the files to the working directory; this respects .dockerignore
 COPY . ./
 
-# expose port 8081
-EXPOSE 8081
+# expose port 8080
+EXPOSE 8080
 
 # start the server
 CMD ["npm", "start"]
