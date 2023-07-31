@@ -23,6 +23,9 @@ COPY package.json package-lock.json ./
 # install node modules
 RUN npm pkg delete scripts.prepare && npm ci --omit=dev
 
+# install tsc
+RUN npm install -g typescript
+
 # copy all files except those in .dockerignore
 COPY . .
 
