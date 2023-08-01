@@ -15,8 +15,8 @@ export const LandingPage = () => {
   return (
     <div className="flex w-full h-full">
       <GoogleMapWrapper post={selectedPost} />
-      <aside className="hidden w-[450px] overflow-y-auto border-r border-gray-200 px-4 py-4 xl:block">
-        <Posts handlePostClick={postClickEventHandler} />
+      <aside className="hidden w-[450px] overflow-y-auto border-l border-gray-200 px-4 py-4 xl:block">
+        <Posts handleLocateClick={postClickEventHandler} />
       </aside>
     </div>
   );

@@ -1,8 +1,9 @@
 export default function Locate({ panTo }) {
   return (
     <button
-      className="locate"
-      onClick={() =>
+      type="button"
+      className="absolute top-3 right-3 z-10"
+      onClick={() => {
         navigator.geolocation.getCurrentPosition(
           (position) => {
             panTo({
@@ -11,10 +12,14 @@ export default function Locate({ panTo }) {
             });
           },
           () => null
-        )
-      }
+        );
+      }}
     >
-      <img src="/compass.svg" alt="compass - locate me" />
+      <img
+        className="w-[30px] cursor-pointer"
+        src="/compass.svg"
+        alt="compass - locate me"
+      />
     </button>
   );
 }

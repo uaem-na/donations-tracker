@@ -1,186 +1,176 @@
-import { GoogleMap, useLoadScript } from "@react-google-maps/api";
-import { PostApiResponse } from "@services/posts";
-import { useCallback, useEffect, useRef, useState } from "react";
-import InfoBox from "./InfoBox";
-import Locate from "./Locate";
-import mapStyles from "./MapStyles";
-import Offer from "./Offer";
-import Request from "./Request";
-import "./index.css";
+import Locate from "@components/GoogleMapWrapper/Locate";
+import { Marker, MarkerUtils } from "@components/GoogleMapWrapper/MarkerUtils";
+import { faHandshake } from "@fortawesome/free-regular-svg-icons";
+import { faFileSignature } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { MarkerClusterer } from "@googlemaps/markerclusterer";
+import { Status, Wrapper } from "@googlemaps/react-wrapper";
+import { PostApiResponse, useGetPostsQuery } from "@services/posts";
+import {
+  PropsWithChildren,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import { createPortal } from "react-dom";
+import { createRoot } from "react-dom/client";
 
-type LatLng = {
-  lat: number;
-  lng: number;
-};
-
-const center: LatLng = {
+const center: google.maps.LatLngLiteral = {
   lat: 45.504717,
   lng: -73.576456,
 };
 
 const options = {
-  styles: mapStyles,
+  mapId: import.meta.env.VITE_GOOGLE_MAP_ID,
   disableDefaultUI: true,
+  center,
   zoomControl: true,
+  zoom: 10,
   clickableIcons: false,
 };
-
-// TODO: add calling posts API to get posts in area
-// TODO: add search integration
-// TODO: fix map click to geolocate to postal code
 
 interface IGoogleMapWrapperProps {
   post: PostApiResponse | null;
 }
 
+// TODO: add search integration
 export const GoogleMapWrapper = ({ post }: IGoogleMapWrapperProps) => {
   const KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
-  const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: KEY,
-    libraries: ["places" as const],
-  });
 
-  const [selected, setSelected] = useState(null);
-  const [offers, setOffers] = useState([]);
-  const [requests, setRequests] = useState([]);
-  const [infoBox, setInfoBox] = useState<LatLng | null>(null);
+  const render = useCallback(
+    (status: Status) => {
+      switch (status) {
+        case Status.LOADING:
+          return <>Loading</>;
+        case Status.FAILURE:
+          return <>Error loading map</>;
+        case Status.SUCCESS:
+          return <GoogleMap zoom={8} center={center} post={post} />;
+      }
+    },
+    [post]
+  );
+
+  return (
+    <Wrapper
+      apiKey={KEY}
+      render={render}
+      version="beta"
+      libraries={["marker"]}
+    />
+  );
+};
+
+const GoogleMap = ({
+  post,
+}: PropsWithChildren<google.maps.MapOptions & { post }>) => {
+  const { data: posts, isLoading } = useGetPostsQuery();
+
+  const [map, setMap] = useState<google.maps.Map>();
+  const ref = useRef(null);
 
   useEffect(() => {
-    console.log(post);
+    if (ref.current) {
+      setMap(new google.maps.Map(ref.current, options));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (map) {
+      const markers: Marker[] = [];
+      posts?.map((post: PostApiResponse) => {
+        const marker = createMarker(
+          {
+            lat: post.location.lat!,
+            lng: post.location.lng!,
+          },
+          post
+        );
+        // This is required, otherwise JSX event handler does nothing kinda hacky
+        marker.addListener("click", () => {});
+        markers.push(marker);
+      });
+
+      const markerCluster = new MarkerClusterer({
+        markers,
+      });
+      markerCluster.setMap(map);
+    }
+  }, [map, posts]);
+
+  const createMarker = useCallback(
+    ({ lat, lng }: google.maps.LatLngLiteral, data: PostApiResponse) => {
+      if (MarkerUtils.isAdvancedMarkerAvailable(map)) {
+        const div = document.createElement("div");
+        const root = createRoot(div);
+        const el = createPortal(<CustomMarker type={data.type} />, div);
+        root.render(el);
+        return new google.maps.marker.AdvancedMarkerElement({
+          map,
+          position: { lat, lng },
+          content: div,
+        });
+      }
+      return new google.maps.Marker({
+        map,
+        position: { lat, lng },
+      });
+    },
+    [map]
+  );
+
+  useEffect(() => {
+    if (post?.location.lat && post?.location.lng) {
+      panTo({
+        lat: post.location.lat,
+        lng: post.location.lng,
+      });
+    }
   }, [post]);
-
-  const onMapClick = useCallback((e) => {
-    setInfoBox({
-      lat: e.latLng.lat(),
-      lng: e.latLng.lng(),
-    });
-    setSelected(null);
-  }, []);
-
-  // const onMapClick = useCallback((e) => {
-  //   const lat = e.latLng.lat()
-  //   const lng = e.latLng.lng()
-  //   const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${KEY}`
-  //   let postalCode = null;
-
-  //   // Step 1: reverse geolocate to obtain postal code of the click
-  //   const fetchPostalCode = fetch(url)
-  //     .then(data => data.json()
-  //       .then(res => {
-  //        console.log(res)
-  //         const address = res.results[0].address_components;
-
-  //         address.forEach(part => {
-  //           if (part.types.includes("postal_code")) {
-  //             postalCode = part.long_name;
-  //           }
-  //         });
-
-  //         // Step 2: geolocate on given postal code to find common latitude and longitude for all posts in area
-  //         const secondUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${postalCode}&key=${KEY}`
-  //         const fetchCoordinates = fetch(secondUrl)
-  //           .then(response => response.json())
-  //             .then(data => {
-  //               return {
-  //                 lat: data.results[0].geometry.location.lat,
-  //                 lng: data.results[0].geometry.location.lng,
-  //               }
-  //             })
-  //         // Here, we need to await the response of the nested promise before returning any value for the outer promise
-  //         const coordinates = fetchCoordinates.then(value => {
-  //           return value
-  //         })
-  //         return coordinates
-  //       })
-  //     );
-
-  //   // REMEMBER: never set a promise equal to a global variable
-  //   // This can create all sorts of synchronization problems
-  //   // Instead, the code below is just to show the process needed to obtain a value from a promise
-  //   // Will want to set these values immediately FROM INSIDE THE ASYNC CALLBACKS
-
-  //   const LAT = fetchPostalCode.then(value => {
-  //     return value.lat;
-  //   })
-
-  //   const LNG = fetchPostalCode.then(value => {
-  //     return value.lng;
-  //   })
-  //   // console.log(LAT)
-  //   // console.log(LNG)
-
-  //   setInfoBox({
-  //     lat: e.latLng.lat(),
-  //     lng: e.latLng.lng(),
-  //   });
-  //   setSelected(null);
-  // }, []);
-
-  const mapRef = useRef<google.maps.Map | null>(null);
-
-  const onLoad = useCallback((map) => {
-    mapRef.current = map;
-  }, []);
 
   const panTo = useCallback(
     ({ lat, lng }) => {
-      if (!mapRef?.current) {
+      if (!map) {
         return;
       }
-      mapRef.current.panTo({ lat, lng });
-      mapRef.current.setZoom(16);
+      map.panTo({ lat, lng });
+      map.setZoom(16);
     },
-    [mapRef]
+    [map]
   );
 
-  if (loadError) return "Error loading maps";
-  if (!isLoaded) return "Loading Maps";
+  return (
+    <div className="relative w-full">
+      <Locate panTo={panTo} />
+      <div ref={ref} id="map" className="w-full h-full" />
+    </div>
+  );
+};
+
+const CustomMarker = ({ type }) => {
+  const markerColor = useCallback(() => {
+    switch (type) {
+      case "offer":
+        return "bg-purple-800 text-white ring-purple-700/10 after:border-t-purple-800";
+      case "request":
+        return "bg-blue-700 text-white ring-blue-700/10 after:border-t-blue-700";
+      default:
+        return "bg-purple-800 text-white ring-purple-700/10 after:border-t-purple-800";
+    }
+  }, []);
 
   return (
-    <div className="relative w-full h-full">
-      <Locate panTo={panTo} />
-      {/* <Search panTo={panTo} /> */}
-
-      <GoogleMap
-        id="map"
-        mapContainerClassName="w-full h-full"
-        zoom={12}
-        center={center}
-        options={options}
-        onClick={onMapClick}
-        onLoad={onLoad}
-        onDblClick={() => {
-          setInfoBox(null);
-        }}
-      >
-        {infoBox && (
-          <InfoBox
-            lat={infoBox.lat}
-            lng={infoBox.lng}
-            setInfoBox={setInfoBox}
-            setOffers={setOffers}
-            setRequests={setRequests}
-          />
-        )}
-        {offers.map((offer) => (
-          <Offer
-            key={`${offer.lat}-${offer.lng}`}
-            selected={selected}
-            setSelected={setSelected}
-            offer={offer}
-            setInfoBox={setInfoBox}
-          />
-        ))}
-        {requests.map((request) => (
-          <Request
-            key={`${request.lat}-${request.lng}`}
-            selected={selected}
-            setSelected={setSelected}
-            request={request}
-            setInfoBox={setInfoBox}
-          />
-        ))}
-      </GoogleMap>
+    <div
+      className={`rounded-full w-[35px] h-[35px] ring-1 ring-inset flex items-center justify-center p-[4px] relative transition ease-out delay-150
+                    after:border-l-[9px] after:border-l-transparent after:border-r-[9px] after:border-r-transparent after:border-t-[9px]  after:left-[50%] after:absolute after:top-[90%] after:h-0 after:content-['']
+                    after:translate-x-[-50%] after:z-[1] ${markerColor()}`}
+    >
+      {type === "offer" ? (
+        <FontAwesomeIcon icon={faHandshake} />
+      ) : (
+        <FontAwesomeIcon icon={faFileSignature} />
+      )}
     </div>
   );
 };

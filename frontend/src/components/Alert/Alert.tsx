@@ -17,7 +17,7 @@ export const Alert = ({
   heading,
   children,
 }: PropsWithChildren<IAlertProps>) => {
-  const renderTypeIcon = useCallback(() => {
+  const renderTypeIcon = () => {
     switch (type) {
       case "info":
         return (
@@ -48,7 +48,7 @@ export const Alert = ({
           />
         );
     }
-  }, []);
+  };
 
   const backgroundColor = useCallback(() => {
     const colorLevel = 50;
