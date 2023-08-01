@@ -21,10 +21,7 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 
 # install node modules
-RUN npm pkg delete scripts.prepare && npm ci
-
-# install tsc
-RUN npm install -g typescript
+RUN npm pkg delete scripts.prepare && npm ci --include=dev
 
 # copy all files except those in .dockerignore
 COPY . .

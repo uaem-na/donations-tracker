@@ -11,10 +11,7 @@ WORKDIR /backend
 COPY package.json package-lock.json ./
 
 # install the dependencies
-RUN npm ci --omit=dev
-
-# install tsc
-RUN npm install -g typescript
+RUN npm ci --include=dev
 
 # copy the rest of the files to the working directory; this respects .dockerignore
 COPY . ./
