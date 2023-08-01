@@ -7,10 +7,7 @@ const DrawerHeader = ({
 }: HTMLAttributes<HTMLDivElement>) => {
   return (
     <div
-      className={classMerge(
-        "flex flex-col space-y-2 text-center sm:text-left",
-        className
-      )}
+      className={classMerge("flex flex-col space-y-2", className)}
       {...props}
     />
   );

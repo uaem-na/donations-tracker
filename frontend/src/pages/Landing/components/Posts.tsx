@@ -5,17 +5,15 @@ import {
   DrawerContent,
   DrawerDescription,
   DrawerHeader,
-  DrawerTitle,
   DrawerTrigger,
 } from "@components/Drawer";
 import { StatusIndicator } from "@components/StatusIndicator/StatusIndicator";
 import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { PostDrawerDetail } from "@pages/Landing/components/PostDrawerDetail";
+import { PostDetails } from "@pages/Posts/components/PostDetails";
 import { PostApiResponse, useGetPostsQuery } from "@services/posts";
 import { capitalizeFirstLetter } from "@utils";
 import formatDistance from "date-fns/formatDistance";
-import { useCallback } from "react";
 
 interface IPostsProp {
   handleLocateClick: (post: PostApiResponse) => void;
@@ -24,7 +22,7 @@ interface IPostsProp {
 export const Posts = ({ handleLocateClick }: IPostsProp) => {
   const { data: posts, isLoading } = useGetPostsQuery();
 
-  const renderStatusIndicator = useCallback((status) => {
+  const renderStatusIndicator = (status) => {
     switch (status) {
       case "open":
         return <StatusIndicator status="online" />;
@@ -35,7 +33,7 @@ export const Posts = ({ handleLocateClick }: IPostsProp) => {
       default:
         return <StatusIndicator />;
     }
-  }, []);
+  };
 
   return (
     <ul className="divide-y divide-gray-200">
@@ -60,12 +58,7 @@ export const Posts = ({ handleLocateClick }: IPostsProp) => {
                       </span>
                     </div>
                   </div>
-                  <svg
-                    viewBox="0 0 2 2"
-                    className="h-0.5 w-0.5 flex-none fill-gray-300"
-                  >
-                    <circle cx="1" cy="1" r="1" />
-                  </svg>
+                  &mdash;
                   <p className="whitespace-nowrap">
                     {formatDistance(new Date(post.createdAt), new Date())} ago
                   </p>
@@ -88,9 +81,8 @@ export const Posts = ({ handleLocateClick }: IPostsProp) => {
                 </DrawerTrigger>
                 <DrawerContent size="medium">
                   <DrawerHeader>
-                    <DrawerTitle>{post.title}</DrawerTitle>
                     <DrawerDescription>
-                      <PostDrawerDetail post={post} />
+                      <PostDetails id={post.id} onError={() => {}} />
                     </DrawerDescription>
                   </DrawerHeader>
                 </DrawerContent>
@@ -99,7 +91,7 @@ export const Posts = ({ handleLocateClick }: IPostsProp) => {
               <Tooltip message="Locate" asChild>
                 <button
                   type="button"
-                  className="rounded bg-white px-2 py-1 text-xs font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 cursor-pointer"
+                  className="rounded bg-red-500 px-2 py-1 text-xs text-gray-50 shadow-sm ring-1 ring-inset ring-red-600 hover:bg-red-600 cursor-pointer"
                   onClick={() => handleLocateClick(post)}
                 >
                   <FontAwesomeIcon icon={faLocationDot} />
