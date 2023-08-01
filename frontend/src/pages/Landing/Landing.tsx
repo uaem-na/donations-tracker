@@ -3,6 +3,9 @@ import { Posts } from "@pages/Landing/components/Posts";
 import { PostApiResponse } from "@services/posts";
 import { useState } from "react";
 
+/*
+ * TODO: Mobile view
+ * */
 export const LandingPage = () => {
   const [selectedPost, setSelectedPost] = useState<PostApiResponse | null>(
     null

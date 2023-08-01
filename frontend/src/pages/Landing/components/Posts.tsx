@@ -1,8 +1,17 @@
 import { Badge } from "@components/Badge";
 import { Tooltip } from "@components/Controls";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@components/Drawer";
 import { StatusIndicator } from "@components/StatusIndicator/StatusIndicator";
 import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { PostDrawerDetail } from "@pages/Landing/components/PostDrawerDetail";
 import { PostApiResponse, useGetPostsQuery } from "@services/posts";
 import { capitalizeFirstLetter } from "@utils";
 import formatDistance from "date-fns/formatDistance";
@@ -68,12 +77,25 @@ export const Posts = ({ handleLocateClick }: IPostsProp) => {
               />
             </div>
             <div className="flex justify-end gap-x-2 mb-1">
-              <button
-                type="button"
-                className="rounded bg-white px-2 py-1 text-xs font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 cursor-pointer"
-              >
-                Details
-              </button>
+              <Drawer>
+                <DrawerTrigger asChild>
+                  <button
+                    type="button"
+                    className="rounded bg-white px-2 py-1 text-xs font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 cursor-pointer"
+                  >
+                    Details
+                  </button>
+                </DrawerTrigger>
+                <DrawerContent size="medium">
+                  <DrawerHeader>
+                    <DrawerTitle>{post.title}</DrawerTitle>
+                    <DrawerDescription>
+                      <PostDrawerDetail post={post} />
+                    </DrawerDescription>
+                  </DrawerHeader>
+                </DrawerContent>
+              </Drawer>
+
               <Tooltip message="Locate" asChild>
                 <button
                   type="button"
