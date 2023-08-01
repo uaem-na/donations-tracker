@@ -80,7 +80,6 @@ export const UserTable = ({ role }: UserTableProps) => {
                           {user.active ? (
                             <Button
                               color="text-red-500 bg-red-100 hover:bg-red-200"
-                              height="h-[40px]"
                               onClick={() => {
                                 handleDeactivate(user.id);
                               }}
@@ -90,7 +89,6 @@ export const UserTable = ({ role }: UserTableProps) => {
                           ) : (
                             <Button
                               color="text-green-500 bg-green-100 hover:bg-green-200"
-                              height="h-[40px]"
                               onClick={() => {
                                 handleActivate(user.id);
                               }}
