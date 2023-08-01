@@ -152,8 +152,9 @@ export const GoogleMapWrapper = () => {
             setRequests={setRequests}
           />
         )}
-        {offers.map((offer) => (
+        {offers.map((offer: any) => (
           <Offer
+            clusterer={null}
             key={`${offer.lat}-${offer.lng}`}
             selected={selected}
             setSelected={setSelected}
@@ -161,8 +162,9 @@ export const GoogleMapWrapper = () => {
             setInfoBox={setInfoBox}
           />
         ))}
-        {requests.map((request) => (
+        {requests.map((request: any) => (
           <Request
+            clusterer={null}
             key={`${request.lat}-${request.lng}`}
             selected={selected}
             setSelected={setSelected}

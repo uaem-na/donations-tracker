@@ -5,7 +5,7 @@ import "./index.css";
 const InfoBox = ({ lat, lng, setInfoBox, setOffers, setRequests }) => {
   const onCloseClick = useCallback(() => {
     setInfoBox(null);
-  });
+  }, []);
   const onOfferClick = useCallback(() => {
     const newOffer = {
       lat: lat,
@@ -14,7 +14,7 @@ const InfoBox = ({ lat, lng, setInfoBox, setOffers, setRequests }) => {
     };
     setOffers((currentOffers) => [...currentOffers, newOffer]);
     setInfoBox(null);
-  });
+  }, []);
   const onRequestClick = useCallback(() => {
     const newRequest = {
       lat: lat,
@@ -23,7 +23,7 @@ const InfoBox = ({ lat, lng, setInfoBox, setOffers, setRequests }) => {
     };
     setRequests((currentRequests) => [...currentRequests, newRequest]);
     setInfoBox(null);
-  });
+  }, []);
 
   return (
     <InfoWindow position={{ lat: lat, lng: lng }} onCloseClick={onCloseClick}>

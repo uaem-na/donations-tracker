@@ -21,7 +21,6 @@ import {
   OfferDetailsPage,
   OffersPage,
   RegisterPage,
-  ReqOffPage,
   RequestDetailsPage,
   RequestsPage,
   ResourceNotFoundErrorPage,
@@ -131,16 +130,6 @@ function App() {
             <Route
               path="/register/organization-account"
               element={<OrganizationAccount />}
-            />
-
-            {/* Others */}
-            <Route
-              path="/request/:id"
-              element={<ReqOffPage offer={false} edit={false} />}
-            />
-            <Route
-              path="/offer/:id"
-              element={<ReqOffPage offer={true} edit={false} />}
             />
           </Route>
         </Routes>

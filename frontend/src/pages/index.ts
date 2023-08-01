@@ -7,4 +7,3 @@ export * from "./Landing";
 export * from "./Login";
 export * from "./Posts";
 export * from "./Register";
-export * from "./RequestOfferPage/reqOff";
