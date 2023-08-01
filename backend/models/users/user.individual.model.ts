@@ -1,4 +1,3 @@
-import { faker } from "@faker-js/faker/locale/en_CA";
 import { Model, Schema } from "mongoose";
 import { UserDiscriminator, UserRole } from "../../constants";
 import { IndividualUser, UserDocument } from "../../types";
@@ -17,25 +16,3 @@ export const IndividualUserModel: Model<UserDocument> =
     UserDiscriminator.INDIVIDUAL,
     IndividualUserSchema
   );
-
-export const fakeIndividualUser = async (
-  username: string,
-  password: string
-): Promise<UserDocument> => {
-  const user = new IndividualUserModel({
-    lastName: faker.person.lastName(),
-    firstName: faker.person.firstName(),
-    email: faker.internet.email(),
-    username: username,
-    location: {
-      lat: faker.location.latitude(),
-      lng: faker.location.longitude(),
-      postalCode: faker.location.zipCode(),
-    },
-    role: UserRole.INDIVIDUAL,
-  });
-
-  await user.setPassword(password);
-
-  return user;
-};

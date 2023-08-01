@@ -1,7 +1,64 @@
-import { PostModel } from "../models/posts";
-import { fakeOfferPost } from "../models/posts/post.offer.model";
-import { fakeRequestPost } from "../models/posts/post.request.model";
+import { faker } from "@faker-js/faker/locale/en_CA";
+import { OfferPostModel, PostModel, RequestPostModel } from "../models/posts";
 import { PostDocument, UserDocument } from "../types";
+
+export const fakeOfferPost = (author: UserDocument): PostDocument => {
+  return new OfferPostModel({
+    title: faker.lorem.words(3),
+    author: author,
+    location: {
+      lat: author.location.lat,
+      lng: author.location.lng,
+      postalCode: author.location.postalCode,
+    },
+    items: [
+      {
+        name: faker.commerce.productName(),
+        quantity: faker.number.int({ min: 1, max: 10 }),
+        price: faker.commerce.price({ min: 0, max: 1000 }),
+        description: faker.commerce.productDescription(),
+        category: faker.commerce.department(),
+      },
+      {
+        name: faker.commerce.productName(),
+        quantity: faker.number.int({ min: 1, max: 10 }),
+        price: faker.commerce.price({ min: 0, max: 100 }),
+        description: faker.commerce.productDescription(),
+        category: faker.commerce.department(),
+      },
+    ],
+  });
+};
+
+export const fakeRequestPost = (author: UserDocument): PostDocument => {
+  const request = new RequestPostModel({
+    title: faker.lorem.words(3),
+    author: author,
+    location: {
+      lat: author.location.lat,
+      lng: author.location.lng,
+      postalCode: author.location.postalCode,
+    },
+    items: [
+      {
+        name: faker.commerce.productName(),
+        quantity: faker.number.int({ min: 1, max: 1000 }),
+        price: faker.commerce.price({ min: 0, max: 10 }),
+        description: faker.commerce.productDescription(),
+        category: faker.commerce.department(),
+      },
+      {
+        name: faker.commerce.productName(),
+        quantity: faker.number.int({ min: 1, max: 1000 }),
+        price: faker.commerce.price({ min: 0, max: 100 }),
+        description: faker.commerce.productDescription(),
+        category: faker.commerce.department(),
+      },
+    ],
+  });
+
+  return request;
+};
 
 export const seedPosts = async (
   destroy: boolean,

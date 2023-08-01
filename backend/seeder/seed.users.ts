@@ -1,9 +1,90 @@
 import { faker } from "@faker-js/faker/locale/en_CA";
-import { UserModel } from "../models/users";
-import { fakeAdminUser } from "../models/users/user.admin.model";
-import { fakeIndividualUser } from "../models/users/user.individual.model";
-import { fakeOrganizationUser } from "../models/users/user.organization.model";
+import { UserRole } from "../constants";
+import {
+  AdminUserModel,
+  IndividualUserModel,
+  OrganizationUserModel,
+  UserModel,
+} from "../models/users";
 import { UserDocument } from "../types.js";
+
+export const fakeAdminUser = async (
+  username: string,
+  password: string
+): Promise<UserDocument> => {
+  const user = new AdminUserModel({
+    lastName: faker.person.lastName(),
+    firstName: faker.person.firstName(),
+    email: faker.internet.email(),
+    username: username,
+    location: {
+      lat: faker.location.latitude(),
+      lng: faker.location.longitude(),
+      postalCode: faker.location.zipCode(),
+    },
+    role: UserRole.ADMIN,
+  });
+
+  await user.setPassword(password);
+
+  return user;
+};
+
+export const fakeOrganizationUser = async (
+  username: string,
+  password: string
+): Promise<UserDocument> => {
+  const user = new OrganizationUserModel({
+    lastName: faker.person.lastName(),
+    firstName: faker.person.firstName(),
+    email: faker.internet.email(),
+    username: username,
+    location: {
+      lat: faker.location.latitude(),
+      lng: faker.location.longitude(),
+      postalCode: faker.location.zipCode(), // * note postalCodes won't match
+    },
+    organization: {
+      name: faker.company.name(),
+      address: {
+        street: faker.location.streetAddress(),
+        city: faker.location.city(),
+        province: faker.location.state(), // * note that province & its code won't match
+        provinceCode: faker.location.state({ abbreviated: true }),
+        postalCode: faker.location.zipCode(),
+      },
+      phone: faker.phone.number(),
+      type: faker.word.noun(),
+    },
+    role: UserRole.ORGANIZATION,
+  });
+
+  await user.setPassword(password);
+
+  return user;
+};
+
+export const fakeIndividualUser = async (
+  username: string,
+  password: string
+): Promise<UserDocument> => {
+  const user = new IndividualUserModel({
+    lastName: faker.person.lastName(),
+    firstName: faker.person.firstName(),
+    email: faker.internet.email(),
+    username: username,
+    location: {
+      lat: faker.location.latitude(),
+      lng: faker.location.longitude(),
+      postalCode: faker.location.zipCode(),
+    },
+    role: UserRole.INDIVIDUAL,
+  });
+
+  await user.setPassword(password);
+
+  return user;
+};
 
 export const seedUsers = async (
   destroy: boolean,

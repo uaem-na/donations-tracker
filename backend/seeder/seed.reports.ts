@@ -1,6 +1,21 @@
+import { faker } from "@faker-js/faker/locale/en_CA";
+import { ReportStatus } from "../constants";
 import { ReportModel } from "../models/reports";
-import { fakeReport } from "../models/reports/report.model";
 import { PostDocument, ReportDocument, UserDocument } from "../types.js";
+
+export const fakeReport = (
+  reporter: UserDocument,
+  post: PostDocument
+): ReportDocument => {
+  const report = new ReportModel({
+    reporter: reporter,
+    post: post,
+    status: ReportStatus.UNRESOLVED,
+    notes: faker.word.words({ count: { min: 5, max: 100 } }),
+  });
+
+  return report;
+};
 
 export const seedReports = async (
   destroy: boolean,
