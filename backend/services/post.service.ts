@@ -18,8 +18,6 @@ export class PostService {
       "firstName lastName userName -__t"
     );
 
-    console.log(posts);
-
     return posts;
   }
 

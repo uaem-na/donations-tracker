@@ -16,7 +16,7 @@ export class PostDto {
   author: UserDto;
   location: PostLocationDto;
   title: string;
-  items: PostItemDto[];
+  item: PostItemDto;
   type: "request" | "offer";
   status: "open" | "in-progress" | "closed";
   views: number;
@@ -24,7 +24,7 @@ export class PostDto {
   updatedAt: string;
 
   private constructor(id: string, post: Post) {
-    const { author, location, title, items, type, status, views } = post;
+    const { author, location, title, item, type, status, views } = post;
     this.id = id;
     this.title = title;
     this.type = type;
@@ -44,18 +44,16 @@ export class PostDto {
     };
 
     // convert PostItem object to PostItemDto
-    this.items = items.map((item) => {
-      const { _id, image, ...rest } = item;
+    const { _id: itemId, image, ...itemRest } = item;
 
-      // convert binary image data to base64 string
-      const b64Image = image?.data.toString("base64");
+    // convert binary image data to base64 string
+    const b64Image = image?.data.toString("base64");
 
-      return {
-        id: _id,
-        ...(b64Image && { image: b64Image }),
-        ...rest,
-      };
-    });
+    this.item = {
+      id: itemId,
+      ...(b64Image && { image: b64Image }),
+      ...itemRest,
+    };
   }
 
   static fromDocument(document: Document): PostDto {

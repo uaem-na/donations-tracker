@@ -1,6 +1,7 @@
 import debug from "debug";
 import expressAsyncHandler from "express-async-handler";
 import { body, param, validationResult } from "express-validator";
+import { PostCategories, PostStatus, PostTypes } from "../constants";
 import { AuthorizationError, NotFoundError, ValidationError } from "../errors";
 import { PostDto } from "../models/posts";
 import { PostService, UserService } from "../services";
@@ -26,12 +27,59 @@ export class PostController {
       throw new AuthorizationError("User not logged in.");
     }
 
-    await body("title").notEmpty().run(req);
-    await body("type").notEmpty().isIn(["request", "offer"]).run(req);
-    await body("items")
-      .isArray({
-        min: 1,
+    await body("title")
+      .trim()
+      .notEmpty()
+      .isString()
+      .isLength({ max: 256 })
+      .run(req);
+    await body("type").trim().notEmpty().isIn(PostTypes).run(req);
+    await body("item").isObject().run(req);
+    await body("item.name")
+      .trim()
+      .notEmpty()
+      .isString()
+      .isLength({
+        max: 256,
       })
+      .run(req);
+    await body("item.quantity")
+      .trim()
+      .notEmpty()
+      .isInt({
+        min: 1,
+        allow_leading_zeroes: false,
+      })
+      .run(req);
+    await body("item.price")
+      .trim()
+      .notEmpty()
+      .isInt({
+        min: 0,
+        allow_leading_zeroes: false,
+      })
+      .run(req);
+    await body("item.description")
+      .trim()
+      .notEmpty()
+      .isString()
+      .isLength({
+        max: 2048,
+      })
+      .run(req);
+    await body("item.category")
+      .trim()
+      .notEmpty()
+      .isString()
+      .isIn(PostCategories)
+      .run(req);
+    await body("item.image").optional().isObject().run(req);
+    await body("item.image.data").optional().notEmpty().isBase64().run(req);
+    await body("item.image.contentType")
+      .optional()
+      .trim()
+      .notEmpty()
+      .isString()
       .run(req);
 
     const errors = validationResult(req);
@@ -39,7 +87,7 @@ export class PostController {
       throw new ValidationError(errors.array());
     }
 
-    const { title, type, items } = req.body;
+    const { title, type, item } = req.body;
     const user = await this.userService.getUserByUsername(req.user.username);
     if (!user) {
       throw new NotFoundError(`Error finding user ${req.user.username}.`);
@@ -48,10 +96,10 @@ export class PostController {
     const post = await this.postService.createPost({
       title,
       type,
-      items,
+      item,
       author: { ...user },
       location: user.location,
-      status: "open",
+      status: PostStatus.OPEN,
     });
 
     log(`Created post [${post._id}] ${post.title} by user ${user.username}.`);
@@ -83,9 +131,60 @@ export class PostController {
     }
 
     await param("id").notEmpty().run(req);
-    await body("title").notEmpty().run(req);
-    await body("type").notEmpty().isIn(["request", "offer"]).run(req);
-    await body("items").isArray().run(req);
+    await body("title")
+      .trim()
+      .notEmpty()
+      .isString()
+      .isLength({ max: 256 })
+      .run(req);
+    await body("type").trim().notEmpty().isIn(PostTypes).run(req);
+    await body("item").isObject().run(req);
+    await body("item.name")
+      .trim()
+      .notEmpty()
+      .isString()
+      .isLength({
+        max: 256,
+      })
+      .run(req);
+    await body("item.quantity")
+      .trim()
+      .notEmpty()
+      .isInt({
+        min: 1,
+        allow_leading_zeroes: false,
+      })
+      .run(req);
+    await body("item.price")
+      .trim()
+      .notEmpty()
+      .isInt({
+        min: 0,
+        allow_leading_zeroes: false,
+      })
+      .run(req);
+    await body("item.description")
+      .trim()
+      .notEmpty()
+      .isString()
+      .isLength({
+        max: 2048,
+      })
+      .run(req);
+    await body("item.category")
+      .trim()
+      .notEmpty()
+      .isString()
+      .isIn(PostCategories)
+      .run(req);
+    await body("item.image").optional().isObject().run(req);
+    await body("item.image.data").optional().notEmpty().isBase64().run(req);
+    await body("item.image.contentType")
+      .optional()
+      .trim()
+      .notEmpty()
+      .isString()
+      .run(req);
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -104,12 +203,12 @@ export class PostController {
       );
     }
 
-    const { title, type, items } = req.body;
+    const { title, type, item } = req.body;
 
     const updatedPost = await this.postService.updatePost(id, {
       title,
       type,
-      items,
+      item,
     });
 
     log(`Updated post ${id} for user ${req.user.username}.`);
