@@ -17,9 +17,9 @@ const drawerVariants = cva(
           "inset-y-0 right-0 h-full border-l data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right sm:max-w-full md:max-w-2xl lg:max-w-full",
       },
       size: {
-        small: "w-1/3 sm:w-3/4",
-        medium: "w-full md:w-2/4 ",
-        large: "w-3/4",
+        small: "w-full lg:w-1/3",
+        medium: "w-full lg:w-2/4 ",
+        large: "w-full lg:w-3/4",
       },
     },
     defaultVariants: {

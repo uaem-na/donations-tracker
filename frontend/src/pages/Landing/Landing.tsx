@@ -7,6 +7,7 @@ import { useState } from "react";
  * TODO: Mobile view
  * */
 export const LandingPage = () => {
+  const [posts, setPosts] = useState<PostApiResponse[]>();
   const [selectedPost, setSelectedPost] = useState<PostApiResponse | null>(
     null
   );
@@ -15,11 +16,18 @@ export const LandingPage = () => {
     setSelectedPost(post);
   };
 
+  const handleVisiblePosts = (posts) => {
+    setPosts(posts);
+  };
+
   return (
     <div className="flex w-full h-full">
-      <GoogleMapWrapper post={selectedPost} />
+      <GoogleMapWrapper
+        post={selectedPost}
+        handleVisiblePosts={handleVisiblePosts}
+      />
       <aside className="hidden w-[450px] overflow-y-auto border-l border-gray-200 px-4 py-4 xl:block">
-        <Posts handleLocateClick={postClickEventHandler} />
+        <Posts posts={posts!} handleLocateClick={postClickEventHandler} />
       </aside>
     </div>
   );

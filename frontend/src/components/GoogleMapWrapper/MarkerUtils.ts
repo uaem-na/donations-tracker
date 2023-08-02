@@ -15,15 +15,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import AdvancedMarkerElementOptions = google.maps.marker.AdvancedMarkerElementOptions;
+import AdvancedMarkerElement = google.maps.marker.AdvancedMarkerElement;
 
 /**
  * util class that creates a common set of convenience functions to wrap
  * shared behavior of Advanced Markers and Markers.
  */
 
-export type Marker =
-  | google.maps.Marker
-  | google.maps.marker.AdvancedMarkerElement;
+export type Marker = google.maps.Marker | AdvancedMarkerElement;
 
 export class MarkerUtils {
   public static isAdvancedMarkerAvailable(
@@ -37,7 +37,7 @@ export class MarkerUtils {
 
   public static isAdvancedMarker(
     marker: Marker
-  ): marker is google.maps.marker.AdvancedMarkerElement {
+  ): marker is AdvancedMarkerElement {
     return (
       google.maps.marker &&
       marker instanceof google.maps.marker.AdvancedMarkerElement
