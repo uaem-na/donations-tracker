@@ -1,9 +1,9 @@
 import { Model, Schema } from "mongoose";
 import { PostDiscriminator, PostType } from "../../constants";
-import { OfferPost, PostDocument } from "../../types";
+import { Post, PostDocument } from "../../types";
 import PostModel from "./post.base.model";
 
-const OfferPostSchema: Schema<OfferPost> = new Schema({});
+const OfferPostSchema: Schema<Post> = new Schema({});
 
 OfferPostSchema.pre("validate", function (next) {
   this.type = PostType.OFFER;

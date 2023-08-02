@@ -7,7 +7,7 @@ const ItemSchema: Schema<PostItem> = new Schema({
   name: { type: String, required: true, maxlength: 256 },
   quantity: { type: Number, required: true, min: 1 },
   price: { type: Number, required: true, min: 0 },
-  description: { type: String, required: false, maxlength: 1024 },
+  description: { type: String, required: false, maxlength: 2048 },
   category: {
     type: String,
     required: true,
@@ -27,7 +27,6 @@ const ItemSchema: Schema<PostItem> = new Schema({
   image: { type: ImageSchema, required: false },
 });
 
-// a post can have multiple "item"s
 const PostSchema: Schema<Post> = new Schema(
   {
     author: {
@@ -37,7 +36,7 @@ const PostSchema: Schema<Post> = new Schema(
     },
     location: { type: LocationSchema, required: true },
     title: { type: String, required: true, maxlength: 256 },
-    items: { type: [ItemSchema], required: true },
+    item: { type: ItemSchema, required: true },
     // * index for author and type for faster queries
     type: {
       type: String,

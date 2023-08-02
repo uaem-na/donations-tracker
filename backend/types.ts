@@ -99,16 +99,12 @@ export type Post = {
   author: User;
   location: Location;
   title: string;
-  items: PostItem[];
+  item: PostItem;
   status: "open" | "in-progress" | "closed";
   views: number;
   createdAt: Date;
   updatedAt: Date;
   type: "request" | "offer";
 };
-
-export type OfferPost = Post;
-
-export type RequestPost = Post;
 
 export type PostDocument = Post & Document;
