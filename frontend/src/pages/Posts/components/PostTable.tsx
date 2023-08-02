@@ -75,8 +75,8 @@ export const PostTable = ({ type }: PostTableProps) => {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="text-sm text-gray-900">
-                            {post.items.length > 0
-                              ? post.items.map((item) => item.name).join(", ")
+                            {post?.item?.name
+                              ? post.item.name
                               : t("posts.no_items")}
                           </div>
                         </td>

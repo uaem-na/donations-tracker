@@ -14,7 +14,7 @@ export type PostApiResponse = {
   author: PostAuthorApiResponse;
   createdAt: string;
   id: string;
-  items: PostItemApiResponse[];
+  item: PostItemApiResponse;
   location: PostLocationApiResponse;
   status: string;
   title: string;
@@ -52,11 +52,11 @@ type CreaetOrEditPostArgs = Omit<
   | "updatedAt"
   | "views"
   | "location"
-  | "items"
+  | "item"
   | "status"
 > & {
   location: Omit<PostLocationApiResponse, "id">;
-  items: Omit<PostItemApiResponse, "id">[];
+  item: Omit<PostItemApiResponse, "id">[];
   id?: string; // * for edit
 };
 
@@ -83,11 +83,9 @@ export const postsApi = createApi({
           ...post,
           createdAt: new Date(post.createdAt).toLocaleDateString(),
           updatedAt: new Date(post.updatedAt).toLocaleDateString(),
-          items: post.items.map(
-            (item): PostItemApiResponse => ({
-              ...item,
-            })
-          ),
+          item: {
+            ...post.item,
+          },
           location: {
             ...post.location,
           },
