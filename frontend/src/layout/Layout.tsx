@@ -32,8 +32,8 @@ const Layout = () => {
     <LayoutProvider>
       <SidebarMobile name={name} siteLinks={siteLinks} />
       <Sidebar name={name} siteLinks={siteLinks} />
+      <Header />
       <div className="lg:pl-20 h-[calc(100vh-64px)]">
-        <Header />
         <Outlet />
       </div>
     </LayoutProvider>

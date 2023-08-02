@@ -1,5 +1,5 @@
+import { PostDetails } from "@components/Posts/PostDetails";
 import { useNavigate, useParams } from "react-router-dom";
-import { PostDetails } from "./components/PostDetails";
 
 export const OfferDetailsPage = () => {
   const { id } = useParams<{ id: string }>();

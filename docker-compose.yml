@@ -31,6 +31,7 @@ services:
       dockerfile: Dockerfile.local
       args:
         VITE_GOOGLE_MAPS_API_KEY: ${VITE_GOOGLE_MAPS_API_KEY}
+        VITE_GOOGLE_MAP_ID: ${VITE_GOOGLE_MAP_ID}
         VITE_API_URL: ${VITE_API_URL}
     container_name: donations-tracker-frontend
     environment:

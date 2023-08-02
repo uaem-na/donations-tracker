@@ -5,14 +5,13 @@ import {
   faTriangleExclamation,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { PropsWithChildren } from "react";
+import { PropsWithChildren, useCallback } from "react";
 
 interface IAlertProps {
   type: "info" | "warn" | "error" | "success";
   heading?: string;
 }
 
-/* TODO: Add support for other alert type*/
 export const Alert = ({
   type,
   heading,
@@ -51,7 +50,7 @@ export const Alert = ({
     }
   };
 
-  const backgroundColor = () => {
+  const backgroundColor = useCallback(() => {
     const colorLevel = 50;
     switch (type) {
       case "info":
@@ -63,9 +62,9 @@ export const Alert = ({
       case "success":
         return `bg-green-50`;
     }
-  };
+  }, []);
 
-  const headerTextColor = () => {
+  const headerTextColor = useCallback(() => {
     switch (type) {
       case "info":
         return `text-blue-800`;
@@ -76,9 +75,9 @@ export const Alert = ({
       case "success":
         return `text-green-800`;
     }
-  };
+  }, []);
 
-  const messageTextColor = () => {
+  const messageTextColor = useCallback(() => {
     switch (type) {
       case "info":
         return `text-blue-700`;
@@ -89,7 +88,7 @@ export const Alert = ({
       case "success":
         return `text-green-700`;
     }
-  };
+  }, []);
 
   return (
     <div className={`rounded-md p-4 ${backgroundColor()}`} role="alert">

@@ -1,178 +1,208 @@
-import { GoogleMap, useLoadScript } from "@react-google-maps/api";
-import { useCallback, useRef, useState } from "react";
-import InfoBox from "./InfoBox";
-import Locate from "./Locate";
-import mapStyles from "./MapStyles";
-import Offer from "./Offer";
-import Request from "./Request";
-import "./index.css";
+import Locate from "@components/GoogleMapWrapper/Locate";
+import { Marker, MarkerUtils } from "@components/GoogleMapWrapper/MarkerUtils";
+import { MarkerClusterer } from "@googlemaps/markerclusterer";
+import { Status, Wrapper } from "@googlemaps/react-wrapper";
+import { PostApiResponse, useGetPostsQuery } from "@services/posts";
+import { GeoCluster } from "@utils/GeoCluster";
+import {
+  PropsWithChildren,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import { createPortal } from "react-dom";
+import { createRoot } from "react-dom/client";
 
-type LatLng = {
-  lat: number;
-  lng: number;
-};
-
-const center: LatLng = {
+const center: google.maps.LatLngLiteral = {
   lat: 45.504717,
   lng: -73.576456,
 };
 
 const options = {
-  styles: mapStyles,
+  mapId: import.meta.env.VITE_GOOGLE_MAP_ID,
   disableDefaultUI: true,
+  center,
   zoomControl: true,
+  zoom: 10,
   clickableIcons: false,
 };
 
-// TODO: add calling posts API to get posts in area
-// TODO: add search integration
-// TODO: fix map click to geolocate to postal code
-export const GoogleMapWrapper = () => {
+interface IGoogleMapWrapperProps {
+  post: PostApiResponse | null;
+  handleVisiblePosts: (posts: PostApiResponse[]) => void;
+}
+
+// TODO: add search integration?
+export const GoogleMapWrapper = ({
+  post,
+  handleVisiblePosts,
+}: IGoogleMapWrapperProps) => {
   const KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
-  const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: KEY,
-    libraries: ["places" as const],
-  });
 
-  const [selected, setSelected] = useState(null);
-  const [offers, setOffers] = useState([]);
-  const [requests, setRequests] = useState([]);
-  const [infoBox, setInfoBox] = useState<LatLng | null>(null);
+  const render = useCallback(
+    (status: Status) => {
+      switch (status) {
+        case Status.LOADING:
+          return <>Loading</>;
+        case Status.FAILURE:
+          return <>Error loading map</>;
+        case Status.SUCCESS:
+          return (
+            <GoogleMap
+              zoom={8}
+              center={center}
+              post={post}
+              handleVisiblePosts={handleVisiblePosts}
+            />
+          );
+      }
+    },
+    [post]
+  );
 
-  const onMapClick = useCallback((e) => {
-    setInfoBox({
-      lat: e.latLng.lat(),
-      lng: e.latLng.lng(),
+  return (
+    <Wrapper
+      apiKey={KEY}
+      render={render}
+      version="beta"
+      libraries={["marker"]}
+    />
+  );
+};
+
+const GoogleMap = ({
+  post,
+  handleVisiblePosts,
+}: PropsWithChildren<
+  google.maps.MapOptions & { post; handleVisiblePosts }
+>) => {
+  const { data: posts, isLoading } = useGetPostsQuery();
+  const [markers, setMarkers] = useState<Marker[]>();
+  const [map, setMap] = useState<google.maps.Map>();
+  const ref = useRef(null);
+
+  useEffect(() => {
+    if (ref.current) {
+      setMap(new google.maps.Map(ref.current, options));
+    }
+  }, []);
+
+  const getVisiblePosts = () => {
+    const bounds = map?.getBounds();
+
+    const markersInView = markers?.filter((m) => {
+      const marker = m as google.maps.marker.AdvancedMarkerElement;
+      if (bounds?.contains(marker.position!) === true) {
+        return marker;
+      }
     });
-    setSelected(null);
-  }, []);
 
-  // const onMapClick = useCallback((e) => {
-  //   const lat = e.latLng.lat()
-  //   const lng = e.latLng.lng()
-  //   const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${KEY}`
-  //   let postalCode = null;
+    let data = markersInView!.map((x) => {
+      return x["data"];
+    });
+    const ids = Array.prototype.concat.apply([], data);
+    const p = posts?.filter((x) => ids.includes(x.id));
 
-  //   // Step 1: reverse geolocate to obtain postal code of the click
-  //   const fetchPostalCode = fetch(url)
-  //     .then(data => data.json()
-  //       .then(res => {
-  //        console.log(res)
-  //         const address = res.results[0].address_components;
+    handleVisiblePosts(p);
+  };
 
-  //         address.forEach(part => {
-  //           if (part.types.includes("postal_code")) {
-  //             postalCode = part.long_name;
-  //           }
-  //         });
+  useEffect(() => {
+    if (map && posts) {
+      const m: Marker[] = [];
+      const coords = posts.map((p) => {
+        return [p.location.lat!, p.location.lng!, p.id];
+      });
+      const geocluster = new GeoCluster(coords, 0.01);
+      const geolocationPosts = geocluster.getGeoCluster();
 
-  //         // Step 2: geolocate on given postal code to find common latitude and longitude for all posts in area
-  //         const secondUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${postalCode}&key=${KEY}`
-  //         const fetchCoordinates = fetch(secondUrl)
-  //           .then(response => response.json())
-  //             .then(data => {
-  //               return {
-  //                 lat: data.results[0].geometry.location.lat,
-  //                 lng: data.results[0].geometry.location.lng,
-  //               }
-  //             })
-  //         // Here, we need to await the response of the nested promise before returning any value for the outer promise
-  //         const coordinates = fetchCoordinates.then(value => {
-  //           return value
-  //         })
-  //         return coordinates
-  //       })
-  //     );
+      geolocationPosts.map(({ centroid, points, ids }) => {
+        const [lat, lng] = centroid;
+        const p = posts.filter((x) => ids.includes(x.id));
+        const marker = createMarker({ lat, lng }, p);
 
-  //   // REMEMBER: never set a promise equal to a global variable
-  //   // This can create all sorts of synchronization problems
-  //   // Instead, the code below is just to show the process needed to obtain a value from a promise
-  //   // Will want to set these values immediately FROM INSIDE THE ASYNC CALLBACKS
+        // This is required, otherwise JSX event handler does nothing kinda hacky
+        marker.addListener("click", () => {});
+        m.push(marker);
+      });
+      setMarkers(m);
+    }
+  }, [map, posts]);
 
-  //   const LAT = fetchPostalCode.then(value => {
-  //     return value.lat;
-  //   })
+  useEffect(() => {
+    if (markers) {
+      const markerCluster = new MarkerClusterer({
+        markers,
+      });
+      markerCluster.setMap(map!);
 
-  //   const LNG = fetchPostalCode.then(value => {
-  //     return value.lng;
-  //   })
-  //   // console.log(LAT)
-  //   // console.log(LNG)
+      google.maps.event.addListener(map!, "idle", () => {
+        getVisiblePosts();
+      });
+    }
+  }, [markers]);
 
-  //   setInfoBox({
-  //     lat: e.latLng.lat(),
-  //     lng: e.latLng.lng(),
-  //   });
-  //   setSelected(null);
-  // }, []);
+  const createMarker = useCallback(
+    ({ lat, lng }: google.maps.LatLngLiteral, posts: PostApiResponse[]) => {
+      if (MarkerUtils.isAdvancedMarkerAvailable(map)) {
+        const div = document.createElement("div");
+        const root = createRoot(div);
+        const el = createPortal(<CustomMarker posts={posts} />, div);
+        root.render(el);
+        const marker = new google.maps.marker.AdvancedMarkerElement({
+          map,
+          position: { lat, lng },
+          content: div,
+        });
+        marker["data"] = posts.map((p) => p.id);
+        return marker;
+      }
+      return new google.maps.Marker({
+        map,
+        position: { lat, lng },
+      });
+    },
+    [map]
+  );
 
-  const mapRef = useRef<google.maps.Map | null>(null);
-
-  const onLoad = useCallback((map) => {
-    mapRef.current = map;
-  }, []);
+  useEffect(() => {
+    if (post?.location.lat && post?.location.lng) {
+      panTo({
+        lat: post.location.lat,
+        lng: post.location.lng,
+      });
+    }
+  }, [post]);
 
   const panTo = useCallback(
     ({ lat, lng }) => {
-      if (!mapRef?.current) {
+      if (!map) {
         return;
       }
-      mapRef.current.panTo({ lat, lng });
-      mapRef.current.setZoom(16);
+      map.panTo({ lat, lng });
+      map.setZoom(10);
     },
-    [mapRef]
+    [map]
   );
 
-  if (loadError) return "Error loading maps";
-  if (!isLoaded) return "Loading Maps";
-
   return (
-    <div className="w-full h-full">
+    <div className="relative w-full">
       <Locate panTo={panTo} />
-      {/* <Search panTo={panTo} /> */}
-
-      <GoogleMap
-        id="map"
-        mapContainerClassName="w-full h-full"
-        zoom={12}
-        center={center}
-        options={options}
-        onClick={onMapClick}
-        onLoad={onLoad}
-        onDblClick={() => {
-          setInfoBox(null);
-        }}
-      >
-        {infoBox && (
-          <InfoBox
-            lat={infoBox.lat}
-            lng={infoBox.lng}
-            setInfoBox={setInfoBox}
-            setOffers={setOffers}
-            setRequests={setRequests}
-          />
-        )}
-        {offers.map((offer: any) => (
-          <Offer
-            clusterer={null}
-            key={`${offer.lat}-${offer.lng}`}
-            selected={selected}
-            setSelected={setSelected}
-            offer={offer}
-            setInfoBox={setInfoBox}
-          />
-        ))}
-        {requests.map((request: any) => (
-          <Request
-            clusterer={null}
-            key={`${request.lat}-${request.lng}`}
-            selected={selected}
-            setSelected={setSelected}
-            request={request}
-            setInfoBox={setInfoBox}
-          />
-        ))}
-      </GoogleMap>
+      <div ref={ref} id="map" className="w-full h-full" />
     </div>
+  );
+};
+
+const CustomMarker = ({ posts }) => {
+  return (
+    <>
+      <div
+        className={`rounded-full w-[35px] h-[35px] ring-1 ring-inset flex items-center justify-center p-[4px] relative transition ease-out delay-150
+                    after:border-l-[9px] after:border-l-transparent after:border-r-[9px] after:border-r-transparent after:border-t-[9px]  after:left-[50%] after:absolute after:top-[90%] after:h-0 after:content-['']
+                    after:translate-x-[-50%] after:z-[1] bg-purple-800 text-white ring-purple-700/10 after:border-t-purple-800`}
+      >
+        <span className="text-lg font-semibold">{posts.length}</span>
+      </div>
+    </>
   );
 };
