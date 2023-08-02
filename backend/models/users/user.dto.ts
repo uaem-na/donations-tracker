@@ -1,3 +1,4 @@
+import { Request } from "express";
 import { Document } from "mongoose";
 import { Location, User } from "../../types";
 
@@ -41,7 +42,7 @@ export class UserDto {
     return new UserDto(document.id, user);
   }
 
-  static fromRequest(req: Express.Request): UserDto | null {
+  static fromRequest(req: Request): UserDto | null {
     if (!req.user?.id || !req.user.username || !req.user.email) {
       return null;
     }

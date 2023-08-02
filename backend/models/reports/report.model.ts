@@ -1,7 +1,6 @@
-import { faker } from "@faker-js/faker/locale/en_CA";
 import { Model, model, Schema } from "mongoose";
 import { ModelName, ReportStatus } from "../../constants";
-import { PostDocument, ReportDocument, UserDocument } from "../../types";
+import { ReportDocument } from "../../types";
 
 const ReportSchema: Schema<ReportDocument> = new Schema(
   {
@@ -30,17 +29,3 @@ export const ReportModel: Model<ReportDocument> = model(
   ReportSchema
 );
 export default ReportModel;
-
-export const fakeReport = (
-  reporter: UserDocument,
-  post: PostDocument
-): ReportDocument => {
-  const report = new ReportModel({
-    reporter: reporter,
-    post: post,
-    status: ReportStatus.UNRESOLVED,
-    notes: faker.word.words({ count: { min: 5, max: 100 } }),
-  });
-
-  return report;
-};

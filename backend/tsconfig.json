@@ -1,6 +1,6 @@
 {
   "include": ["**/*.ts", "custom.d.ts"],
-  "exclude": ["node_modules", "**/*.spec.ts"],
+  "exclude": ["node_modules", "**/*.spec.ts", "seeder"],
   "watchOptions": {
     "fallbackPolling": "fixedinterval"
   },
