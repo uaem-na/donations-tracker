@@ -1,6 +1,5 @@
 import Locate from "@components/GoogleMapWrapper/Locate";
 import { Marker, MarkerUtils } from "@components/GoogleMapWrapper/MarkerUtils";
-import { MarkerClusterer } from "@googlemaps/markerclusterer";
 import { Status, Wrapper } from "@googlemaps/react-wrapper";
 import { PostApiResponse, useGetPostsQuery } from "@services/posts";
 import { GeoCluster } from "@utils/GeoCluster";
@@ -71,6 +70,12 @@ export const GoogleMapWrapper = ({
   );
 };
 
+type Cluster = {
+  centroid: [number, number];
+  ids: string[];
+  points: [number, number];
+};
+
 const GoogleMap = ({
   post,
   handleVisiblePosts,
@@ -78,15 +83,51 @@ const GoogleMap = ({
   google.maps.MapOptions & { post; handleVisiblePosts }
 >) => {
   const { data: posts, isLoading } = useGetPostsQuery();
-  const [markers, setMarkers] = useState<Marker[]>();
   const [map, setMap] = useState<google.maps.Map>();
+  const [postCluster, setPostCluster] = useState<Cluster[]>([]);
+  const [markers, setMarkers] = useState<Marker[]>([]);
+  const [zoomBias, setZoomBias] = useState(2);
   const ref = useRef(null);
 
+  // create a new map instance when the ref changes
   useEffect(() => {
     if (ref.current) {
       setMap(new google.maps.Map(ref.current, options));
     }
   }, []);
+
+  // handle zoom bias
+  const handleZoomChanged = useCallback(() => {
+    if (map) {
+      const zoom = map.getZoom() as number;
+
+      // higher zoom level = zoomed in
+      // lower zoom level = zoomed out
+      // higher bias = cluster larger area
+      // lower bias = cluster smaller area
+      let bias = (1.5 / zoom ** 2) * 100;
+      bias = Math.min(Math.max(bias, 0), 10); // set min 0 and max 10 for bias
+
+      setZoomBias(bias);
+    }
+  }, [map]);
+
+  // set zoom bias when map is ready
+  useEffect(() => {
+    if (map) {
+      // add event listener to update zoom bias
+      const listener = google.maps.event.addListener(
+        map,
+        "zoom_changed",
+        handleZoomChanged
+      );
+
+      // remove event listener when component unmounts
+      return () => {
+        google.maps.event.removeListener(listener);
+      };
+    }
+  }, [map]);
 
   const getVisiblePosts = () => {
     const bounds = map?.getBounds();
@@ -107,63 +148,155 @@ const GoogleMap = ({
     handleVisiblePosts(p);
   };
 
+  const handleMarkerClick = (
+    marker: google.maps.Marker | google.maps.marker.AdvancedMarkerElement
+  ) => {
+    if (!map || !marker) {
+      return;
+    }
+
+    if (marker instanceof google.maps.marker.AdvancedMarkerElement) {
+      const { lat, lng } = marker.position!;
+      map.panTo({
+        lat: lat as number,
+        lng: lng as number,
+      });
+    } else {
+      const position = marker.getPosition();
+      if (position) {
+        map.panTo(position);
+      }
+    }
+  };
+
+  // calculate marker positions when map and posts are ready
   useEffect(() => {
     if (map && posts) {
-      const m: Marker[] = [];
-      const coords = posts.map((p) => {
-        return [p.location.lat!, p.location.lng!, p.id];
+      const coords = posts.map((post) => {
+        return [post.location.lat!, post.location.lng!, post.id];
       });
-      const geocluster = new GeoCluster(coords, 0.01);
-      const geolocationPosts = geocluster.getGeoCluster();
-
-      geolocationPosts.map(({ centroid, points, ids }) => {
-        const [lat, lng] = centroid;
-        const p = posts.filter((x) => ids.includes(x.id));
-        const marker = createMarker({ lat, lng }, p);
-
-        // This is required, otherwise JSX event handler does nothing kinda hacky
-        marker.addListener("click", () => {});
-        m.push(marker);
-      });
-      setMarkers(m);
+      const cluster = new GeoCluster(coords, zoomBias);
+      const postCluster: Cluster[] = cluster.getGeoCluster();
+      setPostCluster(postCluster);
     }
-  }, [map, posts]);
+  }, [map, posts, zoomBias]);
 
-  useEffect(() => {
-    if (markers) {
-      const markerCluster = new MarkerClusterer({
-        markers,
-      });
-      markerCluster.setMap(map!);
-
-      google.maps.event.addListener(map!, "idle", () => {
-        getVisiblePosts();
-      });
-    }
+  // function to remove all markers from map
+  const removeAllMarkers = useCallback(() => {
+    markers?.map((m) => {
+      MarkerUtils.setMap(m, null);
+    });
   }, [markers]);
 
+  // function to create marker
   const createMarker = useCallback(
-    ({ lat, lng }: google.maps.LatLngLiteral, posts: PostApiResponse[]) => {
-      if (MarkerUtils.isAdvancedMarkerAvailable(map)) {
-        const div = document.createElement("div");
-        const root = createRoot(div);
-        const el = createPortal(<CustomMarker posts={posts} />, div);
-        root.render(el);
-        const marker = new google.maps.marker.AdvancedMarkerElement({
-          map,
-          position: { lat, lng },
-          content: div,
-        });
-        marker["data"] = posts.map((p) => p.id);
-        return marker;
+    (
+      { lat, lng }: google.maps.LatLngLiteral,
+      posts: PostApiResponse[]
+    ): google.maps.marker.AdvancedMarkerElement => {
+      if (!MarkerUtils.isAdvancedMarkerAvailable(map)) {
+        throw new Error(
+          "AdvancedMarkerElement is not available, make sure to set Map ID"
+        );
       }
-      return new google.maps.Marker({
+      const div = document.createElement("div");
+      const root = createRoot(div);
+      const el = createPortal(<CustomMarker posts={posts} />, div);
+      root.render(el);
+      const marker = new google.maps.marker.AdvancedMarkerElement({
         map,
         position: { lat, lng },
+        content: div,
       });
+      marker["data"] = posts.map((p) => p.id);
+      return marker;
     },
     [map]
   );
+
+  // based on clusters, create markers
+  useEffect(() => {
+    if (postCluster && postCluster.length > 0) {
+      removeAllMarkers();
+
+      postCluster.forEach(({ centroid, points, ids }) => {
+        const [lat, lng] = centroid;
+        const p = posts?.filter((x) => ids.includes(x.id));
+        const marker = createMarker({ lat, lng }, p!);
+        setMarkers((markers) => [...markers, marker]);
+
+        // TODO: add event listener and cleanup function if needed
+      });
+
+      // clean up markers
+      return () => {
+        console.log("markers length", markers.length);
+        removeAllMarkers();
+      };
+    }
+  }, [postCluster, posts]);
+
+  // TODO: delete if refactor works
+  // useEffect(() => {
+  //   if (map && posts) {
+  //     const m: Marker[] = [];
+  //     const coords = posts.map((p) => {
+  //       return [p.location.lat!, p.location.lng!, p.id];
+  //     });
+  //     const geocluster = new GeoCluster(coords, zoomBias);
+  //     const geolocationPosts = geocluster.getGeoCluster();
+
+  //     geolocationPosts.map(({ centroid, points, ids }) => {
+  //       const [lat, lng] = centroid;
+  //       const p = posts.filter((x) => ids.includes(x.id));
+  //       const marker = createMarker({ lat, lng }, p);
+
+  //       if (marker instanceof google.maps.marker.AdvancedMarkerElement) {
+  //         // resolves lib warning related to event handler
+  //         marker.addEventListener("gmp-click", () => {
+  //           console.count("gmp-click");
+  //           handleMarkerClick(marker);
+  //         });
+  //       } else {
+  //         // This is required, otherwise JSX event handler does nothing kinda hacky
+  //         marker.addListener("click", () => {
+  //           console.count("click");
+  //           handleMarkerClick(marker);
+  //         });
+  //       }
+
+  //       m.push(marker);
+  //     });
+  //     // setMarkers(m);
+  //     console.log(markers);
+  //   }
+
+  //   return () => {
+  //     console.count("cleanup");
+  //     markers?.map((m) => {
+  //       if (m instanceof google.maps.marker.AdvancedMarkerElement) {
+  //         m.removeEventListener("gmp-click", () => {
+  //           handleMarkerClick(m);
+  //         });
+  //       } else {
+  //         m.setMap(null);
+  //       }
+  //     });
+  //   };
+  // }, [map, posts, zoomBias]);
+
+  // useEffect(() => {
+  //   if (markers) {
+  //     const markerCluster = new MarkerClusterer({
+  //       markers,
+  //     });
+  //     markerCluster.setMap(map!);
+
+  //     google.maps.event.addListener(map!, "idle", () => {
+  //       getVisiblePosts();
+  //     });
+  //   }
+  // }, [markers]);
 
   useEffect(() => {
     if (post?.location.lat && post?.location.lng) {
