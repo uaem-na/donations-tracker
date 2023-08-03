@@ -113,8 +113,10 @@ const GoogleMap = ({
       const coords = posts.map((p) => {
         return [p.location.lat!, p.location.lng!, p.id];
       });
-      const geocluster = new GeoCluster(coords, 0.01);
+      const geocluster = new GeoCluster(coords, 1);
       const geolocationPosts = geocluster.getGeoCluster();
+
+      console.log(geolocationPosts);
 
       geolocationPosts.map(({ centroid, points, ids }) => {
         const [lat, lng] = centroid;

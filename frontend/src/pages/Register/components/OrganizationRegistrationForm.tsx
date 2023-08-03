@@ -1,5 +1,6 @@
 import { Alert } from "@components";
 import { Button, Input, Label } from "@components/Controls";
+import { PlaceAutocomplete } from "@components/Controls/PlaceAutocomplete";
 import { SelectInput } from "@components/Controls/Select";
 import { UserDiscriminator } from "@constants";
 import { ProvinceName } from "@constants/Provinces";
@@ -188,16 +189,17 @@ export const OrganizationRegistrationForm = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-6">
         <div className="md:col-span-2">
           <Label htmlFor="streetAddress">Street address</Label>
-          <div className="mt-2">
-            <Input
-              {...register("streetAddress")}
-              id="streetAddress"
-              type="text"
-              autoComplete="street-address"
-              placeholder="Street address"
-              errorMessage={errors.streetAddress?.message}
-            />
-          </div>
+          <PlaceAutocomplete />
+          {/*<div className="mt-2">*/}
+          {/*  <Input*/}
+          {/*    {...register("streetAddress")}*/}
+          {/*    id="streetAddress"*/}
+          {/*    type="text"*/}
+          {/*    autoComplete="street-address"*/}
+          {/*    placeholder="Street address"*/}
+          {/*    errorMessage={errors.streetAddress?.message}*/}
+          {/*  />*/}
+          {/*</div>*/}
         </div>
 
         <div className="md:col-span-1">
