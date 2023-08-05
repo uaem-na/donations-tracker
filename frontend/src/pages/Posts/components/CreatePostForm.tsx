@@ -81,18 +81,6 @@ export const CreatePostForm = ({ type }: PostTableProps) => {
   return (
     <form className="space-y-6" onSubmit={handleSubmit(onSubmit)} noValidate>
       <div>{serverMessage && <Alert type="error">{serverMessage}</Alert>}</div>
-
-      <div>
-        <Label htmlFor="title">{t("title")}</Label>
-        <div className="mt-2">
-          <Input
-            {...register("title")}
-            id="title"
-            type="text"
-            errorMessage={errors.title?.message}
-          />
-        </div>
-      </div>
       <div>
         <Label htmlFor="name">{t("posts.name")}</Label>
         <div className="mt-2">

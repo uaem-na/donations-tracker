@@ -64,7 +64,6 @@ export const EditPostForm = ({ id, type, onError }: EditPostFormProps) => {
       id: post.id,
       location: {},
       type,
-      title: data.title,
       item: data.item,
     });
   };
@@ -80,7 +79,6 @@ export const EditPostForm = ({ id, type, onError }: EditPostFormProps) => {
   // if post is available, populate form
   useEffect(() => {
     if (isPostLoaded) {
-      setValue("title", post.title, { shouldValidate: true });
       setValue("item", post.item, { shouldValidate: true });
     }
 
@@ -138,18 +136,6 @@ export const EditPostForm = ({ id, type, onError }: EditPostFormProps) => {
   return (
     <form className="space-y-6" onSubmit={handleSubmit(onSubmit)} noValidate>
       <div>{serverMessage && <Alert type="error">{serverMessage}</Alert>}</div>
-
-      <div>
-        <Label htmlFor="title">{t("title")}</Label>
-        <div className="mt-2">
-          <Input
-            {...register("title")}
-            id="title"
-            type="text"
-            errorMessage={errors.title?.message}
-          />
-        </div>
-      </div>
       <div>
         <Label htmlFor="name">{t("posts.name")}</Label>
         <div className="mt-2">
