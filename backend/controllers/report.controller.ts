@@ -57,7 +57,7 @@ export class ReportController {
     });
 
     log(
-      `Created report ${report._id} for user ${post.author.username} on post [${post.id}] ${post.title}.`
+      `Created report ${report._id} for user ${post.author.username} on post [${post.id}]`
     );
 
     res.status(201).json(ReportDto.fromDocument(report));

@@ -98,7 +98,6 @@ export type Post = {
   _id: string;
   author: User;
   location: Location;
-  title: string;
   item: PostItem;
   status: "open" | "in-progress" | "closed";
   views: number;

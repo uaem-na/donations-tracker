@@ -17,7 +17,6 @@ export type PostApiResponse = {
   item: PostItemApiResponse;
   location: PostLocationApiResponse;
   status: string;
-  title: string;
   type: string;
   updatedAt: string;
   views: number;

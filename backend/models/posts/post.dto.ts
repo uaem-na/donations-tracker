@@ -15,7 +15,6 @@ export class PostDto {
   id: string;
   author: UserDto;
   location: PostLocationDto;
-  title: string;
   item: PostItemDto;
   type: "request" | "offer";
   status: "open" | "in-progress" | "closed";
@@ -24,9 +23,8 @@ export class PostDto {
   updatedAt: string;
 
   private constructor(id: string, post: Post) {
-    const { author, location, title, item, type, status, views } = post;
+    const { author, location, item, type, status, views } = post;
     this.id = id;
-    this.title = title;
     this.type = type;
     this.status = status;
     this.views = views;
