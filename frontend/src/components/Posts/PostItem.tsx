@@ -1,5 +1,6 @@
-import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
+import { faChevronRight, faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
@@ -22,33 +23,56 @@ export const PostItem = ({
 }: PostItemProps) => {
   const { t } = useTranslation();
 
+  const shouldDisplayCreatedAt = () => {
+    return createdAt === updatedAt;
+  };
+
+  const handleTrackClick = () => {
+    console.count("TODO: add track post functionality");
+  };
+
   return (
-    <li className="relative flex justify-between gap-x-6 px-4 py-5 hover:bg-gray-50 sm:px-6 lg:px-8">
-      <div className="flex gap-x-4">
-        <div className="min-w-0 flex-auto">
-          <p className="text-sm font-semibold leading-6 text-gray-900">
-            <Link to={`${id}`}>
-              <span className="absolute inset-x-0 -top-px bottom-0"></span>
-              {title}
-            </Link>
-          </p>
-          <p className="mt-1 flex text-xs leading-5 text-gray-500">
-            <span className="relative truncate hover:underline"></span>
-            {displayName}
-          </p>
-        </div>
-      </div>
-      <div className="flex items-center gap-x-4">
-        <div className="hidden sm:flex sm:flex-col sm:items-end">
-          <p className="text-sm leading-6 text-gray-900">{status}</p>
-          <p className="mt-1 text-xs leading-5 text-gray-500">
-            {t("posts.updated_at", { date: updatedAt })}
-          </p>
-        </div>
+    <li className="flex justify-between gap-x-6 px-4 py-5 hover:bg-gray-50 sm:px-6 lg:px-8">
+      <div className="relative flex-none flex items-center justify-center">
+        <VisuallyHidden>{t("posts.track")}</VisuallyHidden>
+        <span
+          className="absolute inset-0 cursor-pointer -mx-4 -my-5 peer"
+          onClick={handleTrackClick}
+        ></span>
         <FontAwesomeIcon
-          className="h-5 w-5 flex-none text-gray-400"
-          icon={faChevronRight}
+          className="h-5 w-5 flex-none text-yellow-400 peer-hover:text-yellow-500"
+          icon={faStar}
         />
+      </div>
+      <div className="grow relative flex">
+        <div className="grow flex gap-x-4">
+          <div className="min-w-0 flex-auto">
+            <p className="text-sm font-semibold leading-6 text-gray-900">
+              <Link to={`${id}`}>
+                <span className="absolute inset-0 -mx-4 -my-5"></span>
+                {title}
+              </Link>
+            </p>
+            <p className="mt-1 flex text-xs leading-5 text-gray-500">
+              <span className="relative truncate hover:underline"></span>
+              {displayName}
+            </p>
+          </div>
+        </div>
+        <div className="flex items-center gap-x-4">
+          <div className="hidden sm:flex sm:flex-col sm:items-end">
+            <p className="text-sm leading-6 text-gray-900">{status}</p>
+            <p className="mt-1 text-xs leading-5 text-gray-500">
+              {shouldDisplayCreatedAt()
+                ? t("posts.created_at", { date: createdAt })
+                : t("posts.updated_at", { date: updatedAt })}
+            </p>
+          </div>
+          <FontAwesomeIcon
+            className="h-5 w-5 flex-none text-gray-400"
+            icon={faChevronRight}
+          />
+        </div>
       </div>
     </li>
   );

@@ -28,7 +28,8 @@
     "created_at": "Created at {{date}}",
     "updated_at": "Updated at {{date}}",
     "created_on": "Created on {{date}}",
-    "last_modified_on": "Last modified on {{date}}"
+    "last_modified_on": "Last modified on {{date}}",
+    "track": "Track"
   },
   "user_actions": {
     "open_user_menu": "Open user menu",
