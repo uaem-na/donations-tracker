@@ -34,17 +34,10 @@ export const PostTable = ({ type }: PostTableProps) => {
                 <tr>
                   <th
                     scope="col"
-                    className="px-6 py-3 text-xs font-medium tracking-wider text-center text-gray-500 uppercase bg-gray-50"
+                    className="px-6 py-3 text-xs font-medium tracking-wider text-gray-500 uppercase bg-gray-50"
                   >
-                    Title
+                    Item
                   </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-xs font-medium tracking-wider text-center text-gray-500 uppercase bg-gray-50"
-                  >
-                    Items
-                  </th>
-
                   <th
                     scope="col"
                     className="px-6 py-3 text-xs font-medium tracking-wider text-center text-gray-500 uppercase bg-gray-50"
@@ -70,22 +63,20 @@ export const PostTable = ({ type }: PostTableProps) => {
                       <tr key={post.id}>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="text-sm text-gray-900">
-                            <Link to={`${post.id}`}>{post.title}</Link>
+                            <Link to={`${post.id}`}>
+                              {" "}
+                              {post?.item?.name
+                                ? post.item.name
+                                : t("posts.no_items")}
+                            </Link>
                           </div>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-gray-900">
-                            {post?.item?.name
-                              ? post.item.name
-                              : t("posts.no_items")}
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
+                        <td className="px-6 py-4 whitespace-nowrap text-center">
                           <div className="text-sm text-gray-900">
                             {post.status}
                           </div>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
+                        <td className="px-6 py-4 whitespace-nowrap text-center">
                           <div className="text-sm text-gray-900">
                             {post.createdAt}
                           </div>

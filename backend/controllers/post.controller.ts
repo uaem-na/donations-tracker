@@ -27,12 +27,6 @@ export class PostController {
       throw new AuthorizationError("User not logged in.");
     }
 
-    await body("title")
-      .trim()
-      .notEmpty()
-      .isString()
-      .isLength({ max: 256 })
-      .run(req);
     await body("type").trim().notEmpty().isIn(PostTypes).run(req);
     await body("item").isObject().run(req);
     await body("item.name")
@@ -87,14 +81,13 @@ export class PostController {
       throw new ValidationError(errors.array());
     }
 
-    const { title, type, item } = req.body;
+    const { type, item } = req.body;
     const user = await this.userService.getUserByUsername(req.user.username);
     if (!user) {
       throw new NotFoundError(`Error finding user ${req.user.username}.`);
     }
 
     const post = await this.postService.createPost({
-      title,
       type,
       item,
       author: { ...user },
@@ -102,7 +95,7 @@ export class PostController {
       status: PostStatus.OPEN,
     });
 
-    log(`Created post [${post._id}] ${post.title} by user ${user.username}.`);
+    log(`Created post [${post._id}] by user ${user.username}.`);
 
     res.status(201).json(PostDto.fromDocument(post));
   });
@@ -131,12 +124,6 @@ export class PostController {
     }
 
     await param("id").notEmpty().run(req);
-    await body("title")
-      .trim()
-      .notEmpty()
-      .isString()
-      .isLength({ max: 256 })
-      .run(req);
     await body("type").trim().notEmpty().isIn(PostTypes).run(req);
     await body("item").isObject().run(req);
     await body("item.name")
@@ -203,10 +190,9 @@ export class PostController {
       );
     }
 
-    const { title, type, item } = req.body;
+    const { type, item } = req.body;
 
     const updatedPost = await this.postService.updatePost(id, {
-      title,
       type,
       item,
     });

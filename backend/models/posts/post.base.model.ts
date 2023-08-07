@@ -35,7 +35,6 @@ const PostSchema: Schema<Post> = new Schema(
       required: true,
     },
     location: { type: LocationSchema, required: true },
-    title: { type: String, required: true, maxlength: 256 },
     item: { type: ItemSchema, required: true },
     // * index for author and type for faster queries
     type: {

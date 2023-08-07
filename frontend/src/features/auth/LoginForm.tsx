@@ -60,14 +60,15 @@ export const LoginForm = () => {
     }
   }, [afterLoginSession, navigate]);
 
+  // redirect to account page if session exists
+  useEffect(() => {
+    if (currentSession) {
+      navigate("/account/dashboard");
+    }
+  }, [currentSession, navigate]);
+
   if (isLoading) {
     return <div>Loading...</div>;
-  }
-
-  if (currentSession) {
-    // session exists, redirect to account page
-    navigate("/account/dashboard");
-    return null;
   }
 
   return (

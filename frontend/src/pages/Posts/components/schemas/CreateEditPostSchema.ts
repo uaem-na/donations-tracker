@@ -3,11 +3,6 @@ import * as yup from "yup";
 
 export const CreateEditPostSchema = (t: TFunction) => {
   return yup.object().shape({
-    title: yup
-      .string()
-      .min(1, t("validation:string.too_short", { min: 1 }))
-      .max(256, t("validation:string.too_long", { max: 256 }))
-      .required(t("validation:field_required", { field: t("title") })),
     item: yup.object().shape({
       name: yup
         .string()
