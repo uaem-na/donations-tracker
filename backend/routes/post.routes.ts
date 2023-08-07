@@ -18,6 +18,7 @@ router.get("/items/categories", postController.getItemCategories);
 router.post("/", ensureAuthenticated, postController.createPost);
 router.post("/:id", ensureAuthenticated, postController.updatePost);
 router.delete("/:id", ensureAuthenticated, postController.deletePost);
+router.post("/:id/star", ensureAuthenticated, postController.starPost);
 
 router.get(
   "/user/:username",

@@ -1,6 +1,9 @@
+import { Badge } from "@components/Badge";
 import { faChevronRight, faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import { useGetSessionQuery, useStarPostMutation } from "@services/api";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
@@ -11,6 +14,7 @@ interface PostItemProps {
   displayName: string;
   createdAt: string;
   updatedAt: string;
+  type: string;
 }
 
 export const PostItem = ({
@@ -20,37 +24,64 @@ export const PostItem = ({
   displayName,
   createdAt,
   updatedAt,
+  type,
 }: PostItemProps) => {
   const { t } = useTranslation();
+  const { data: currentSession } = useGetSessionQuery();
+  const [starPostApi, { data: starResponse, isSuccess: isStarred }] =
+    useStarPostMutation();
+  const [starred, setStarred] = useState(false);
+
+  useEffect(() => {
+    if (currentSession) {
+      currentSession.starred?.find((postId) => postId === id)
+        ? setStarred(true)
+        : setStarred(false);
+    }
+  }, [currentSession]);
+
+  useEffect(() => {
+    if (isStarred) {
+      setStarred(starResponse ?? false);
+    }
+  }, [isStarred, starResponse]);
 
   const shouldDisplayCreatedAt = () => {
     return createdAt === updatedAt;
   };
 
   const handleTrackClick = () => {
-    console.count("TODO: add track post functionality");
+    starPostApi({ id });
   };
 
   return (
     <li className="flex justify-between gap-x-6 px-4 py-5 hover:bg-gray-50 sm:px-6 lg:px-8">
-      <div className="relative flex-none flex items-center justify-center">
-        <VisuallyHidden>{t("posts.track")}</VisuallyHidden>
-        <span
-          className="absolute inset-0 cursor-pointer -mx-4 -my-5 peer"
-          onClick={handleTrackClick}
-        ></span>
-        <FontAwesomeIcon
-          className="h-5 w-5 flex-none text-yellow-400 peer-hover:text-yellow-500"
-          icon={faStar}
-        />
-      </div>
+      {currentSession && (
+        <div className="relative flex-none flex items-center justify-center">
+          <VisuallyHidden>{t("posts.star")}</VisuallyHidden>
+          <span
+            className="absolute inset-0 cursor-pointer -mx-4 -my-5 peer"
+            onClick={handleTrackClick}
+          ></span>
+          <FontAwesomeIcon
+            className={
+              "h-5 w-5 flex-none " +
+              (starred
+                ? "text-yellow-400 peer-hover:text-yellow-500"
+                : "text-gray-200 peer-hover:text-yellow-500")
+            }
+            icon={faStar}
+          />
+        </div>
+      )}
       <div className="grow relative flex">
         <div className="grow flex gap-x-4">
           <div className="min-w-0 flex-auto">
             <p className="text-sm font-semibold leading-6 text-gray-900">
-              <Link to={`${id}`}>
+              <Link to={`/posts/${id}`}>
                 <span className="absolute inset-0 -mx-4 -my-5"></span>
-                {title}
+                <Badge color="gray" text={t(`posts.${type}`)} />
+                {" " + title}
               </Link>
             </p>
             <p className="mt-1 flex text-xs leading-5 text-gray-500">

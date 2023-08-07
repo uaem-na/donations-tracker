@@ -1,7 +1,7 @@
 import Link from "@components/Controls/Link/Link";
 import { faBuilding, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useGetSessionQuery } from "@services/auth";
+import { useGetSessionQuery } from "@services/api";
 import { useEffect } from "react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 

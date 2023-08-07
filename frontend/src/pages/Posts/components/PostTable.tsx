@@ -1,6 +1,6 @@
 import { PostList } from "@components";
 import { PostType } from "@constants";
-import { useGetPostsQuery } from "@services/posts";
+import { useGetPostsQuery } from "@services/api";
 import { useTranslation } from "react-i18next";
 
 type Type = (typeof PostType)[keyof typeof PostType];

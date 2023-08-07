@@ -1,7 +1,7 @@
 import { PostDetails } from "@components/Posts/PostDetails";
 import { useNavigate, useParams } from "react-router-dom";
 
-export const RequestDetailsPage = () => {
+export const PostDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
@@ -20,7 +20,7 @@ export const RequestDetailsPage = () => {
 
   return (
     <>
-      <PostDetails id={id} type="request" onError={handleError} />
+      <PostDetails id={id} onError={handleError} />
     </>
   );
 };

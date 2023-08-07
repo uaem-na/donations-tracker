@@ -1,8 +1,7 @@
 import { Badge } from "@components/Badge";
 import { StatusIndicator } from "@components/StatusIndicator/StatusIndicator";
 import { PostType } from "@constants";
-import { useGetSessionQuery } from "@store/services/auth";
-import { useGetPostQuery } from "@store/services/posts";
+import { useGetPostQuery, useGetSessionQuery } from "@services/api";
 import { capitalizeFirstLetter } from "@utils";
 import { format } from "date-fns";
 import { useEffect } from "react";
@@ -13,12 +12,11 @@ type Type = (typeof PostType)[keyof typeof PostType];
 
 interface PostDetailsProps {
   id: string;
-  type?: Type;
   onError: (err) => void;
 }
 
 /*TODO: add email if current user is logged in*/
-export const PostDetails = ({ id, type, onError }: PostDetailsProps) => {
+export const PostDetails = ({ id, onError }: PostDetailsProps) => {
   const { t } = useTranslation();
   const { data: currentSession } = useGetSessionQuery();
 

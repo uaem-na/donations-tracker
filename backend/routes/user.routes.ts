@@ -12,6 +12,7 @@ const userController = new UserController(userService);
 router.post("/update", ensureAuthenticated, userController.updateUser);
 router.post("/password", ensureAuthenticated, userController.updatePassword);
 router.delete("/:id", ensureAuthenticated, userController.deleteUser);
+router.get("/:id/starred", ensureAuthenticated, userController.getStarredPosts);
 
 // * admin actions
 router.get("/", ensureAuthenticated, ensureAdmin, userController.getAllUsers);

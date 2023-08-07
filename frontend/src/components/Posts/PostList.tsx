@@ -1,4 +1,5 @@
-import { PostApiResponse } from "@store/services/posts";
+import { PostApiResponse } from "@services/api";
+import { useTranslation } from "react-i18next";
 import { PostItem } from "./PostItem";
 
 interface PostListProps {
@@ -6,6 +7,11 @@ interface PostListProps {
 }
 
 export const PostList = ({ posts }: PostListProps) => {
+  const { t } = useTranslation();
+  if (posts === undefined || posts.length === 0) {
+    return <>{t("posts.no_posts_found")}</>;
+  }
+
   return (
     <ul
       role="list"
@@ -21,6 +27,7 @@ export const PostList = ({ posts }: PostListProps) => {
             displayName={post.author.firstName + " " + post.author.lastName}
             createdAt={post.createdAt}
             updatedAt={post.updatedAt}
+            type={post.type}
           />
         );
       })}

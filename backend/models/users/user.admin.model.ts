@@ -1,9 +1,9 @@
 import { Model, Schema } from "mongoose";
 import { UserDiscriminator, UserRole } from "../../constants";
-import { UserDocument } from "../../types";
+import { User, UserDocument } from "../../types";
 import UserModel from "./user.base.model";
 
-const AdminUserSchema: Schema<UserDocument> = new Schema({});
+const AdminUserSchema: Schema<User> = new Schema({});
 
 AdminUserSchema.pre("validate", function (next) {
   this.role = UserRole.ADMIN;

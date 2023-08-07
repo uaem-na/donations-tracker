@@ -1,5 +1,5 @@
 import { UserModel } from "../models/users";
-import { User, UserDocument } from "../types";
+import { PostDocument, User, UserDocument } from "../types";
 
 export class UserService {
   /**
@@ -85,5 +85,22 @@ export class UserService {
     user.active = active;
 
     return await user.save();
+  }
+
+  async getStarredPosts(id: string): Promise<PostDocument[]> {
+    const user = await UserModel.findById(id).populate({
+      path: "starred",
+      populate: {
+        path: "author",
+        select: "firstName lastName userName -__t",
+        model: "User",
+      },
+    });
+
+    if (!user) {
+      throw new Error(`Error getting starred posts. User does not exist.`);
+    }
+
+    return user.starred as PostDocument[];
   }
 }

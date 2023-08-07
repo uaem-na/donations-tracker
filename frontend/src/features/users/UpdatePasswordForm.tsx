@@ -4,7 +4,7 @@ import { useToast } from "@components/Toast";
 import { updatePasswordSchema } from "@features/YupSchemas";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Label } from "@radix-ui/react-label";
-import { useChangePasswordMutation } from "@services/users";
+import { useChangePasswordMutation } from "@services/api";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 

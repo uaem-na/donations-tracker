@@ -257,4 +257,24 @@ export class PostController {
 
     res.json(categories);
   });
+
+  starPost = expressAsyncHandler(async (req, res, next) => {
+    if (!hasUser(req)) {
+      throw new AuthorizationError("User not logged in.");
+    }
+
+    await param("id").notEmpty().run(req);
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      throw new ValidationError(errors.array());
+    }
+
+    const { id } = req.params;
+    const result = await this.postService.starPost(id, req.user.id);
+
+    log(`Starred post ${id} for user ${req.user.username}.`);
+
+    res.json(result);
+  });
 }

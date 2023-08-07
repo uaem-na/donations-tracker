@@ -9,11 +9,15 @@
   "deactivate": "Désactiver",
   "loading": "Chargement...",
   "email": "E-mail",
+  "select_a_tab": "Sélectionnez un onglet",
   "posts": {
     "author": "Auteur",
     "type": "Type",
+    "all": "Tous",
     "offer": "Offre",
+    "offers": "Offres",
     "request": "Demande",
+    "requests": "Demandes",
     "contact_information": "Informations de contact",
     "item": "Article",
     "item_details": "Détails de l'article",
@@ -29,7 +33,8 @@
     "updated_at": "Mis à jour le {{date}}",
     "created_on": "Créé le {{date}}",
     "last_modified_on": "Dernière modification le {{date}}",
-    "track": "Suivre"
+    "star": "Étoile",
+    "no_posts_found": "Aucun article trouvé"
   },
   "user_actions": {
     "open_user_menu": "Ouvrir le menu utilisateur",

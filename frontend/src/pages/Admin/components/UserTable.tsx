@@ -1,7 +1,10 @@
 import { Button } from "@components/Controls";
 import { UserRole } from "@constants";
-import { useGetSessionQuery } from "@services/auth";
-import { useGetUsersQuery, useSetUserActiveMutation } from "@services/users";
+import {
+  useGetSessionQuery,
+  useGetUsersQuery,
+  useSetUserActiveMutation,
+} from "@services/api";
 import { capitalizeFirstLetter } from "@utils";
 
 type Role = (typeof UserRole)[keyof typeof UserRole];

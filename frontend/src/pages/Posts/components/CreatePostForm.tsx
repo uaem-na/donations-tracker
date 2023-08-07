@@ -6,7 +6,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import {
   useCreatePostMutation,
   useGetItemCategoriesQuery,
-} from "@services/posts";
+} from "@services/api";
 import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -46,7 +46,7 @@ export const CreatePostForm = ({ type }: PostTableProps) => {
   // handle successful request
   useEffect(() => {
     if (isSuccess) {
-      navigate(`/${type}s`);
+      navigate(`/posts/list`);
     }
   }, [isSuccess]);
 

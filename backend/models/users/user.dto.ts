@@ -1,6 +1,7 @@
 import { Request } from "express";
 import { Document } from "mongoose";
 import { Location, User } from "../../types";
+import { LocationDto } from "../common";
 
 type UserLocationDto = Omit<Location, "_id"> & {
   id: string;
@@ -12,9 +13,10 @@ export class UserDto {
   email: string;
   firstName: string;
   lastName: string;
-  location: UserLocationDto | undefined;
   role: string;
   active: boolean;
+  location: UserLocationDto | undefined;
+  starred: string[] | undefined;
 
   private constructor(id: string, user: User) {
     const { username, email, firstName, lastName, location, role } = user;
@@ -28,12 +30,13 @@ export class UserDto {
     this.active = user.active;
 
     if (location) {
-      // convert location._id to location.id
-      const { _id: locationId, ...rest } = location;
-      this.location = {
-        id: locationId,
-        ...rest,
-      };
+      this.location = LocationDto.fromLocation(location);
+    }
+
+    if (user.starred && user.starred.length > 0) {
+      this.starred = user.starred.map((post) => {
+        return post._id;
+      });
     }
   }
 

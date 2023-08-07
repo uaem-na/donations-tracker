@@ -5,8 +5,7 @@ import { Button } from "@components/Controls";
 import { DEVICES } from "@constants";
 import { UpdateUserInfoForm } from "@features/users";
 import { AccountLayout } from "@pages/Account/components/AccountLayout";
-import { useGetSessionQuery } from "@services/auth";
-import { useGetPostsQuery } from "@services/posts";
+import { useGetPostsQuery, useGetSessionQuery } from "@services/api";
 import styled from "styled-components";
 
 const VerifiedStatus = () => {

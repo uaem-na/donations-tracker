@@ -9,11 +9,15 @@
   "deactivate": "Deactivate",
   "loading": "Loading...",
   "email": "E-mail",
+  "select_a_tab": "Select a tab",
   "posts": {
     "author": "Author",
     "type": "Type",
+    "all": "All",
     "offer": "Offer",
+    "offers": "Offers",
     "request": "Request",
+    "requests": "Requests",
     "contact_information": "Contact information",
     "item": "Item",
     "item_details": "Item details",
@@ -29,7 +33,8 @@
     "updated_at": "Updated at {{date}}",
     "created_on": "Created on {{date}}",
     "last_modified_on": "Last modified on {{date}}",
-    "track": "Track"
+    "star": "Star",
+    "no_posts_found": "No posts found"
   },
   "user_actions": {
     "open_user_menu": "Open user menu",

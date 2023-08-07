@@ -6,7 +6,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
-import { useGetSessionQuery, useLogoutMutation } from "@services/auth";
+import { useGetSessionQuery, useLogoutMutation } from "@services/api";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -52,7 +52,7 @@ const ProfileMenu = () => {
               <DropdownMenu.Group>
                 <DropdownMenu.Item
                   onSelect={() => {
-                    navigate("/offers/new");
+                    navigate("/posts/offer/new");
                   }}
                   className="block px-3 py-1 text-sm leading-6 font-light text-gray-900 cursor-pointer hover:bg-gray-50"
                 >
@@ -64,7 +64,7 @@ const ProfileMenu = () => {
                 </DropdownMenu.Item>
                 <DropdownMenu.Item
                   onSelect={() => {
-                    navigate("/requests/new");
+                    navigate("/posts/request/new");
                   }}
                   className="block px-3 py-1 text-sm leading-6 font-light text-gray-900 cursor-pointer hover:bg-gray-50"
                 >
