@@ -63,7 +63,7 @@ export const DashboardPage = () => {
                     <p className="text-sm font-semibold leading-6 text-gray-900">
                       <a href="#">
                         <span className="absolute inset-x-0 -top-px bottom-0"></span>
-                        {post.title}
+                        {post.item.name}
                       </a>
                     </p>
                     <p className="mt-1 flex text-xs leading-5 text-gray-500">

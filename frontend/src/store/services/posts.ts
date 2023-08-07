@@ -8,6 +8,7 @@ export type PostAuthorApiResponse = {
   firstName: string;
   id: string;
   lastName: string;
+  email: string;
 };
 
 export type PostApiResponse = {
