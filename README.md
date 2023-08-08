@@ -60,7 +60,7 @@ To build without cache:
 - [x] As a user, I should be able to set a category for post (clothes, food, personal protective equipment, book, cutlery, stationary, furniture, toy, other - screend by admin)
 - [x] As a user, I should be able to create a request, edit and delete my own requests
 - [x] As a user, I should be able to view the posts on a map (landing page or "view")
-- [ ] As a user, I should be able to track others' requests/offers in my account dashboard
+- [x] As a user, I should be able to track others' requests/offers in my account dashboard
 - [ ] As a user, I should be able to use the app in both English and French
 - [ ] Add pagination, sorting, and filtering to public requests/offers page
 
