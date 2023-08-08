@@ -2,7 +2,7 @@ import { Tooltip } from "@components/Controls";
 import { ISiteLinks, UserRole } from "@constants";
 import { IconDefinition } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useGetSessionQuery } from "@services/auth";
+import { useGetSessionQuery } from "@services/api";
 import { NavLink } from "react-router-dom";
 
 interface SidebarLogoProps {

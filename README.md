@@ -43,6 +43,7 @@ To build without cache:
 - [ ] Post must be in private mode where only the author and admins can read before it goes public
 - [ ] User emails must be verified (depends on email service provider such as Amazon SES)
 - [ ] When there is an activity on the post, authors must be notified
+- [ ] Add display name to user model and use it across the app
 
 ### Admin features
 
@@ -57,18 +58,16 @@ To build without cache:
 - [X] As a user, I should be able to view a list of public requests
 - [X] As a user, I should be able to view a list of public offers
 - [x] As a user, I should be able to set a category for post (clothes, food, personal protective equipment, book, cutlery, stationary, furniture, toy, other - screend by admin)
-- [ ] As a user, I should be able to create a request, edit and delete my own requests
-- [ ] As a user, I should be able to view my own requests/offers in my account dashboard
-- [ ] As a user, I should be able to track others' requests/offers in my account dashboard
-- [ ] As a user, I should be able to click a button to leave my contact info on a post
-- [ ] As a user, I should be able to view the posts on a map (landing page or "view")
+- [x] As a user, I should be able to create a request, edit and delete my own requests
+- [x] As a user, I should be able to view the posts on a map (landing page or "view")
+- [x] As a user, I should be able to track others' requests/offers in my account dashboard
 - [ ] As a user, I should be able to use the app in both English and French
 - [ ] Add pagination, sorting, and filtering to public requests/offers page
 
 ### Organization features
 
-- [ ] As an organization, I should be able to sign up using organization details
-- [ ] As an organization, I should be able to create a request/offer
+- [x] As an organization, I should be able to sign up using organization details
+- [x] As an organization, I should be able to create a request/offer
 
 ## Contributors 
 

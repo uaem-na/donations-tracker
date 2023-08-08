@@ -10,7 +10,7 @@ import { PostDetails } from "@components/Posts/PostDetails";
 import { StatusIndicator } from "@components/StatusIndicator/StatusIndicator";
 import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { PostApiResponse } from "@services/posts";
+import { PostApiResponse } from "@services/api";
 import { capitalizeFirstLetter } from "@utils";
 import formatDistance from "date-fns/formatDistance";
 

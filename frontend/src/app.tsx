@@ -8,21 +8,17 @@ import { RequireAuth } from "@features/auth";
 import {
   AboutUsPage,
   AdminUsersPage,
-  CreateOfferPage,
-  CreateRequestPage,
+  CreatePostPage,
   DashboardPage,
-  EditOfferPage,
-  EditRequestPage,
+  EditPostPage,
   FaqPage,
   GeneralPage,
   InternalServerErrorPage,
   LandingPage,
   LoginPage,
-  OfferDetailsPage,
-  OffersPage,
+  PostDetailsPage,
+  PostsPage,
   RegisterPage,
-  RequestDetailsPage,
-  RequestsPage,
   ResourceNotFoundErrorPage,
   SecurityPage,
 } from "@pages";
@@ -38,8 +34,6 @@ function App() {
             <Route index element={<LandingPage />} />
             <Route path="/about-us" element={<AboutUsPage />} />
             <Route path="/faq" element={<FaqPage />} />
-            <Route path="/offers" element={<OffersPage />} />
-            <Route path="/requests" element={<RequestsPage />} />
             <Route path="/errors/404" element={<ResourceNotFoundErrorPage />} />
             <Route path="/errors/500" element={<InternalServerErrorPage />} />
 
@@ -80,45 +74,28 @@ function App() {
               }
             />
 
-            <Route
-              path="/offers/new"
-              element={
-                <RequireAuth>
-                  <CreateOfferPage />
-                </RequireAuth>
-              }
-            />
-
-            <Route
-              path="/requests/new"
-              element={
-                <RequireAuth>
-                  <CreateRequestPage />
-                </RequireAuth>
-              }
-            />
-
-            <Route
-              path="/offers/:id/edit"
-              element={
-                <RequireAuth>
-                  <EditOfferPage />
-                </RequireAuth>
-              }
-            />
-
-            <Route
-              path="/requests/:id/edit"
-              element={
-                <RequireAuth>
-                  <EditRequestPage />
-                </RequireAuth>
-              }
-            />
+            <Route path="/posts">
+              <Route path=":id" element={<PostDetailsPage />} />
+              <Route path="list" element={<PostsPage />} />
+              <Route
+                path=":type/new"
+                element={
+                  <RequireAuth>
+                    <CreatePostPage />
+                  </RequireAuth>
+                }
+              />
+              <Route
+                path=":id/edit"
+                element={
+                  <RequireAuth>
+                    <EditPostPage />
+                  </RequireAuth>
+                }
+              />
+            </Route>
 
             {/* Hybrid pages (public vs user might see a different view) */}
-            <Route path="/requests/:id" element={<RequestDetailsPage />} />
-            <Route path="/offers/:id" element={<OfferDetailsPage />} />
 
             {/* Authentication pages */}
             <Route path="/login" element={<LoginPage />} />

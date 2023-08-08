@@ -1,5 +1,6 @@
 import { Document } from "mongoose";
 import { Location, Post, PostItem } from "../../types";
+import { LocationDto } from "../common";
 import { UserDto } from "../users";
 
 type PostLocationDto = Omit<Location, "_id"> & {
@@ -14,7 +15,7 @@ type PostItemDto = Omit<PostItem, "image" | "_id"> & {
 export class PostDto {
   id: string;
   author: UserDto;
-  location: PostLocationDto;
+  location: PostLocationDto | undefined;
   item: PostItemDto;
   type: "request" | "offer";
   status: "open" | "in-progress" | "closed";
@@ -31,15 +32,11 @@ export class PostDto {
     this.createdAt = post.createdAt.toISOString();
     this.updatedAt = post.updatedAt.toISOString();
 
-    // convert User object to UserDto
     this.author = UserDto.fromUser(author);
 
-    // convert location._id to location.id
-    const { _id: locationId, ...rest } = location;
-    this.location = {
-      id: locationId,
-      ...rest,
-    };
+    if (location) {
+      this.location = LocationDto.fromLocation(location);
+    }
 
     // convert PostItem object to PostItemDto
     const { _id: itemId, image, ...itemRest } = item;

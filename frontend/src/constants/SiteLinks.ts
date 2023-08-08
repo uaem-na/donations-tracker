@@ -1,7 +1,4 @@
-import {
-  faHandshake,
-  IconDefinition,
-} from "@fortawesome/free-regular-svg-icons";
+import { IconDefinition } from "@fortawesome/free-regular-svg-icons";
 import {
   faCircleQuestion,
   faFileSignature,
@@ -27,14 +24,8 @@ export const siteLinks: ISiteLinks[] = [
     icon: faPersonCircleQuestion,
   },
   {
-    name: "Offers",
-    path: "/offers",
-    menu: true,
-    icon: faHandshake,
-  },
-  {
-    name: "Requests",
-    path: "/requests",
+    name: "Posts",
+    path: "/posts/list",
     menu: true,
     icon: faFileSignature,
   },

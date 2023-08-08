@@ -1,7 +1,7 @@
 import Locate from "@components/GoogleMapWrapper/Locate";
 import { Marker, MarkerUtils } from "@components/GoogleMapWrapper/MarkerUtils";
 import { Status, Wrapper } from "@googlemaps/react-wrapper";
-import { PostApiResponse, useGetPostsQuery } from "@services/posts";
+import { PostApiResponse, useGetPostsQuery } from "@services/api";
 import { GeoCluster } from "@utils/GeoCluster";
 import {
   PropsWithChildren,

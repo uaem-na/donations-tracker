@@ -1,5 +1,6 @@
 import { PostCategory } from "../constants";
 import { PostModel } from "../models/posts";
+import { UserModel } from "../models/users";
 import { Post, PostDocument } from "../types";
 
 export class PostService {
@@ -55,5 +56,37 @@ export class PostService {
 
   getItemCategories(): string[] {
     return Object.values(PostCategory);
+  }
+
+  async starPost(postId: string, userId: string): Promise<boolean> {
+    const post = await PostModel.findById(postId);
+    if (!post) {
+      throw new Error(`Error tracking post. Post does not exist.`);
+    }
+
+    const user = await UserModel.findById(userId).populate("starred");
+    if (!user) {
+      throw new Error(`Error tracking post. User does not exist.`);
+    }
+
+    const postExists = user.starred.find(
+      (post) => post._id.toString() === postId
+    );
+
+    if (postExists) {
+      // remove post from user's starred posts
+      user.starred = user.starred.filter(
+        (post) => post._id.toString() !== postId
+      );
+      await user.save();
+
+      return false;
+    } else {
+      // add post to user's starred posts
+      user.starred.push(post);
+      await user.save();
+
+      return true;
+    }
   }
 }

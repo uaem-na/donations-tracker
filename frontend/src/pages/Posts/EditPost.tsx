@@ -1,9 +1,9 @@
-import { PostDetails } from "@components/Posts/PostDetails";
 import { useNavigate, useParams } from "react-router-dom";
+import { EditPostForm } from "./components/EditPostForm";
 
-export const OfferDetailsPage = () => {
-  const { id } = useParams<{ id: string }>();
+export const EditPostPage = () => {
   const navigate = useNavigate();
+  const { id } = useParams<{ id: string }>();
 
   if (!id) {
     navigate("/errors/404");
@@ -20,7 +20,7 @@ export const OfferDetailsPage = () => {
 
   return (
     <>
-      <PostDetails id={id} type="offer" onError={handleError} />
+      <EditPostForm id={id} onError={handleError} />
     </>
   );
 };

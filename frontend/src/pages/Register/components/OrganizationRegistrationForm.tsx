@@ -8,7 +8,7 @@ import {
   useGetSessionQuery,
   useLazyGetSessionQuery,
   useRegisterMutation,
-} from "@services/auth";
+} from "@services/api";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";

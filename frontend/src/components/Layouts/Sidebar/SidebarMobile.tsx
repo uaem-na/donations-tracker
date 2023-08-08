@@ -3,7 +3,7 @@ import { ISiteLinks } from "@constants/SiteLinks";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { LayoutContext, LayoutContextType } from "@layout/Layout";
-import { useGetSessionQuery } from "@services/auth";
+import { useGetSessionQuery } from "@services/api";
 import { useContext } from "react";
 import { NavLink } from "react-router-dom";
 
