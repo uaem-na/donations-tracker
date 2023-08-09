@@ -1,4 +1,4 @@
-import { PostCategory } from "../constants";
+import { FilterPostType, PostCategory } from "../constants";
 import { PostModel } from "../models/posts";
 import { UserModel } from "../models/users";
 import { Post, PostDocument } from "../types";
@@ -12,12 +12,29 @@ export class PostService {
     return await newPost.save();
   }
 
-  async getPosts(): Promise<PostDocument[]> {
-    // TODO: should we filter by some attributes?
-    const posts = await PostModel.find().populate(
-      "author",
-      "firstName lastName userName -__t"
-    );
+  async getPosts(
+    page: number,
+    perPage: number,
+    type: FilterPostType = FilterPostType.ALL
+  ): Promise<PostDocument[]> {
+    // TODO: this code is repeated in post.service.ts and user.service.ts (refactor?)
+    if (page && perPage) {
+      const posts = await PostModel.find({
+        ...(type !== FilterPostType.ALL && { type: type }),
+      })
+        .sort({ updatedAt: -1, createdAt: -1 })
+        .skip((page - 1) * perPage)
+        .limit(perPage)
+        .populate("author", "firstName lastName userName -__t");
+
+      return posts;
+    }
+
+    const posts = await PostModel.find({
+      ...(type !== FilterPostType.ALL && { type: type }),
+    })
+      .sort({ updatedAt: -1, createdAt: -1 })
+      .populate("author", "firstName lastName userName -__t");
 
     return posts;
   }

@@ -1,30 +1,32 @@
+import { Button } from "@components/Controls";
 import { PostList } from "@components/Posts";
 import { PostApiResponse } from "@services/api";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-type Tab = "all" | "requests" | "offers";
+type Tab = "all" | "request" | "offer";
 
 interface PostsContainerProps {
   posts?: PostApiResponse[];
+  onTabChange: (tab: Tab) => void;
+  onPrevPage: () => void;
+  onNextPage: () => void;
 }
 
-export const PostsContainer = ({ posts }: PostsContainerProps) => {
+export const PostsContainer = ({
+  posts,
+  onTabChange,
+  onPrevPage,
+  onNextPage,
+}: PostsContainerProps) => {
   const { t } = useTranslation();
   const [selectedTab, setSelectedTab] = useState<Tab>("all");
-  const [displayedPosts, setDisplayedPosts] = useState<PostApiResponse[]>([]);
 
   useEffect(() => {
-    if (posts) {
-      if (selectedTab === ("all" as const)) {
-        setDisplayedPosts(posts);
-      } else if (selectedTab === ("requests" as const)) {
-        setDisplayedPosts(posts.filter((post) => post.type === "request"));
-      } else if (selectedTab === ("offers" as const)) {
-        setDisplayedPosts(posts.filter((post) => post.type === "offer"));
-      }
+    if (onTabChange) {
+      onTabChange(selectedTab);
     }
-  }, [selectedTab, posts]);
+  }, [onTabChange, selectedTab]);
 
   const activeLinkClassName = "bg-purple-100 text-purple-800";
   const inactiveLinkClassName =
@@ -46,8 +48,8 @@ export const PostsContainer = ({ posts }: PostsContainerProps) => {
             onChange={(e) => setSelectedTab(e.target.value as Tab)}
           >
             <option value="all">{t("posts.all")}</option>
-            <option value="requests">{t("posts.requests")}</option>
-            <option value="offers">{t("posts.offers")}</option>
+            <option value="request">{t("posts.requests")}</option>
+            <option value="offer">{t("posts.offers")}</option>
           </select>
         </div>
         <div className="hidden sm:block">
@@ -66,9 +68,9 @@ export const PostsContainer = ({ posts }: PostsContainerProps) => {
               href="#"
               className={
                 "rounded-md px-3 py-2 text-sm font-medium " +
-                linkClassName("requests")
+                linkClassName("request")
               }
-              onClick={() => setSelectedTab("requests")}
+              onClick={() => setSelectedTab("request")}
             >
               {t("posts.requests")}
             </a>
@@ -76,9 +78,9 @@ export const PostsContainer = ({ posts }: PostsContainerProps) => {
               href="#"
               className={
                 "rounded-md px-3 py-2 text-sm font-medium " +
-                linkClassName("offers")
+                linkClassName("offer")
               }
-              onClick={() => setSelectedTab("offers")}
+              onClick={() => setSelectedTab("offer")}
             >
               {t("posts.offers")}
             </a>
@@ -87,7 +89,14 @@ export const PostsContainer = ({ posts }: PostsContainerProps) => {
       </div>
 
       <div className="flex flex-col">
-        <PostList posts={displayedPosts} />
+        <PostList posts={posts} />
+      </div>
+
+      <div className="flex flex-col">
+        <div className="justify-center">
+          <Button onClick={onPrevPage}>Prev</Button>
+          <Button onClick={onNextPage}>Next</Button>
+        </div>
       </div>
     </>
   );

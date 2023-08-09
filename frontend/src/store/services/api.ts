@@ -62,6 +62,19 @@ export type User = {
 };
 
 // * Define args
+type PaginationArgs = {
+  per_page: number;
+  page: number;
+};
+
+type FilterByPostTypeArgs = {
+  type: "all" | "request" | "offer";
+};
+
+type FilterByPostStatusArgs = {
+  status?: "all" | "open" | "closed";
+};
+
 type GetUserArgs = {
   userId: string;
 };
@@ -144,19 +157,40 @@ export const api = createApi({
       }),
       invalidatesTags: ["session"],
     }),
-    getStarredPosts: builder.query<PostApiResponse[], GetUserArgs>({
-      query: ({ userId }) => ({
+    getStarredPosts: builder.query<
+      PostApiResponse[],
+      GetUserArgs & PaginationArgs & FilterByPostTypeArgs
+    >({
+      query: ({ userId, ...rest }) => ({
         url: `users/${userId}/starred`,
         method: "GET",
+        params: { ...rest },
       }),
+      transformResponse: (posts: PostApiResponse[]): PostApiResponse[] => {
+        return posts.map((post) => ({
+          ...post,
+          createdAt: new Date(post.createdAt).toLocaleDateString(),
+          updatedAt: new Date(post.updatedAt).toLocaleDateString(),
+          item: {
+            ...post.item,
+          },
+          location: {
+            ...post.location,
+          },
+        }));
+      },
       providesTags: (result, error, arg) => [
         { type: "session", id: "starred" },
       ],
     }),
-    getPosts: builder.query<PostApiResponse[], void>({
-      query: () => ({
+    getPosts: builder.query<
+      PostApiResponse[],
+      PaginationArgs | FilterByPostTypeArgs | void
+    >({
+      query: (args) => ({
         url: "posts",
         method: "GET",
+        params: { ...args },
       }),
       transformResponse: (posts: PostApiResponse[]): PostApiResponse[] => {
         return posts.map((post) => ({
