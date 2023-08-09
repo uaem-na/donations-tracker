@@ -1,4 +1,4 @@
-import { useGetSessionQuery } from "@services/auth";
+import { useGetSessionQuery } from "@services/api";
 import { ReactNode } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 

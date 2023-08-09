@@ -1,18 +1,20 @@
 import Link from "@components/Controls/Link/Link";
 import { faBuilding, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useGetSessionQuery } from "@services/auth";
+import { useGetSessionQuery } from "@services/api";
+import { useEffect } from "react";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 
 export const RegisterPage = () => {
   const navigate = useNavigate();
   const { data: currentSession } = useGetSessionQuery();
 
-  if (currentSession) {
-    // session exists, redirect to account page
-    navigate("/account/dashboard");
-    return null;
-  }
+  // redirect to account page if session exists
+  useEffect(() => {
+    if (currentSession) {
+      navigate("/account/dashboard");
+    }
+  }, [currentSession, navigate]);
 
   const renderAccountTypeSelection = ({ name, icon, iconText, to, color }) => {
     return (

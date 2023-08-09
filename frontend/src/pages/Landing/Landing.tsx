@@ -1,6 +1,6 @@
 import { GoogleMapWrapper } from "@components/GoogleMapWrapper/GoogleMapWrapper";
 import { Posts } from "@pages/Landing/components/Posts";
-import { PostApiResponse } from "@services/posts";
+import { PostApiResponse } from "@services/api";
 import { useState } from "react";
 
 /*

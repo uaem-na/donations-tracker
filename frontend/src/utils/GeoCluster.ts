@@ -47,6 +47,7 @@ export class GeoCluster {
     });
 
     let changing = true;
+    let visited: Set<string> = new Set();
 
     while (changing) {
       let newCluster = false;
@@ -71,17 +72,20 @@ export class GeoCluster {
 
         const [lat, lng, id] = e;
 
-        if (closestDist < threshold || closestDist === 0) {
-          clusterMap[closestCluster!].points.push([lat, lng]);
-          clusterMap[closestCluster!].ids.indexOf(id) <= -1 &&
-            clusterMap[closestCluster!].ids.push(id);
-        } else {
-          clusterMap.push({
-            centroid: [lat, lng],
-            points: [e],
-            ids: [id],
-          });
-          newCluster = true;
+        if (!visited.has(`${id}`)) {
+          if (closestDist < threshold || closestDist === 0) {
+            clusterMap[closestCluster!].points.push([lat, lng]);
+            clusterMap[closestCluster!].ids.indexOf(id) <= -1 &&
+              clusterMap[closestCluster!].ids.push(id);
+          } else {
+            clusterMap.push({
+              centroid: [lat, lng],
+              points: [e],
+              ids: [id],
+            });
+            newCluster = true;
+          }
+          visited.add(`${id}`);
         }
       });
 
@@ -102,13 +106,6 @@ export class GeoCluster {
 
       if (!clusterChanged && !newCluster) {
         changing = false;
-      } else {
-        if (changing) {
-          clusterMap = clusterMap.map((cluster) => {
-            cluster.points = [];
-            return cluster;
-          });
-        }
       }
     }
 

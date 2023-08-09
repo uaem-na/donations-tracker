@@ -8,6 +8,8 @@ export type Location = {
   postalCode: string;
 };
 
+export type LocationDocument = Location & Document;
+
 export type ImageFile = {
   _id: string;
   data: Buffer;
@@ -43,28 +45,23 @@ export type User = {
   recoveryEmail: string;
   firstName: string;
   lastName: string;
-  location: Location;
   active: boolean;
   createdAt: Date;
   updatedAt: Date;
   role: string;
+  location: Location | LocationDocument;
+  starred: Post[] | PostDocument[];
   isAdmin: () => boolean;
   isOrganization: () => boolean;
   isIndividual: () => boolean;
 };
 
-export type AdminUser = User;
-
 export type OrganizationUser = User & {
   organization: Organization;
 };
 
-export type IndividualUser = User;
-
 export type UserDocument = User &
-  AdminUser &
   OrganizationUser &
-  IndividualUser &
   PassportLocalDocument &
   Document & {
     lat: number;
@@ -98,7 +95,6 @@ export type Post = {
   _id: string;
   author: User;
   location: Location;
-  title: string;
   item: PostItem;
   status: "open" | "in-progress" | "closed";
   views: number;

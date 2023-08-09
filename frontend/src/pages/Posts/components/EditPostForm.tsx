@@ -8,7 +8,7 @@ import {
   useEditPostMutation,
   useGetItemCategoriesQuery,
   useGetPostQuery,
-} from "@services/posts";
+} from "@services/api";
 import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -19,11 +19,10 @@ type Type = (typeof PostType)[keyof typeof PostType];
 
 interface EditPostFormProps {
   id: string;
-  type: Type;
   onError: (err) => void;
 }
 
-export const EditPostForm = ({ id, type, onError }: EditPostFormProps) => {
+export const EditPostForm = ({ id, onError }: EditPostFormProps) => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const schema = useMemo(() => CreateEditPostSchema(t), [t]); // ! required for on the fly language change
@@ -63,8 +62,6 @@ export const EditPostForm = ({ id, type, onError }: EditPostFormProps) => {
     editPostApi({
       id: post.id,
       location: {},
-      type,
-      title: data.title,
       item: data.item,
     });
   };
@@ -80,7 +77,6 @@ export const EditPostForm = ({ id, type, onError }: EditPostFormProps) => {
   // if post is available, populate form
   useEffect(() => {
     if (isPostLoaded) {
-      setValue("title", post.title, { shouldValidate: true });
       setValue("item", post.item, { shouldValidate: true });
     }
 
@@ -92,7 +88,7 @@ export const EditPostForm = ({ id, type, onError }: EditPostFormProps) => {
   // handle successful requests
   useEffect(() => {
     if (isEditSuccess || isDeleteSuccess) {
-      navigate(`/${type}s`);
+      navigate(`/posts/list`);
     }
   }, [isEditSuccess, isDeleteSuccess]);
 
@@ -138,18 +134,6 @@ export const EditPostForm = ({ id, type, onError }: EditPostFormProps) => {
   return (
     <form className="space-y-6" onSubmit={handleSubmit(onSubmit)} noValidate>
       <div>{serverMessage && <Alert type="error">{serverMessage}</Alert>}</div>
-
-      <div>
-        <Label htmlFor="title">{t("title")}</Label>
-        <div className="mt-2">
-          <Input
-            {...register("title")}
-            id="title"
-            type="text"
-            errorMessage={errors.title?.message}
-          />
-        </div>
-      </div>
       <div>
         <Label htmlFor="name">{t("posts.name")}</Label>
         <div className="mt-2">

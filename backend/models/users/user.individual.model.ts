@@ -1,9 +1,9 @@
 import { Model, Schema } from "mongoose";
 import { UserDiscriminator, UserRole } from "../../constants";
-import { IndividualUser, UserDocument } from "../../types";
+import { User, UserDocument } from "../../types";
 import UserModel from "./user.base.model";
 
-const IndividualUserSchema: Schema<IndividualUser> = new Schema({});
+const IndividualUserSchema: Schema<User> = new Schema({});
 
 IndividualUserSchema.pre("validate", function (next) {
   this.role = UserRole.INDIVIDUAL;

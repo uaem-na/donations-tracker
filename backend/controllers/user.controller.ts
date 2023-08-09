@@ -1,6 +1,7 @@
 import debug from "debug";
 import expressAsyncHandler from "express-async-handler";
 import { body, param, validationResult } from "express-validator";
+import { PostDto } from "../models/posts";
 import { UserDto } from "../models/users";
 import { UserService } from "../services";
 
@@ -132,11 +133,9 @@ export class UserController {
     const { id } = req.params;
     const { active } = req.body;
     if (!id) {
-      res
-        .status(400)
-        .json({
-          error: `Error setting user active status. User ID must be specified.`,
-        });
+      res.status(400).json({
+        error: `Error setting user active status. User ID must be specified.`,
+      });
       return;
     }
 
@@ -144,10 +143,31 @@ export class UserController {
 
     log(`Set user ${id} active status to ${active}.`);
 
-    res
-      .status(200)
-      .json({
-        message: `Successfully set user ${id} active status to ${active}.`,
+    res.status(200).json({
+      message: `Successfully set user ${id} active status to ${active}.`,
+    });
+  });
+
+  getStarredPosts = expressAsyncHandler(async (req, res, next) => {
+    await param("id").notEmpty().run(req);
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      res.status(400).json({ errors: errors.array() });
+      return;
+    }
+
+    const { id } = req.params;
+    if (!id) {
+      res.status(400).json({
+        error: `Error getting starred posts. User ID must be specified.`,
       });
+      return;
+    }
+
+    const posts = await this.userService.getStarredPosts(id);
+    const postDtos = posts.map((post) => PostDto.fromDocument(post));
+
+    res.status(200).json(postDtos);
   });
 }

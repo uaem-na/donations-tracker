@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { passwordStrength } from "check-password-strength";
 import {
   PassportLocalDocument,
@@ -10,16 +11,23 @@ import { ModelName, UserRole } from "../../constants";
 import { UserDocument } from "../../types";
 import { LocationSchema } from "../common";
 
+const MAXIMUM_TRACKING_POSTS = 100;
+
+const validateEmailFormat = (val: string) => {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
+};
+
+const validateNameFormat = (val: string) => {
+  return /^[a-zA-ZÀ-ÖØ-öø-ÿ-' ]+$/.test(val);
+};
+
 // ! TODO: reset password mechanism
 const UserSchema: Schema<UserDocument & PassportLocalDocument> = new Schema({
   email: {
     type: String,
     required: true,
     validate: {
-      validator: (v: string) => {
-        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
-      },
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      validator: validateEmailFormat,
       message: (props: any) => `${props.value} is not a valid email address!`,
     },
   },
@@ -27,10 +35,7 @@ const UserSchema: Schema<UserDocument & PassportLocalDocument> = new Schema({
     type: String,
     required: true,
     validate: {
-      validator: (v: string) => {
-        return /^[a-zA-ZÀ-ÖØ-öø-ÿ-' ]+$/.test(v);
-      },
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      validator: validateNameFormat,
       message: (props: any) => `${props.value} is not a valid first name!`,
     },
   },
@@ -38,10 +43,7 @@ const UserSchema: Schema<UserDocument & PassportLocalDocument> = new Schema({
     type: String,
     required: true,
     validate: {
-      validator: (v: string) => {
-        return /^[a-zA-ZÀ-ÖØ-öø-ÿ-' ]+$/.test(v);
-      },
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      validator: validateNameFormat,
       message: (props: any) => `${props.value} is not a valid last name!`,
     },
   },
@@ -54,6 +56,13 @@ const UserSchema: Schema<UserDocument & PassportLocalDocument> = new Schema({
     required: true,
     default: UserRole.INDIVIDUAL,
   },
+  starred: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: ModelName.POST,
+      maxlength: MAXIMUM_TRACKING_POSTS,
+    },
+  ],
 });
 
 UserSchema.methods.isAdmin = function (): boolean {

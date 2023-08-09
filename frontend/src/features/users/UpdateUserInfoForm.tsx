@@ -6,8 +6,7 @@ import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Label } from "@radix-ui/react-label";
-import { useGetSessionQuery } from "@services/auth";
-import { useUpdateUserMutation } from "@services/users";
+import { useGetSessionQuery, useUpdateUserMutation } from "@services/api";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
