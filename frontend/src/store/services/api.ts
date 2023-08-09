@@ -180,7 +180,7 @@ export const api = createApi({
           : [{ type: "posts", id: "list" }],
     }),
     getPost: builder.query<PostApiResponse, GetPostArgs>({
-      query: ({ postId }) => `/${postId}`,
+      query: ({ postId }) => `/posts/${postId}`,
       providesTags: (result, error, arg) => [{ type: "posts", id: arg.postId }],
     }),
     createPost: builder.mutation<unknown, CreatePostArgs>({
