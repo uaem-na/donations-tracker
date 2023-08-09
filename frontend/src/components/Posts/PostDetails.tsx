@@ -1,8 +1,8 @@
 import { Badge } from "@components/Badge";
-import { StatusIndicator } from "@components/StatusIndicator/StatusIndicator";
 import { PostType } from "@constants";
 import { useGetPostQuery, useGetSessionQuery } from "@services/api";
 import { capitalizeFirstLetter } from "@utils";
+import { getStatusIndicator } from "@utils/GetStatusIndicator";
 import { format } from "date-fns";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
@@ -41,19 +41,6 @@ export const PostDetails = ({ id, onError }: PostDetailsProps) => {
     return <p>{t("errors.unknown_server_error")}</p>;
   }
 
-  const renderStatusIndicator = (status: string | undefined) => {
-    switch (status) {
-      case "open":
-        return <StatusIndicator status="online" />;
-      case "in-progress":
-        return <StatusIndicator status="away" />;
-      case "closed":
-        return <StatusIndicator status="busy" />;
-      default:
-        return <StatusIndicator />;
-    }
-  };
-
   // display post and its properties and add labels for each property
   return (
     <div className="container mx-auto px-4 py-8 sm:px-8 sm:pb-14  ">
@@ -66,7 +53,7 @@ export const PostDetails = ({ id, onError }: PostDetailsProps) => {
           <span className="ml-2">{post.item.name}</span>{" "}
         </h2>
         <div className="flex items-center gap-2">
-          {renderStatusIndicator(post.status)}
+          {getStatusIndicator(post.status)}
           <span className="text-sm">{capitalizeFirstLetter(post.status)}</span>
         </div>
       </div>

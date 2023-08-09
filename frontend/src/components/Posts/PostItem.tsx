@@ -3,6 +3,8 @@ import { faChevronRight, faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { useGetSessionQuery, useStarPostMutation } from "@services/api";
+import { capitalizeFirstLetter } from "@utils";
+import { getStatusIndicator } from "@utils/GetStatusIndicator";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
@@ -80,7 +82,10 @@ export const PostItem = ({
             <p className="text-sm font-semibold leading-6 text-gray-900">
               <Link to={`/posts/${id}`}>
                 <span className="absolute inset-0 -mx-4 -my-5"></span>
-                <Badge color="gray" text={t(`posts.${type}`)} />
+                <Badge
+                  color={type === "offer" ? "purple" : "blue"}
+                  text={t(`posts.${type}`)}
+                />
                 {" " + title}
               </Link>
             </p>
@@ -92,7 +97,10 @@ export const PostItem = ({
         </div>
         <div className="flex items-center gap-x-4">
           <div className="hidden sm:flex sm:flex-col sm:items-end">
-            <p className="text-sm leading-6 text-gray-900">{status}</p>
+            <p className="flex items-center gap-2">
+              {getStatusIndicator(status)}
+              <span className="text-sm">{capitalizeFirstLetter(status)}</span>
+            </p>
             <p className="mt-1 text-xs leading-5 text-gray-500">
               {shouldDisplayCreatedAt()
                 ? t("posts.created_at", { date: createdAt })
