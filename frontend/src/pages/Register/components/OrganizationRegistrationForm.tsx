@@ -1,8 +1,9 @@
 import { Alert } from "@components";
 import { Button, Input, Label } from "@components/Controls";
+import { PlaceAutocomplete } from "@components/Controls/PlaceAutocomplete";
 import { SelectInput } from "@components/Controls/Select";
 import { UserDiscriminator } from "@constants";
-import { ProvinceName } from "@constants/Provinces";
+import { ProvinceCode, ProvinceName } from "@constants/Provinces";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
   useGetSessionQuery,
@@ -28,6 +29,7 @@ export const OrganizationRegistrationForm = () => {
     formState: { errors },
     handleSubmit,
     setValue,
+    control,
   } = useForm({
     resolver: yupResolver(registerOrganizationSchema),
   });
@@ -85,9 +87,9 @@ export const OrganizationRegistrationForm = () => {
     }
   };
 
-  const postalCodeFormatting = (event) => {
+  const postalCodeFormatting = (val: string) => {
     const postalCodeRegex = /^([A-Za-z]\d[A-Za-z])[ -]?(\d[A-Za-z]\d)$/;
-    const value = event.target.value;
+    const value = val;
     if (postalCodeRegex.test(value)) {
       const formatted = value.toUpperCase().replace(postalCodeRegex, "$1 $2");
       setValue("postalCode", formatted);
@@ -187,25 +189,32 @@ export const OrganizationRegistrationForm = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-6">
         <div className="md:col-span-2">
-          <Label htmlFor="streetAddress">Street address</Label>
-          <div className="mt-2">
-            <Input
-              {...register("streetAddress")}
-              id="streetAddress"
-              type="text"
-              autoComplete="street-address"
-              placeholder="Street address"
-              errorMessage={errors.streetAddress?.message}
-            />
-          </div>
+          <Label htmlFor="streetAddress">Address</Label>
+          <PlaceAutocomplete
+            control={control}
+            name="streetAddress"
+            id="streetAddress"
+            setValue={setValue}
+            placeholder="Address"
+            onSelect={(e) => {
+              setValue("streetAddress", `${e.street_number} ${e.street_name}`);
+              postalCodeFormatting(e.postalCode);
+              setValue("city", e.city);
+              const province = Object.keys(ProvinceCode).find((p) => {
+                return ProvinceCode[p] === e.provinceCode;
+              });
+              setValue("province", province!);
+            }}
+          />
         </div>
 
         <div className="md:col-span-1">
           <Label htmlFor="postalCode">Postal code</Label>
           <div className="mt-2">
             <Input
-              {...register("postalCode")}
-              onBlur={postalCodeFormatting}
+              {...register("postalCode", {
+                onBlur: (e) => postalCodeFormatting(e.target.value),
+              })}
               id="postalCode"
               type="text"
               autoComplete="postal-code"

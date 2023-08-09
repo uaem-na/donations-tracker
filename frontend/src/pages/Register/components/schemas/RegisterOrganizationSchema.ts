@@ -39,10 +39,7 @@ export const registerOrganizationSchema = yup.object().shape({
     .string()
     .min(3, "Must be 3 characters or more")
     .required("Organization is required"),
-  streetAddress: yup
-    .string()
-    .min(3, "Must be 3 characters or more")
-    .required("Street address is required"),
+  streetAddress: yup.string().required("Address is required"),
   postalCode: yup
     .string()
     .matches(

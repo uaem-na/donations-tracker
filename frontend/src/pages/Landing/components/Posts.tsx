@@ -45,7 +45,7 @@ export const Posts = ({ posts, handleLocateClick }: IPostsProp) => {
                     <div className="flex items-center gap-x-3">
                       <h2 className="min-w-0 text-sm font-semibold leading-6 text-gray-500">
                         <div className="flex gap-x-2">
-                          <span className="truncate">{post.title}</span>
+                          <span className="truncate">{post.item.name}</span>
                         </div>
                       </h2>
                     </div>
