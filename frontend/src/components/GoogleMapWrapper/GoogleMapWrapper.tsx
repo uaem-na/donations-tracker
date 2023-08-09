@@ -113,7 +113,7 @@ const GoogleMap = ({
   }, [map]);
 
   // get visible posts so that parent component can filter posts
-  const getVisiblePosts = useCallback(() => {
+  const getVisiblePosts = () => {
     if (map && posts && markers) {
       const bounds = map?.getBounds();
       const markersInView = markers?.filter((m) => {
@@ -131,7 +131,7 @@ const GoogleMap = ({
 
       handleVisiblePosts(p);
     }
-  }, [map, markers, posts]);
+  };
 
   // add zoom_changed event listener to map
   useEffect(() => {

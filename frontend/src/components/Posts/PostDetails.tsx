@@ -132,18 +132,18 @@ export const PostDetails = ({ id, onError }: PostDetailsProps) => {
 
       {/* Button groups for edit or deleting if the current user matches the author id */}
       <div>
-        <div className="mt-4 flex justify-end">
+        <div className="mt-4 flex justify-start gap-2.5">
           {currentSession && currentSession.id === post.author.id && (
             <>
               <NavLink
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                to={"edit"}
+                to={`/posts/${post.id}/edit`}
               >
                 {t("edit")}
               </NavLink>
               <NavLink
                 className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                to={"delete"}
+                to={`delete`}
               >
                 {t("delete")}
               </NavLink>
