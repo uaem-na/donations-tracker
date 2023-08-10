@@ -1,5 +1,5 @@
 import { Badge } from "@components/Badge";
-import { Tooltip } from "@components/Controls";
+import { Button, Tooltip } from "@components/Controls";
 import {
   Drawer,
   DrawerContent,
@@ -138,27 +138,19 @@ export const Posts = ({ posts, handleLocateClick }: IPostsProp) => {
             })}
           </ul>
           <nav
-            className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6 mt-2"
+            className="flex items-center justify-between border-t border-gray-200 bg-white py-3  mt-2"
             aria-label="Pagination"
           >
-            <div className="flex flex-1 justify-between sm:justify-end">
+            <div className="flex flex-1 justify-between sm:justify-end gap-1.5">
               {currentPage === 1 ? null : (
-                <button
-                  type="button"
-                  onClick={handlePrev}
-                  className="relative inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0"
-                >
+                <Button type="button" onClick={handlePrev} intent="secondary">
                   Previous
-                </button>
+                </Button>
               )}
               {currentPage === totalPages ? null : (
-                <button
-                  type="button"
-                  onClick={handleNext}
-                  className="relative ml-3 inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0"
-                >
+                <Button type="button" onClick={handleNext} intent="secondary">
                   Next
-                </button>
+                </Button>
               )}
             </div>
           </nav>

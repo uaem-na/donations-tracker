@@ -9,7 +9,8 @@ const buttonVariants = cva(
       intent: {
         primary:
           "bg-purple-800 text-white hover:bg-purple-700 focus-visible:outline-purple-600",
-        secondary: "bg-blue-600 text-white",
+        secondary:
+          "bg-white text-gray-900 ring-gray-300 hover:bg-gray-50 ring-1 ring-inset",
       },
     },
     defaultVariants: {
