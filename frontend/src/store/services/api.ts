@@ -61,7 +61,27 @@ export type User = {
   starred: PostApiResponse[];
 };
 
+type PaginatedListResponse<T> = {
+  data: T[];
+  total: number;
+  page: number;
+  per_page: number;
+};
+
 // * Define args
+type PaginationArgs = {
+  per_page: number;
+  page: number;
+};
+
+type FilterByPostTypeArgs = {
+  type: "all" | "request" | "offer";
+};
+
+type FilterByPostStatusArgs = {
+  status?: "all" | "open" | "closed";
+};
+
 type GetUserArgs = {
   userId: string;
 };
@@ -144,22 +164,20 @@ export const api = createApi({
       }),
       invalidatesTags: ["session"],
     }),
-    getStarredPosts: builder.query<PostApiResponse[], GetUserArgs>({
-      query: ({ userId }) => ({
+    getStarredPosts: builder.query<
+      PaginatedListResponse<PostApiResponse>,
+      GetUserArgs & PaginationArgs & FilterByPostTypeArgs
+    >({
+      query: ({ userId, ...rest }) => ({
         url: `users/${userId}/starred`,
         method: "GET",
+        params: { ...rest },
       }),
-      providesTags: (result, error, arg) => [
-        { type: "session", id: "starred" },
-      ],
-    }),
-    getPosts: builder.query<PostApiResponse[], void>({
-      query: () => ({
-        url: "posts",
-        method: "GET",
-      }),
-      transformResponse: (posts: PostApiResponse[]): PostApiResponse[] => {
-        return posts.map((post) => ({
+      transformResponse: (
+        response: PaginatedListResponse<PostApiResponse>
+      ): PaginatedListResponse<PostApiResponse> => {
+        const posts = response.data;
+        response.data = posts.map((post) => ({
           ...post,
           createdAt: new Date(post.createdAt).toLocaleDateString(),
           updatedAt: new Date(post.updatedAt).toLocaleDateString(),
@@ -170,11 +188,44 @@ export const api = createApi({
             ...post.location,
           },
         }));
+
+        return response;
+      },
+      providesTags: (result, error, arg) => [
+        { type: "session", id: "starred" },
+      ],
+    }),
+    getPosts: builder.query<
+      PaginatedListResponse<PostApiResponse>,
+      PaginationArgs | FilterByPostTypeArgs | void
+    >({
+      query: (args) => ({
+        url: "posts",
+        method: "GET",
+        params: { ...args },
+      }),
+      transformResponse: (
+        response: PaginatedListResponse<PostApiResponse>
+      ): PaginatedListResponse<PostApiResponse> => {
+        const posts = response.data;
+        response.data = posts.map((post) => ({
+          ...post,
+          createdAt: new Date(post.createdAt).toLocaleDateString(),
+          updatedAt: new Date(post.updatedAt).toLocaleDateString(),
+          item: {
+            ...post.item,
+          },
+          location: {
+            ...post.location,
+          },
+        }));
+
+        return response;
       },
       providesTags: (result, error, arg) =>
         result
           ? [
-              ...result.map(({ id }) => ({ type: "posts" as const, id })),
+              ...result.data.map(({ id }) => ({ type: "posts" as const, id })),
               { type: "posts", id: "list" },
             ]
           : [{ type: "posts", id: "list" }],

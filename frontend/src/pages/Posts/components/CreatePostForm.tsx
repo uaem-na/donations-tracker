@@ -15,11 +15,11 @@ import { CreateEditPostSchema } from "./schemas/CreateEditPostSchema";
 
 type Type = (typeof PostType)[keyof typeof PostType];
 
-interface PostTableProps {
+interface CreatePostFormProps {
   type: Type;
 }
 
-export const CreatePostForm = ({ type }: PostTableProps) => {
+export const CreatePostForm = ({ type }: CreatePostFormProps) => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const schema = useMemo(() => CreateEditPostSchema(t), [t]); // ! required for on the fly language change

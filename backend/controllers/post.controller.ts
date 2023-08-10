@@ -1,11 +1,19 @@
 import debug from "debug";
 import expressAsyncHandler from "express-async-handler";
-import { body, param, validationResult } from "express-validator";
-import { PostCategories, PostStatus, PostTypes } from "../constants";
+import { body, param, query, validationResult } from "express-validator";
+import {
+  FilterPostType,
+  FilterablePostTypes,
+  PostCategories,
+  PostStatus,
+  PostTypes,
+} from "../constants";
 import { AuthorizationError, NotFoundError, ValidationError } from "../errors";
 import { PostDto } from "../models/posts";
 import { PostService, UserService } from "../services";
+import { OptionallyPaginatedListResponse } from "../types";
 import { hasUser } from "../utils";
+import { isEnumValue } from "../utils/isEnumValue";
 
 const log = debug("backend:post");
 
@@ -16,10 +24,52 @@ export class PostController {
   ) {}
 
   getAllPosts = expressAsyncHandler(async (req, res, next) => {
-    const posts = await this.postService.getPosts();
+    await query("page")
+      .optional()
+      .isInt({
+        min: 1,
+        allow_leading_zeroes: false,
+      })
+      .run(req);
+    await query("per_page")
+      .optional()
+      .isInt({
+        min: 1,
+        allow_leading_zeroes: false,
+      })
+      .run(req);
+    await query("type").optional().isIn(FilterablePostTypes).run(req);
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      throw new ValidationError(errors.array());
+    }
+
+    const type = req.query.type as string;
+    const filterByPostType = isEnumValue(type, FilterPostType)
+      ? type
+      : FilterPostType.ALL;
+    const page = parseInt(req.query.page as string) ?? 0;
+    const perPage = parseInt(req.query.per_page as string) ?? 0;
+
+    const posts = await this.postService.getPosts(
+      page,
+      perPage,
+      filterByPostType
+    );
+
+    const totalCount = await this.postService.getPostsCount(filterByPostType);
+
     const postDtos = posts.map((post) => PostDto.fromDocument(post));
 
-    res.json(postDtos || []);
+    const response: OptionallyPaginatedListResponse<PostDto> = {
+      data: postDtos || [],
+      ...(page > 0 && { page: page }),
+      ...(perPage > 0 && { per_page: perPage }),
+      total: totalCount,
+    };
+
+    res.json(response);
   });
 
   createPost = expressAsyncHandler(async (req, res, next) => {

@@ -1,6 +1,13 @@
 import { Document, PassportLocalDocument } from "mongoose";
 
 // * Common types
+export type OptionallyPaginatedListResponse<T> = {
+  data: T[];
+  total: number;
+  page?: number;
+  per_page?: number;
+};
+
 export type Location = {
   _id: string;
   lat: number;
