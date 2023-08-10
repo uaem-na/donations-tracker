@@ -61,6 +61,13 @@ export type User = {
   starred: PostApiResponse[];
 };
 
+type PaginatedListResponse<T> = {
+  data: T[];
+  total: number;
+  page: number;
+  per_page: number;
+};
+
 // * Define args
 type PaginationArgs = {
   per_page: number;
@@ -158,7 +165,7 @@ export const api = createApi({
       invalidatesTags: ["session"],
     }),
     getStarredPosts: builder.query<
-      PostApiResponse[],
+      PaginatedListResponse<PostApiResponse>,
       GetUserArgs & PaginationArgs & FilterByPostTypeArgs
     >({
       query: ({ userId, ...rest }) => ({
@@ -166,8 +173,11 @@ export const api = createApi({
         method: "GET",
         params: { ...rest },
       }),
-      transformResponse: (posts: PostApiResponse[]): PostApiResponse[] => {
-        return posts.map((post) => ({
+      transformResponse: (
+        response: PaginatedListResponse<PostApiResponse>
+      ): PaginatedListResponse<PostApiResponse> => {
+        const posts = response.data;
+        response.data = posts.map((post) => ({
           ...post,
           createdAt: new Date(post.createdAt).toLocaleDateString(),
           updatedAt: new Date(post.updatedAt).toLocaleDateString(),
@@ -178,13 +188,15 @@ export const api = createApi({
             ...post.location,
           },
         }));
+
+        return response;
       },
       providesTags: (result, error, arg) => [
         { type: "session", id: "starred" },
       ],
     }),
     getPosts: builder.query<
-      PostApiResponse[],
+      PaginatedListResponse<PostApiResponse>,
       PaginationArgs | FilterByPostTypeArgs | void
     >({
       query: (args) => ({
@@ -192,8 +204,11 @@ export const api = createApi({
         method: "GET",
         params: { ...args },
       }),
-      transformResponse: (posts: PostApiResponse[]): PostApiResponse[] => {
-        return posts.map((post) => ({
+      transformResponse: (
+        response: PaginatedListResponse<PostApiResponse>
+      ): PaginatedListResponse<PostApiResponse> => {
+        const posts = response.data;
+        response.data = posts.map((post) => ({
           ...post,
           createdAt: new Date(post.createdAt).toLocaleDateString(),
           updatedAt: new Date(post.updatedAt).toLocaleDateString(),
@@ -204,11 +219,13 @@ export const api = createApi({
             ...post.location,
           },
         }));
+
+        return response;
       },
       providesTags: (result, error, arg) =>
         result
           ? [
-              ...result.map(({ id }) => ({ type: "posts" as const, id })),
+              ...result.data.map(({ id }) => ({ type: "posts" as const, id })),
               { type: "posts", id: "list" },
             ]
           : [{ type: "posts", id: "list" }],

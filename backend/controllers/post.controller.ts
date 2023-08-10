@@ -11,6 +11,7 @@ import {
 import { AuthorizationError, NotFoundError, ValidationError } from "../errors";
 import { PostDto } from "../models/posts";
 import { PostService, UserService } from "../services";
+import { OptionallyPaginatedListResponse } from "../types";
 import { hasUser } from "../utils";
 import { isEnumValue } from "../utils/isEnumValue";
 
@@ -48,17 +49,27 @@ export class PostController {
     const filterByPostType = isEnumValue(type, FilterPostType)
       ? type
       : FilterPostType.ALL;
-    const page = parseInt(req.query.page as string) ?? 1;
-    const perPage = parseInt(req.query.per_page as string) ?? 10;
+    const page = parseInt(req.query.page as string) ?? 0;
+    const perPage = parseInt(req.query.per_page as string) ?? 0;
 
     const posts = await this.postService.getPosts(
       page,
       perPage,
       filterByPostType
     );
+
+    const totalCount = await this.postService.getPostsCount(filterByPostType);
+
     const postDtos = posts.map((post) => PostDto.fromDocument(post));
 
-    res.json(postDtos || []);
+    const response: OptionallyPaginatedListResponse<PostDto> = {
+      data: postDtos || [],
+      ...(page > 0 && { page: page }),
+      ...(perPage > 0 && { per_page: perPage }),
+      total: totalCount,
+    };
+
+    res.json(response);
   });
 
   createPost = expressAsyncHandler(async (req, res, next) => {

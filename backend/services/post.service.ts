@@ -1,3 +1,4 @@
+import { FilterQuery } from "mongoose";
 import { FilterPostType, PostCategory } from "../constants";
 import { PostModel } from "../models/posts";
 import { UserModel } from "../models/users";
@@ -12,16 +13,31 @@ export class PostService {
     return await newPost.save();
   }
 
+  async getPostsCount(
+    type: FilterPostType = FilterPostType.ALL
+  ): Promise<number> {
+    const count = await PostModel.countDocuments({
+      ...(type !== FilterPostType.ALL && { type: type }),
+    });
+
+    return count;
+  }
+
   async getPosts(
     page: number,
     perPage: number,
-    type: FilterPostType = FilterPostType.ALL
+    type: FilterPostType = FilterPostType.ALL,
+    extraQuery?: FilterQuery<PostDocument>
   ): Promise<PostDocument[]> {
-    // TODO: this code is repeated in post.service.ts and user.service.ts (refactor?)
-    if (page && perPage) {
-      const posts = await PostModel.find({
-        ...(type !== FilterPostType.ALL && { type: type }),
-      })
+    const query: FilterQuery<PostDocument> = {
+      ...(type !== FilterPostType.ALL && { type: type }),
+      ...(extraQuery && { ...extraQuery }),
+    };
+
+    // * if both page and perPage are truthy and greater than 0, then paginate
+    const shouldPaginate = !!page && !!perPage && page > 0 && perPage > 0;
+    if (shouldPaginate) {
+      const posts = await PostModel.find(query)
         .sort({ updatedAt: -1, createdAt: -1 })
         .skip((page - 1) * perPage)
         .limit(perPage)
@@ -30,9 +46,7 @@ export class PostService {
       return posts;
     }
 
-    const posts = await PostModel.find({
-      ...(type !== FilterPostType.ALL && { type: type }),
-    })
+    const posts = await PostModel.find(query)
       .sort({ updatedAt: -1, createdAt: -1 })
       .populate("author", "firstName lastName userName -__t");
 

@@ -1,12 +1,14 @@
 import { Router } from "express";
 import { UserController } from "../controllers/user.controller";
 import { ensureAdmin, ensureAuthenticated } from "../middlewares";
+import { PostService } from "../services";
 import { UserService } from "../services/user.service";
 
 // * middleware function to create route handlers
 const router = Router();
 const userService = new UserService();
-const userController = new UserController(userService);
+const postService = new PostService();
+const userController = new UserController(userService, postService);
 
 // * wire up routes with controller
 router.post("/update", ensureAuthenticated, userController.updateUser);

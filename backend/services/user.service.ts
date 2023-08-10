@@ -1,7 +1,5 @@
-import { FilterPostType } from "../constants";
-import { PostModel } from "../models/posts";
 import { UserModel } from "../models/users";
-import { PostDocument, User, UserDocument } from "../types";
+import { User, UserDocument } from "../types";
 
 export class UserService {
   /**
@@ -89,12 +87,7 @@ export class UserService {
     return await user.save();
   }
 
-  async getStarredPosts(
-    id: string,
-    page: number,
-    perPage: number,
-    type: FilterPostType = FilterPostType.ALL
-  ): Promise<PostDocument[]> {
+  async getStarredPostsById(id: string): Promise<string[]> {
     const user = await UserModel.findById(id);
 
     if (!user) {
@@ -105,29 +98,8 @@ export class UserService {
       return [];
     }
 
-    const starredPostIds = user?.starred.map((oid) => oid.toString());
+    const starredPostIds: string[] = user?.starred.map((oid) => oid.toString());
 
-    // TODO: this code is repeated in post.service.ts and user.service.ts (refactor?)
-    if (perPage && page) {
-      const posts = await PostModel.find({
-        ...(type !== FilterPostType.ALL && { type: type }),
-        _id: { $in: starredPostIds },
-      })
-        .sort({ updatedAt: -1, createdAt: -1 })
-        .skip((page - 1) * perPage)
-        .limit(perPage)
-        .populate("author", "firstName lastName userName -__t");
-
-      return posts;
-    }
-
-    const posts = await PostModel.find({
-      ...(type !== FilterPostType.ALL && { type: type }),
-      _id: { $in: starredPostIds },
-    })
-      .sort({ updatedAt: -1, createdAt: -1 })
-      .populate("author", "firstName lastName userName -__t");
-
-    return posts;
+    return starredPostIds;
   }
 }
