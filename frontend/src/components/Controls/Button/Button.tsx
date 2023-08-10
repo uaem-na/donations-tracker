@@ -1,16 +1,36 @@
+import { classMerge } from "@utils/ClassMerge";
+import { cva, VariantProps } from "class-variance-authority";
 import { ButtonHTMLAttributes, forwardRef } from "react";
+
+const buttonVariants = cva(
+  "rounded-md px-3 py-1.5 text-sm font-semibold leading-6 shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 ",
+  {
+    variants: {
+      intent: {
+        primary:
+          "bg-purple-800 text-white hover:bg-purple-700 focus-visible:outline-purple-600",
+        secondary: "bg-blue-600 text-white",
+      },
+    },
+    defaultVariants: {
+      intent: "primary",
+    },
+  }
+);
 
 export const Button = forwardRef<
   HTMLButtonElement,
-  ButtonHTMLAttributes<HTMLButtonElement>
->(({ ...props }, ref) => {
+  ButtonHTMLAttributes<HTMLButtonElement> & VariantProps<typeof buttonVariants>
+>(({ intent, ...props }, ref) => {
   return (
     <button
       ref={ref}
       {...props}
-      className={`rounded-md bg-purple-800 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-purple-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-600 ${
-        props.className
-      } ${props.disabled && "disabled:cursor-not-allowed disabled:opacity-50"}`}
+      className={classMerge(
+        buttonVariants({ intent }),
+        props.className,
+        props.disabled && "disabled:cursor-not-allowed disabled:opacity-50"
+      )}
     >
       {props.children}
     </button>

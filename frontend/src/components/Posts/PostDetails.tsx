@@ -1,5 +1,8 @@
 import { Badge } from "@components/Badge";
+import { Button } from "@components/Controls";
 import { PostType } from "@constants";
+import { faEdit } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useGetPostQuery, useGetSessionQuery } from "@services/api";
 import { capitalizeFirstLetter } from "@utils";
 import { getStatusIndicator } from "@utils/GetStatusIndicator";
@@ -122,6 +125,14 @@ export const PostDetails = ({ id, onError }: PostDetailsProps) => {
         <div className="mt-4 flex justify-start gap-2.5">
           {currentSession && currentSession.id === post.author.id && (
             <>
+              <Button
+                type="button"
+                intent="secondary"
+                className="flex gap-1.5 justify-center items-center"
+              >
+                <FontAwesomeIcon icon={faEdit} />
+                Edit
+              </Button>
               <NavLink
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                 to={`/posts/${post.id}/edit`}
