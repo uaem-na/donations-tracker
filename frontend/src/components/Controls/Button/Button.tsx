@@ -11,6 +11,8 @@ const buttonVariants = cva(
           "bg-purple-800 text-white hover:bg-purple-700 focus-visible:outline-purple-600",
         secondary:
           "bg-white text-gray-900 ring-gray-300 hover:bg-gray-50 ring-1 ring-inset",
+        danger:
+          "bg-red-600 text-white hover:bg-red-500 focus-visible:outline-red-400",
       },
     },
     defaultVariants: {

@@ -1,7 +1,7 @@
 import { Badge } from "@components/Badge";
 import { Button } from "@components/Controls";
 import { PostType } from "@constants";
-import { faEdit } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useGetPostQuery, useGetSessionQuery } from "@services/api";
 import { capitalizeFirstLetter } from "@utils";
@@ -9,7 +9,7 @@ import { getStatusIndicator } from "@utils/GetStatusIndicator";
 import { format } from "date-fns";
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { NavLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 type Type = (typeof PostType)[keyof typeof PostType];
 
@@ -22,6 +22,7 @@ interface PostDetailsProps {
 export const PostDetails = ({ id, onError }: PostDetailsProps) => {
   const { t } = useTranslation();
   const { data: currentSession } = useGetSessionQuery();
+  const navigate = useNavigate();
 
   const {
     data: post,
@@ -122,29 +123,27 @@ export const PostDetails = ({ id, onError }: PostDetailsProps) => {
 
       {/* Button groups for edit or deleting if the current user matches the author id */}
       <div>
-        <div className="mt-4 flex justify-start gap-2.5">
+        <div className="mt-4 flex justify-end gap-2.5">
           {currentSession && currentSession.id === post.author.id && (
             <>
               <Button
                 type="button"
                 intent="secondary"
                 className="flex gap-1.5 justify-center items-center"
+                onClick={() => navigate(`/posts/${post.id}/edit`)}
               >
                 <FontAwesomeIcon icon={faEdit} />
                 Edit
               </Button>
-              <NavLink
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                to={`/posts/${post.id}/edit`}
+
+              <Button
+                type="button"
+                intent="danger"
+                className="flex gap-1.5 justify-center items-center"
               >
-                {t("edit")}
-              </NavLink>
-              <NavLink
-                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                to={`delete`}
-              >
-                {t("delete")}
-              </NavLink>
+                <FontAwesomeIcon icon={faTrash} />
+                Delete
+              </Button>
             </>
           )}
         </div>
