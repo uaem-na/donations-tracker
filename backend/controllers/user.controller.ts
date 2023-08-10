@@ -1,14 +1,20 @@
 import debug from "debug";
 import expressAsyncHandler from "express-async-handler";
-import { body, param, validationResult } from "express-validator";
+import { body, param, query, validationResult } from "express-validator";
+import { FilterPostType, FilterablePostTypes } from "../constants";
 import { PostDto } from "../models/posts";
 import { UserDto } from "../models/users";
-import { UserService } from "../services";
+import { PostService, UserService } from "../services";
+import { OptionallyPaginatedListResponse } from "../types";
+import { isEnumValue } from "../utils/isEnumValue";
 
 const log = debug("backend:user");
 
 export class UserController {
-  constructor(private userService: UserService) {}
+  constructor(
+    private userService: UserService,
+    private postService: PostService
+  ) {}
 
   getAllUsers = expressAsyncHandler(async (req, res, next) => {
     const users = await this.userService.getUsers(false);
@@ -150,6 +156,21 @@ export class UserController {
 
   getStarredPosts = expressAsyncHandler(async (req, res, next) => {
     await param("id").notEmpty().run(req);
+    await query("page")
+      .optional()
+      .isInt({
+        min: 1,
+        allow_leading_zeroes: false,
+      })
+      .run(req);
+    await query("per_page")
+      .optional()
+      .isInt({
+        min: 1,
+        allow_leading_zeroes: false,
+      })
+      .run(req);
+    await query("type").optional().isIn(FilterablePostTypes).run(req);
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -158,6 +179,7 @@ export class UserController {
     }
 
     const { id } = req.params;
+
     if (!id) {
       res.status(400).json({
         error: `Error getting starred posts. User ID must be specified.`,
@@ -165,9 +187,36 @@ export class UserController {
       return;
     }
 
-    const posts = await this.userService.getStarredPosts(id);
+    const postIds = await this.userService.getStarredPostsById(id);
+
+    if (postIds.length === 0) {
+      res.json([]);
+      return;
+    }
+
+    const type = req.query.type as string;
+    const filterByPostType = isEnumValue(type, FilterPostType)
+      ? type
+      : FilterPostType.ALL;
+    const page = parseInt(req.query.page as string) ?? 0;
+    const perPage = parseInt(req.query.per_page as string) ?? 0;
+
+    const posts = await this.postService.getPosts(
+      page,
+      perPage,
+      filterByPostType,
+      { _id: { $in: postIds } }
+    );
+
     const postDtos = posts.map((post) => PostDto.fromDocument(post));
 
-    res.status(200).json(postDtos);
+    const response: OptionallyPaginatedListResponse<PostDto> = {
+      data: postDtos || [],
+      ...(page > 0 && { page: page }),
+      ...(perPage > 0 && { per_page: perPage }),
+      total: postDtos.length,
+    };
+
+    res.json(response);
   });
 }

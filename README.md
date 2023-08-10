@@ -51,7 +51,9 @@ To build without cache:
 - [x] As an admin, I should be able to activate/deactivate any account
 - [ ] As an admin, I should be able to verify/unverify an organization account
 - [ ] As an admin, I should be able to check whether users have any associated reports
-- [ ] Add pagination, sorting, and filtering to admin/users page
+- [ ] Add pagination to admin/users page
+- [ ] Add sorting to admin/users page
+- [ ] Add filtering to admin/users page
 
 ### User features
 
@@ -61,8 +63,11 @@ To build without cache:
 - [x] As a user, I should be able to create a request, edit and delete my own requests
 - [x] As a user, I should be able to view the posts on a map (landing page or "view")
 - [x] As a user, I should be able to track others' requests/offers in my account dashboard
+- [x] Add pagination to post listings
+- [ ] Add sorting to post listings
+- [ ] Add filtering to post listing
+- [ ] Display category, price, quantity (item info) on post listings
 - [ ] As a user, I should be able to use the app in both English and French
-- [ ] Add pagination, sorting, and filtering to public requests/offers page
 
 ### Organization features
 

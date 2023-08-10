@@ -82,7 +82,7 @@ const GoogleMap = ({
 }: PropsWithChildren<
   google.maps.MapOptions & { post; handleVisiblePosts }
 >) => {
-  const { data: posts, isLoading } = useGetPostsQuery();
+  const { data: postsResponse, isLoading } = useGetPostsQuery();
   const [map, setMap] = useState<google.maps.Map>();
   const [postCluster, setPostCluster] = useState<Cluster[]>([]);
   const [markers, setMarkers] = useState<Marker[]>([]);
@@ -114,7 +114,7 @@ const GoogleMap = ({
 
   // get visible posts so that parent component can filter posts
   const getVisiblePosts = useCallback(() => {
-    if (map && posts && markers) {
+    if (map && postsResponse && markers) {
       const bounds = map?.getBounds();
       const markersInView = markers?.filter((m) => {
         const marker = m as google.maps.marker.AdvancedMarkerElement;
@@ -127,11 +127,11 @@ const GoogleMap = ({
         return x["data"];
       });
       const ids = Array.prototype.concat.apply([], data);
-      const p = posts?.filter((x) => ids.includes(x.id));
+      const p = postsResponse?.data.filter((x) => ids.includes(x.id));
 
       handleVisiblePosts(p);
     }
-  }, [map, markers, posts]);
+  }, [map, markers, postsResponse]);
 
   // add zoom_changed event listener to map
   useEffect(() => {
@@ -190,8 +190,8 @@ const GoogleMap = ({
 
   // calculate marker positions when map and posts are ready
   useEffect(() => {
-    if (map && posts) {
-      const coords = posts.map((post) => {
+    if (map && postsResponse) {
+      const coords = postsResponse.data.map((post) => {
         return [post.location.lat!, post.location.lng!, post.id];
       });
       const cluster = new GeoCluster(coords, zoomBias);
@@ -202,7 +202,7 @@ const GoogleMap = ({
         setPostCluster([]);
       };
     }
-  }, [map, posts, zoomBias]);
+  }, [map, postsResponse, zoomBias]);
 
   // function to remove all markers from map
   const removeAllMarkers = () => {
@@ -238,7 +238,7 @@ const GoogleMap = ({
       marker["data"] = posts.map((p) => p.id);
       return marker;
     },
-    [map, posts]
+    [map, postsResponse]
   );
 
   // based on clusters, create markers
@@ -248,7 +248,7 @@ const GoogleMap = ({
 
       postCluster.forEach(({ centroid, points, ids }) => {
         const [lat, lng] = centroid;
-        const p = posts?.filter((x) => ids.includes(x.id));
+        const p = postsResponse?.data.filter((x) => ids.includes(x.id));
         const marker = createMarker({ lat, lng }, p!);
         setMarkers((prev) => {
           return [...prev, marker];

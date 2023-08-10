@@ -10,6 +10,7 @@
   "loading": "Chargement...",
   "email": "E-mail",
   "select_a_tab": "Sélectionnez un onglet",
+  "display_per_page": "Afficher par page",
   "posts": {
     "author": "Auteur",
     "type": "Type",

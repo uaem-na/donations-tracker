@@ -15,6 +15,18 @@ export enum PostType {
 
 export const PostTypes = [PostType.OFFER, PostType.REQUEST];
 
+export enum FilterPostType {
+  ALL = "all",
+  OFFER = "offer",
+  REQUEST = "request",
+}
+
+export const FilterablePostTypes = [
+  FilterPostType.ALL,
+  FilterPostType.OFFER,
+  FilterPostType.REQUEST,
+];
+
 export enum PostStatus {
   OPEN = "open",
   IN_PROGRESS = "in-progress",

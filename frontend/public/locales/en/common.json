@@ -10,6 +10,7 @@
   "loading": "Loading...",
   "email": "E-mail",
   "select_a_tab": "Select a tab",
+  "display_per_page": "Display per page",
   "posts": {
     "author": "Author",
     "type": "Type",
