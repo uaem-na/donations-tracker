@@ -37,8 +37,7 @@ export class GeoCluster {
 
     let clusterMap: any = [];
 
-    const eCentroid =
-      this.elements[Math.floor(Math.random() * this.elements.length)];
+    const eCentroid = this.elements[0];
 
     clusterMap.push({
       centroid: [eCentroid[0], eCentroid[1]],
