@@ -53,6 +53,30 @@ export const Posts = ({ posts, handleLocateClick }: IPostsProp) => {
     setCurrentPage(currentPage + 1);
   };
 
+  useEffect(() => {
+    if (posts) {
+      const indexOfLastPost = currentPage * postsPerPage;
+      const indexOfFirstPost = indexOfLastPost - postsPerPage;
+      setPaginatedPosts(posts.slice(indexOfFirstPost, indexOfLastPost));
+
+      setTotalPages(Math.ceil(posts.length / postsPerPage));
+    }
+  }, [posts, currentPage]);
+
+  // reset current page whenever there's change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [posts]);
+
+  const handlePrev = () => {
+    if (currentPage === 1) return;
+    setCurrentPage(currentPage - 1);
+  };
+
+  const handleNext = () => {
+    setCurrentPage(currentPage + 1);
+  };
+
   return (
     <>
       {paginatedPosts?.length ? (
