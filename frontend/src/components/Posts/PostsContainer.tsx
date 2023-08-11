@@ -1,7 +1,8 @@
 import { Button } from "@components/Controls";
+import { SelectInput } from "@components/Controls/Select";
 import { PostList } from "@components/Posts";
 import { PostApiResponse } from "@services/api";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 type Tab = "all" | "request" | "offer";
@@ -50,6 +51,26 @@ export const PostsContainer = ({
     "text-gray-500 hover:text-gray-700 hover:bg-gray-50";
   const linkClassName = (tab: Tab) =>
     tab === selectedTab ? activeLinkClassName : inactiveLinkClassName;
+
+  const renderPaginationResults = useCallback(() => {
+    return (
+      <>
+        <p className="flex gap-1 text-sm text-gray-700">
+          Showing
+          <span className="font-medium">
+            {page === 1 ? 1 : page * perPage - (perPage - 1)}
+          </span>
+          to
+          <span className="font-medium">
+            {page * perPage > total ? total : page * perPage}
+          </span>
+          of
+          <span className="font-medium">{total}</span>
+          results
+        </p>
+      </>
+    );
+  }, [page]);
 
   return (
     <>
@@ -106,35 +127,41 @@ export const PostsContainer = ({
           </div>
         </div>
 
-        <div>
+        <div className="sm:inline-flex sm:justify-end">
           <label htmlFor="perPage" className="sr-only">
             {t("display_per_page")}
           </label>
-          <select
+          <SelectInput
             name="perPage"
-            className="block w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+            className="w-full"
             defaultValue={10}
             onChange={(e) => handlePerPageChange(e.target.value)}
-          >
-            <option value="10">10</option>
-            <option value="25">25</option>
-            <option value="50">50</option>
-          </select>
+            placeholder={t("display_per_page")}
+            options={["10", "25", "50"].map((i) => ({ value: i, label: i }))}
+          ></SelectInput>
         </div>
 
         <PostList posts={posts} />
 
-        <div className="justify-center">
-          <Button onClick={onPrevPage} disabled={page <= 1}>
-            Prev
-          </Button>
-          <Button onClick={onNextPage} disabled={perPage * page > total}>
-            Next
-          </Button>
-          <p>Current page: {page}</p>
-          <p>Per page: {perPage}</p>
-          <p>Total records: {total}</p>
-        </div>
+        <nav
+          className="flex items-center justify-between px-4 py-3 sm:px-6"
+          aria-label="Pagination"
+        >
+          <div className="hidden sm:block">{renderPaginationResults()}</div>
+          <div className="flex flex-1 justify-between sm:justify-end gap-2">
+            <Button type="button" onClick={onPrevPage} disabled={page <= 1}>
+              Previous
+            </Button>
+            <div className="block sm:hidden">{renderPaginationResults()}</div>
+            <Button
+              type="button"
+              onClick={onNextPage}
+              disabled={perPage * page > total}
+            >
+              Next
+            </Button>
+          </div>
+        </nav>
       </div>
     </>
   );

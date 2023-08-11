@@ -1,5 +1,5 @@
 import { Badge } from "@components/Badge";
-import { Tooltip } from "@components/Controls";
+import { Button, Tooltip } from "@components/Controls";
 import {
   Drawer,
   DrawerContent,
@@ -7,11 +7,12 @@ import {
   DrawerTrigger,
 } from "@components/Drawer";
 import { PostDetails } from "@components/Posts/PostDetails";
-import { StatusIndicator } from "@components/StatusIndicator/StatusIndicator";
+import { PostType } from "@constants";
 import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { PostApiResponse } from "@services/api";
 import { capitalizeFirstLetter } from "@utils";
+import { getStatusIndicator } from "@utils/GetStatusIndicator";
 import formatDistance from "date-fns/formatDistance";
 import { useEffect, useState } from "react";
 
@@ -28,17 +29,28 @@ export const Posts = ({ posts, handleLocateClick }: IPostsProp) => {
 
   const [totalPages, setTotalPages] = useState<number>(0);
 
-  const renderStatusIndicator = (status) => {
-    switch (status) {
-      case "open":
-        return <StatusIndicator status="online" />;
-      case "in-progress":
-        return <StatusIndicator status="away" />;
-      case "closed":
-        return <StatusIndicator status="busy" />;
-      default:
-        return <StatusIndicator />;
+  useEffect(() => {
+    if (posts) {
+      const indexOfLastPost = currentPage * postsPerPage;
+      const indexOfFirstPost = indexOfLastPost - postsPerPage;
+      setPaginatedPosts(posts.slice(indexOfFirstPost, indexOfLastPost));
+
+      setTotalPages(Math.ceil(posts.length / postsPerPage));
     }
+  }, [posts, currentPage]);
+
+  // reset current page whenever there's change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [posts]);
+
+  const handlePrev = () => {
+    if (currentPage === 1) return;
+    setCurrentPage(currentPage - 1);
+  };
+
+  const handleNext = () => {
+    setCurrentPage(currentPage + 1);
   };
 
   useEffect(() => {
@@ -85,7 +97,7 @@ export const Posts = ({ posts, handleLocateClick }: IPostsProp) => {
                       <div className="mt-3 flex items-center gap-x-2.5 text-xs leading-5 text-gray-400">
                         <div className="truncate">
                           <div className="flex justify-center items-center">
-                            {renderStatusIndicator(post.status)}
+                            {getStatusIndicator(post.status)}
                             <span className="ml-1">
                               {capitalizeFirstLetter(post.status)}
                             </span>
@@ -99,7 +111,7 @@ export const Posts = ({ posts, handleLocateClick }: IPostsProp) => {
                       </div>
                     </div>
                     <Badge
-                      color={post.type === "offer" ? "purple" : "blue"}
+                      color={post.type === PostType.OFFER ? "purple" : "blue"}
                       text={capitalizeFirstLetter(post.type)}
                     />
                   </div>
@@ -138,27 +150,19 @@ export const Posts = ({ posts, handleLocateClick }: IPostsProp) => {
             })}
           </ul>
           <nav
-            className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6 mt-2"
+            className="flex items-center justify-between border-t border-gray-200 bg-white py-3  mt-2"
             aria-label="Pagination"
           >
-            <div className="flex flex-1 justify-between sm:justify-end">
+            <div className="flex flex-1 justify-between sm:justify-end gap-1.5">
               {currentPage === 1 ? null : (
-                <button
-                  type="button"
-                  onClick={handlePrev}
-                  className="relative inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0"
-                >
+                <Button type="button" onClick={handlePrev} intent="secondary">
                   Previous
-                </button>
+                </Button>
               )}
               {currentPage === totalPages ? null : (
-                <button
-                  type="button"
-                  onClick={handleNext}
-                  className="relative ml-3 inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0"
-                >
+                <Button type="button" onClick={handleNext} intent="secondary">
                   Next
-                </button>
+                </Button>
               )}
             </div>
           </nav>

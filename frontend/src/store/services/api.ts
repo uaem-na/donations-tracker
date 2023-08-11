@@ -111,7 +111,7 @@ type CreatePostArgs = Omit<
   id?: string; // * for edit
 };
 
-type EditPostArgs = Omit<CreatePostArgs, "type">;
+type EditPostArgs = CreatePostArgs;
 
 type DeletePostArgs = Pick<PostApiResponse, "id">;
 

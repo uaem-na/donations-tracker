@@ -28,6 +28,7 @@
     "price": "Price",
     "category": "Category",
     "create": "Create",
+    "select_type": "Select a type",
     "select_category": "Select a category",
     "no_items": "No items",
     "created_at": "Created at {{date}}",
@@ -35,7 +36,9 @@
     "created_on": "Created on {{date}}",
     "last_modified_on": "Last modified on {{date}}",
     "star": "Star",
-    "no_posts_found": "No posts found"
+    "no_posts_found": "No posts found",
+    "new_offer": "I would like to make an offer...",
+    "new_request": "I would like to make a request..."
   },
   "user_actions": {
     "open_user_menu": "Open user menu",

@@ -19,8 +19,8 @@ export const EditPostPage = () => {
   };
 
   return (
-    <>
+    <div className="p-6">
       <EditPostForm id={id} onError={handleError} />
-    </>
+    </div>
   );
 };

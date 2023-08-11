@@ -1,3 +1,5 @@
+import { faRectangleList } from "@fortawesome/free-regular-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { PostApiResponse } from "@services/api";
 import { useTranslation } from "react-i18next";
 import { PostItem } from "./PostItem";
@@ -9,7 +11,19 @@ interface PostListProps {
 export const PostList = ({ posts }: PostListProps) => {
   const { t } = useTranslation();
   if (posts === undefined || posts.length === 0) {
-    return <>{t("posts.no_posts_found")}</>;
+    return (
+      <>
+        <div className="relative block w-full rounded-lg border-2 border-dashed border-gray-300 p-12 text-center">
+          <FontAwesomeIcon
+            className="mx-auto h-12 w-12 text-gray-400"
+            icon={faRectangleList}
+          />
+          <span className="mt-2 block text-sm font-semibold text-gray-900">
+            {t("posts.no_posts_found")}
+          </span>
+        </div>
+      </>
+    );
   }
 
   return (
