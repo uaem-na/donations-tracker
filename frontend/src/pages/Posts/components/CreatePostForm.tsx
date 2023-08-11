@@ -1,7 +1,11 @@
 import { Alert } from "@components";
 import { Button, Input, Label } from "@components/Controls";
 import { SelectInput } from "@components/Controls/Select";
+import { Textarea } from "@components/Controls/Textarea";
 import { PostType } from "@constants";
+import { faHandshake } from "@fortawesome/free-regular-svg-icons";
+import { faFileSignature } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
   useCreatePostMutation,
@@ -39,7 +43,6 @@ export const CreatePostForm = ({ type }: CreatePostFormProps) => {
   const onSubmit = async (data) => {
     // append type to data
     data.type = type;
-
     createPostApi(data);
   };
 
@@ -79,80 +82,105 @@ export const CreatePostForm = ({ type }: CreatePostFormProps) => {
   }, [error]);
 
   return (
-    <form className="space-y-6" onSubmit={handleSubmit(onSubmit)} noValidate>
-      <div>{serverMessage && <Alert type="error">{serverMessage}</Alert>}</div>
-      <div>
-        <Label htmlFor="name">{t("posts.name")}</Label>
-        <div className="mt-2">
-          <Input
-            {...register(`item.name`)}
-            id="name"
-            type="text"
-            errorMessage={errors.item?.name?.message}
-          />
-        </div>
+    <div className="container mx-auto">
+      <div className="flex items-center justify-center mb-4">
+        <h1 className="mt-8 text-2xl font-bold leading-9 tracking-tight text-gray-900">
+          {type === PostType.OFFER
+            ? t("posts.new_offer")
+            : t("posts.new_request")}
+        </h1>
       </div>
-      <div>
-        <Label htmlFor="quantity">{t("posts.quantity")}</Label>
-        <div className="mt-2">
-          <Input
-            {...register(`item.quantity`)}
-            id="quantity"
-            type="number"
-            errorMessage={errors.item?.quantity?.message}
-          />
+      <form className="space-y-6" onSubmit={handleSubmit(onSubmit)} noValidate>
+        <div>
+          {serverMessage && <Alert type="error">{serverMessage}</Alert>}
         </div>
-      </div>
-      <div>
-        <Label htmlFor="price">{t("posts.price")}</Label>
-        <div className="mt-2">
-          <Input
-            {...register(`item.price`)}
-            id="price"
-            type="number"
-            errorMessage={errors.item?.price?.message}
-          />
-        </div>
-      </div>
-      <div>
-        <Label htmlFor="description">{t("posts.description")}</Label>
-        <div className="mt-2">
-          <Input
-            {...register(`item.description`)}
-            id="description"
-            type="text"
-            errorMessage={errors.item?.description?.message}
-          />
-        </div>
-      </div>
-      <div>
-        <Label htmlFor="category">{t("posts.category")}</Label>
-        <div className="mt-2">
-          <SelectInput
-            {...register(`item.category`)}
-            id="category"
-            errorMessage={errors.item?.category?.message}
-            placeholder={t("posts.select_category")}
-            options={
-              // TODO: i18n based on category string values (these are from backend)
-              categories?.map((category) => ({
-                value: category,
-                label: category,
-              })) ?? []
-            }
-          />
-        </div>
-      </div>
 
-      <div>
-        <Button
-          disabled={isCreating}
-          type="submit"
-          className="flex w-full justify-center"
-        >
-          {t("posts.create")}
-        </Button>
-      </div>
-    </form>
+        <div>
+          <Label htmlFor="name">{t("posts.name")}</Label>
+          <div className="mt-2">
+            <Input
+              {...register(`item.name`)}
+              id="name"
+              type="text"
+              errorMessage={errors.item?.name?.message}
+            />
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-6">
+          <div>
+            <Label htmlFor="category">{t("posts.category")}</Label>
+            <div className="mt-2">
+              <SelectInput
+                {...register(`item.category`)}
+                id="category"
+                errorMessage={errors.item?.category?.message}
+                placeholder={t("posts.select_category")}
+                options={
+                  // TODO: i18n based on category string values (these are from backend)
+                  categories?.map((category) => ({
+                    value: category,
+                    label: category,
+                  })) ?? []
+                }
+              />
+            </div>
+          </div>
+          <div>
+            <Label htmlFor="quantity">{t("posts.quantity")}</Label>
+            <div className="mt-2">
+              <Input
+                {...register(`item.quantity`)}
+                id="quantity"
+                type="number"
+                errorMessage={errors.item?.quantity?.message}
+              />
+            </div>
+          </div>
+          <div>
+            <Label htmlFor="price">{t("posts.price")}</Label>
+            <div className="mt-2">
+              <Input
+                {...register(`item.price`)}
+                id="price"
+                type="number"
+                errorMessage={errors.item?.price?.message}
+              />
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <Label htmlFor="description">{t("posts.description")}</Label>
+          <div className="mt-2">
+            <Textarea
+              {...register(`item.description`)}
+              id="description"
+              errorMessage={errors.item?.description?.message}
+            />
+          </div>
+        </div>
+
+        <div className="inline-flex justify-start">
+          <Button
+            disabled={isCreating}
+            type="submit"
+            className="flex gap-1.5 justify-center items-center"
+          >
+            {type === PostType.OFFER ? (
+              <>
+                <FontAwesomeIcon icon={faHandshake} />
+                {t("posts.offer")}
+              </>
+            ) : (
+              <>
+                <FontAwesomeIcon icon={faFileSignature} />
+                {t("posts.request")}
+              </>
+            )}
+          </Button>
+        </div>
+      </form>
+    </div>
   );
 };

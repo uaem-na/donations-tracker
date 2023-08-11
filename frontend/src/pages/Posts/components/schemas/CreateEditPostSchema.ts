@@ -3,6 +3,7 @@ import * as yup from "yup";
 
 export const CreateEditPostSchema = (t: TFunction) => {
   return yup.object().shape({
+    type: yup.string(),
     item: yup.object().shape({
       name: yup
         .string()

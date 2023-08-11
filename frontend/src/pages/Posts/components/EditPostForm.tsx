@@ -1,7 +1,10 @@
 import { Alert } from "@components";
 import { Button, Input, Label } from "@components/Controls";
 import { SelectInput } from "@components/Controls/Select";
+import { Textarea } from "@components/Controls/Textarea";
 import { PostType } from "@constants";
+import { faCheck, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
   useDeletePostMutation,
@@ -34,7 +37,6 @@ export const EditPostForm = ({ id, onError }: EditPostFormProps) => {
     error: postError,
   } = useGetPostQuery({ postId: id });
   const { data: categories } = useGetItemCategoriesQuery();
-
   const [
     editPostApi,
     { isLoading: isEditing, isSuccess: isEditSuccess, error: editError },
@@ -62,6 +64,7 @@ export const EditPostForm = ({ id, onError }: EditPostFormProps) => {
     editPostApi({
       id: post.id,
       location: {},
+      type: data.type,
       item: data.item,
     });
   };
@@ -77,6 +80,7 @@ export const EditPostForm = ({ id, onError }: EditPostFormProps) => {
   // if post is available, populate form
   useEffect(() => {
     if (isPostLoaded) {
+      setValue("type", post.type, { shouldValidate: true });
       setValue("item", post.item, { shouldValidate: true });
     }
 
@@ -132,88 +136,118 @@ export const EditPostForm = ({ id, onError }: EditPostFormProps) => {
   }
 
   return (
-    <form className="space-y-6" onSubmit={handleSubmit(onSubmit)} noValidate>
-      <div>{serverMessage && <Alert type="error">{serverMessage}</Alert>}</div>
-      <div>
-        <Label htmlFor="name">{t("posts.name")}</Label>
-        <div className="mt-2">
-          <Input
-            {...register(`item.name`)}
-            id="name"
-            type="text"
-            errorMessage={errors.item?.name?.message}
-          />
-        </div>
-      </div>
-      <div>
-        <Label htmlFor="quantity">{t("posts.quantity")}</Label>
-        <div className="mt-2">
-          <Input
-            {...register(`item.quantity`)}
-            id="quantity"
-            type="number"
-            errorMessage={errors.item?.quantity?.message}
-          />
-        </div>
-      </div>
-      <div>
-        <Label htmlFor="price">{t("posts.price")}</Label>
-        <div className="mt-2">
-          <Input
-            {...register(`item.price`)}
-            id="price"
-            type="number"
-            errorMessage={errors.item?.price?.message}
-          />
-        </div>
-      </div>
-      <div>
-        <Label htmlFor="description">{t("posts.description")}</Label>
-        <div className="mt-2">
-          <Input
-            {...register(`item.description`)}
-            id="description"
-            type="text"
-            errorMessage={errors.item?.description?.message}
-          />
-        </div>
-      </div>
-      <div>
-        <Label htmlFor="category">{t("posts.category")}</Label>
-        <div className="mt-2">
-          <SelectInput
-            {...register(`item.category`)}
-            id="category"
-            errorMessage={errors.item?.category?.message}
-            placeholder={t("posts.select_category")}
-            options={
-              // TODO: i18n based on category string values (these are from backend)
-              categories?.map((category) => ({
-                value: category,
-                label: category,
-              })) ?? []
-            }
-          />
-        </div>
-      </div>
-
-      <div className="inline-flex rounded-md shadow-sm" role="group">
-        <Button
-          disabled={isEditing}
-          type="submit"
-          className="rounded-l-lg rounded-r-none border-r-1 border-solid border-r-1 border-gray-300"
-        >
-          {t("submit")}
-        </Button>
+    <div className="container mx-auto">
+      <div className="flex justify-end items-center mb-4">
         <Button
           disabled={isEditing}
           type="button"
-          className="bg-red-500 hover:bg-red-900 focus:bg-red-900 rounded-l-none rounded-r-lg"
           onClick={onDelete}
+          intent="danger"
+          className="flex gap-1.5 justify-center items-center"
         >
+          <FontAwesomeIcon icon={faTrash} />
           {t("delete")}
         </Button>
       </div>
-    </form>
+      <form className="space-y-6" onSubmit={handleSubmit(onSubmit)} noValidate>
+        <div>
+          {serverMessage && <Alert type="error">{serverMessage}</Alert>}
+        </div>
+
+        <div>
+          <Label htmlFor="type">{t("posts.type")}</Label>
+          <div className="mt-2">
+            <SelectInput
+              {...register(`type`)}
+              options={Object.keys(PostType).map((k) => {
+                return {
+                  value: k.toLowerCase(),
+                  label: t(`posts.${PostType[k]}`),
+                };
+              })}
+              placeholder={t("posts.select_type")}
+              disabled
+            />
+          </div>
+        </div>
+
+        <div>
+          <Label htmlFor="name">{t("posts.name")}</Label>
+          <div className="mt-2">
+            <Input
+              {...register(`item.name`)}
+              id="name"
+              type="text"
+              errorMessage={errors.item?.name?.message}
+            />
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-6">
+          <div>
+            <Label htmlFor="category">{t("posts.category")}</Label>
+            <div className="mt-2">
+              <SelectInput
+                {...register(`item.category`)}
+                id="category"
+                errorMessage={errors.item?.category?.message}
+                placeholder={t("posts.select_category")}
+                options={
+                  // TODO: i18n based on category string values (these are from backend)
+                  categories?.map((category) => ({
+                    value: category,
+                    label: category,
+                  })) ?? []
+                }
+              />
+            </div>
+          </div>
+          <div>
+            <Label htmlFor="quantity">{t("posts.quantity")}</Label>
+            <div className="mt-2">
+              <Input
+                {...register(`item.quantity`)}
+                id="quantity"
+                type="number"
+                errorMessage={errors.item?.quantity?.message}
+              />
+            </div>
+          </div>
+          <div>
+            <Label htmlFor="price">{t("posts.price")}</Label>
+            <div className="mt-2">
+              <Input
+                {...register(`item.price`)}
+                id="price"
+                type="number"
+                errorMessage={errors.item?.price?.message}
+              />
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <Label htmlFor="description">{t("posts.description")}</Label>
+          <div className="mt-2">
+            <Textarea
+              {...register(`item.description`)}
+              id="description"
+              errorMessage={errors.item?.description?.message}
+            />
+          </div>
+        </div>
+
+        <div className="inline-flex justify-start">
+          <Button
+            disabled={isEditing}
+            type="submit"
+            className="flex gap-1.5 justify-center items-center"
+          >
+            <FontAwesomeIcon icon={faCheck} />
+            {t("submit")}
+          </Button>
+        </div>
+      </form>
+    </div>
   );
 };

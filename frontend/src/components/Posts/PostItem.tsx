@@ -97,10 +97,10 @@ export const PostItem = ({
         </div>
         <div className="flex items-center gap-x-4">
           <div className="hidden sm:flex sm:flex-col sm:items-end">
-            <p className="flex items-center gap-2">
+            <span className="flex items-center gap-2">
               {getStatusIndicator(status)}
               <span className="text-sm">{capitalizeFirstLetter(status)}</span>
-            </p>
+            </span>
             <p className="mt-1 text-xs leading-5 text-gray-500">
               {shouldDisplayCreatedAt()
                 ? t("posts.created_at", { date: createdAt })

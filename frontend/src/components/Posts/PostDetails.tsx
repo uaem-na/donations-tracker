@@ -1,13 +1,18 @@
+import { Alert } from "@components";
 import { Badge } from "@components/Badge";
 import { Button } from "@components/Controls";
 import { PostType } from "@constants";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useGetPostQuery, useGetSessionQuery } from "@services/api";
+import {
+  useDeletePostMutation,
+  useGetPostQuery,
+  useGetSessionQuery,
+} from "@services/api";
 import { capitalizeFirstLetter } from "@utils";
 import { getStatusIndicator } from "@utils/GetStatusIndicator";
 import { format } from "date-fns";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
@@ -24,6 +29,11 @@ export const PostDetails = ({ id, onError }: PostDetailsProps) => {
   const { data: currentSession } = useGetSessionQuery();
   const navigate = useNavigate();
 
+  const [serverMessage, setServerMessage] = useState();
+
+  const [deletePostApi, { isSuccess: isDeleteSuccess, error: deleteError }] =
+    useDeletePostMutation();
+
   const {
     data: post,
     isLoading,
@@ -37,6 +47,38 @@ export const PostDetails = ({ id, onError }: PostDetailsProps) => {
     }
   }, [isError]);
 
+  const onDelete = async () => {
+    if (!post?.id) {
+      onError({ status: 500, message: "Post ID must be available" });
+      return;
+    }
+    deletePostApi({ id: post.id });
+  };
+
+  // handle successful requests
+  useEffect(() => {
+    if (isDeleteSuccess) {
+      navigate(`/posts/list`);
+    }
+  }, [isDeleteSuccess]);
+
+  // handle server error message
+  useEffect(() => {
+    if (deleteError) {
+      handleServerErrors(deleteError);
+    }
+  }, [deleteError]);
+
+  const handleServerErrors = (error) => {
+    const err: any = "error" in error ? error.error : error.data;
+
+    err.errors.length > 0
+      ? setServerMessage(
+          err.errors.join(",") ?? t("errors.unknown_server_error")
+        )
+      : setServerMessage(err.message ?? t("errors.unknown_server_error"));
+  };
+
   if (isLoading) {
     return <p>{t("loading")}</p>;
   }
@@ -47,11 +89,15 @@ export const PostDetails = ({ id, onError }: PostDetailsProps) => {
 
   // display post and its properties and add labels for each property
   return (
-    <div className="container mx-auto px-4 py-8 sm:px-8 sm:pb-14  ">
+    <div className="container mx-auto px-4 py-8 sm:px-8 sm:pb-14">
+      <div className="mb-4">
+        {serverMessage && <Alert type="error">{serverMessage}</Alert>}
+      </div>
+
       <div className="flex justify-between items-center">
         <h2 className="text-base font-semibold leading-6 text-gray-900">
           <Badge
-            color={post.type === "offer" ? "purple" : "blue"}
+            color={post.type === PostType.OFFER ? "purple" : "blue"}
             text={capitalizeFirstLetter(post.type)}
           />
           <span className="ml-2">{post.item.name}</span>{" "}
@@ -133,16 +179,17 @@ export const PostDetails = ({ id, onError }: PostDetailsProps) => {
                 onClick={() => navigate(`/posts/${post.id}/edit`)}
               >
                 <FontAwesomeIcon icon={faEdit} />
-                Edit
+                {t("edit")}
               </Button>
 
               <Button
                 type="button"
                 intent="danger"
                 className="flex gap-1.5 justify-center items-center"
+                onClick={onDelete}
               >
                 <FontAwesomeIcon icon={faTrash} />
-                Delete
+                {t("delete")}
               </Button>
             </>
           )}

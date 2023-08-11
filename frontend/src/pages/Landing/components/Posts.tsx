@@ -7,11 +7,12 @@ import {
   DrawerTrigger,
 } from "@components/Drawer";
 import { PostDetails } from "@components/Posts/PostDetails";
-import { StatusIndicator } from "@components/StatusIndicator/StatusIndicator";
+import { PostType } from "@constants";
 import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { PostApiResponse } from "@services/api";
 import { capitalizeFirstLetter } from "@utils";
+import { getStatusIndicator } from "@utils/GetStatusIndicator";
 import formatDistance from "date-fns/formatDistance";
 import { useEffect, useState } from "react";
 
@@ -27,19 +28,6 @@ export const Posts = ({ posts, handleLocateClick }: IPostsProp) => {
   const [paginatedPosts, setPaginatedPosts] = useState<PostApiResponse[]>();
 
   const [totalPages, setTotalPages] = useState<number>(0);
-
-  const renderStatusIndicator = (status) => {
-    switch (status) {
-      case "open":
-        return <StatusIndicator status="online" />;
-      case "in-progress":
-        return <StatusIndicator status="away" />;
-      case "closed":
-        return <StatusIndicator status="busy" />;
-      default:
-        return <StatusIndicator />;
-    }
-  };
 
   useEffect(() => {
     if (posts) {
@@ -85,7 +73,7 @@ export const Posts = ({ posts, handleLocateClick }: IPostsProp) => {
                       <div className="mt-3 flex items-center gap-x-2.5 text-xs leading-5 text-gray-400">
                         <div className="truncate">
                           <div className="flex justify-center items-center">
-                            {renderStatusIndicator(post.status)}
+                            {getStatusIndicator(post.status)}
                             <span className="ml-1">
                               {capitalizeFirstLetter(post.status)}
                             </span>
@@ -99,7 +87,7 @@ export const Posts = ({ posts, handleLocateClick }: IPostsProp) => {
                       </div>
                     </div>
                     <Badge
-                      color={post.type === "offer" ? "purple" : "blue"}
+                      color={post.type === PostType.OFFER ? "purple" : "blue"}
                       text={capitalizeFirstLetter(post.type)}
                     />
                   </div>
