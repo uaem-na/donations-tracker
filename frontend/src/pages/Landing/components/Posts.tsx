@@ -67,16 +67,7 @@ export const Posts = ({ posts, handleLocateClick }: IPostsProp) => {
   useEffect(() => {
     setCurrentPage(1);
   }, [posts]);
-
-  const handlePrev = () => {
-    if (currentPage === 1) return;
-    setCurrentPage(currentPage - 1);
-  };
-
-  const handleNext = () => {
-    setCurrentPage(currentPage + 1);
-  };
-
+  
   return (
     <>
       {paginatedPosts?.length ? (
