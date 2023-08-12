@@ -70,7 +70,7 @@ export const PostsContainer = ({
         </p>
       </>
     );
-  }, [page]);
+  }, [page, posts]);
 
   return (
     <>

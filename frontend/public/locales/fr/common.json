@@ -4,6 +4,7 @@
   "edit": "Modifier",
   "delete": "Supprimer",
   "remove": "Supprimer",
+  "cancel": "Annuler",
   "submit": "Soumettre",
   "activate": "Activer",
   "deactivate": "Désactiver",
@@ -38,7 +39,9 @@
     "star": "Étoile",
     "no_posts_found": "Aucun article trouvé",
     "new_offer": "Je souhaite faire une offre...",
-    "new_request": "Je voudrais faire une demande..."
+    "new_request": "Je voudrais faire une demande...",
+    "deleteConfirmTitle": "Etes-vous sûr que vous voulez supprimer?",
+    "deleteConfirmDescription": "Cette action ne peut pas être annulée. Cela supprimera définitivement votre message."
   },
   "user_actions": {
     "open_user_menu": "Ouvrir le menu utilisateur",

@@ -68,15 +68,6 @@ export const Posts = ({ posts, handleLocateClick }: IPostsProp) => {
     setCurrentPage(1);
   }, [posts]);
 
-  const handlePrev = () => {
-    if (currentPage === 1) return;
-    setCurrentPage(currentPage - 1);
-  };
-
-  const handleNext = () => {
-    setCurrentPage(currentPage + 1);
-  };
-
   return (
     <>
       {paginatedPosts?.length ? (
@@ -127,7 +118,11 @@ export const Posts = ({ posts, handleLocateClick }: IPostsProp) => {
                       </DrawerTrigger>
                       <DrawerContent size="medium">
                         <DrawerHeader>
-                          <PostDetails id={post.id} onError={() => {}} />
+                          <PostDetails
+                            id={post.id}
+                            onError={() => {}}
+                            redirectOnDelete={false}
+                          />
                         </DrawerHeader>
                       </DrawerContent>
                     </Drawer>
