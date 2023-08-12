@@ -67,7 +67,7 @@ export const Posts = ({ posts, handleLocateClick }: IPostsProp) => {
   useEffect(() => {
     setCurrentPage(1);
   }, [posts]);
-  
+
   return (
     <>
       {paginatedPosts?.length ? (
@@ -118,7 +118,11 @@ export const Posts = ({ posts, handleLocateClick }: IPostsProp) => {
                       </DrawerTrigger>
                       <DrawerContent size="medium">
                         <DrawerHeader>
-                          <PostDetails id={post.id} onError={() => {}} />
+                          <PostDetails
+                            id={post.id}
+                            onError={() => {}}
+                            redirectOnDelete={false}
+                          />
                         </DrawerHeader>
                       </DrawerContent>
                     </Drawer>

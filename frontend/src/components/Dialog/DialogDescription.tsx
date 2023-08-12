@@ -8,7 +8,7 @@ const DialogDescription = forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Description
     ref={ref}
-    className={classMerge("text-sm", className)}
+    className={classMerge("text-sm text-gray-500", className)}
     {...props}
   />
 ));

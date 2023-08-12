@@ -1,9 +1,19 @@
 import { Alert } from "@components";
 import { Badge } from "@components/Badge";
 import { Button } from "@components/Controls";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@components/Dialog";
 import { PostType } from "@constants";
-import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faCancel, faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { DialogClose } from "@radix-ui/react-dialog";
 import {
   useDeletePostMutation,
   useGetPostQuery,
@@ -21,10 +31,15 @@ type Type = (typeof PostType)[keyof typeof PostType];
 interface PostDetailsProps {
   id: string;
   onError: (err) => void;
+  redirectOnDelete?: boolean;
 }
 
 /*TODO: add email if current user is logged in*/
-export const PostDetails = ({ id, onError }: PostDetailsProps) => {
+export const PostDetails = ({
+  id,
+  onError,
+  redirectOnDelete = true,
+}: PostDetailsProps) => {
   const { t } = useTranslation();
   const { data: currentSession } = useGetSessionQuery();
   const navigate = useNavigate();
@@ -57,7 +72,7 @@ export const PostDetails = ({ id, onError }: PostDetailsProps) => {
 
   // handle successful requests
   useEffect(() => {
-    if (isDeleteSuccess) {
+    if (isDeleteSuccess && redirectOnDelete) {
       navigate(`/posts/list`);
     }
   }, [isDeleteSuccess]);
@@ -182,15 +197,50 @@ export const PostDetails = ({ id, onError }: PostDetailsProps) => {
                 {t("edit")}
               </Button>
 
-              <Button
-                type="button"
-                intent="danger"
-                className="flex gap-1.5 justify-center items-center"
-                onClick={onDelete}
-              >
-                <FontAwesomeIcon icon={faTrash} />
-                {t("delete")}
-              </Button>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button
+                    type="button"
+                    intent="danger"
+                    className="flex gap-1.5 justify-center items-center"
+                  >
+                    <FontAwesomeIcon icon={faTrash} />
+                    {t("delete")}
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>{t("posts.delete_confirm_title")}</DialogTitle>
+                    <DialogDescription>
+                      {t("posts.delete_confirm_description")}
+                    </DialogDescription>
+                    <DialogFooter>
+                      <div className="mt-5 sm:mt-4 flex flex-row-reverse gap-2">
+                        <Button
+                          type="button"
+                          intent="danger"
+                          className="flex gap-1.5 justify-center items-center"
+                          onClick={onDelete}
+                        >
+                          <FontAwesomeIcon icon={faTrash} />
+                          {t("delete")}
+                        </Button>
+
+                        <DialogClose asChild>
+                          <Button
+                            type="button"
+                            intent="secondary"
+                            className="flex gap-1.5 justify-center items-center"
+                          >
+                            <FontAwesomeIcon icon={faCancel} />
+                            {t("cancel")}
+                          </Button>
+                        </DialogClose>
+                      </div>
+                    </DialogFooter>
+                  </DialogHeader>
+                </DialogContent>
+              </Dialog>
             </>
           )}
         </div>

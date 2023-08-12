@@ -9,7 +9,7 @@ const DialogTitle = forwardRef<
   <DialogPrimitive.Title
     ref={ref}
     className={classMerge(
-      "text-lg font-semibold leading-none tracking-tight",
+      "text-base font-semibold leading-6 text-gray-900",
       className
     )}
     {...props}

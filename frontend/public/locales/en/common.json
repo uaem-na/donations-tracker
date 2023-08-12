@@ -4,6 +4,7 @@
   "edit": "Edit",
   "delete": "Delete",
   "remove": "Remove",
+  "cancel": "Cancel",
   "submit": "Submit",
   "activate": "Activate",
   "deactivate": "Deactivate",
@@ -38,7 +39,9 @@
     "star": "Star",
     "no_posts_found": "No posts found",
     "new_offer": "I would like to make an offer...",
-    "new_request": "I would like to make a request..."
+    "new_request": "I would like to make a request...",
+    "delete_confirm_title": "Are you sure you want to delete?",
+    "delete_confirm_description": "This action cannot be undone. This will permanently delete your post."
   },
   "user_actions": {
     "open_user_menu": "Open user menu",
