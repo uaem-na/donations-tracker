@@ -2,7 +2,7 @@ import { Button } from "@components/Controls";
 import { SelectInput } from "@components/Controls/Select";
 import { PostList } from "@components/Posts";
 import { PostApiResponse } from "@services/api";
-import { useCallback, useEffect, useState } from "react";
+import { SetStateAction, useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 type Tab = "all" | "request" | "offer";
@@ -12,10 +12,10 @@ interface PostsContainerProps {
   page: number;
   perPage: number;
   total: number;
-  onPerPageChange: (perPage: number) => void;
-  onTabChange: (tab: Tab) => void;
-  onPrevPage: () => void;
-  onNextPage: () => void;
+  isLoading: boolean;
+  updatePage: (setter: SetStateAction<number>) => void;
+  updatePerPage: (setter: SetStateAction<number>) => void;
+  updateTab: (setter: SetStateAction<Tab>) => void;
 }
 
 export const PostsContainer = ({
@@ -23,27 +23,32 @@ export const PostsContainer = ({
   page,
   perPage,
   total,
-  onPerPageChange,
-  onTabChange,
-  onPrevPage,
-  onNextPage,
+  isLoading,
+  updatePage,
+  updatePerPage,
+  updateTab,
 }: PostsContainerProps) => {
   const { t } = useTranslation();
   const [selectedTab, setSelectedTab] = useState<Tab>("all");
 
   useEffect(() => {
-    if (onTabChange) {
-      onTabChange(selectedTab);
+    if (updateTab) {
+      updateTab(selectedTab);
     }
   }, [selectedTab]);
 
   const handlePerPageChange = (val: string) => {
-    onPerPageChange(parseInt(val) ?? 10);
+    // update parent containers
+    updatePage(1);
+    updatePerPage(parseInt(val) ?? 10);
   };
 
   const handleTabChange = (tab: Tab) => {
     setSelectedTab(tab);
-    onTabChange(tab);
+
+    // update parent containers
+    updatePage(1);
+    updateTab(tab);
   };
 
   const activeLinkClassName = "bg-purple-100 text-purple-800";
@@ -71,6 +76,10 @@ export const PostsContainer = ({
       </>
     );
   }, [page, posts]);
+
+  if (isLoading) {
+    return <p>{t("loading")}</p>;
+  }
 
   return (
     <>
@@ -149,13 +158,17 @@ export const PostsContainer = ({
         >
           <div className="hidden sm:block">{renderPaginationResults()}</div>
           <div className="flex flex-1 justify-between sm:justify-end gap-2">
-            <Button type="button" onClick={onPrevPage} disabled={page <= 1}>
+            <Button
+              type="button"
+              onClick={() => updatePage((prev) => Math.max(prev - 1, 1))}
+              disabled={page <= 1}
+            >
               Previous
             </Button>
             <div className="block sm:hidden">{renderPaginationResults()}</div>
             <Button
               type="button"
-              onClick={onNextPage}
+              onClick={() => updatePage((prev) => prev + 1)}
               disabled={perPage * page > total}
             >
               Next
