@@ -12,6 +12,12 @@
   "email": "E-mail",
   "select_a_tab": "Select a tab",
   "display_per_page": "Display per page",
+  "search": "Search",
+  "search_results": "Search results",
+  "no_search_results": "No search results",
+  "next": "Next",
+  "previous": "Previous",
+  "showing_results": "Showing <from>{{from}}</from> to <to>{{to}}</to> of <total>{{total}}</total> results",
   "posts": {
     "author": "Author",
     "type": "Type",

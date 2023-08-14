@@ -3,7 +3,7 @@ import { SelectInput } from "@components/Controls/Select";
 import { PostList } from "@components/Posts";
 import { PostApiResponse } from "@services/api";
 import { SetStateAction, useCallback, useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 
 type Tab = "all" | "request" | "offer";
 
@@ -61,17 +61,19 @@ export const PostsContainer = ({
     return (
       <>
         <p className="flex gap-1 text-sm text-gray-700">
-          Showing
-          <span className="font-medium">
-            {page === 1 ? 1 : page * perPage - (perPage - 1)}
-          </span>
-          to
-          <span className="font-medium">
-            {page * perPage > total ? total : page * perPage}
-          </span>
-          of
-          <span className="font-medium">{total}</span>
-          results
+          <Trans
+            i18nKey="showing_results"
+            values={{
+              from: page === 1 ? 1 : page * perPage - (perPage - 1),
+              to: page * perPage > total ? total : page * perPage,
+              total: total,
+            }}
+            components={{
+              from: <span className="font-medium" />,
+              to: <span className="font-medium" />,
+              total: <span className="font-medium" />,
+            }}
+          />
         </p>
       </>
     );
@@ -163,7 +165,7 @@ export const PostsContainer = ({
               onClick={() => updatePage((prev) => Math.max(prev - 1, 1))}
               disabled={page <= 1}
             >
-              Previous
+              {t("previous")}
             </Button>
             <div className="block sm:hidden">{renderPaginationResults()}</div>
             <Button
@@ -171,7 +173,7 @@ export const PostsContainer = ({
               onClick={() => updatePage((prev) => prev + 1)}
               disabled={perPage * page > total}
             >
-              Next
+              {t("next")}
             </Button>
           </div>
         </nav>
