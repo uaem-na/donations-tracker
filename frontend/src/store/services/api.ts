@@ -75,7 +75,15 @@ type PaginationArgs = {
 };
 
 type FilterByPostTypeArgs = {
-  type: "all" | "request" | "offer";
+  post_type: string;
+};
+
+type FilterByUserTypeArgs = {
+  user_type: string;
+};
+
+type FilterByCategoriesTypeArgs = {
+  categories: string[];
 };
 
 type FilterByPostStatusArgs = {
@@ -166,7 +174,11 @@ export const api = createApi({
     }),
     getStarredPosts: builder.query<
       PaginatedListResponse<PostApiResponse>,
-      GetUserArgs & PaginationArgs & FilterByPostTypeArgs
+      GetUserArgs &
+        PaginationArgs &
+        FilterByPostTypeArgs &
+        FilterByUserTypeArgs &
+        FilterByCategoriesTypeArgs
     >({
       query: ({ userId, ...rest }) => ({
         url: `users/${userId}/starred`,
@@ -197,7 +209,11 @@ export const api = createApi({
     }),
     getPosts: builder.query<
       PaginatedListResponse<PostApiResponse>,
-      PaginationArgs | FilterByPostTypeArgs | void
+      | PaginationArgs
+      | FilterByPostTypeArgs
+      | FilterByUserTypeArgs
+      | FilterByCategoriesTypeArgs
+      | void
     >({
       query: (args) => ({
         url: "posts",

@@ -14,6 +14,9 @@ interface PostItemProps {
   title: string;
   status: string;
   displayName: string;
+  category: string;
+  price: number;
+  quantity: number;
   createdAt: string;
   updatedAt: string;
   type: string;
@@ -24,6 +27,9 @@ export const PostItem = ({
   title,
   status,
   displayName,
+  category,
+  price,
+  quantity,
   createdAt,
   updatedAt,
   type,
@@ -85,12 +91,15 @@ export const PostItem = ({
                 <Badge
                   color={type === "offer" ? "purple" : "blue"}
                   text={t(`posts.${type}`)}
+                  width="w-16"
                 />
-                {" " + title}
+                <span className="mx-2">{`[${category}] ${title}`}</span>
               </Link>
             </p>
             <p className="mt-1 flex text-xs leading-5 text-gray-500">
-              <span className="relative truncate hover:underline"></span>
+              CAD {price} • {quantity} {t("posts.available")}
+            </p>
+            <p className="mt-1 flex text-xs leading-5 text-gray-500">
               {displayName}
             </p>
           </div>

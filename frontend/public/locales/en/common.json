@@ -12,10 +12,17 @@
   "email": "E-mail",
   "select_a_tab": "Select a tab",
   "display_per_page": "Display per page",
+  "search": "Search",
+  "search_results": "Search results",
+  "no_search_results": "No search results",
+  "next": "Next",
+  "previous": "Previous",
+  "showing_results": "Showing <from>{{from}}</from> to <to>{{to}}</to> of <total>{{total}}</total> results",
+  "all": "All",
   "posts": {
     "author": "Author",
+    "available": "Available",
     "type": "Type",
-    "all": "All",
     "offer": "Offer",
     "offers": "Offers",
     "request": "Request",
@@ -30,7 +37,9 @@
     "category": "Category",
     "create": "Create",
     "select_type": "Select a type",
+    "select_user_type": "Select a user type",
     "select_category": "Select a category",
+    "select_date": "Select a date",
     "no_items": "No items",
     "created_at": "Created at {{date}}",
     "updated_at": "Updated at {{date}}",
@@ -42,6 +51,10 @@
     "new_request": "I would like to make a request...",
     "delete_confirm_title": "Are you sure you want to delete?",
     "delete_confirm_description": "This action cannot be undone. This will permanently delete your post."
+  },
+  "users": {
+    "individual": "Individual",
+    "organization": "Organization"
   },
   "user_actions": {
     "open_user_menu": "Open user menu",

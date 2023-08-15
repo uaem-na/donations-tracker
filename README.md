@@ -44,6 +44,7 @@ To build without cache:
 - [ ] User emails must be verified (depends on email service provider such as Amazon SES)
 - [ ] When there is an activity on the post, authors must be notified
 - [ ] Add display name to user model and use it across the app
+- [ ] Bilingual support (English and French)
 
 ### Admin features
 
@@ -63,11 +64,11 @@ To build without cache:
 - [x] As a user, I should be able to create a request, edit and delete my own requests
 - [x] As a user, I should be able to view the posts on a map (landing page or "view")
 - [x] As a user, I should be able to track others' requests/offers in my account dashboard
+- [x] Display category, price, quantity (item info) on post listings
 - [x] Add pagination to post listings
 - [ ] Add sorting to post listings
 - [ ] Add filtering to post listing
-- [ ] Display category, price, quantity (item info) on post listings
-- [ ] As a user, I should be able to use the app in both English and French
+- [ ] As a user, I should be able to view my own posts in dashboard
 
 ### Organization features
 
