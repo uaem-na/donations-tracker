@@ -104,6 +104,7 @@ export const FilterContainer = ({
           {ariaLabel}
         </label>
         <select
+          title={ariaLabel}
           name={name}
           className="block w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
           defaultValue={selected[0].value}
