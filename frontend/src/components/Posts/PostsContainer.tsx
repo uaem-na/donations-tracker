@@ -1,21 +1,33 @@
 import { Button } from "@components/Controls";
 import { SelectInput } from "@components/Controls/Select";
-import { PostList } from "@components/Posts";
+import { FilterContainer, PostList } from "@components/Posts";
 import { PostApiResponse } from "@services/api";
-import { SetStateAction, useCallback, useEffect, useState } from "react";
+import { SetStateAction, useCallback } from "react";
 import { Trans, useTranslation } from "react-i18next";
+import {
+  FilterPostType,
+  FilterUserType,
+  PerPageOption,
+  getPerPageOption,
+} from "./types";
 
-type Tab = "all" | "request" | "offer";
+interface FilterProps {
+  userType: "individual" | "organization";
+  date?: string; // date picker preferred, but text input is fine for first iteration
+  category?: string[]; // multi-select checkbox preferred, but single select dropdown is fine for first iteration
+}
 
 interface PostsContainerProps {
   posts?: PostApiResponse[];
   page: number;
-  perPage: number;
+  perPage: PerPageOption;
   total: number;
   isLoading: boolean;
   updatePage: (setter: SetStateAction<number>) => void;
-  updatePerPage: (setter: SetStateAction<number>) => void;
-  updateTab: (setter: SetStateAction<Tab>) => void;
+  updatePerPage: (setter: SetStateAction<PerPageOption>) => void;
+  updatePostType: (setter: SetStateAction<FilterPostType>) => void;
+  updateUserType: (setter: SetStateAction<FilterUserType>) => void;
+  updateCategories: (setter: SetStateAction<string[]>) => void;
 }
 
 export const PostsContainer = ({
@@ -26,36 +38,35 @@ export const PostsContainer = ({
   isLoading,
   updatePage,
   updatePerPage,
-  updateTab,
+  updatePostType,
+  updateUserType,
+  updateCategories,
 }: PostsContainerProps) => {
   const { t } = useTranslation();
-  const [selectedTab, setSelectedTab] = useState<Tab>("all");
-
-  useEffect(() => {
-    if (updateTab) {
-      updateTab(selectedTab);
-    }
-  }, [selectedTab]);
 
   const handlePerPageChange = (val: string) => {
-    // update parent containers
+    // update parent container state
     updatePage(1);
-    updatePerPage(parseInt(val) ?? 10);
+    updatePerPage(getPerPageOption(parseInt(val)));
   };
 
-  const handleTabChange = (tab: Tab) => {
-    setSelectedTab(tab);
-
-    // update parent containers
+  const handlePostTypeFilterChange = (postType: FilterPostType) => {
+    // update parent container state
     updatePage(1);
-    updateTab(tab);
+    updatePostType(postType);
   };
 
-  const activeLinkClassName = "bg-purple-100 text-purple-800";
-  const inactiveLinkClassName =
-    "text-gray-500 hover:text-gray-700 hover:bg-gray-50";
-  const linkClassName = (tab: Tab) =>
-    tab === selectedTab ? activeLinkClassName : inactiveLinkClassName;
+  const handleUserTypeFilterChange = (userType: FilterUserType) => {
+    // update parent container state
+    updatePage(1);
+    updateUserType(userType);
+  };
+
+  const handleCategoryFilterChange = (categories: string[]) => {
+    // update parent container state
+    updatePage(1);
+    updateCategories(categories);
+  };
 
   const renderPaginationResults = useCallback(() => {
     return (
@@ -86,58 +97,49 @@ export const PostsContainer = ({
   return (
     <>
       <div className="flex flex-col gap-y-4">
-        <div>
-          <div className="sm:hidden">
-            <label htmlFor="tabs" className="sr-only">
-              {t("select_a_tab")}
-            </label>
-            <select
-              name="tabs"
-              className="block w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
-              defaultValue={t("posts.all")}
-              onChange={(e) => handleTabChange(e.target.value as Tab)}
-            >
-              <option value="all">{t("posts.all")}</option>
-              <option value="request">{t("posts.requests")}</option>
-              <option value="offer">{t("posts.offers")}</option>
-            </select>
-          </div>
-          <div className="hidden sm:block">
-            <nav className="flex space-x-4" aria-label="Tabs">
-              <a
-                href="#"
-                className={
-                  "rounded-md px-3 py-2 text-sm font-medium " +
-                  linkClassName("all")
-                }
-                onClick={() => handleTabChange("all" as const)}
-              >
-                {t("posts.all")}
-              </a>
-              <a
-                href="#"
-                className={
-                  "rounded-md px-3 py-2 text-sm font-medium " +
-                  linkClassName("request")
-                }
-                onClick={() => handleTabChange("request" as const)}
-              >
-                {t("posts.requests")}
-              </a>
-              <a
-                href="#"
-                className={
-                  "rounded-md px-3 py-2 text-sm font-medium " +
-                  linkClassName("offer")
-                }
-                onClick={() => handleTabChange("offer" as const)}
-              >
-                {t("posts.offers")}
-              </a>
-            </nav>
-          </div>
-        </div>
-
+        <FilterContainer
+          name="postType"
+          multiSelect={false}
+          activeClassNames="bg-purple-100 text-purple-800"
+          inactiveClassNames="text-gray-500 hover:text-gray-700 hover:bg-gray-50"
+          ariaLabel={t("posts.select_type")}
+          options={[
+            { value: "request", label: t("posts.requests") },
+            { value: "offer", label: t("posts.offers") },
+          ]}
+          onChange={(option) =>
+            handlePostTypeFilterChange(option.value as FilterPostType)
+          }
+        />
+        <FilterContainer
+          name="userType"
+          multiSelect={false}
+          activeClassNames="bg-purple-100 text-purple-800"
+          inactiveClassNames="text-gray-500 hover:text-gray-700 hover:bg-gray-50"
+          ariaLabel={t("posts.select_user_type")}
+          options={[
+            { value: "individual", label: t("users.individual") },
+            { value: "organization", label: t("users.organization") },
+          ]}
+          onChange={(option) =>
+            handleUserTypeFilterChange(option.value as FilterUserType)
+          }
+        />
+        <FilterContainer
+          name="category"
+          multiSelect={true}
+          activeClassNames="bg-purple-100 text-purple-800"
+          inactiveClassNames="text-gray-500 hover:text-gray-700 hover:bg-gray-50"
+          ariaLabel={t("posts.select_category")}
+          options={[
+            { value: "food", label: "TODO: Food" },
+            { value: "toy", label: "TODO: Toy" },
+            { value: "ppe", label: "TODO: PPEs" },
+          ]}
+          onChange={(options) =>
+            handleCategoryFilterChange(options.map((option) => option.value))
+          }
+        />
         <div className="sm:inline-flex sm:justify-end">
           <label htmlFor="perPage" className="sr-only">
             {t("display_per_page")}
@@ -148,7 +150,10 @@ export const PostsContainer = ({
             defaultValue={10}
             onChange={(e) => handlePerPageChange(e.target.value)}
             placeholder={t("display_per_page")}
-            options={["10", "25", "50"].map((i) => ({ value: i, label: i }))}
+            options={["10", "20", "50", "100"].map((i) => ({
+              value: i,
+              label: i,
+            }))}
           ></SelectInput>
         </div>
 

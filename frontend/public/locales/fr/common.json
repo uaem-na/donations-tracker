@@ -18,11 +18,11 @@
   "next": "Suivant",
   "previous": "Précédent",
   "showing_results": "Affichage des résultats <from>{{from}}</from> à <to>{{to}}</to> de <total>{{total}}</total>",
+  "all": "Tous",
   "posts": {
     "author": "Auteur",
     "available": "Disponible",
     "type": "Type",
-    "all": "Tous",
     "offer": "Offre",
     "offers": "Offres",
     "request": "Demande",
@@ -37,7 +37,9 @@
     "category": "Catégorie",
     "create": "Créer",
     "select_type": "Sélectionnez un type",
+    "select_user_type": "Sélectionnez un type d'utilisateur",
     "select_category": "Sélectionnez une catégorie",
+    "select_date": "Sélectionnez une date",
     "no_items": "Aucun article",
     "created_at": "Créé le {{date}}",
     "updated_at": "Mis à jour le {{date}}",
@@ -47,8 +49,12 @@
     "no_posts_found": "Aucun article trouvé",
     "new_offer": "Je souhaite faire une offre...",
     "new_request": "Je voudrais faire une demande...",
-    "deleteConfirmTitle": "Etes-vous sûr que vous voulez supprimer?",
-    "deleteConfirmDescription": "Cette action ne peut pas être annulée. Cela supprimera définitivement votre message."
+    "delete_confirm_title": "Etes-vous sûr que vous voulez supprimer?",
+    "delete_confirm_description": "Cette action ne peut pas être annulée. Cela supprimera définitivement votre message."
+  },
+  "users": {
+    "individual": "Individuel",
+    "organization": "Organisation"
   },
   "user_actions": {
     "open_user_menu": "Ouvrir le menu utilisateur",
