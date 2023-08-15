@@ -22,7 +22,7 @@ export const DashboardPage = () => {
       userId: user?.id!,
       per_page: perPage,
       page: page,
-      type: postType,
+      post_type: postType,
       user_type: userType,
       categories: categories,
     });
