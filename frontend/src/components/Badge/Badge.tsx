@@ -11,9 +11,10 @@ interface IBadgeProps {
     | "purple"
     | "pink";
   text: string | ReactNode;
+  width?: string; // tailwindcss name
 }
 
-export const Badge = ({ color, text }: IBadgeProps) => {
+export const Badge = ({ color, text, width }: IBadgeProps) => {
   const badgeColor = () => {
     switch (color) {
       case "red":
@@ -38,7 +39,9 @@ export const Badge = ({ color, text }: IBadgeProps) => {
 
   return (
     <span
-      className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset ${badgeColor()}`}
+      className={`inline-flex items-center justify-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset ${badgeColor()} ${
+        width ?? ""
+      }`}
     >
       {text}
     </span>
