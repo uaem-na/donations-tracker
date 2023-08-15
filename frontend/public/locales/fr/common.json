@@ -20,6 +20,7 @@
   "showing_results": "Affichage des résultats <from>{{from}}</from> à <to>{{to}}</to> de <total>{{total}}</total>",
   "posts": {
     "author": "Auteur",
+    "available": "Disponible",
     "type": "Type",
     "all": "Tous",
     "offer": "Offre",

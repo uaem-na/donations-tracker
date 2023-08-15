@@ -39,6 +39,9 @@ export const PostList = ({ posts }: PostListProps) => {
             title={post.item.name}
             status={post.status}
             displayName={post.author.firstName + " " + post.author.lastName}
+            category={post.item.category}
+            price={post.item.price}
+            quantity={post.item.quantity}
             createdAt={post.createdAt}
             updatedAt={post.updatedAt}
             type={post.type}

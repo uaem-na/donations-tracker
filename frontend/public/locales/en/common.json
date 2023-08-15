@@ -20,6 +20,7 @@
   "showing_results": "Showing <from>{{from}}</from> to <to>{{to}}</to> of <total>{{total}}</total> results",
   "posts": {
     "author": "Author",
+    "available": "Available",
     "type": "Type",
     "all": "All",
     "offer": "Offer",

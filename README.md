@@ -64,9 +64,9 @@ To build without cache:
 - [x] As a user, I should be able to view the posts on a map (landing page or "view")
 - [x] As a user, I should be able to track others' requests/offers in my account dashboard
 - [x] Add pagination to post listings
+- [x] Display category, price, quantity (item info) on post listings
 - [ ] Add sorting to post listings
 - [ ] Add filtering to post listing
-- [ ] Display category, price, quantity (item info) on post listings
 - [ ] As a user, I should be able to use the app in both English and French
 
 ### Organization features
