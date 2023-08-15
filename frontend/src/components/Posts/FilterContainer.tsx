@@ -55,7 +55,7 @@ export const FilterContainer = ({
         onChange(selected[0]);
       }
     }
-  }, [selected, onChange]);
+  }, [selected]);
 
   const matchByValue = (value: string) => (option: Option) =>
     option.value === value;
