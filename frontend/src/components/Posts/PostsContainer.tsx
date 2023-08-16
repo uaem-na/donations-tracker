@@ -1,7 +1,7 @@
 import { Button } from "@components/Controls";
 import { SelectInput } from "@components/Controls/Select";
 import { FilterContainer, PostList } from "@components/Posts";
-import { PostApiResponse } from "@services/api";
+import { PostApiResponse, useGetItemCategoriesQuery } from "@services/api";
 import { SetStateAction, useCallback } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import {
@@ -43,6 +43,7 @@ export const PostsContainer = ({
   updateCategories,
 }: PostsContainerProps) => {
   const { t } = useTranslation();
+  const { data: categories } = useGetItemCategoriesQuery({ locale: "en" });
 
   const handlePerPageChange = (val: string) => {
     // update parent container state
@@ -131,11 +132,7 @@ export const PostsContainer = ({
           activeClassNames="bg-purple-100 text-purple-800"
           inactiveClassNames="text-gray-500 hover:text-gray-700 hover:bg-gray-50"
           ariaLabel={t("posts.select_category")}
-          options={[
-            { value: "food", label: "TODO: Food" },
-            { value: "toy", label: "TODO: Toy" },
-            { value: "ppe", label: "TODO: PPEs" },
-          ]}
+          options={categories ?? []}
           onChange={(options) =>
             handleCategoryFilterChange(options.map((option) => option.value))
           }

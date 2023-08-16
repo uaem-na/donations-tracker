@@ -10,7 +10,8 @@ const userService = new UserService();
 const postController = new PostController(postService, userService);
 
 // * wire up public routes with controller
-router.get("/", postController.getAllPosts);
+router.get("/", postController.getPublicPosts);
+router.get("/landing", postController.getAllPosts);
 router.get("/:id", postController.getPost);
 router.get("/items/categories", postController.getItemCategories);
 

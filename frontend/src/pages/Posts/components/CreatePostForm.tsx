@@ -27,7 +27,7 @@ export const CreatePostForm = ({ type }: CreatePostFormProps) => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const schema = useMemo(() => CreateEditPostSchema(t), [t]); // ! required for on the fly language change
-  const { data: categories } = useGetItemCategoriesQuery();
+  const { data: categories } = useGetItemCategoriesQuery({ locale: "en" });
   const [createPostApi, { isLoading: isCreating, isSuccess, error }] =
     useCreatePostMutation();
   const [serverMessage, setServerMessage] = useState("");
@@ -117,10 +117,9 @@ export const CreatePostForm = ({ type }: CreatePostFormProps) => {
                 errorMessage={errors.item?.category?.message}
                 placeholder={t("posts.select_category")}
                 options={
-                  // TODO: i18n based on category string values (these are from backend)
                   categories?.map((category) => ({
-                    value: category,
-                    label: category,
+                    value: category.value,
+                    label: category.label,
                   })) ?? []
                 }
               />

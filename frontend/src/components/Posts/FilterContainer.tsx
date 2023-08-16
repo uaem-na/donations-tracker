@@ -118,9 +118,10 @@ export const FilterContainer = ({
         </select>
       </div>
       <div className="hidden sm:block">
-        <nav className="flex space-x-4" aria-label={ariaLabel}>
+        <nav className="flex gap-x-4 flex-wrap" aria-label={ariaLabel}>
           {optionsWithAll.map((option) => (
             <button
+              type="button"
               key={option.value}
               onClick={() => handleChange(option.value)}
               className={`rounded-md px-3 py-2 text-sm font-medium ${

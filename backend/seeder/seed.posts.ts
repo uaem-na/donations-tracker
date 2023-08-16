@@ -10,6 +10,7 @@ export const fakePost = (
   const content = {
     title: faker.lorem.words(5),
     author: author,
+    authorType: faker.helpers.arrayElement(["individual", "organization"]),
     location: {
       // Montreal boundaries rough estimate
       lat: faker.location.latitude({

@@ -1,5 +1,11 @@
 import { Model, model, Schema } from "mongoose";
-import { ModelName, PostCategory, PostStatus, PostType } from "../../constants";
+import {
+  ModelName,
+  PostCategory,
+  PostStatus,
+  PostType,
+  UserRole,
+} from "../../constants";
 import { Post, PostDocument, PostItem } from "../../types";
 import { ImageSchema, LocationSchema } from "../common";
 
@@ -11,6 +17,7 @@ const ItemSchema: Schema<PostItem> = new Schema({
   category: {
     type: String,
     required: true,
+    index: true,
     enum: [
       PostCategory.BOOK,
       PostCategory.CLOTHING,
@@ -36,7 +43,12 @@ const PostSchema: Schema<Post> = new Schema(
     },
     location: { type: LocationSchema, required: true },
     item: { type: ItemSchema, required: true },
-    // * index for author and type for faster queries
+    authorType: {
+      type: String,
+      enum: [UserRole.ORGANIZATION, UserRole.INDIVIDUAL],
+      required: true,
+      default: UserRole.INDIVIDUAL,
+    },
     type: {
       type: String,
       enum: [PostType.OFFER, PostType.REQUEST],
@@ -48,6 +60,7 @@ const PostSchema: Schema<Post> = new Schema(
       enum: [PostStatus.OPEN, PostStatus.IN_PROGRESS, PostStatus.CLOSED],
       required: true,
       default: PostStatus.OPEN,
+      indes: true,
     },
     views: { type: Number, default: 0 },
   },

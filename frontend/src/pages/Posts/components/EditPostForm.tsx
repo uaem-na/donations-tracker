@@ -46,7 +46,7 @@ export const EditPostForm = ({ id, onError }: EditPostFormProps) => {
     isSuccess: isPostLoaded,
     error: postError,
   } = useGetPostQuery({ postId: id });
-  const { data: categories } = useGetItemCategoriesQuery();
+  const { data: categories } = useGetItemCategoriesQuery({ locale: "en" });
   const [
     editPostApi,
     { isLoading: isEditing, isSuccess: isEditSuccess, error: editError },
@@ -237,10 +237,9 @@ export const EditPostForm = ({ id, onError }: EditPostFormProps) => {
                 errorMessage={errors.item?.category?.message}
                 placeholder={t("posts.select_category")}
                 options={
-                  // TODO: i18n based on category string values (these are from backend)
                   categories?.map((category) => ({
-                    value: category,
-                    label: category,
+                    value: category.value,
+                    label: category.label,
                   })) ?? []
                 }
               />
