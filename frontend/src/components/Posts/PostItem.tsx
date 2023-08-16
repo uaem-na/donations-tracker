@@ -62,6 +62,8 @@ export const PostItem = ({
     starPostApi({ id });
   };
 
+  const categoryString = t(`posts.item_categories.${category}`);
+
   return (
     <li className="flex justify-between gap-x-6 px-4 py-5 hover:bg-gray-50 sm:px-6 lg:px-8">
       {currentSession && (
@@ -93,7 +95,7 @@ export const PostItem = ({
                   text={t(`posts.${type}`)}
                   width="w-16"
                 />
-                <span className="mx-2">{`[${category}] ${title}`}</span>
+                <span className="mx-2">{`[${categoryString}] ${title}`}</span>
               </Link>
             </p>
             <p className="mt-1 flex text-xs leading-5 text-gray-500">

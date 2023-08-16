@@ -102,6 +102,8 @@ export const PostDetails = ({
     return <p>{t("errors.unknown_server_error")}</p>;
   }
 
+  const categoryString = t(`posts.item_categories.${post.item.category}`);
+
   // display post and its properties and add labels for each property
   return (
     <div className="container mx-auto px-4 py-8 sm:px-8 sm:pb-14">
@@ -163,7 +165,7 @@ export const PostDetails = ({
           <div>
             <dt className="inline text-gray-500 mr-3">{t("posts.category")}</dt>
             <dd className="inline truncate text-gray-700">
-              <Badge color="gray" text={post.item.category} />{" "}
+              <Badge color="gray" text={categoryString} />{" "}
             </dd>
           </div>
           <div>
