@@ -87,8 +87,8 @@ export class UserService {
     return await user.save();
   }
 
-  async getStarredPostsById(id: string): Promise<string[]> {
-    const user = await UserModel.findById(id);
+  async getUserStarredPostIds(userId: string): Promise<string[]> {
+    const user = await UserModel.findById(userId);
 
     if (!user) {
       throw new Error(`Error getting starred posts. User does not exist.`);
@@ -98,7 +98,9 @@ export class UserService {
       return [];
     }
 
-    const starredPostIds: string[] = user?.starred.map((oid) => oid.toString());
+    const starredPostIds: string[] = user?.starred.map(
+      (oid: { toString: () => string }) => oid.toString()
+    );
 
     return starredPostIds;
   }

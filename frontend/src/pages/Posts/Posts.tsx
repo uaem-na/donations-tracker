@@ -11,9 +11,11 @@ import { useState } from "react";
 export const PostsPage = () => {
   const [page, setPage] = useState(1);
   const [perPage, setPerPage] = useState<PerPageOption>(10);
+
+  // default filter should be "all" otherwise 400 error will be returned
   const [postType, setPostType] = useState<FilterPostType>("all");
   const [userType, setUserType] = useState<FilterUserType>("all");
-  const [categories, setCategories] = useState<string[]>([]);
+  const [categories, setCategories] = useState<string[]>(["all"]);
   const { data: postsResponse, isLoading } = useGetPostsQuery({
     per_page: perPage,
     page: page,

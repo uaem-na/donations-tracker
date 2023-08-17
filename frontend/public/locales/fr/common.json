@@ -50,7 +50,19 @@
     "new_offer": "Je souhaite faire une offre...",
     "new_request": "Je voudrais faire une demande...",
     "delete_confirm_title": "Etes-vous sûr que vous voulez supprimer?",
-    "delete_confirm_description": "Cette action ne peut pas être annulée. Cela supprimera définitivement votre message."
+    "delete_confirm_description": "Cette action ne peut pas être annulée. Cela supprimera définitivement votre message.",
+    "item_categories": {
+      "book": "Livre",
+      "clothing": "Vêtement",
+      "cutlery": "Couverts",
+      "electronics": "Électronique",
+      "food": "Nourriture",
+      "furniture": "Meubles",
+      "ppe": "ÉPI",
+      "stationary": "Papeterie",
+      "toy": "Jouet",
+      "other": "Autre"
+    }
   },
   "users": {
     "individual": "Individuel",

@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import qs from "query-string";
 
 const baseUrl = import.meta.env.VITE_API_URL || "";
 
@@ -47,6 +48,11 @@ export type PostItemApiResponse = {
   price: number;
   quantity: number;
   id: string;
+};
+
+export type PostItemCategoryApiResponse = {
+  value: string;
+  label: string;
 };
 
 export type User = {
@@ -130,12 +136,19 @@ type SetUserActiveArgs = {
   active: boolean;
 };
 
+type GetPostItemCategoriesArgs = {
+  locale: string;
+};
+
 // * Define a service using a base URL and expected endpoints
 export const api = createApi({
   reducerPath: "apis",
   baseQuery: fetchBaseQuery({
     baseUrl: `${baseUrl}`,
     credentials: "include",
+    paramsSerializer: (params) => {
+      return qs.stringify(params, { arrayFormat: "bracket" });
+    },
   }),
   tagTypes: ["session", "posts", "users"],
   endpoints: (builder) => ({
@@ -183,7 +196,9 @@ export const api = createApi({
       query: ({ userId, ...rest }) => ({
         url: `users/${userId}/starred`,
         method: "GET",
-        params: { ...rest },
+        params: {
+          ...rest,
+        },
       }),
       transformResponse: (
         response: PaginatedListResponse<PostApiResponse>
@@ -246,6 +261,40 @@ export const api = createApi({
             ]
           : [{ type: "posts", id: "list" }],
     }),
+    getPostsForLandingPage: builder.query<
+      PaginatedListResponse<PostApiResponse>,
+      void
+    >({
+      query: () => ({
+        url: "posts/landing",
+        method: "GET",
+      }),
+      transformResponse: (
+        response: PaginatedListResponse<PostApiResponse>
+      ): PaginatedListResponse<PostApiResponse> => {
+        const posts = response.data;
+        response.data = posts.map((post) => ({
+          ...post,
+          createdAt: new Date(post.createdAt).toLocaleDateString(),
+          updatedAt: new Date(post.updatedAt).toLocaleDateString(),
+          item: {
+            ...post.item,
+          },
+          location: {
+            ...post.location,
+          },
+        }));
+
+        return response;
+      },
+      providesTags: (result, error, arg) =>
+        result
+          ? [
+              ...result.data.map(({ id }) => ({ type: "posts" as const, id })),
+              { type: "posts", id: "landing-list" },
+            ]
+          : [{ type: "posts", id: "landing-list" }],
+    }),
     getPost: builder.query<PostApiResponse, GetPostArgs>({
       query: ({ postId }) => `/posts/${postId}`,
       providesTags: (result, error, arg) => [{ type: "posts", id: arg.postId }],
@@ -273,10 +322,14 @@ export const api = createApi({
       }),
       invalidatesTags: (result, error, arg) => [{ type: "posts", id: arg.id }],
     }),
-    getItemCategories: builder.query<string[], void>({
-      query: () => ({
+    getItemCategories: builder.query<
+      PostItemCategoryApiResponse[],
+      GetPostItemCategoriesArgs
+    >({
+      query: ({ locale }) => ({
         url: `posts/items/categories`,
         method: "GET",
+        params: { locale },
       }),
       providesTags: (result, error, arg) => [
         { type: "posts", id: "categories" },
@@ -364,6 +417,7 @@ export const {
   useGetItemCategoriesQuery,
   useGetPostQuery,
   useGetPostsQuery,
+  useGetPostsForLandingPageQuery,
   useGetSessionQuery,
   useGetStarredPostsQuery,
   useGetUserQuery,

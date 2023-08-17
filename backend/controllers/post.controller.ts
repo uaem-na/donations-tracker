@@ -1,19 +1,26 @@
 import debug from "debug";
 import expressAsyncHandler from "express-async-handler";
-import { body, param, query, validationResult } from "express-validator";
-import {
-  FilterPostType,
-  FilterablePostTypes,
-  PostCategories,
-  PostStatus,
-  PostTypes,
-} from "../constants";
+import { body, param, validationResult } from "express-validator";
+import { FilterQuery } from "mongoose";
+import { PostCategories, PostStatus, PostTypes } from "../constants";
 import { AuthorizationError, NotFoundError, ValidationError } from "../errors";
 import { PostDto } from "../models/posts";
 import { PostService, UserService } from "../services";
-import { OptionallyPaginatedListResponse } from "../types";
-import { hasUser } from "../utils";
-import { isEnumValue } from "../utils/isEnumValue";
+import {
+  OptionallyPaginatedListResponse,
+  PaginatedResponse,
+  PostDocument,
+} from "../types";
+import {
+  hasUser,
+  tryParseFilterQuery,
+  tryParsePaginationQuery,
+} from "../utils";
+import {
+  validateLocale,
+  validatePaginationRequest,
+  validatePostsFilterRequest,
+} from "./validators";
 
 const log = debug("backend:post");
 
@@ -23,50 +30,55 @@ export class PostController {
     private userService: UserService
   ) {}
 
-  getAllPosts = expressAsyncHandler(async (req, res, next) => {
-    await query("page")
-      .optional()
-      .isInt({
-        min: 1,
-        allow_leading_zeroes: false,
-      })
-      .run(req);
-    await query("per_page")
-      .optional()
-      .isInt({
-        min: 1,
-        allow_leading_zeroes: false,
-      })
-      .run(req);
-    await query("type").optional().isIn(FilterablePostTypes).run(req);
+  // this API is called on public post listings page without authentication
+  getPublicPosts = expressAsyncHandler(async (req, res, next) => {
+    await validatePaginationRequest({ req, optional: false });
+    await validatePostsFilterRequest({ req, optional: false });
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      throw new ValidationError(errors.array());
+      res.status(400).json({ errors: errors.array({ onlyFirstError: true }) });
+      return;
     }
 
-    const type = req.query.type as string;
-    const filterByPostType = isEnumValue(type, FilterPostType)
-      ? type
-      : FilterPostType.ALL;
-    const page = parseInt(req.query.page as string) ?? 0;
-    const perPage = parseInt(req.query.per_page as string) ?? 0;
+    const { page, limit } = tryParsePaginationQuery(req);
+    const { postType, userType, categories } = tryParseFilterQuery(req);
 
-    const posts = await this.postService.getPosts(
+    const filterQuery: FilterQuery<PostDocument> = {
+      ...(postType && { type: postType }),
+      ...(userType && { authorType: userType }),
+      ...(categories && {
+        "item.category": { $in: categories },
+      }),
+    };
+
+    const [posts, count] = await this.postService.getPaginatedPosts(
       page,
-      perPage,
-      filterByPostType
+      limit,
+      filterQuery,
+      { updatedAt: -1, createdAt: -1 }
     );
 
-    const totalCount = await this.postService.getPostsCount(filterByPostType);
+    const postDtos = posts.map((post) => PostDto.fromDocument(post));
+
+    const response: PaginatedResponse<PostDto> = {
+      data: postDtos || [],
+      page: page,
+      per_page: limit,
+      total: count,
+    };
+
+    res.json(response);
+  });
+
+  // this API is called on landing page
+  getAllPosts = expressAsyncHandler(async (req, res, next) => {
+    const posts = await this.postService.getPosts();
 
     const postDtos = posts.map((post) => PostDto.fromDocument(post));
 
     const response: OptionallyPaginatedListResponse<PostDto> = {
       data: postDtos || [],
-      ...(page > 0 && { page: page }),
-      ...(perPage > 0 && { per_page: perPage }),
-      total: totalCount,
     };
 
     res.json(response);
@@ -303,7 +315,18 @@ export class PostController {
   });
 
   getItemCategories = expressAsyncHandler(async (req, res, next) => {
-    const categories = this.postService.getItemCategories();
+    await validateLocale({ req, optional: false });
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      throw new ValidationError(errors.array());
+    }
+
+    const { locale } = req.query;
+
+    const categories = this.postService.getItemCategories(
+      locale as "en" | "fr"
+    );
 
     res.json(categories);
   });

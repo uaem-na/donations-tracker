@@ -1,9 +1,18 @@
 import { Document, PassportLocalDocument } from "mongoose";
 
 // * Common types
-export type OptionallyPaginatedListResponse<T> = {
+export type PaginatedResponse<T> = {
   data: T[];
   total: number;
+  page: number;
+  per_page: number;
+};
+
+export type OptionallyPaginatedListResponse<T> = Omit<
+  PaginatedResponse<T>,
+  "page" | "per_page" | "total"
+> & {
+  total?: number;
   page?: number;
   per_page?: number;
 };
@@ -101,6 +110,7 @@ export type PostItem = {
 export type Post = {
   _id: string;
   author: User;
+  authorType: "individual" | "organization";
   location: Location;
   item: PostItem;
   status: "open" | "in-progress" | "closed";

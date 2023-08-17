@@ -1,5 +1,9 @@
-import { FilterQuery } from "mongoose";
-import { FilterPostType, PostCategory } from "../constants";
+import { FilterQuery, SortOrder } from "mongoose";
+import {
+  BilingualPostCategory,
+  FilterPostType,
+  PostCategory,
+} from "../constants";
 import { PostModel } from "../models/posts";
 import { UserModel } from "../models/users";
 import { Post, PostDocument } from "../types";
@@ -23,30 +27,36 @@ export class PostService {
     return count;
   }
 
-  async getPosts(
+  async getPaginatedPosts(
     page: number,
-    perPage: number,
-    type: FilterPostType = FilterPostType.ALL,
-    extraQuery?: FilterQuery<PostDocument>
-  ): Promise<PostDocument[]> {
-    const query: FilterQuery<PostDocument> = {
-      ...(type !== FilterPostType.ALL && { type: type }),
-      ...(extraQuery && { ...extraQuery }),
-    };
-
-    // * if both page and perPage are truthy and greater than 0, then paginate
-    const shouldPaginate = !!page && !!perPage && page > 0 && perPage > 0;
-    if (shouldPaginate) {
-      const posts = await PostModel.find(query)
-        .sort({ updatedAt: -1, createdAt: -1 })
-        .skip((page - 1) * perPage)
-        .limit(perPage)
-        .populate("author", "firstName lastName userName -__t");
-
-      return posts;
+    limit: number,
+    filter: FilterQuery<PostDocument> = {},
+    sort:
+      | string
+      | { [key: string]: SortOrder | { $meta: "textScore" } }
+      | [string, SortOrder][]
+      | null
+      | undefined = {}
+  ): Promise<[PostDocument[], number]> {
+    if (!page || !limit || page < 0 || limit < 0) {
+      throw new Error("Error paginating posts. Invalid page or limit.");
     }
 
-    const posts = await PostModel.find(query)
+    const posts = await PostModel.find({
+      ...(filter && { ...filter }),
+    })
+      .sort(sort)
+      .skip((page - 1) * limit)
+      .limit(limit)
+      .populate("author", "role firstName lastName userName -__t");
+
+    return [posts, await PostModel.countDocuments(filter)];
+  }
+
+  async getPosts(filter?: FilterQuery<PostDocument>): Promise<PostDocument[]> {
+    const posts = await PostModel.find({
+      ...(filter && { ...filter }),
+    })
       .sort({ updatedAt: -1, createdAt: -1 })
       .populate("author", "firstName lastName userName -__t");
 
@@ -85,8 +95,12 @@ export class PostService {
     return posts;
   }
 
-  getItemCategories(): string[] {
-    return Object.values(PostCategory);
+  getItemCategories(locale: "en" | "fr"): { value: string; label: string }[] {
+    console.log(locale);
+    return Object.values(PostCategory).map((value) => {
+      console.log(BilingualPostCategory[value][locale]);
+      return { value, label: BilingualPostCategory[value][locale] };
+    });
   }
 
   async starPost(postId: string, userId: string): Promise<boolean> {

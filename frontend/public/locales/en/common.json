@@ -50,7 +50,19 @@
     "new_offer": "I would like to make an offer...",
     "new_request": "I would like to make a request...",
     "delete_confirm_title": "Are you sure you want to delete?",
-    "delete_confirm_description": "This action cannot be undone. This will permanently delete your post."
+    "delete_confirm_description": "This action cannot be undone. This will permanently delete your post.",
+    "item_categories": {
+      "book": "Book",
+      "clothing": "Clothing",
+      "cutlery": "Cutlery",
+      "electronics": "Electronics",
+      "food": "Food",
+      "furniture": "Furniture",
+      "ppe": "PPE",
+      "stationary": "Stationary",
+      "toy": "Toy",
+      "other": "Other"
+    }
   },
   "users": {
     "individual": "Individual",

@@ -1,7 +1,7 @@
 import Locate from "@components/GoogleMapWrapper/Locate";
 import { Marker, MarkerUtils } from "@components/GoogleMapWrapper/MarkerUtils";
 import { Status, Wrapper } from "@googlemaps/react-wrapper";
-import { PostApiResponse, useGetPostsQuery } from "@services/api";
+import { PostApiResponse, useGetPostsForLandingPageQuery } from "@services/api";
 import { GeoCluster } from "@utils/GeoCluster";
 import {
   PropsWithChildren,
@@ -82,7 +82,7 @@ const GoogleMap = ({
 }: PropsWithChildren<
   google.maps.MapOptions & { post; handleVisiblePosts }
 >) => {
-  const { data: postsResponse, isLoading } = useGetPostsQuery();
+  const { data: postsResponse } = useGetPostsForLandingPageQuery();
   const [map, setMap] = useState<google.maps.Map>();
   const [postCluster, setPostCluster] = useState<Cluster[]>([]);
   const [markers, setMarkers] = useState<Marker[]>([]);

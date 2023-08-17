@@ -27,6 +27,18 @@ export const FilterablePostTypes = [
   FilterPostType.REQUEST,
 ];
 
+export enum FilterUserType {
+  ALL = "all",
+  ORGANIZATION = "organization",
+  INDIVIDUAL = "individual",
+}
+
+export const FilterableUserTypes = [
+  FilterUserType.ALL,
+  FilterUserType.ORGANIZATION,
+  FilterUserType.INDIVIDUAL,
+];
+
 export enum PostStatus {
   OPEN = "open",
   IN_PROGRESS = "in-progress",
@@ -179,3 +191,46 @@ export const PostCategories = [
   PostCategory.TOY,
   PostCategory.OTHER,
 ];
+
+export const BilingualPostCategory = {
+  [PostCategory.BOOK]: {
+    en: "Book",
+    fr: "Livre",
+  },
+  [PostCategory.CLOTHING]: {
+    en: "Clothing",
+    fr: "Vêtements",
+  },
+  [PostCategory.CUTLERY]: {
+    en: "Cutlery",
+    fr: "Couverts",
+  },
+  [PostCategory.ELECTRONICS]: {
+    en: "Electronics",
+    fr: "Électronique",
+  },
+  [PostCategory.FOOD]: {
+    en: "Food",
+    fr: "Nourriture",
+  },
+  [PostCategory.FURNITURE]: {
+    en: "Furniture",
+    fr: "Meubles",
+  },
+  [PostCategory.PPE]: {
+    en: "PPE",
+    fr: "ÉPI",
+  },
+  [PostCategory.STATIONARY]: {
+    en: "Stationary",
+    fr: "Papeterie",
+  },
+  [PostCategory.TOY]: {
+    en: "Toy",
+    fr: "Jouet",
+  },
+  [PostCategory.OTHER]: {
+    en: "Other",
+    fr: "Autre",
+  },
+};
