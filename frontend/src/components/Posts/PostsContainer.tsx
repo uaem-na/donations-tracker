@@ -1,6 +1,6 @@
 import { Button } from "@components/Controls";
-import { SelectInput } from "@components/Controls/Select";
-import { FilterContainer, PostList } from "@components/Posts";
+import { PostList } from "@components/Posts";
+import { FilterLayout } from "@components/Posts/FilterLayout";
 import { PostApiResponse, useGetItemCategoriesQuery } from "@services/api";
 import { SetStateAction, useCallback } from "react";
 import { Trans, useTranslation } from "react-i18next";
@@ -18,6 +18,7 @@ interface FilterProps {
 }
 
 interface PostsContainerProps {
+  heading: string;
   posts?: PostApiResponse[];
   page: number;
   perPage: PerPageOption;
@@ -28,9 +29,15 @@ interface PostsContainerProps {
   updatePostType: (setter: SetStateAction<FilterPostType>) => void;
   updateUserType: (setter: SetStateAction<FilterUserType>) => void;
   updateCategories: (setter: SetStateAction<string[]>) => void;
+  filters: {
+    postType: boolean;
+    userType: boolean;
+    categories: boolean;
+  };
 }
 
 export const PostsContainer = ({
+  heading,
   posts,
   page,
   perPage,
@@ -41,6 +48,7 @@ export const PostsContainer = ({
   updatePostType,
   updateUserType,
   updateCategories,
+  filters,
 }: PostsContainerProps) => {
   const { t } = useTranslation();
   const { data: categories } = useGetItemCategoriesQuery({ locale: "en" });
@@ -76,7 +84,12 @@ export const PostsContainer = ({
           <Trans
             i18nKey="showing_results"
             values={{
-              from: page === 1 ? 1 : page * perPage - (perPage - 1),
+              from:
+                total === 0
+                  ? 0
+                  : page === 1
+                  ? 1
+                  : page * perPage - (perPage - 1),
               to: page * perPage > total ? total : page * perPage,
               total: total,
             }}
@@ -96,63 +109,78 @@ export const PostsContainer = ({
   }
 
   return (
-    <>
+    <FilterLayout
+      filters={filters}
+      heading={heading}
+      handlePerPageChange={(e) => handlePerPageChange(e)}
+      handlePostTypeFilterChange={(option) =>
+        handlePostTypeFilterChange(option)
+      }
+      handleUserTypeFilterChange={(option) =>
+        handleUserTypeFilterChange(option)
+      }
+      categories={categories ?? []}
+      handleCategoryFilterChange={(options) =>
+        handleCategoryFilterChange(options.map((opt) => opt.value))
+      }
+    >
       <div className="flex flex-col gap-y-4">
-        <FilterContainer
-          name="postType"
-          multiSelect={false}
-          activeClassNames="bg-purple-100 text-purple-800"
-          inactiveClassNames="text-gray-500 hover:text-gray-700 hover:bg-gray-50"
-          ariaLabel={t("posts.select_type")}
-          options={[
-            { value: "request", label: t("posts.requests") },
-            { value: "offer", label: t("posts.offers") },
-          ]}
-          onChange={(option) =>
-            handlePostTypeFilterChange(option.value as FilterPostType)
-          }
-        />
-        <FilterContainer
-          name="userType"
-          multiSelect={false}
-          activeClassNames="bg-purple-100 text-purple-800"
-          inactiveClassNames="text-gray-500 hover:text-gray-700 hover:bg-gray-50"
-          ariaLabel={t("posts.select_user_type")}
-          options={[
-            { value: "individual", label: t("users.individual") },
-            { value: "organization", label: t("users.organization") },
-          ]}
-          onChange={(option) =>
-            handleUserTypeFilterChange(option.value as FilterUserType)
-          }
-        />
-        <FilterContainer
-          name="category"
-          multiSelect={true}
-          activeClassNames="bg-purple-100 text-purple-800"
-          inactiveClassNames="text-gray-500 hover:text-gray-700 hover:bg-gray-50"
-          ariaLabel={t("posts.select_category")}
-          options={categories ?? []}
-          onChange={(options) =>
-            handleCategoryFilterChange(options.map((option) => option.value))
-          }
-        />
-        <div className="sm:inline-flex sm:justify-end">
-          <label htmlFor="perPage" className="sr-only">
-            {t("display_per_page")}
-          </label>
-          <SelectInput
-            name="perPage"
-            className="w-full"
-            defaultValue={10}
-            onChange={(e) => handlePerPageChange(e.target.value)}
-            placeholder={t("display_per_page")}
-            options={["10", "20", "50", "100"].map((i) => ({
-              value: i,
-              label: i,
-            }))}
-          ></SelectInput>
-        </div>
+        {/*<FilterContainer*/}
+        {/*  name="postType"*/}
+        {/*  multiSelect={false}*/}
+        {/*  activeClassNames="bg-purple-100 text-purple-800"*/}
+        {/*  inactiveClassNames="text-gray-500 hover:text-gray-700 hover:bg-gray-50"*/}
+        {/*  ariaLabel={t("posts.select_type")}*/}
+        {/*  options={[*/}
+        {/*    { value: "request", label: t("posts.requests") },*/}
+        {/*    { value: "offer", label: t("posts.offers") },*/}
+        {/*  ]}*/}
+        {/*  onChange={(option) =>*/}
+        {/*    handlePostTypeFilterChange(option.value as FilterPostType)*/}
+        {/*  }*/}
+        {/*/>*/}
+        {/*<FilterContainer*/}
+        {/*  name="userType"*/}
+        {/*  multiSelect={false}*/}
+        {/*  activeClassNames="bg-purple-100 text-purple-800"*/}
+        {/*  inactiveClassNames="text-gray-500 hover:text-gray-700 hover:bg-gray-50"*/}
+        {/*  ariaLabel={t("posts.select_user_type")}*/}
+        {/*  options={[*/}
+        {/*    { value: "individual", label: t("users.individual") },*/}
+        {/*    { value: "organization", label: t("users.organization") },*/}
+        {/*  ]}*/}
+        {/*  onChange={(option) =>*/}
+        {/*    handleUserTypeFilterChange(option.value as FilterUserType)*/}
+        {/*  }*/}
+        {/*/>*/}
+        {/*<FilterContainer*/}
+        {/*  name="category"*/}
+        {/*  multiSelect={true}*/}
+        {/*  activeClassNames="bg-purple-100 text-purple-800"*/}
+        {/*  inactiveClassNames="text-gray-500 hover:text-gray-700 hover:bg-gray-50"*/}
+        {/*  ariaLabel={t("posts.select_category")}*/}
+        {/*  options={categories ?? []}*/}
+        {/*  onChange={(options) =>*/}
+        {/*    handleCategoryFilterChange(options.map((option) => option.value))*/}
+        {/*  }*/}
+        {/*/>*/}
+
+        {/*<div className="sm:inline-flex sm:justify-end">*/}
+        {/*  <label htmlFor="perPage" className="sr-only">*/}
+        {/*    {t("display_per_page")}*/}
+        {/*  </label>*/}
+        {/*  <SelectInput*/}
+        {/*    name="perPage"*/}
+        {/*    className="w-full"*/}
+        {/*    defaultValue={10}*/}
+        {/*    onChange={(e) => handlePerPageChange(e.target.value)}*/}
+        {/*    placeholder={t("display_per_page")}*/}
+        {/*    options={["10", "20", "50", "100"].map((i) => ({*/}
+        {/*      value: i,*/}
+        {/*      label: i,*/}
+        {/*    }))}*/}
+        {/*  ></SelectInput>*/}
+        {/*</div>*/}
 
         <PostList posts={posts} />
 
@@ -180,6 +208,6 @@ export const PostsContainer = ({
           </div>
         </nav>
       </div>
-    </>
+    </FilterLayout>
   );
 };

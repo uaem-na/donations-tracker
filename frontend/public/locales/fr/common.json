@@ -20,6 +20,7 @@
   "showing_results": "Affichage des résultats <from>{{from}}</from> à <to>{{to}}</to> de <total>{{total}}</total>",
   "all": "Tous",
   "posts": {
+    "title": "Messages",
     "author": "Auteur",
     "available": "Disponible",
     "type": "Type",
@@ -45,6 +46,8 @@
     "updated_at": "Mis à jour le {{date}}",
     "created_on": "Créé le {{date}}",
     "last_modified_on": "Dernière modification le {{date}}",
+    "my_posts": "Mes messages",
+    "favorites": "Favoris",
     "star": "Étoile",
     "no_posts_found": "Aucun article trouvé",
     "new_offer": "Je souhaite faire une offre...",

@@ -12,7 +12,7 @@ export const AccountLayout = (
   props: PropsWithChildren<IAccountLayoutProps>
 ) => {
   return (
-    <div className="mx-auto max-w-7xl lg:flex lg:gap-x-16 lg:px-8">
+    <div className="lg:flex lg:gap-x-16 lg:px-8">
       <aside className="flex overflow-x-auto px-0.5 border-b border-gray-900/5 py-4 lg:block lg:w-64 lg:flex-none lg:border-0 lg:py-20">
         <nav className="flex-none px-4 sm:px-6 lg:px-0">
           <ul className="flex gap-x-3 gap-y-1 whitespace-nowrap lg:flex-col">
