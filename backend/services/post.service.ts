@@ -96,9 +96,7 @@ export class PostService {
   }
 
   getItemCategories(locale: "en" | "fr"): { value: string; label: string }[] {
-    console.log(locale);
     return Object.values(PostCategory).map((value) => {
-      console.log(BilingualPostCategory[value][locale]);
       return { value, label: BilingualPostCategory[value][locale] };
     });
   }

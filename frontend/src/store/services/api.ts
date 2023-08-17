@@ -1,144 +1,8 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import qs from "query-string";
+import { ApiModel, ApiResponse, MutationArgs, QueryArgs } from "./types";
 
 const baseUrl = import.meta.env.VITE_API_URL || "";
-
-// * Define API response types
-type Session = {
-  id: string;
-  username: string;
-  email: string;
-  role: string;
-  firstName: string;
-  lastName: string;
-  verified: boolean;
-  starred: string[]; // post ids
-};
-
-export type PostAuthorApiResponse = {
-  firstName: string;
-  id: string;
-  lastName: string;
-  email: string;
-};
-
-export type PostApiResponse = {
-  author: PostAuthorApiResponse;
-  createdAt: string;
-  id: string;
-  item: PostItemApiResponse;
-  location: PostLocationApiResponse;
-  status: "request" | "offer";
-  type: string;
-  updatedAt: string;
-  views: number;
-};
-
-export type PostLocationApiResponse = {
-  lat?: number;
-  lng?: number;
-  postalCode?: string;
-  id: string;
-};
-
-export type PostItemApiResponse = {
-  name: string;
-  category: string;
-  description: string;
-  price: number;
-  quantity: number;
-  id: string;
-};
-
-export type PostItemCategoryApiResponse = {
-  value: string;
-  label: string;
-};
-
-export type User = {
-  id: string;
-  username: string;
-  email: string;
-  role: string;
-  firstName: string;
-  lastName: string;
-  verified: boolean;
-  active: boolean;
-  starred: PostApiResponse[];
-};
-
-type PaginatedListResponse<T> = {
-  data: T[];
-  total: number;
-  page: number;
-  per_page: number;
-};
-
-// * Define args
-type PaginationArgs = {
-  per_page: number;
-  page: number;
-};
-
-type FilterByPostTypeArgs = {
-  post_type: string;
-};
-
-type FilterByUserTypeArgs = {
-  user_type: string;
-};
-
-type FilterByCategoriesTypeArgs = {
-  categories: string[];
-};
-
-type FilterByPostStatusArgs = {
-  status?: "all" | "open" | "closed";
-};
-
-type GetUserArgs = {
-  userId: string;
-};
-
-type LoginArgs = {
-  username: string;
-  password: string;
-};
-
-type GetPostArgs = {
-  postId: string;
-};
-
-type CreatePostArgs = Omit<
-  PostApiResponse,
-  | "id"
-  | "author"
-  | "createdAt"
-  | "updatedAt"
-  | "views"
-  | "location"
-  | "item"
-  | "status"
-> & {
-  location: Omit<PostLocationApiResponse, "id">;
-  item: Omit<PostItemApiResponse, "id">[];
-  id?: string; // * for edit
-};
-
-type EditPostArgs = CreatePostArgs;
-
-type DeletePostArgs = Pick<PostApiResponse, "id">;
-
-type StarPostArgs = Pick<PostApiResponse, "id">;
-
-type SetUserActiveArgs = {
-  userId: string;
-  active: boolean;
-};
-
-type GetPostItemCategoriesArgs = {
-  locale: string;
-};
 
 // * Define a service using a base URL and expected endpoints
 export const api = createApi({
@@ -152,14 +16,14 @@ export const api = createApi({
   }),
   tagTypes: ["session", "posts", "users"],
   endpoints: (builder) => ({
-    getSession: builder.query<Session, void>({
+    getSession: builder.query<ApiResponse.Session, void>({
       query: () => ({
         url: "auth/session",
         method: "GET",
       }),
       providesTags: ["session"],
     }),
-    login: builder.mutation<Session, LoginArgs>({
+    login: builder.mutation<ApiResponse.Session, MutationArgs.Auth.Login>({
       query: ({ username, password }) => ({
         url: "auth/login",
         method: "POST",
@@ -177,21 +41,19 @@ export const api = createApi({
       }),
       invalidatesTags: ["session"],
     }),
-    register: builder.mutation<Session, unknown>({
-      query: (data) => ({
-        url: "auth/register",
-        method: "POST",
-        body: data,
-      }),
-      invalidatesTags: ["session"],
-    }),
+    register: builder.mutation<ApiResponse.Session, MutationArgs.Auth.Register>(
+      {
+        query: (data) => ({
+          url: "auth/register",
+          method: "POST",
+          body: data,
+        }),
+        invalidatesTags: ["session"],
+      }
+    ),
     getStarredPosts: builder.query<
-      PaginatedListResponse<PostApiResponse>,
-      GetUserArgs &
-        PaginationArgs &
-        FilterByPostTypeArgs &
-        FilterByUserTypeArgs &
-        FilterByCategoriesTypeArgs
+      ApiResponse.PaginatedList<ApiModel.Post>,
+      QueryArgs.Users.GetStarredPosts
     >({
       query: ({ userId, ...rest }) => ({
         url: `users/${userId}/starred`,
@@ -201,8 +63,8 @@ export const api = createApi({
         },
       }),
       transformResponse: (
-        response: PaginatedListResponse<PostApiResponse>
-      ): PaginatedListResponse<PostApiResponse> => {
+        response: ApiResponse.PaginatedList<ApiModel.Post>
+      ): ApiResponse.PaginatedList<ApiModel.Post> => {
         const posts = response.data;
         response.data = posts.map((post) => ({
           ...post,
@@ -223,12 +85,8 @@ export const api = createApi({
       ],
     }),
     getPosts: builder.query<
-      PaginatedListResponse<PostApiResponse>,
-      | PaginationArgs
-      | FilterByPostTypeArgs
-      | FilterByUserTypeArgs
-      | FilterByCategoriesTypeArgs
-      | void
+      ApiResponse.PaginatedList<ApiModel.Post>,
+      QueryArgs.Posts.GetPaginatedPosts
     >({
       query: (args) => ({
         url: "posts",
@@ -236,8 +94,8 @@ export const api = createApi({
         params: { ...args },
       }),
       transformResponse: (
-        response: PaginatedListResponse<PostApiResponse>
-      ): PaginatedListResponse<PostApiResponse> => {
+        response: ApiResponse.PaginatedList<ApiModel.Post>
+      ): ApiResponse.PaginatedList<ApiModel.Post> => {
         const posts = response.data;
         response.data = posts.map((post) => ({
           ...post,
@@ -262,7 +120,7 @@ export const api = createApi({
           : [{ type: "posts", id: "list" }],
     }),
     getPostsForLandingPage: builder.query<
-      PaginatedListResponse<PostApiResponse>,
+      ApiResponse.PaginatedList<ApiModel.Post>,
       void
     >({
       query: () => ({
@@ -270,8 +128,8 @@ export const api = createApi({
         method: "GET",
       }),
       transformResponse: (
-        response: PaginatedListResponse<PostApiResponse>
-      ): PaginatedListResponse<PostApiResponse> => {
+        response: ApiResponse.PaginatedList<ApiModel.Post>
+      ): ApiResponse.PaginatedList<ApiModel.Post> => {
         const posts = response.data;
         response.data = posts.map((post) => ({
           ...post,
@@ -295,11 +153,11 @@ export const api = createApi({
             ]
           : [{ type: "posts", id: "landing-list" }],
     }),
-    getPost: builder.query<PostApiResponse, GetPostArgs>({
+    getPost: builder.query<ApiModel.Post, QueryArgs.Posts.GetPost>({
       query: ({ postId }) => `/posts/${postId}`,
       providesTags: (result, error, arg) => [{ type: "posts", id: arg.postId }],
     }),
-    createPost: builder.mutation<unknown, CreatePostArgs>({
+    createPost: builder.mutation<unknown, QueryArgs.Posts.CreatePost>({
       query: (post) => ({
         url: "posts",
         method: "POST",
@@ -307,7 +165,7 @@ export const api = createApi({
       }),
       invalidatesTags: (result, error, arg) => [{ type: "posts", id: "list" }],
     }),
-    editPost: builder.mutation<unknown, EditPostArgs>({
+    editPost: builder.mutation<unknown, QueryArgs.Posts.EditPost>({
       query: (post) => ({
         url: `posts/${post.id}`,
         method: "POST",
@@ -315,7 +173,7 @@ export const api = createApi({
       }),
       invalidatesTags: (result, error, arg) => [{ type: "posts", id: arg.id }],
     }),
-    deletePost: builder.mutation<unknown, DeletePostArgs>({
+    deletePost: builder.mutation<unknown, QueryArgs.Posts.DeletePost>({
       query: ({ id }) => ({
         url: `posts/${id}`,
         method: "DELETE",
@@ -323,8 +181,8 @@ export const api = createApi({
       invalidatesTags: (result, error, arg) => [{ type: "posts", id: arg.id }],
     }),
     getItemCategories: builder.query<
-      PostItemCategoryApiResponse[],
-      GetPostItemCategoriesArgs
+      ApiModel.PostItemCategory[],
+      QueryArgs.Posts.GetAvailableItemCategories
     >({
       query: ({ locale }) => ({
         url: `posts/items/categories`,
@@ -335,20 +193,20 @@ export const api = createApi({
         { type: "posts", id: "categories" },
       ],
     }),
-    starPost: builder.mutation<boolean, StarPostArgs>({
+    starPost: builder.mutation<boolean, QueryArgs.Posts.StarPost>({
       query: ({ id }) => ({
         url: `posts/${id}/star`,
         method: "POST",
       }),
       invalidatesTags: ["session"],
     }),
-    getUser: builder.query<User, GetUserArgs>({
+    getUser: builder.query<ApiModel.User, QueryArgs.Users.GetUser>({
       query: ({ userId }) => ({ url: `users/${userId}`, method: "GET" }),
       providesTags: (result, error, args) => [
         { type: "users", id: args.userId },
       ],
     }),
-    getUsers: builder.query<User[], void>({
+    getUsers: builder.query<ApiModel.User[], void>({
       query: () => ({
         url: "users",
         method: "GET",
@@ -393,7 +251,10 @@ export const api = createApi({
       }),
       invalidatesTags: (result, error, id) => [{ type: "users", id }],
     }),
-    setUserActive: builder.mutation<User, SetUserActiveArgs>({
+    setUserActive: builder.mutation<
+      ApiModel.User,
+      MutationArgs.Users.SetUserActive
+    >({
       query: ({ userId, active }) => ({
         url: `users/${userId}/active`,
         method: "PUT",
@@ -433,3 +294,5 @@ export const {
   useUpdateUserMutation,
   useVerifyUserMutation,
 } = api;
+
+export * from "./types";

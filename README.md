@@ -40,7 +40,7 @@ To build without cache:
 - [x] Seed posts
 - [x] Seed reports
 - [ ] Human friendly error messages
-- [ ] Post must be in private mode where only the author and admins can read before it goes public
+- [ ] Post must be in private mode if other category is selected, and an admin must verify the post before going public
 - [ ] User emails must be verified (depends on email service provider such as Amazon SES)
 - [ ] When there is an activity on the post, authors must be notified
 - [ ] Add display name to user model and use it across the app

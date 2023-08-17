@@ -2,7 +2,12 @@ import debug from "debug";
 import expressAsyncHandler from "express-async-handler";
 import { body, param, validationResult } from "express-validator";
 import { FilterQuery } from "mongoose";
-import { PostCategories, PostStatus, PostTypes } from "../constants";
+import {
+  PostCategories,
+  PostCategory,
+  PostStatus,
+  PostTypes,
+} from "../constants";
 import { AuthorizationError, NotFoundError, ValidationError } from "../errors";
 import { PostDto } from "../models/posts";
 import { PostService, UserService } from "../services";
@@ -11,14 +16,12 @@ import {
   PaginatedResponse,
   PostDocument,
 } from "../types";
+import { tryParseFilterQuery, tryParsePaginationQuery } from "../utils";
 import {
   hasUser,
-  tryParseFilterQuery,
-  tryParsePaginationQuery,
-} from "../utils";
-import {
   validateLocale,
   validatePaginationRequest,
+  validatePostCreation,
   validatePostsFilterRequest,
 } from "./validators";
 
@@ -45,6 +48,7 @@ export class PostController {
     const { postType, userType, categories } = tryParseFilterQuery(req);
 
     const filterQuery: FilterQuery<PostDocument> = {
+      status: PostStatus.OPEN,
       ...(postType && { type: postType }),
       ...(userType && { authorType: userType }),
       ...(categories && {
@@ -73,7 +77,9 @@ export class PostController {
 
   // this API is called on landing page
   getAllPosts = expressAsyncHandler(async (req, res, next) => {
-    const posts = await this.postService.getPosts();
+    const posts = await this.postService.getPosts({
+      status: PostStatus.OPEN,
+    });
 
     const postDtos = posts.map((post) => PostDto.fromDocument(post));
 
@@ -89,54 +95,7 @@ export class PostController {
       throw new AuthorizationError("User not logged in.");
     }
 
-    await body("type").trim().notEmpty().isIn(PostTypes).run(req);
-    await body("item").isObject().run(req);
-    await body("item.name")
-      .trim()
-      .notEmpty()
-      .isString()
-      .isLength({
-        max: 256,
-      })
-      .run(req);
-    await body("item.quantity")
-      .trim()
-      .notEmpty()
-      .isInt({
-        min: 1,
-        allow_leading_zeroes: false,
-      })
-      .run(req);
-    await body("item.price")
-      .trim()
-      .notEmpty()
-      .isInt({
-        min: 0,
-        allow_leading_zeroes: false,
-      })
-      .run(req);
-    await body("item.description")
-      .trim()
-      .notEmpty()
-      .isString()
-      .isLength({
-        max: 2048,
-      })
-      .run(req);
-    await body("item.category")
-      .trim()
-      .notEmpty()
-      .isString()
-      .isIn(PostCategories)
-      .run(req);
-    await body("item.image").optional().isObject().run(req);
-    await body("item.image.data").optional().notEmpty().isBase64().run(req);
-    await body("item.image.contentType")
-      .optional()
-      .trim()
-      .notEmpty()
-      .isString()
-      .run(req);
+    await validatePostCreation({ req, optional: false });
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -154,7 +113,10 @@ export class PostController {
       item,
       author: { ...user },
       location: user.location,
-      status: PostStatus.OPEN,
+      status:
+        item.category === PostCategory.OTHER
+          ? PostStatus.PENDING_APPROVAL
+          : PostStatus.OPEN,
     });
 
     log(`Created post [${post._id}] by user ${user.username}.`);

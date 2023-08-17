@@ -9,6 +9,7 @@ import {
 import { Post, PostDocument, PostItem } from "../../types";
 import { ImageSchema, LocationSchema } from "../common";
 
+// TODO: consider merging with PostSchema
 const ItemSchema: Schema<PostItem> = new Schema({
   name: { type: String, required: true, maxlength: 256 },
   quantity: { type: Number, required: true, min: 1 },
@@ -57,10 +58,15 @@ const PostSchema: Schema<Post> = new Schema(
     },
     status: {
       type: String,
-      enum: [PostStatus.OPEN, PostStatus.IN_PROGRESS, PostStatus.CLOSED],
+      enum: [
+        PostStatus.PENDING_APPROVAL,
+        PostStatus.OPEN,
+        PostStatus.IN_PROGRESS,
+        PostStatus.CLOSED,
+      ],
       required: true,
       default: PostStatus.OPEN,
-      indes: true,
+      index: true,
     },
     views: { type: Number, default: 0 },
   },

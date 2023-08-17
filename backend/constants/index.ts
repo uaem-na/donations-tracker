@@ -41,12 +41,14 @@ export const FilterableUserTypes = [
 
 export enum PostStatus {
   OPEN = "open",
-  IN_PROGRESS = "in-progress",
+  PENDING_APPROVAL = "pending-approval",
+  IN_PROGRESS = "in-progress", // TODO: is this needed?
   CLOSED = "closed",
 }
 
 export const PostStatuses = [
   PostStatus.OPEN,
+  PostStatus.PENDING_APPROVAL,
   PostStatus.IN_PROGRESS,
   PostStatus.CLOSED,
 ];
