@@ -16,8 +16,8 @@ export const DashboardPage = () => {
         <div className="block">
           <div className="border-b border-gray-200">
             <nav className="-mb-px flex space-x-8" aria-label="Tabs">
-              <a
-                href="javascript:void(0)"
+              <button
+                type="button"
                 onClick={() => setSelectedTabIndex(0)}
                 className={classMerge(
                   "whitespace-nowrap border-b-2 pb-4 px-1 text-sm font-medium",
@@ -27,9 +27,9 @@ export const DashboardPage = () => {
                 )}
               >
                 {t("posts.favorites")}
-              </a>
-              <a
-                href="javascript:void(0)"
+              </button>
+              <button
+                type="button"
                 onClick={() => setSelectedTabIndex(1)}
                 className={classMerge(
                   "whitespace-nowrap border-b-2 pb-4 px-1 text-sm font-medium",
@@ -39,7 +39,7 @@ export const DashboardPage = () => {
                 )}
               >
                 {t("posts.my_posts")}
-              </a>
+              </button>
             </nav>
           </div>
         </div>

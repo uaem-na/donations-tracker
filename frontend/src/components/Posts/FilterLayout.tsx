@@ -13,6 +13,11 @@ interface IFilterLayoutProps extends PropsWithChildren {
     categories: PostItemCategoryApiResponse[]
   ) => void;
   categories: PostItemCategoryApiResponse[];
+  filters: {
+    postType: boolean;
+    userType: boolean;
+    categories: boolean;
+  };
 }
 
 export const FilterLayout = ({
@@ -22,6 +27,7 @@ export const FilterLayout = ({
   handleUserTypeFilterChange,
   handleCategoryFilterChange,
   categories,
+  filters,
   children,
 }: IFilterLayoutProps) => {
   const { t } = useTranslation();
@@ -64,49 +70,55 @@ export const FilterLayout = ({
 
         <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
           <form className="hidden lg:block">
-            <div>
-              <FilterContainer
-                name="postType"
-                activeClassNames="bg-purple-100 text-purple-800"
-                inactiveClassNames="text-gray-500 hover:text-gray-700 hover:bg-gray-50"
-                ariaLabel={t("posts.select_type")}
-                options={[
-                  { value: "request", label: t("posts.requests") },
-                  { value: "offer", label: t("posts.offers") },
-                ]}
-                multiSelect={false}
-                onChange={(option) =>
-                  handlePostTypeFilterChange(option.value as FilterPostType)
-                }
-              />
-            </div>
+            {filters.postType && (
+              <div>
+                <FilterContainer
+                  name="postType"
+                  activeClassNames="bg-purple-100 text-purple-800"
+                  inactiveClassNames="text-gray-500 hover:text-gray-700 hover:bg-gray-50"
+                  ariaLabel={t("posts.select_type")}
+                  options={[
+                    { value: "request", label: t("posts.requests") },
+                    { value: "offer", label: t("posts.offers") },
+                  ]}
+                  multiSelect={false}
+                  onChange={(option) =>
+                    handlePostTypeFilterChange(option.value as FilterPostType)
+                  }
+                />
+              </div>
+            )}
 
-            <div className="py-6">
-              <FilterContainer
-                name="userType"
-                activeClassNames="bg-purple-100 text-purple-800"
-                inactiveClassNames="text-gray-500 hover:text-gray-700 hover:bg-gray-50"
-                ariaLabel={t("posts.select_user_type")}
-                options={[
-                  { value: "individual", label: t("users.individual") },
-                  { value: "organization", label: t("users.organization") },
-                ]}
-                multiSelect={false}
-                onChange={(option) =>
-                  handleUserTypeFilterChange(option.value as FilterUserType)
-                }
-              />
-            </div>
+            {filters.userType && (
+              <div className="pt-6">
+                <FilterContainer
+                  name="userType"
+                  activeClassNames="bg-purple-100 text-purple-800"
+                  inactiveClassNames="text-gray-500 hover:text-gray-700 hover:bg-gray-50"
+                  ariaLabel={t("posts.select_user_type")}
+                  options={[
+                    { value: "individual", label: t("users.individual") },
+                    { value: "organization", label: t("users.organization") },
+                  ]}
+                  multiSelect={false}
+                  onChange={(option) =>
+                    handleUserTypeFilterChange(option.value as FilterUserType)
+                  }
+                />
+              </div>
+            )}
 
-            <div className="border-b border-gray-200 pb-6">
-              <FilterContainer
-                name="category"
-                ariaLabel={t("posts.category")}
-                options={categories ?? []}
-                multiSelect={true}
-                onChange={(options) => handleCategoryFilterChange(options)}
-              />
-            </div>
+            {filters.categories && (
+              <div className="border-b border-gray-200 pt-6 last:pb-6">
+                <FilterContainer
+                  name="category"
+                  ariaLabel={t("posts.category")}
+                  options={categories ?? []}
+                  multiSelect={true}
+                  onChange={(options) => handleCategoryFilterChange(options)}
+                />
+              </div>
+            )}
           </form>
 
           <div className="lg:col-span-3">{children}</div>

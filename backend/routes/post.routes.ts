@@ -22,9 +22,9 @@ router.delete("/:id", ensureAuthenticated, postController.deletePost);
 router.post("/:id/star", ensureAuthenticated, postController.starPost);
 
 router.get(
-  "/user/:username",
+  "/user/:userId",
   ensureAuthenticated,
-  postController.getPostsByUsername
+  postController.getPostsByUserId
 );
 
 export default router;

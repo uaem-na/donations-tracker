@@ -5,7 +5,7 @@ import {
   PerPageOption,
   PostsContainer,
 } from "@components";
-import { useGetSessionQuery, useGetStarredPostsQuery } from "@services/api";
+import { useGetSessionQuery, useGetUserPostsQuery } from "@services/api";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -22,7 +22,7 @@ export const MyPosts = () => {
 
   const { data: user, isLoading: isSessionLoading } = useGetSessionQuery();
   const { data: postsResponse, isLoading: isPostsLoading } =
-    useGetStarredPostsQuery({
+    useGetUserPostsQuery({
       userId: user?.id!,
       per_page: perPage,
       page: page,
@@ -44,6 +44,7 @@ export const MyPosts = () => {
       updatePostType={setPostType}
       updateUserType={setUserType}
       updateCategories={setCategories}
+      filters={{ postType: true, userType: false, categories: true }}
     />
   );
 };

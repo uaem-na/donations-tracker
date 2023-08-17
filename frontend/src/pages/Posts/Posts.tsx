@@ -41,6 +41,7 @@ export const PostsPage = () => {
           updatePostType={setPostType}
           updateUserType={setUserType}
           updateCategories={setCategories}
+          filters={{ postType: true, userType: true, categories: true }}
         />
       </div>
     </>

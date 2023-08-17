@@ -29,6 +29,11 @@ interface PostsContainerProps {
   updatePostType: (setter: SetStateAction<FilterPostType>) => void;
   updateUserType: (setter: SetStateAction<FilterUserType>) => void;
   updateCategories: (setter: SetStateAction<string[]>) => void;
+  filters: {
+    postType: boolean;
+    userType: boolean;
+    categories: boolean;
+  };
 }
 
 export const PostsContainer = ({
@@ -43,6 +48,7 @@ export const PostsContainer = ({
   updatePostType,
   updateUserType,
   updateCategories,
+  filters,
 }: PostsContainerProps) => {
   const { t } = useTranslation();
   const { data: categories } = useGetItemCategoriesQuery({ locale: "en" });
@@ -104,6 +110,7 @@ export const PostsContainer = ({
 
   return (
     <FilterLayout
+      filters={filters}
       heading={heading}
       handlePerPageChange={(e) => handlePerPageChange(e)}
       handlePostTypeFilterChange={(option) =>
