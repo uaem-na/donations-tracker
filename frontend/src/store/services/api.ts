@@ -222,6 +222,41 @@ export const api = createApi({
         { type: "session", id: "starred" },
       ],
     }),
+    getUserPosts: builder.query<
+      PaginatedListResponse<PostApiResponse>,
+      GetUserArgs &
+        PaginationArgs &
+        FilterByPostTypeArgs &
+        FilterByUserTypeArgs &
+        FilterByCategoriesTypeArgs
+    >({
+      query: ({ userId, ...args }) => ({
+        url: `posts/user/${userId}`,
+        method: "GET",
+        params: { ...args },
+      }),
+      transformResponse: (
+        response: PaginatedListResponse<PostApiResponse>
+      ): PaginatedListResponse<PostApiResponse> => {
+        const posts = response.data;
+        response.data = posts.map((post) => ({
+          ...post,
+          createdAt: new Date(post.createdAt).toLocaleDateString(),
+          updatedAt: new Date(post.updatedAt).toLocaleDateString(),
+          item: {
+            ...post.item,
+          },
+          location: {
+            ...post.location,
+          },
+        }));
+
+        return response;
+      },
+      providesTags: (result, error, arg) => [
+        { type: "session", id: "my_posts" },
+      ],
+    }),
     getPosts: builder.query<
       PaginatedListResponse<PostApiResponse>,
       | PaginationArgs
@@ -420,6 +455,7 @@ export const {
   useGetPostsForLandingPageQuery,
   useGetSessionQuery,
   useGetStarredPostsQuery,
+  useGetUserPostsQuery,
   useGetUserQuery,
   useGetUsersQuery,
   useLazyGetPostQuery,

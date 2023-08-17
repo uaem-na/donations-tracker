@@ -20,6 +20,7 @@
   "showing_results": "Showing <from>{{from}}</from> to <to>{{to}}</to> of <total>{{total}}</total> results",
   "all": "All",
   "posts": {
+    "title": "Posts",
     "author": "Author",
     "available": "Available",
     "type": "Type",
@@ -45,6 +46,8 @@
     "updated_at": "Updated at {{date}}",
     "created_on": "Created on {{date}}",
     "last_modified_on": "Last modified on {{date}}",
+    "my_posts": "My posts",
+    "favorites": "Favorites",
     "star": "Star",
     "no_posts_found": "No posts found",
     "new_offer": "I would like to make an offer...",

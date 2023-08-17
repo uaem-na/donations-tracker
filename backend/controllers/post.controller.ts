@@ -295,23 +295,49 @@ export class PostController {
     res.status(204).end();
   });
 
-  getPostsByUsername = expressAsyncHandler(async (req, res, next) => {
-    await param("username").notEmpty().run(req);
+  getPostsByUserId = expressAsyncHandler(async (req, res, next) => {
+    await param("userId").notEmpty().run(req);
+    await validatePaginationRequest({ req, optional: false });
+    await validatePostsFilterRequest({ req, optional: false });
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      throw new ValidationError(errors.array());
+      res.status(400).json({ errors: errors.array({ onlyFirstError: true }) });
+      return;
     }
 
-    const { username } = req.params;
-    const user = await this.userService.getUserByUsername(username);
+    const { page, limit } = tryParsePaginationQuery(req);
+    const { postType, userType, categories } = tryParseFilterQuery(req);
+
+    const { userId } = req.params;
+    const user = await this.userService.getUserById(userId);
     if (!user) {
-      throw new NotFoundError(`Error finding user ${username}.`);
+      throw new NotFoundError(`Error finding user ${userId}.`);
     }
 
-    const posts = await this.postService.getPostsByUsername(user.username);
+    const filterQuery: FilterQuery<PostDocument> = {
+      ...(postType && { type: postType }),
+      ...(userType && { authorType: userType }),
+      ...(userId && { author: { _id: userId } }),
+      ...(categories && {
+        "item.category": { $in: categories },
+      }),
+    };
 
-    res.json(posts.map((post) => PostDto.fromDocument(post)));
+    const [posts, count] = await this.postService.getPaginatedPosts(
+      page,
+      limit,
+      filterQuery,
+      { updatedAt: -1, createdAt: -1 }
+    );
+    const postDtos = posts.map((post) => PostDto.fromDocument(post));
+    const response: PaginatedResponse<PostDto> = {
+      data: postDtos || [],
+      page: page,
+      per_page: limit,
+      total: count,
+    };
+    res.json(response);
   });
 
   getItemCategories = expressAsyncHandler(async (req, res, next) => {
