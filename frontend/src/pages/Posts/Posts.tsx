@@ -7,8 +7,10 @@ import {
 } from "@components/Posts";
 import { useGetPostsQuery } from "@services/api";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export const PostsPage = () => {
+  const { t } = useTranslation();
   const [page, setPage] = useState(1);
   const [perPage, setPerPage] = useState<PerPageOption>(10);
 
@@ -28,6 +30,7 @@ export const PostsPage = () => {
     <>
       <div className="px-4 py-5">
         <PostsContainer
+          heading={t("posts.title")}
           isLoading={isLoading}
           posts={postsResponse?.data}
           page={postsResponse?.page ?? 0}

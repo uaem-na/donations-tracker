@@ -1,3 +1,5 @@
+import { CollapseIcon, ExpandIcon } from "@components/Icons";
+import { classMerge } from "@utils/ClassMerge";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -8,11 +10,12 @@ type Option = {
 
 type SharedContainerProps = {
   name: string;
-  activeClassNames: string;
-  inactiveClassNames: string;
+  activeClassNames?: string;
+  inactiveClassNames?: string;
   ariaLabel: string;
   options: Option[];
   defaultOption?: Option;
+  defaultExpanded?: boolean;
 };
 
 type FilterContainerProps<TMultiple = boolean> = TMultiple extends true
@@ -34,6 +37,7 @@ export const FilterContainer = ({
   options,
   defaultOption,
   onChange,
+  defaultExpanded = true,
 }: FilterContainerProps) => {
   const { t } = useTranslation();
   const optionsWithAll = [
@@ -46,6 +50,8 @@ export const FilterContainer = ({
   const [selected, setSelected] = useState<Option[]>([
     defaultOption ?? optionsWithAll[0],
   ]);
+
+  const [expanded, setExpanded] = useState<boolean>(defaultExpanded);
 
   useEffect(() => {
     if (onChange) {
@@ -97,44 +103,80 @@ export const FilterContainer = ({
     }
   };
 
-  return (
-    <>
-      <div className="sm:hidden">
-        <label htmlFor={name} className="sr-only">
-          {ariaLabel}
-        </label>
-        <select
-          title={ariaLabel}
-          name={name}
-          className="block w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
-          defaultValue={selected[0].value}
-          onChange={(e) => handleChange(e.target.value)}
+  const renderSingleFilter = () => {
+    return (
+      <>
+        <h3 className="sr-only">{ariaLabel}</h3>
+        <ul
+          role="list"
+          className="space-y-1.5 border-b border-gray-200 pb-6 text-sm font-medium"
         >
           {optionsWithAll.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
-      </div>
-      <div className="hidden sm:block">
-        <nav className="flex gap-x-4 flex-wrap" aria-label={ariaLabel}>
-          {optionsWithAll.map((option) => (
-            <button
-              type="button"
+            <li
               key={option.value}
-              onClick={() => handleChange(option.value)}
-              className={`rounded-md px-3 py-2 text-sm font-medium ${
+              className={classMerge(
+                "rounded-md px-3 py-1.5 text-sm font-medium cursor-pointer",
                 selected.find(matchByValue(option.value))
                   ? activeClassNames
                   : inactiveClassNames
-              }`}
+              )}
+              onClick={() => handleChange(option.value)}
             >
-              {option.label}
-            </button>
+              <span>{option.label}</span>
+            </li>
           ))}
-        </nav>
-      </div>
-    </>
-  );
+        </ul>
+      </>
+    );
+  };
+
+  const renderMultiFilter = () => {
+    return (
+      <>
+        <h3 className="-my-3 flow-root">
+          <button
+            type="button"
+            className="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500"
+            aria-controls="filter-section-1"
+            aria-expanded={expanded}
+            onClick={() => setExpanded(!expanded)}
+          >
+            <span className="font-medium text-gray-900">{ariaLabel}</span>
+            <span className="ml-6 flex items-center">
+              <span className="ml-6 flex h-7 items-center">
+                {expanded ? <CollapseIcon /> : <ExpandIcon />}
+              </span>
+            </span>
+          </button>
+        </h3>
+        <div className={classMerge("pt-6 px-3", expanded ? "block" : "hidden")}>
+          <div className="space-y-4">
+            {optionsWithAll.map((option, index) => {
+              return (
+                <div key={option.value} className="flex items-center ">
+                  <input
+                    id={option.value}
+                    name={`${name}[]`}
+                    value={option.value}
+                    type="checkbox"
+                    className="h-4 w-4 rounded border-gray-300 text-purple-800 focus:ring-purple-700"
+                    onChange={(e) => handleChange(e.target.value)}
+                    checked={!!selected.find(matchByValue(option.value))}
+                  />
+                  <label
+                    htmlFor={option.value}
+                    className="ml-3 text-sm text-gray-600"
+                  >
+                    {option.label}
+                  </label>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </>
+    );
+  };
+
+  return <>{!multiSelect ? renderSingleFilter() : renderMultiFilter()}</>;
 };
