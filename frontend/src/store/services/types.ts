@@ -131,6 +131,10 @@ export namespace QueryArgs {
     };
 
     export type GetPaginatedPosts = Pagination & Filters.All;
+
+    export type GetUserPosts = GetPaginatedPosts & {
+      userId: string;
+    };
   }
 
   export namespace Users {

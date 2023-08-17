@@ -85,12 +85,8 @@ export const api = createApi({
       ],
     }),
     getUserPosts: builder.query<
-      PaginatedListResponse<PostApiResponse>,
-      GetUserArgs &
-        PaginationArgs &
-        FilterByPostTypeArgs &
-        FilterByUserTypeArgs &
-        FilterByCategoriesTypeArgs
+      ApiResponse.PaginatedList<ApiModel.Post>,
+      QueryArgs.Posts.GetUserPosts
     >({
       query: ({ userId, ...args }) => ({
         url: `posts/user/${userId}`,
@@ -98,8 +94,8 @@ export const api = createApi({
         params: { ...args },
       }),
       transformResponse: (
-        response: PaginatedListResponse<PostApiResponse>
-      ): PaginatedListResponse<PostApiResponse> => {
+        response: ApiResponse.PaginatedList<ApiModel.Post>
+      ): ApiResponse.PaginatedList<ApiModel.Post> => {
         const posts = response.data;
         response.data = posts.map((post) => ({
           ...post,
