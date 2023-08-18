@@ -1,7 +1,7 @@
 import Locate from "@components/GoogleMapWrapper/Locate";
 import { Marker, MarkerUtils } from "@components/GoogleMapWrapper/MarkerUtils";
 import { Status, Wrapper } from "@googlemaps/react-wrapper";
-import { PostApiResponse, useGetPostsForLandingPageQuery } from "@services/api";
+import { ApiModel, useGetPostsForLandingPageQuery } from "@services/api";
 import { GeoCluster } from "@utils/GeoCluster";
 import {
   PropsWithChildren,
@@ -28,8 +28,8 @@ const options = {
 };
 
 interface IGoogleMapWrapperProps {
-  post: PostApiResponse | null;
-  handleVisiblePosts: (posts: PostApiResponse[]) => void;
+  post: ApiModel.Post | null;
+  handleVisiblePosts: (posts: ApiModel.Post[]) => void;
 }
 
 // TODO: add search integration?
@@ -219,7 +219,7 @@ const GoogleMap = ({
   const createMarker = useCallback(
     (
       { lat, lng }: google.maps.LatLngLiteral,
-      posts: PostApiResponse[]
+      posts: ApiModel.Post[]
     ): google.maps.marker.AdvancedMarkerElement => {
       if (!MarkerUtils.isAdvancedMarkerAvailable(map)) {
         throw new Error(

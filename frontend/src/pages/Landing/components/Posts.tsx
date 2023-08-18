@@ -10,22 +10,22 @@ import { PostDetails } from "@components/Posts/PostDetails";
 import { PostType } from "@constants";
 import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { PostApiResponse } from "@services/api";
+import { ApiModel } from "@services/api";
 import { capitalizeFirstLetter } from "@utils";
 import { getStatusIndicator } from "@utils/GetStatusIndicator";
 import formatDistance from "date-fns/formatDistance";
 import { useEffect, useState } from "react";
 
 interface IPostsProp {
-  posts: PostApiResponse[];
-  handleLocateClick?: (post: PostApiResponse) => void;
+  posts: ApiModel.Post[];
+  handleLocateClick?: (post: ApiModel.Post) => void;
 }
 
 export const Posts = ({ posts, handleLocateClick }: IPostsProp) => {
   const postsPerPage = 10;
 
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [paginatedPosts, setPaginatedPosts] = useState<PostApiResponse[]>();
+  const [paginatedPosts, setPaginatedPosts] = useState<ApiModel.Post[]>();
 
   const [totalPages, setTotalPages] = useState<number>(0);
 

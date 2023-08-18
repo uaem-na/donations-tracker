@@ -1,18 +1,16 @@
 import { GoogleMapWrapper } from "@components/GoogleMapWrapper/GoogleMapWrapper";
 import { Posts } from "@pages/Landing/components/Posts";
-import { PostApiResponse } from "@services/api";
+import { ApiModel } from "@services/api";
 import { useState } from "react";
 
 /*
  * TODO: Mobile view
  * */
 export const LandingPage = () => {
-  const [posts, setPosts] = useState<PostApiResponse[]>();
-  const [selectedPost, setSelectedPost] = useState<PostApiResponse | null>(
-    null
-  );
+  const [posts, setPosts] = useState<ApiModel.Post[]>();
+  const [selectedPost, setSelectedPost] = useState<ApiModel.Post | null>(null);
 
-  const postClickEventHandler = (post: PostApiResponse) => {
+  const postClickEventHandler = (post: ApiModel.Post) => {
     setSelectedPost(post);
   };
 
