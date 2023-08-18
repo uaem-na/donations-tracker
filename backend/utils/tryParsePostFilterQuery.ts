@@ -2,7 +2,7 @@ import { Request } from "express";
 import { FilterPostType, FilterUserType } from "../constants";
 import { isEnumValue } from "./isEnumValue";
 
-export const tryParseFilterQuery = (req: Request) => {
+export const tryParsePostFilterQuery = (req: Request) => {
   const { post_type, user_type, categories } = req.query;
 
   const parsedPostType = isEnumValue(post_type, FilterPostType)

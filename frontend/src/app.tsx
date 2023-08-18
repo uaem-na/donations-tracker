@@ -7,6 +7,7 @@ import { UserRole } from "@constants";
 import { RequireAuth } from "@features/auth";
 import {
   AboutUsPage,
+  AdminUserDetailsPage,
   AdminUsersPage,
   CreatePostPage,
   DashboardPage,
@@ -37,15 +38,25 @@ function App() {
             <Route path="/errors/404" element={<ResourceNotFoundErrorPage />} />
             <Route path="/errors/500" element={<InternalServerErrorPage />} />
 
-            {/* Admin pages */}
-            <Route
-              path="/admin/users"
-              element={
-                <RequireAuth role={UserRole.ADMIN}>
-                  <AdminUsersPage />
-                </RequireAuth>
-              }
-            />
+            <Route path="/admin">
+              <Route
+                path="users"
+                element={
+                  <RequireAuth role={UserRole.ADMIN}>
+                    <AdminUsersPage />
+                  </RequireAuth>
+                }
+              />
+
+              <Route
+                path="users/:id"
+                element={
+                  <RequireAuth role={UserRole.ADMIN}>
+                    <AdminUserDetailsPage />
+                  </RequireAuth>
+                }
+              />
+            </Route>
 
             {/* Private pages */}
             {/* Account Pages */}

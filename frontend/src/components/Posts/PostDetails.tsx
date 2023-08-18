@@ -26,8 +26,6 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
-type Type = (typeof PostType)[keyof typeof PostType];
-
 interface PostDetailsProps {
   id: string;
   onError: (err) => void;
@@ -124,6 +122,7 @@ export const PostDetails = ({
           <span className="text-sm">{capitalizeFirstLetter(post.status)}</span>
         </div>
       </div>
+
       <div className="mt-1 text-xs leading-6 text-gray-500">
         <time dateTime={post.createdAt}>
           {t("posts.created_on", {
@@ -131,6 +130,7 @@ export const PostDetails = ({
           })}
         </time>
       </div>
+
       <div className="mt-4 pr-4 py-4">
         <h2 className="text-base font-semibold leading-6 text-gray-900">
           {t("posts.contact_information")}

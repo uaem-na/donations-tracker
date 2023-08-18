@@ -3,7 +3,7 @@ import { UserRole } from "@constants";
 import {
   useGetSessionQuery,
   useGetUsersQuery,
-  useSetUserActiveMutation,
+  useToggleUserActiveAdminMutation,
 } from "@services/api";
 import { capitalizeFirstLetter } from "@utils";
 
@@ -18,18 +18,14 @@ export const UserTable = ({ role }: UserTableProps) => {
   const { data: currentUser, isLoading: isSessionLoading } =
     useGetSessionQuery();
   const { data: users, isLoading: isUsersLoading } = useGetUsersQuery();
-  const [setUserActive] = useSetUserActiveMutation();
+  const [toggleUserActive] = useToggleUserActiveAdminMutation();
 
   if (isSessionLoading || isUsersLoading) {
     return <>Loading...</>;
   }
 
-  const handleActivate = (id: string) => {
-    setUserActive({ userId: id, active: true });
-  };
-
-  const handleDeactivate = (id: string) => {
-    setUserActive({ userId: id, active: false });
+  const handleToggle = (id: string) => {
+    toggleUserActive({ userId: id });
   };
 
   return (
@@ -84,7 +80,7 @@ export const UserTable = ({ role }: UserTableProps) => {
                             <Button
                               color="text-red-500 bg-red-100 hover:bg-red-200"
                               onClick={() => {
-                                handleDeactivate(user.id);
+                                handleToggle(user.id);
                               }}
                             >
                               Deactivate
@@ -93,7 +89,7 @@ export const UserTable = ({ role }: UserTableProps) => {
                             <Button
                               color="text-green-500 bg-green-100 hover:bg-green-200"
                               onClick={() => {
-                                handleActivate(user.id);
+                                handleToggle(user.id);
                               }}
                             >
                               Activate

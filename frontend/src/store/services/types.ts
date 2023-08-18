@@ -1,4 +1,21 @@
 export namespace ApiModel {
+  export type Location = {
+    lat?: number;
+    lng?: number;
+    postalCode?: string;
+    id: string;
+  };
+
+  export type Address = {
+    street: string;
+    city: string;
+    province: string;
+    provinceCode: string;
+    postalCode: string;
+    country: string;
+    countryCode: string;
+  };
+
   export type PostAuthor = {
     firstName: string;
     id: string;
@@ -8,7 +25,7 @@ export namespace ApiModel {
 
   export type PostItem = {
     name: string;
-    category: PostItemCategory;
+    category: string;
     description: string;
     price: number;
     quantity: number;
@@ -20,23 +37,24 @@ export namespace ApiModel {
     label: string;
   };
 
-  export type PostLocation = {
-    lat?: number;
-    lng?: number;
-    postalCode?: string;
-    id: string;
-  };
-
   export type Post = {
     author: PostAuthor;
     createdAt: string;
     id: string;
     item: PostItem;
-    location: PostLocation;
     status: "request" | "offer";
     type: string;
     updatedAt: string;
     views: number;
+    location: Location;
+  };
+
+  export type UserOrganization = {
+    name: string;
+    address: Address;
+    phone: string;
+    type: string;
+    verified: boolean;
   };
 
   export type User = {
@@ -49,6 +67,8 @@ export namespace ApiModel {
     verified: boolean;
     active: boolean;
     starred: Post[];
+    location?: Location;
+    organization?: UserOrganization;
   };
 }
 
@@ -69,6 +89,10 @@ export namespace ApiResponse {
     total: number;
     page: number;
     per_page: number;
+  };
+
+  export type MessageResponse = {
+    message: string;
   };
 }
 
@@ -114,7 +138,7 @@ export namespace QueryArgs {
       | "item"
       | "status"
     > & {
-      location: Omit<ApiModel.PostLocation, "id">;
+      location: Omit<ApiModel.Location, "id">;
       item: Omit<ApiModel.PostItem, "id">[];
     };
 
@@ -148,6 +172,8 @@ export namespace QueryArgs {
       Filters.Categories & {
         userId: string;
       };
+
+    export type GetPaginatedUsers = Pagination & Filters.UserType;
   }
 }
 
@@ -184,9 +210,12 @@ export namespace MutationArgs {
   }
 
   export namespace Users {
-    export type SetUserActive = {
+    export type ToggleUserActive = {
       userId: string;
-      active: boolean;
+    };
+
+    export type VerifyUser = {
+      userId: string;
     };
   }
 }

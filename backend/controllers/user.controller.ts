@@ -6,7 +6,7 @@ import { PostDto } from "../models/posts";
 import { UserDto } from "../models/users";
 import { PostService, UserService } from "../services";
 import { PaginatedResponse, PostDocument } from "../types";
-import { tryParseFilterQuery, tryParsePaginationQuery } from "../utils";
+import { tryParsePaginationQuery, tryParsePostFilterQuery } from "../utils";
 import {
   validatePaginationRequest,
   validatePostsFilterRequest,
@@ -132,7 +132,6 @@ export class UserController {
 
   setActive = expressAsyncHandler(async (req, res, next) => {
     await param("id").notEmpty().run(req);
-    await body("active").notEmpty().run(req);
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -149,7 +148,7 @@ export class UserController {
       return;
     }
 
-    await this.userService.setActive(id, active);
+    await this.userService.toggleActive(id);
 
     log(`Set user ${id} active status to ${active}.`);
 
@@ -193,7 +192,7 @@ export class UserController {
     }
 
     const { page, limit } = tryParsePaginationQuery(req);
-    const { postType, userType, categories } = tryParseFilterQuery(req);
+    const { postType, userType, categories } = tryParsePostFilterQuery(req);
 
     const filterQuery: FilterQuery<PostDocument> = {
       _id: { $in: postIds },

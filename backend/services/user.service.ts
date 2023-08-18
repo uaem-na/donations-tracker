@@ -1,7 +1,34 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { FilterQuery, SortOrder } from "mongoose";
 import { UserModel } from "../models/users";
 import { User, UserDocument } from "../types";
 
 export class UserService {
+  async getPaginatedUsers(
+    page: number,
+    limit: number,
+    filter: FilterQuery<UserDocument> = {},
+    sort:
+      | string
+      | { [key: string]: SortOrder | { $meta: "textScore" } }
+      | [string, SortOrder][]
+      | null
+      | undefined = {}
+  ): Promise<[UserDocument[], number]> {
+    if (!page || !limit || page < 0 || limit < 0) {
+      throw new Error("Error paginating users. Invalid page or limit.");
+    }
+
+    const posts = await UserModel.find({
+      ...(filter && { ...filter }),
+    })
+      .sort(sort)
+      .skip((page - 1) * limit)
+      .limit(limit);
+
+    return [posts, await UserModel.countDocuments(filter)];
+  }
+
   /**
    * Get all active users, optionally get all users when active is set to false
    * @param filterInactive set to false to get all users including inactive users
@@ -75,16 +102,17 @@ export class UserService {
     return await user.save();
   }
 
-  async setActive(id: string, active: boolean): Promise<UserDocument> {
-    const user = await this.getUserById(id);
-
+  async toggleActive(id: string): Promise<UserDocument> {
+    const user = await UserModel.findOneAndUpdate({ _id: id }, [
+      { $set: { active: { $eq: [false, "$active"] } } },
+    ]);
     if (!user) {
-      throw new Error(`Error updating user. User does not exist.`);
+      throw new Error(
+        `Error toggling active for id(${id}). User does not exist.`
+      );
     }
 
-    user.active = active;
-
-    return await user.save();
+    return user;
   }
 
   async getUserStarredPostIds(userId: string): Promise<string[]> {

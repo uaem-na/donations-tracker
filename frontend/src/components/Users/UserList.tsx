@@ -2,15 +2,15 @@ import { faRectangleList } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ApiModel } from "@services/api";
 import { useTranslation } from "react-i18next";
-import { PostItem } from "./PostItem";
+import { UserItem } from "./UserItem";
 
-interface PostListProps {
-  posts: ApiModel.Post[] | undefined;
+interface UserListProps {
+  users: ApiModel.User[] | undefined;
 }
 
-export const PostList = ({ posts }: PostListProps) => {
+export const UserList = ({ users }: UserListProps) => {
   const { t } = useTranslation();
-  if (posts === undefined || posts.length === 0) {
+  if (users === undefined || users.length === 0) {
     return (
       <>
         <div className="relative block w-full rounded-lg border-2 border-dashed border-gray-300 p-12 text-center">
@@ -19,7 +19,7 @@ export const PostList = ({ posts }: PostListProps) => {
             icon={faRectangleList}
           />
           <span className="mt-2 block text-sm font-semibold text-gray-900">
-            {t("posts.no_posts_found")}
+            {t("users.no_users_found")}
           </span>
         </div>
       </>
@@ -31,20 +31,14 @@ export const PostList = ({ posts }: PostListProps) => {
       role="list"
       className="divide-y divide-gray-100 overflow-hidden bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl mt-2"
     >
-      {posts?.map((post: ApiModel.Post) => {
+      {users?.map((user: ApiModel.User) => {
         return (
-          <PostItem
-            key={post.id}
-            id={post.id}
-            title={post.item.name}
-            status={post.status}
-            displayName={post.author.firstName + " " + post.author.lastName}
-            category={post.item.category}
-            price={post.item.price}
-            quantity={post.item.quantity}
-            createdAt={post.createdAt}
-            updatedAt={post.updatedAt}
-            type={post.type}
+          <UserItem
+            key={user.id}
+            id={user.id}
+            displayName={user.firstName + " " + user.lastName}
+            verified={user.verified}
+            type={user.role}
           />
         );
       })}

@@ -16,7 +16,7 @@ import {
   PaginatedResponse,
   PostDocument,
 } from "../types";
-import { tryParseFilterQuery, tryParsePaginationQuery } from "../utils";
+import { tryParsePaginationQuery, tryParsePostFilterQuery } from "../utils";
 import {
   hasUser,
   validateLocale,
@@ -45,7 +45,7 @@ export class PostController {
     }
 
     const { page, limit } = tryParsePaginationQuery(req);
-    const { postType, userType, categories } = tryParseFilterQuery(req);
+    const { postType, userType, categories } = tryParsePostFilterQuery(req);
 
     const filterQuery: FilterQuery<PostDocument> = {
       status: PostStatus.OPEN,
@@ -269,7 +269,7 @@ export class PostController {
     }
 
     const { page, limit } = tryParsePaginationQuery(req);
-    const { postType, userType, categories } = tryParseFilterQuery(req);
+    const { postType, userType, categories } = tryParsePostFilterQuery(req);
 
     const { userId } = req.params;
     const user = await this.userService.getUserById(userId);

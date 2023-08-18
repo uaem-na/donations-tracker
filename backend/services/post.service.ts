@@ -3,6 +3,7 @@ import {
   BilingualPostCategory,
   FilterPostType,
   PostCategory,
+  PostStatus,
 } from "../constants";
 import { PostModel } from "../models/posts";
 import { UserModel } from "../models/users";
@@ -131,5 +132,17 @@ export class PostService {
 
       return true;
     }
+  }
+
+  async approvePost(postId: string): Promise<PostDocument> {
+    const post = await this.getPost(postId);
+
+    if (!post) {
+      throw new Error(`Error approving post. Post does not exist.`);
+    }
+
+    post.status = PostStatus.OPEN;
+
+    return await post.save();
   }
 }

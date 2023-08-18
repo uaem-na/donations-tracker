@@ -11,6 +11,46 @@ const userService = new UserService();
 const adminController = new AdminController(postService, userService);
 
 // * wire up routes with controller
-router.get("/posts-to-verify", ensureAuthenticated, ensureAdmin);
+router.get(
+  "/posts",
+  ensureAuthenticated,
+  ensureAdmin,
+  adminController.getPostsToApprove
+);
+
+router.put(
+  "/posts/:id/approve",
+  ensureAuthenticated,
+  ensureAdmin,
+  adminController.approvePost
+);
+
+router.get(
+  "/users",
+  ensureAuthenticated,
+  ensureAdmin,
+  adminController.getUsersToVerify
+);
+
+router.get(
+  "/users/:id",
+  ensureAuthenticated,
+  ensureAdmin,
+  adminController.getUserById
+);
+
+router.put(
+  "/users/:id/verify",
+  ensureAuthenticated,
+  ensureAdmin,
+  adminController.verifyUser
+);
+
+router.put(
+  "/users/:id/active",
+  ensureAuthenticated,
+  ensureAdmin,
+  adminController.toggleUserActive
+);
 
 export default router;

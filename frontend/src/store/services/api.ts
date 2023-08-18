@@ -231,12 +231,6 @@ export const api = createApi({
       }),
       invalidatesTags: ["session"],
     }),
-    getUser: builder.query<ApiModel.User, QueryArgs.Users.GetUser>({
-      query: ({ userId }) => ({ url: `users/${userId}`, method: "GET" }),
-      providesTags: (result, error, args) => [
-        { type: "users", id: args.userId },
-      ],
-    }),
     getUsers: builder.query<ApiModel.User[], void>({
       query: () => ({
         url: "users",
@@ -274,25 +268,53 @@ export const api = createApi({
       }),
       invalidatesTags: (result, error, id) => [{ type: "users", id }],
     }),
-    verifyUser: builder.mutation({
-      query: ({ userId }) => ({
-        url: "users/verify",
-        method: "POST",
-        body: { userId },
-      }),
-      invalidatesTags: (result, error, id) => [{ type: "users", id }],
-    }),
-    setUserActive: builder.mutation<
+    toggleUserActiveAdmin: builder.mutation<
       ApiModel.User,
-      MutationArgs.Users.SetUserActive
+      MutationArgs.Users.ToggleUserActive
     >({
-      query: ({ userId, active }) => ({
-        url: `users/${userId}/active`,
+      query: ({ userId }) => ({
+        url: `admin/users/${userId}/active`,
         method: "PUT",
-        body: { active },
+        body: { userId },
       }),
       invalidatesTags: (result, error, { userId }) => [
         { type: "users", id: userId },
+      ],
+    }),
+    getUsersAdmin: builder.query<
+      ApiResponse.PaginatedList<ApiModel.User>,
+      QueryArgs.Users.GetPaginatedUsers
+    >({
+      query: (args) => ({
+        url: "admin/users",
+        method: "GET",
+        params: { ...args },
+      }),
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.data.map(({ id }) => ({ type: "users" as const, id })),
+              { type: "users", id: "admin-list" },
+            ]
+          : [{ type: "users", id: "admin-list" }],
+    }),
+    getUserAdmin: builder.query<ApiModel.User, QueryArgs.Users.GetUser>({
+      query: ({ userId }) => ({ url: `admin/users/${userId}`, method: "GET" }),
+      providesTags: (result, error, args) => [
+        { type: "users", id: args.userId },
+      ],
+    }),
+    verifyUserAdmin: builder.mutation<
+      ApiResponse.MessageResponse,
+      MutationArgs.Users.VerifyUser
+    >({
+      query: ({ userId }) => ({
+        url: `admin/users/${userId}/verify`,
+        method: "PUT",
+        body: { userId },
+      }),
+      invalidatesTags: (result, error, args) => [
+        { type: "users", id: args.userId },
       ],
     }),
   }),
@@ -313,7 +335,6 @@ export const {
   useGetSessionQuery,
   useGetStarredPostsQuery,
   useGetUserPostsQuery,
-  useGetUserQuery,
   useGetUsersQuery,
   useLazyGetPostQuery,
   useLazyGetSessionQuery,
@@ -321,10 +342,12 @@ export const {
   useLoginMutation,
   useLogoutMutation,
   useRegisterMutation,
-  useSetUserActiveMutation,
+  useToggleUserActiveAdminMutation,
   useStarPostMutation,
   useUpdateUserMutation,
-  useVerifyUserMutation,
+  useVerifyUserAdminMutation,
+  useGetUserAdminQuery,
+  useGetUsersAdminQuery,
 } = api;
 
 export * from "./types";
