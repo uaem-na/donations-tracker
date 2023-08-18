@@ -209,6 +209,16 @@ export namespace MutationArgs {
     export type Register = IndividualRegister & OrganizationRegister;
   }
 
+  export namespace Posts {
+    export type ApprovePost = {
+      postId: string;
+    };
+
+    export type RejectPost = {
+      postId: string;
+    };
+  }
+
   export namespace Users {
     export type ToggleUserActive = {
       userId: string;

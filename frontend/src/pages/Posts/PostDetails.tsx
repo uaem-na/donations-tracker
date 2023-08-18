@@ -1,4 +1,4 @@
-import { PostDetails } from "@components/Posts/PostDetails";
+import { PostDetails } from "@components/Posts";
 import { useNavigate, useParams } from "react-router-dom";
 
 export const PostDetailsPage = () => {

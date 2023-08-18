@@ -31,11 +31,6 @@ export const AdminUsersPage = () => {
         updateUserType={setUserType}
         filters={{ userType: true }}
       />
-      {/* <div className="px-8 py-8 flex flex-col gap-8">
-        <UserTable role="admin" />
-        <UserTable role="organization" />
-        <UserTable role="individual" />
-      </div> */}
     </div>
   );
 };

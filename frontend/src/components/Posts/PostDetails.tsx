@@ -30,6 +30,7 @@ interface PostDetailsProps {
   id: string;
   onError: (err) => void;
   redirectOnDelete?: boolean;
+  hideEditDelete?: boolean;
 }
 
 /*TODO: add email if current user is logged in*/
@@ -37,6 +38,7 @@ export const PostDetails = ({
   id,
   onError,
   redirectOnDelete = true,
+  hideEditDelete = false,
 }: PostDetailsProps) => {
   const { t } = useTranslation();
   const { data: currentSession } = useGetSessionQuery();
@@ -184,69 +186,72 @@ export const PostDetails = ({
         </dl>
       </div>
 
-      {/* Button groups for edit or deleting if the current user matches the author id */}
-      <div>
-        <div className="mt-4 flex justify-end gap-2.5">
-          {currentSession && currentSession.id === post.author.id && (
-            <>
-              <Button
-                type="button"
-                intent="secondary"
-                className="flex gap-1.5 justify-center items-center"
-                onClick={() => navigate(`/posts/${post.id}/edit`)}
-              >
-                <FontAwesomeIcon icon={faEdit} />
-                {t("edit")}
-              </Button>
+      {!hideEditDelete && (
+        <div>
+          <div className="mt-4 flex justify-end gap-2.5">
+            {currentSession && currentSession.id === post.author.id && (
+              <>
+                <Button
+                  type="button"
+                  intent="secondary"
+                  className="flex gap-1.5 justify-center items-center"
+                  onClick={() => navigate(`/posts/${post.id}/edit`)}
+                >
+                  <FontAwesomeIcon icon={faEdit} />
+                  {t("edit")}
+                </Button>
 
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button
-                    type="button"
-                    intent="danger"
-                    className="flex gap-1.5 justify-center items-center"
-                  >
-                    <FontAwesomeIcon icon={faTrash} />
-                    {t("delete")}
-                  </Button>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>{t("posts.delete_confirm_title")}</DialogTitle>
-                    <DialogDescription>
-                      {t("posts.delete_confirm_description")}
-                    </DialogDescription>
-                    <DialogFooter>
-                      <div className="mt-5 sm:mt-4 flex flex-row-reverse gap-2">
-                        <Button
-                          type="button"
-                          intent="danger"
-                          className="flex gap-1.5 justify-center items-center"
-                          onClick={onDelete}
-                        >
-                          <FontAwesomeIcon icon={faTrash} />
-                          {t("delete")}
-                        </Button>
-
-                        <DialogClose asChild>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button
+                      type="button"
+                      intent="danger"
+                      className="flex gap-1.5 justify-center items-center"
+                    >
+                      <FontAwesomeIcon icon={faTrash} />
+                      {t("delete")}
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>
+                        {t("posts.delete_confirm_title")}
+                      </DialogTitle>
+                      <DialogDescription>
+                        {t("posts.delete_confirm_description")}
+                      </DialogDescription>
+                      <DialogFooter>
+                        <div className="mt-5 sm:mt-4 flex flex-row-reverse gap-2">
                           <Button
                             type="button"
-                            intent="secondary"
+                            intent="danger"
                             className="flex gap-1.5 justify-center items-center"
+                            onClick={onDelete}
                           >
-                            <FontAwesomeIcon icon={faCancel} />
-                            {t("cancel")}
+                            <FontAwesomeIcon icon={faTrash} />
+                            {t("delete")}
                           </Button>
-                        </DialogClose>
-                      </div>
-                    </DialogFooter>
-                  </DialogHeader>
-                </DialogContent>
-              </Dialog>
-            </>
-          )}
+
+                          <DialogClose asChild>
+                            <Button
+                              type="button"
+                              intent="secondary"
+                              className="flex gap-1.5 justify-center items-center"
+                            >
+                              <FontAwesomeIcon icon={faCancel} />
+                              {t("cancel")}
+                            </Button>
+                          </DialogClose>
+                        </div>
+                      </DialogFooter>
+                    </DialogHeader>
+                  </DialogContent>
+                </Dialog>
+              </>
+            )}
+          </div>
         </div>
-      </div>
+      )}
 
       <div className="flex justify-end mt-16">
         <span className="text-xs">

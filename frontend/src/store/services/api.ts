@@ -281,6 +281,67 @@ export const api = createApi({
         { type: "users", id: userId },
       ],
     }),
+    getPostsAdmin: builder.query<
+      ApiResponse.PaginatedList<ApiModel.Post>,
+      QueryArgs.Posts.GetPaginatedPosts
+    >({
+      query: (args) => ({
+        url: "admin/posts",
+        method: "GET",
+        params: { ...args },
+      }),
+      transformResponse: (
+        response: ApiResponse.PaginatedList<ApiModel.Post>
+      ): ApiResponse.PaginatedList<ApiModel.Post> => {
+        const posts = response.data;
+        response.data = posts.map((post) => ({
+          ...post,
+          createdAt: new Date(post.createdAt).toLocaleDateString(),
+          updatedAt: new Date(post.updatedAt).toLocaleDateString(),
+          item: {
+            ...post.item,
+          },
+          location: {
+            ...post.location,
+          },
+        }));
+
+        return response;
+      },
+      providesTags: (result, error, arg) =>
+        result
+          ? [
+              ...result.data.map(({ id }) => ({ type: "posts" as const, id })),
+              { type: "posts", id: "admin-list" },
+            ]
+          : [{ type: "posts", id: "admin-list" }],
+    }),
+    approvePostAdmin: builder.mutation<
+      ApiResponse.MessageResponse,
+      MutationArgs.Posts.ApprovePost
+    >({
+      query: ({ postId }) => ({
+        url: `admin/posts/${postId}/approve`,
+        method: "PUT",
+        body: { postId },
+      }),
+      invalidatesTags: (result, error, args) => [
+        { type: "posts", id: args.postId },
+      ],
+    }),
+    rejectPostAdmin: builder.mutation<
+      ApiResponse.MessageResponse,
+      MutationArgs.Posts.RejectPost
+    >({
+      query: ({ postId }) => ({
+        url: `admin/posts/${postId}/reject`,
+        method: "PUT",
+        body: { postId },
+      }),
+      invalidatesTags: (result, error, args) => [
+        { type: "posts", id: args.postId },
+      ],
+    }),
     getUsersAdmin: builder.query<
       ApiResponse.PaginatedList<ApiModel.User>,
       QueryArgs.Users.GetPaginatedUsers
@@ -348,6 +409,9 @@ export const {
   useVerifyUserAdminMutation,
   useGetUserAdminQuery,
   useGetUsersAdminQuery,
+  useGetPostsAdminQuery,
+  useApprovePostAdminMutation,
+  useRejectPostAdminMutation,
 } = api;
 
 export * from "./types";

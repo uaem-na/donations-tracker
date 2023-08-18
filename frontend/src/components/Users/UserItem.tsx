@@ -1,9 +1,7 @@
 import { Badge } from "@components/Badge";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useGetSessionQuery } from "@services/api";
 import { getStatusIndicator } from "@utils/GetStatusIndicator";
-import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
@@ -21,13 +19,6 @@ export const UserItem = ({
   type,
 }: UserItemProps) => {
   const { t } = useTranslation();
-  const { data: currentSession } = useGetSessionQuery();
-  const [starred, setStarred] = useState(false);
-
-  useEffect(() => {
-    if (currentSession) {
-    }
-  }, [currentSession]);
 
   const getColorForBadge = (type: string) => {
     switch (type) {
@@ -46,7 +37,7 @@ export const UserItem = ({
         <div className="grow flex gap-x-4">
           <div className="min-w-0 flex-auto">
             <p className="text-sm font-semibold leading-6 text-gray-900">
-              <Link to={`/admin/users/${id}`}>
+              <Link to={`${id}`}>
                 <span className="absolute inset-0 -mx-4 -my-5"></span>
                 <Badge
                   color={getColorForBadge(type)}

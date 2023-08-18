@@ -7,6 +7,7 @@ import { UserRole } from "@constants";
 import { RequireAuth } from "@features/auth";
 import {
   AboutUsPage,
+  AdminPostDetailsPage,
   AdminUserDetailsPage,
   AdminUsersPage,
   CreatePostPage,
@@ -23,6 +24,7 @@ import {
   ResourceNotFoundErrorPage,
   SecurityPage,
 } from "@pages";
+import AdminPostsPage from "@pages/Admin/Posts";
 import { Layout } from "layout";
 
 function App() {
@@ -56,6 +58,24 @@ function App() {
                   </RequireAuth>
                 }
               />
+
+              <Route
+                path="posts"
+                element={
+                  <RequireAuth role={UserRole.ADMIN}>
+                    <AdminPostsPage />
+                  </RequireAuth>
+                }
+              />
+
+              <Route
+                path="posts/:id"
+                element={
+                  <RequireAuth role={UserRole.ADMIN}>
+                    <AdminPostDetailsPage />
+                  </RequireAuth>
+                }
+              />
             </Route>
 
             {/* Private pages */}
@@ -85,26 +105,24 @@ function App() {
               }
             />
 
-            <Route path="/posts">
-              <Route path=":id" element={<PostDetailsPage />} />
-              <Route path="list" element={<PostsPage />} />
-              <Route
-                path=":type/new"
-                element={
-                  <RequireAuth>
-                    <CreatePostPage />
-                  </RequireAuth>
-                }
-              />
-              <Route
-                path=":id/edit"
-                element={
-                  <RequireAuth>
-                    <EditPostPage />
-                  </RequireAuth>
-                }
-              />
-            </Route>
+            <Route path="/posts" element={<PostsPage />} />
+            <Route path="/posts/:id" element={<PostDetailsPage />} />
+            <Route
+              path="/posts/:type/new"
+              element={
+                <RequireAuth>
+                  <CreatePostPage />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/posts/:id/edit"
+              element={
+                <RequireAuth>
+                  <EditPostPage />
+                </RequireAuth>
+              }
+            />
 
             {/* Hybrid pages (public vs user might see a different view) */}
 

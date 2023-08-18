@@ -24,3 +24,5 @@ export const AdminUserDetailsPage = () => {
     </>
   );
 };
+
+export default AdminUserDetailsPage;
