@@ -3,6 +3,7 @@ import { ISiteLinks, UserRole } from "@constants";
 import { IconDefinition } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useGetSessionQuery } from "@services/api";
+import { generateRandomID } from "@utils";
 import { NavLink } from "react-router-dom";
 
 interface SidebarLogoProps {
@@ -29,7 +30,12 @@ const NavList = ({ siteLinks, isUserAdmin = false }: NavListProps) => {
         {siteLinks
           .filter(({ menu, adminOnly }) => menu && (!adminOnly || isUserAdmin))
           .map(({ name, path, icon }) => (
-            <NavItem key={name} to={path} name={name} icon={icon}></NavItem>
+            <NavItem
+              key={name + generateRandomID()}
+              to={path}
+              name={name}
+              icon={icon}
+            ></NavItem>
           ))}
       </ul>
     </nav>

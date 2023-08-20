@@ -4,7 +4,7 @@ import { body, param, validationResult } from "express-validator";
 import { AuthorizationError, NotFoundError, ValidationError } from "../errors";
 import { ReportDto } from "../models/reports";
 import { PostService, ReportService, UserService } from "../services";
-import { hasUser } from "../utils";
+import { hasUser } from "./validators";
 
 const log = debug("backend:report");
 

@@ -1,7 +1,7 @@
-import { PostDetails } from "@components/Posts";
+import { UserDetails } from "@components/Users";
 import { useNavigate, useParams } from "react-router-dom";
 
-export const PostDetailsPage = () => {
+export const AdminUserDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
@@ -20,7 +20,9 @@ export const PostDetailsPage = () => {
 
   return (
     <>
-      <PostDetails id={id} onError={handleError} />
+      <UserDetails id={id} onError={handleError} />
     </>
   );
 };
+
+export default AdminUserDetailsPage;

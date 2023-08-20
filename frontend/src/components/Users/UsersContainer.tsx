@@ -1,57 +1,39 @@
 import { Button } from "@components/Controls";
-import { PostList } from "@components/Posts";
-import { FilterLayout } from "@components/Posts/FilterLayout";
-import { ApiModel, useGetItemCategoriesQuery } from "@services/api";
+import { ApiModel } from "@services/api";
 import { SetStateAction, useCallback } from "react";
 import { Trans, useTranslation } from "react-i18next";
-import {
-  FilterPostType,
-  FilterUserType,
-  PerPageOption,
-  getPerPageOption,
-} from "./types";
+import { FilterLayout } from "./FilterLayout";
+import { UserList } from "./UserList";
+import { FilterUserType, PerPageOption, getPerPageOption } from "./types";
 
-interface FilterProps {
-  userType: "individual" | "organization";
-  date?: string; // date picker preferred, but text input is fine for first iteration
-  category?: string[]; // multi-select checkbox preferred, but single select dropdown is fine for first iteration
-}
-
-interface PostsContainerProps {
+interface UsersContainerProps {
   heading: string;
-  posts?: ApiModel.Post[];
+  users?: ApiModel.User[];
   page: number;
   perPage: PerPageOption;
   total: number;
   isLoading: boolean;
   updatePage: (setter: SetStateAction<number>) => void;
   updatePerPage: (setter: SetStateAction<PerPageOption>) => void;
-  updatePostType: (setter: SetStateAction<FilterPostType>) => void;
   updateUserType: (setter: SetStateAction<FilterUserType>) => void;
-  updateCategories: (setter: SetStateAction<string[]>) => void;
   filters: {
-    postType: boolean;
     userType: boolean;
-    categories: boolean;
   };
 }
 
-export const PostsContainer = ({
+export const UsersContainer = ({
   heading,
-  posts,
+  users,
   page,
   perPage,
   total,
   isLoading,
   updatePage,
   updatePerPage,
-  updatePostType,
   updateUserType,
-  updateCategories,
   filters,
-}: PostsContainerProps) => {
+}: UsersContainerProps) => {
   const { t } = useTranslation();
-  const { data: categories } = useGetItemCategoriesQuery({ locale: "en" });
 
   const handlePerPageChange = (val: string) => {
     // update parent container state
@@ -59,22 +41,10 @@ export const PostsContainer = ({
     updatePerPage(getPerPageOption(parseInt(val)));
   };
 
-  const handlePostTypeFilterChange = (postType: FilterPostType) => {
-    // update parent container state
-    updatePage(1);
-    updatePostType(postType);
-  };
-
   const handleUserTypeFilterChange = (userType: FilterUserType) => {
     // update parent container state
     updatePage(1);
     updateUserType(userType);
-  };
-
-  const handleCategoryFilterChange = (categories: string[]) => {
-    // update parent container state
-    updatePage(1);
-    updateCategories(categories);
   };
 
   const renderPaginationResults = useCallback(() => {
@@ -102,7 +72,7 @@ export const PostsContainer = ({
         </p>
       </>
     );
-  }, [page, posts]);
+  }, [page, users]);
 
   if (isLoading) {
     return <p>{t("loading")}</p>;
@@ -113,19 +83,12 @@ export const PostsContainer = ({
       filters={filters}
       heading={heading}
       handlePerPageChange={(e) => handlePerPageChange(e)}
-      handlePostTypeFilterChange={(option) =>
-        handlePostTypeFilterChange(option)
-      }
       handleUserTypeFilterChange={(option) =>
         handleUserTypeFilterChange(option)
       }
-      categories={categories ?? []}
-      handleCategoryFilterChange={(options) =>
-        handleCategoryFilterChange(options.map((opt) => opt.value))
-      }
     >
       <div className="flex flex-col gap-y-4">
-        <PostList posts={posts} />
+        <UserList users={users} />
 
         <nav
           className="flex items-center justify-between px-4 py-3 sm:px-6"

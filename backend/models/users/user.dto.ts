@@ -1,6 +1,7 @@
 import { Request } from "express";
 import { Document } from "mongoose";
-import { Location, User } from "../../types";
+import { UserRole } from "../../constants";
+import { Location, OrganizationUser, User } from "../../types";
 import { LocationDto } from "../common";
 
 type UserLocationDto = Omit<Location, "_id"> & {
@@ -17,8 +18,26 @@ export class UserDto {
   active: boolean;
   location: UserLocationDto | undefined;
   starred: string[] | undefined;
+  verified: boolean | undefined;
+  organization:
+    | {
+        name: string;
+        address: {
+          street: string;
+          city: string;
+          province: string;
+          provinceCode: string;
+          postalCode: string;
+          country: string;
+          countryCode: string;
+        };
+        phone: string;
+        type: string;
+        verified: boolean;
+      }
+    | undefined;
 
-  private constructor(id: string, user: User) {
+  private constructor(id: string, user: User | OrganizationUser) {
     const { username, email, firstName, lastName, location, role } = user;
 
     this.id = id;
@@ -28,6 +47,19 @@ export class UserDto {
     this.lastName = lastName;
     this.role = role;
     this.active = user.active;
+    this.verified = true;
+    if (role === UserRole.ORGANIZATION && "organization" in user) {
+      this.verified = user.organization.verified;
+      this.organization = {
+        name: user.organization.name,
+        address: {
+          ...user.organization.address,
+        },
+        phone: user.organization.phone,
+        type: user.organization.type,
+        verified: user.organization.verified,
+      };
+    }
 
     if (location) {
       this.location = LocationDto.fromLocation(location);

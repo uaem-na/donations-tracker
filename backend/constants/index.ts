@@ -39,14 +39,30 @@ export const FilterableUserTypes = [
   FilterUserType.INDIVIDUAL,
 ];
 
+export enum FilterUserTypeAdmin {
+  ALL = "all",
+  ADMIN = "admin",
+  ORGANIZATION = "organization",
+  INDIVIDUAL = "individual",
+}
+
+export const FilterableUserTypesAdmin = [
+  FilterUserTypeAdmin.ALL,
+  FilterUserTypeAdmin.ADMIN,
+  FilterUserTypeAdmin.ORGANIZATION,
+  FilterUserTypeAdmin.INDIVIDUAL,
+];
+
 export enum PostStatus {
   OPEN = "open",
-  IN_PROGRESS = "in-progress",
+  PENDING_APPROVAL = "pending-approval",
+  IN_PROGRESS = "in-progress", // TODO: is this needed?
   CLOSED = "closed",
 }
 
 export const PostStatuses = [
   PostStatus.OPEN,
+  PostStatus.PENDING_APPROVAL,
   PostStatus.IN_PROGRESS,
   PostStatus.CLOSED,
 ];

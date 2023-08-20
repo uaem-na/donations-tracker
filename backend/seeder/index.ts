@@ -24,7 +24,7 @@ connection.once("open", async () => {
 const seed = async (destroy = false) => {
   console.log("Seeding database...");
 
-  const users = await seedUsers(destroy, 20);
-  const posts = await seedPosts(destroy, 20, users);
+  const users = await seedUsers(destroy, 5);
+  const posts = await seedPosts(destroy, 5, users);
   const reports = await seedReports(destroy, users[0], posts);
 };

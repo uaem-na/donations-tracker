@@ -3,6 +3,7 @@ import {
   BilingualPostCategory,
   FilterPostType,
   PostCategory,
+  PostStatus,
 } from "../constants";
 import { PostModel } from "../models/posts";
 import { UserModel } from "../models/users";
@@ -96,9 +97,7 @@ export class PostService {
   }
 
   getItemCategories(locale: "en" | "fr"): { value: string; label: string }[] {
-    console.log(locale);
     return Object.values(PostCategory).map((value) => {
-      console.log(BilingualPostCategory[value][locale]);
       return { value, label: BilingualPostCategory[value][locale] };
     });
   }
@@ -133,5 +132,17 @@ export class PostService {
 
       return true;
     }
+  }
+
+  async approvePost(postId: string): Promise<PostDocument> {
+    const post = await this.getPost(postId);
+
+    if (!post) {
+      throw new Error(`Error approving post. Post does not exist.`);
+    }
+
+    post.status = PostStatus.OPEN;
+
+    return await post.save();
   }
 }

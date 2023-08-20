@@ -113,7 +113,7 @@ export type Post = {
   authorType: "individual" | "organization";
   location: Location;
   item: PostItem;
-  status: "open" | "in-progress" | "closed";
+  status: "open" | "in-progress" | "closed" | "pending-approval";
   views: number;
   createdAt: Date;
   updatedAt: Date;

@@ -1,6 +1,7 @@
 import { IconDefinition } from "@fortawesome/free-regular-svg-icons";
 import {
   faCircleQuestion,
+  faClipboardCheck,
   faFileSignature,
   faHome,
   faPersonCircleQuestion,
@@ -25,7 +26,7 @@ export const siteLinks: ISiteLinks[] = [
   },
   {
     name: "Posts",
-    path: "/posts/list",
+    path: "/posts",
     menu: true,
     icon: faFileSignature,
   },
@@ -35,6 +36,13 @@ export const siteLinks: ISiteLinks[] = [
     path: "/admin/users",
     menu: true,
     icon: faUsers,
+    adminOnly: true,
+  },
+  {
+    name: "Posts",
+    path: "/admin/posts",
+    menu: true,
+    icon: faClipboardCheck,
     adminOnly: true,
   },
 ];

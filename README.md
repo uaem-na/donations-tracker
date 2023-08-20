@@ -8,6 +8,7 @@
     - [Admin features](#admin-features)
     - [User features](#user-features)
     - [Organization features](#organization-features)
+    - [Out of scope](#out-of-scope)
   - [Contributors](#contributors)
 
 ## Project description
@@ -40,40 +41,41 @@ To build without cache:
 - [x] Seed posts
 - [x] Seed reports
 - [ ] Human friendly error messages
-- [ ] Post must be in private mode where only the author and admins can read before it goes public
-- [ ] User emails must be verified (depends on email service provider such as Amazon SES)
-- [ ] When there is an activity on the post, authors must be notified
+- [ ] E-mail addresses must be verified
 - [ ] Add display name to user model and use it across the app
 - [ ] Bilingual support (English and French)
 
 ### Admin features
 
-- [x] As an admin, I should be able to view a list of all users grouped by type (admin, organization, individual)
-- [x] As an admin, I should be able to activate/deactivate any account
-- [ ] As an admin, I should be able to verify/unverify an organization account
-- [ ] As an admin, I should be able to check whether users have any associated reports
-- [ ] Add pagination to admin/users page
-- [ ] Add sorting to admin/users page
-- [ ] Add filtering to admin/users page
+- [x] Users table
+- [x] Activate/deactivate users
+- [x] Verify organization accounts
+- [x] Post must be approved by admin if other category is selected on create
+- [x] Add pagination to admin/users page
+- [x] Add filtering to admin/users page
+- [ ] User reports table
 
 ### User features
 
-- [X] As a user, I should be able to view a list of public requests
-- [X] As a user, I should be able to view a list of public offers
-- [x] As a user, I should be able to set a category for post (clothes, food, personal protective equipment, book, cutlery, stationary, furniture, toy, other - screend by admin)
-- [x] As a user, I should be able to create a request, edit and delete my own requests
-- [x] As a user, I should be able to view the posts on a map (landing page or "view")
-- [x] As a user, I should be able to track others' requests/offers in my account dashboard
-- [x] Display category, price, quantity (item info) on post listings
+- [x] Public post listings
+- [x] Post creation
+- [x] Post editing
+- [x] Post deletion
+- [x] Landing page map with posts
+- [x] Star possts and track them in dashboard
+- [x] View own posts in dashboard
 - [x] Add pagination to post listings
-- [ ] Add sorting to post listings
-- [ ] Add filtering to post listing
-- [ ] As a user, I should be able to view my own posts in dashboard
+- [x] Add filtering to post listings
 
 ### Organization features
 
 - [x] As an organization, I should be able to sign up using organization details
 - [x] As an organization, I should be able to create a request/offer
+
+### Out of scope
+
+- [ ] When there is an activity on the post, authors must be notified
+- [ ] Post image support
 
 ## Contributors 
 

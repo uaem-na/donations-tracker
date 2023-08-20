@@ -1,30 +1,21 @@
-import { FilterContainer, FilterPostType, FilterUserType } from "@components";
+import { FilterContainer, FilterUserType } from "@components";
 import { SelectInput } from "@components/Controls/Select";
-import { ApiModel } from "@services/api";
 import { PropsWithChildren } from "react";
 import { useTranslation } from "react-i18next";
 
 interface IFilterLayoutProps extends PropsWithChildren {
   heading: string;
   handlePerPageChange: (val: string) => void;
-  handlePostTypeFilterChange: (postType: FilterPostType) => void;
   handleUserTypeFilterChange: (userType: FilterUserType) => void;
-  handleCategoryFilterChange: (categories: ApiModel.PostItemCategory[]) => void;
-  categories: ApiModel.PostItemCategory[];
   filters: {
-    postType: boolean;
     userType: boolean;
-    categories: boolean;
   };
 }
 
 export const FilterLayout = ({
   heading,
   handlePerPageChange,
-  handlePostTypeFilterChange,
   handleUserTypeFilterChange,
-  handleCategoryFilterChange,
-  categories,
   filters,
   children,
 }: IFilterLayoutProps) => {
@@ -61,40 +52,22 @@ export const FilterLayout = ({
         </div>
       </div>
 
-      <section aria-labelledby="posts-heading" className="pb-24 pt-6">
-        <h2 id="posts-heading" className="sr-only">
-          {t("posts.title")}
+      <section aria-labelledby="filters-heading" className="pb-24 pt-6">
+        <h2 id="filters-heading" className="sr-only">
+          {t("users.title")}
         </h2>
 
         <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
           <form className="hidden lg:block">
-            {filters.postType && (
-              <div>
-                <FilterContainer
-                  name="postType"
-                  activeClassNames="bg-purple-100 text-purple-800"
-                  inactiveClassNames="text-gray-500 hover:text-gray-700 hover:bg-gray-50"
-                  ariaLabel={t("posts.select_type")}
-                  options={[
-                    { value: "request", label: t("posts.requests") },
-                    { value: "offer", label: t("posts.offers") },
-                  ]}
-                  multiSelect={false}
-                  onChange={(option) =>
-                    handlePostTypeFilterChange(option.value as FilterPostType)
-                  }
-                />
-              </div>
-            )}
-
             {filters.userType && (
               <div className="pt-6">
                 <FilterContainer
                   name="userType"
                   activeClassNames="bg-purple-100 text-purple-800"
                   inactiveClassNames="text-gray-500 hover:text-gray-700 hover:bg-gray-50"
-                  ariaLabel={t("posts.select_user_type")}
+                  ariaLabel={t("users.select_user_type")}
                   options={[
+                    { value: "admin", label: t("users.admin") },
                     { value: "individual", label: t("users.individual") },
                     { value: "organization", label: t("users.organization") },
                   ]}
@@ -102,18 +75,6 @@ export const FilterLayout = ({
                   onChange={(option) =>
                     handleUserTypeFilterChange(option.value as FilterUserType)
                   }
-                />
-              </div>
-            )}
-
-            {filters.categories && (
-              <div className="border-b border-gray-200 pt-6 last:pb-6">
-                <FilterContainer
-                  name="category"
-                  ariaLabel={t("posts.category")}
-                  options={categories ?? []}
-                  multiSelect={true}
-                  onChange={(options) => handleCategoryFilterChange(options)}
                 />
               </div>
             )}

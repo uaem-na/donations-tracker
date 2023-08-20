@@ -18,7 +18,7 @@ export class PostDto {
   location: PostLocationDto | undefined;
   item: PostItemDto;
   type: "request" | "offer";
-  status: "open" | "in-progress" | "closed";
+  status: "open" | "in-progress" | "closed" | "pending-approval";
   views: number;
   createdAt: string;
   updatedAt: string;
