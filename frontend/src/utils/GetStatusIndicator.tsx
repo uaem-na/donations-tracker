@@ -5,6 +5,7 @@ export const getStatusIndicator = (status: string | boolean | undefined) => {
     case "open":
     case true:
       return <StatusIndicator status="online" />;
+    case "pending-approval":
     case "in-progress":
       return <StatusIndicator status="away" />;
     case "closed":
