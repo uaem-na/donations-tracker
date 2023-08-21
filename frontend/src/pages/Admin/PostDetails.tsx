@@ -1,6 +1,11 @@
 import { Button } from "@components/Controls";
 import { PostDetails } from "@components/Posts";
 import {
+  faCircleXmark,
+  faClipboardCheck,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
   useApprovePostAdminMutation,
   useRejectPostAdminMutation,
 } from "@services/api";
@@ -39,15 +44,27 @@ export const AdminPostDetailsPage = () => {
   };
 
   return (
-    <>
+    <div className="container mx-auto">
       <PostDetails id={id} onError={handleError} hideEditDelete={true} />
-      <Button intent="primary" onClick={handleApproveClick}>
-        Approve
-      </Button>
-      <Button intent="danger" onClick={handleRejectClick}>
-        Reject
-      </Button>
-    </>
+      <div className="mt-4 flex justify-end gap-2.5 px-4">
+        <Button
+          intent="primary"
+          onClick={handleApproveClick}
+          className="flex gap-1.5 justify-center items-center"
+        >
+          <FontAwesomeIcon icon={faClipboardCheck} />
+          Approve
+        </Button>
+        <Button
+          intent="danger"
+          onClick={handleRejectClick}
+          className="flex gap-1.5 justify-center items-center"
+        >
+          <FontAwesomeIcon icon={faCircleXmark} />
+          Reject
+        </Button>
+      </div>
+    </div>
   );
 };
 
