@@ -3,7 +3,7 @@ import { classMerge } from "@utils/ClassMerge";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-type Option = {
+export type Option = {
   label: string;
   value: string;
 };
@@ -14,7 +14,8 @@ type SharedContainerProps = {
   inactiveClassNames?: string;
   ariaLabel: string;
   options: Option[];
-  defaultOption?: Option;
+  defaultOption?: Option | Option[];
+  setValue?: Option | Option[];
   defaultExpanded?: boolean;
 };
 
@@ -36,6 +37,7 @@ export const FilterContainer = ({
   ariaLabel,
   options,
   defaultOption,
+  setValue,
   onChange,
   defaultExpanded = true,
 }: FilterContainerProps) => {
@@ -47,21 +49,33 @@ export const FilterContainer = ({
     },
     ...options,
   ];
-  const [selected, setSelected] = useState<Option[]>([
-    defaultOption ?? optionsWithAll[0],
-  ]);
+  const [selected, setSelected] = useState<Option | Option[]>(
+    multiSelect
+      ? (defaultOption as Option[]) ?? [optionsWithAll[0]]
+      : (defaultOption as Option) ?? optionsWithAll[0]
+  );
 
   const [expanded, setExpanded] = useState<boolean>(defaultExpanded);
 
   useEffect(() => {
-    if (onChange) {
+    if (onChange && selected) {
       if (multiSelect) {
-        onChange(selected);
+        onChange(selected as Option[]);
       } else {
-        onChange(selected[0]);
+        onChange(selected as Option);
       }
     }
   }, [selected]);
+
+  useEffect(() => {
+    if (setValue) {
+      if (multiSelect) {
+        setSelected(setValue as Option[]);
+      } else {
+        setSelected(setValue as Option);
+      }
+    }
+  }, [setValue]);
 
   const matchByValue = (value: string) => (option: Option) =>
     option.value === value;
@@ -74,18 +88,20 @@ export const FilterContainer = ({
 
     // if multi select is enabled, simply set the selected array to the selectedOption
     if (!multiSelect) {
-      setSelected([selectedOption]);
+      setSelected(selectedOption);
       return;
     }
 
     // otherwise, handle multi select
-    const alreadySelected = selected.find(matchByValue(value));
+    const alreadySelected = (selected as Option[]).find(matchByValue(value));
     if (alreadySelected) {
       // Option is already selected, remove it
-      const filtered = selected.filter((option) => option.value !== value);
+      const filtered = (selected as Option[]).filter(
+        (option) => option.value !== value
+      );
       if (!filtered || filtered.length === 0) {
         // If there are no options selected, set the default option
-        setSelected([defaultOption ?? optionsWithAll[0]]);
+        setSelected([(defaultOption as Option) ?? optionsWithAll[0]]);
       } else {
         // Else, set selected array to the filtered array
         setSelected(filtered);
@@ -97,7 +113,9 @@ export const FilterContainer = ({
         setSelected([selectedOption]);
       } else {
         // Else, remove "all" option from selected array and add selectedOption
-        const filtered = selected.filter((option) => option.value !== "all");
+        const filtered = (selected as Option[]).filter(
+          (option) => option.value !== "all"
+        );
         setSelected([...filtered, selectedOption]);
       }
     }
@@ -116,7 +134,7 @@ export const FilterContainer = ({
               key={option.value}
               className={classMerge(
                 "rounded-md px-3 py-1.5 text-sm font-medium cursor-pointer",
-                selected.find(matchByValue(option.value))
+                (selected as Option).value === option.value
                   ? activeClassNames
                   : inactiveClassNames
               )}
@@ -155,16 +173,18 @@ export const FilterContainer = ({
               return (
                 <div key={option.value} className="flex items-center ">
                   <input
-                    id={option.value}
+                    id={`${name}-${option.value}`}
                     name={`${name}[]`}
                     value={option.value}
                     type="checkbox"
                     className="h-4 w-4 rounded border-gray-300 text-purple-800 focus:ring-purple-700"
                     onChange={(e) => handleChange(e.target.value)}
-                    checked={!!selected.find(matchByValue(option.value))}
+                    checked={
+                      !!(selected as Option[]).find(matchByValue(option.value))
+                    }
                   />
                   <label
-                    htmlFor={option.value}
+                    htmlFor={`${name}-${option.value}`}
                     className="ml-3 text-sm text-gray-600"
                   >
                     {option.label}
