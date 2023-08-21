@@ -8,6 +8,16 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { updatePasswordSchema } from "./schemas/UpdatePasswordSchema";
 
+const Heading = (text: string) => {
+  return (
+    <div className="md:col-span-1">
+      <h2 className="text-base font-semibold leading-7 text-gray-900">
+        {text}
+      </h2>
+    </div>
+  );
+};
+
 export const UpdatePasswordForm = () => {
   const toast = useToast();
   const [changePasswordApi, { isLoading: loading, isSuccess, error }] =
@@ -51,16 +61,6 @@ export const UpdatePasswordForm = () => {
       }
     }
   }, [error]);
-
-  const Heading = (text: string) => {
-    return (
-      <div className="md:col-span-1">
-        <h2 className="text-base font-semibold leading-7 text-gray-900">
-          {text}
-        </h2>
-      </div>
-    );
-  };
 
   return (
     <>
