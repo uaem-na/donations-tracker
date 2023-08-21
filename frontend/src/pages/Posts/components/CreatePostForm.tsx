@@ -49,7 +49,7 @@ export const CreatePostForm = ({ type }: CreatePostFormProps) => {
   // handle successful request
   useEffect(() => {
     if (isSuccess) {
-      navigate(`/posts/list`);
+      navigate(`/posts`);
     }
   }, [isSuccess]);
 
