@@ -6,8 +6,7 @@
   - [TODOs](#todos)
     - [Housekeeping](#housekeeping)
     - [Admin features](#admin-features)
-    - [User features](#user-features)
-    - [Organization features](#organization-features)
+    - [Features](#features)
     - [Out of scope](#out-of-scope)
   - [Contributors](#contributors)
 
@@ -37,9 +36,6 @@ To build without cache:
 
 ### Housekeeping
 
-- [x] Seed users
-- [x] Seed posts
-- [x] Seed reports
 - [ ] Human friendly error messages
 - [ ] E-mail addresses must be verified
 - [ ] Add display name to user model and use it across the app
@@ -48,14 +44,12 @@ To build without cache:
 ### Admin features
 
 - [x] Users table
-- [x] Activate/deactivate users
+- [x] Activate/deactivate accounts
 - [x] Verify organization accounts
-- [x] Post must be approved by admin if other category is selected on create
-- [x] Add pagination to admin/users page
-- [x] Add filtering to admin/users page
-- [ ] User reports table
+- [x] Approve posts when "other" category is selected
+- [ ] Review post reports
 
-### User features
+### Features
 
 - [x] Public post listings
 - [x] Post creation
@@ -66,11 +60,7 @@ To build without cache:
 - [x] View own posts in dashboard
 - [x] Add pagination to post listings
 - [x] Add filtering to post listings
-
-### Organization features
-
-- [x] As an organization, I should be able to sign up using organization details
-- [x] As an organization, I should be able to create a request/offer
+- [ ] Report posts
 
 ### Out of scope
 
