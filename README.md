@@ -36,10 +36,10 @@ To build without cache:
 
 ### Housekeeping
 
-- [ ] Human friendly error messages
-- [ ] E-mail addresses must be verified
-- [ ] Add display name to user model and use it across the app
 - [ ] Bilingual support (English and French)
+- [ ] Human friendly error messages
+- [ ] Fix error mapping in API (not returning arrays anymore in validation)
+- [ ] E-mail addresses must be verified
 
 ### Admin features
 
@@ -58,8 +58,6 @@ To build without cache:
 - [x] Landing page map with posts
 - [x] Star possts and track them in dashboard
 - [x] View own posts in dashboard
-- [x] Add pagination to post listings
-- [x] Add filtering to post listings
 - [ ] Report posts
 
 ### Out of scope
