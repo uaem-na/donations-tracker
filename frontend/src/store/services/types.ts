@@ -16,12 +16,10 @@ export namespace ApiModel {
     countryCode: string;
   };
 
-  export type PostAuthor = {
-    firstName: string;
-    id: string;
-    lastName: string;
-    email: string;
-  };
+  export type PostAuthor = Pick<
+    User,
+    "id" | "displayName" | "email" | "firstName" | "lastName"
+  >;
 
   export type PostItem = {
     name: string;
@@ -62,6 +60,7 @@ export namespace ApiModel {
     username: string;
     email: string;
     role: string;
+    displayName: string;
     firstName: string;
     lastName: string;
     verified: boolean;
@@ -75,6 +74,7 @@ export namespace ApiModel {
 export namespace ApiResponse {
   export type Session = {
     id: string;
+    displayName: string;
     username: string;
     email: string;
     role: string;
@@ -185,6 +185,7 @@ export namespace MutationArgs {
     };
 
     export type IndividualRegister = {
+      displayName: string;
       username: string;
       email: string;
       password: string;
@@ -192,12 +193,7 @@ export namespace MutationArgs {
       lastName: string;
     };
 
-    export type OrganizationRegister = {
-      username: string;
-      email: string;
-      password: string;
-      firstName: string;
-      lastName: string;
+    export type OrganizationRegister = IndividualRegister & {
       phone: string;
       organization: string;
       streetAddress: string;

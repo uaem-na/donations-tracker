@@ -1,6 +1,5 @@
 import { Alert } from "@components/Alert";
 import { Button, Input, Label } from "@components/Controls";
-import { loginSchema } from "@features/YupSchemas";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
   useGetSessionQuery,
@@ -10,6 +9,7 @@ import {
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { loginSchema } from "./schemas/LoginSchema";
 
 export const LoginForm = () => {
   const navigate = useNavigate();

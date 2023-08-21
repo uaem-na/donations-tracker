@@ -140,9 +140,7 @@ export const PostDetails = ({
         <dl className="mt-6 text-sm leading-6">
           <div>
             <dt className="inline text-gray-500 mr-3">{t("posts.author")}</dt>
-            <dd className="inline text-gray-700">
-              {post.author.firstName} {post.author.lastName}
-            </dd>
+            <dd className="inline text-gray-700">{post.author.displayName}</dd>
           </div>
           {currentSession && (
             <div>

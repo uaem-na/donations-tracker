@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import debug from "debug";
 import { Request } from "express";
 import expressAsyncHandler from "express-async-handler";
 import { ParamsDictionary } from "express-serve-static-core";
-import { body } from "express-validator";
+import { body, validationResult } from "express-validator";
 import passport from "passport";
 import QueryString from "qs";
 import { ProvinceCode, ProvinceName, UserDiscriminator } from "../constants";
@@ -14,6 +15,11 @@ import {
   UserModel,
 } from "../models/users";
 import { AuthService } from "../services";
+import { UserDocument } from "../types";
+import {
+  validateUserRegisterBase,
+  validateUserRegisterOrg,
+} from "./validators";
 
 const log = debug("backend:auth");
 
@@ -56,7 +62,7 @@ export class AuthController {
 
       res
         .status(200)
-        .json(this.authService.getSession(req) || { error: "Login failed." });
+        .json(this.authService.getSession(req) ?? { error: "Login failed." });
     });
   });
 
@@ -86,16 +92,21 @@ export class AuthController {
   });
 
   register = expressAsyncHandler(async (req, res, next) => {
-    await body("type").notEmpty().run(req);
-    await body("username").notEmpty().run(req);
-    await body("email").notEmpty().isEmail().run(req);
-    await body("firstName").notEmpty().run(req);
-    await body("lastName").notEmpty().run(req);
-    await body("password").notEmpty().run(req);
-
     const { type } = req.body;
 
-    let user;
+    await validateUserRegisterBase({ req, optional: false });
+
+    if (type === UserDiscriminator.ORGANIZATION) {
+      await validateUserRegisterOrg({ req, optional: false });
+    }
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      res.status(400).json({ errors: errors.array({ onlyFirstError: true }) });
+      return;
+    }
+
+    let user: UserDocument | undefined;
 
     switch (type) {
       case UserDiscriminator.INDIVIDUAL:
@@ -113,6 +124,9 @@ export class AuthController {
           if (err) {
             return next(err);
           }
+          if (user === undefined) {
+            throw new InvalidOperationError("User is undefined.");
+          }
           log(`User ${user.id} registered.`);
           res.status(200).json(UserDto.fromDocument(user));
         });
@@ -122,12 +136,15 @@ export class AuthController {
     }
   });
 
-  private async registerIndividualUser<P, ResBody, ReqBody, ReqQuery>(
+  private async registerIndividualUser(
     req: Request<ParamsDictionary, any, any, QueryString.ParsedQs>
   ) {
-    const { username, email, firstName, lastName, password } = req.body;
+    // * validation already happened in parent function
+    const { displayName, username, email, firstName, lastName, password } =
+      req.body;
     return await UserModel.register(
       new IndividualUserModel({
+        displayName,
         username,
         email,
         firstName,
@@ -137,17 +154,11 @@ export class AuthController {
     );
   }
 
-  private async registerOrganizationUser<P, ResBody, ReqBody, ReqQuery>(
+  private async registerOrganizationUser(
     req: Request<ParamsDictionary, any, any, QueryString.ParsedQs>
   ) {
-    await body("phone").notEmpty().run(req);
-    await body("organization").notEmpty().run(req);
-    await body("streetAddress").notEmpty().run(req);
-    await body("postalCode").notEmpty().run(req);
-    await body("city").notEmpty().run(req);
-    await body("province").notEmpty().run(req);
     const {
-      type,
+      displayName,
       username,
       email,
       firstName,
@@ -163,12 +174,12 @@ export class AuthController {
 
     return await UserModel.register(
       new OrganizationUserModel({
+        displayName,
         username,
         email,
         firstName,
         lastName,
         organization: {
-          type,
           name: organization,
           phone,
           address: {

@@ -126,6 +126,7 @@ export const UserDetails = ({
     username,
     verified,
     email,
+    displayName,
     firstName,
     lastName,
     active,
@@ -142,7 +143,7 @@ export const UserDetails = ({
       <div className="flex justify-between items-center">
         <h2 className="text-base font-semibold leading-6 text-gray-900">
           <Badge color={getColorForBadge(role)} text={t(`users.${role}`)} />
-          <span className="ml-2">{username}</span>{" "}
+          <span className="ml-2">{displayName}</span>{" "}
         </h2>
         <div className="flex items-center gap-2">
           {getStatusIndicator(verified)}
@@ -157,6 +158,17 @@ export const UserDetails = ({
           {t("users.user_information")}
         </h2>
         <dl className="mt-6 text-sm leading-6">
+          <div>
+            <dt className="inline text-gray-500 mr-3">
+              {t("users.display_name")}
+            </dt>
+            <dd className="inline text-gray-700">{displayName}</dd>
+          </div>
+          <div>
+            <dt className="inline text-gray-500 mr-3">{t("users.username")}</dt>
+            <dd className="inline text-gray-700">{username}</dd>
+          </div>
+
           <div>
             <dt className="inline text-gray-500 mr-3">{t("users.name")}</dt>
             <dd className="inline text-gray-700">

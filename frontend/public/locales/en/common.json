@@ -96,7 +96,9 @@
     "activate": "Activate",
     "activate_confirm_title": "Are you sure you want to activate?",
     "deactivate": "Deactivate",
-    "deactivate_confirm_title": "Are you sure you want to deactivate?"
+    "deactivate_confirm_title": "Are you sure you want to deactivate?",
+    "display_name": "Display name",
+    "username": "Username"
   },
   "user_actions": {
     "open_user_menu": "Open user menu",

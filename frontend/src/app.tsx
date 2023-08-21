@@ -3,8 +3,8 @@ import { OrganizationAccount } from "@pages/Register/OrganizationAccount";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
 // * Various React page components
+import { RequireAuth } from "@components/RequireAuth";
 import { UserRole } from "@constants";
-import { RequireAuth } from "@features/auth";
 import {
   AboutUsPage,
   AdminPostDetailsPage,

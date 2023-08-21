@@ -5,11 +5,10 @@ import { AddressSchema } from "../common";
 import UserModel from "./user.base.model";
 
 const OrganizationSchema: Schema<Organization> = new Schema({
-  name: { type: String, required: true },
-  address: { type: AddressSchema, required: true },
-  phone: { type: String, required: true },
-  type: { type: String, required: false },
+  name: { type: String, minlength: 3, maxlength: 1024, required: true },
+  phone: { type: String, minlength: 10, maxlength: 20, required: true },
   verified: { type: Boolean, default: false, required: true },
+  address: { type: AddressSchema, required: true },
 });
 
 const OrganizationUserSchema: Schema<OrganizationUser> = new Schema({

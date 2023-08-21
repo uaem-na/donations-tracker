@@ -17,6 +17,7 @@ export const fakeAdminUser = async (
     firstName: faker.person.firstName(),
     email: faker.internet.email(),
     username: username,
+    displayName: faker.internet.displayName(),
     location: {
       lat: faker.location.latitude(),
       lng: faker.location.longitude(),
@@ -39,6 +40,7 @@ export const fakeOrganizationUser = async (
     firstName: faker.person.firstName(),
     email: faker.internet.email(),
     username: username,
+    displayName: faker.internet.displayName(),
     location: {
       lat: faker.location.latitude(),
       lng: faker.location.longitude(),
@@ -72,6 +74,7 @@ export const fakeIndividualUser = async (
     lastName: faker.person.lastName(),
     firstName: faker.person.firstName(),
     email: faker.internet.email(),
+    displayName: faker.internet.displayName(),
     username: username,
     location: {
       lat: faker.location.latitude(),
