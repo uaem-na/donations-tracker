@@ -8,8 +8,8 @@ import {
 import { Address } from "../../types";
 
 export const AddressSchema: Schema<Address> = new Schema({
-  street: { type: String, required: true },
-  city: { type: String, required: true },
+  street: { type: String, minlength: 3, maxlength: 256, required: true },
+  city: { type: String, minlength: 3, maxlength: 256, required: true },
   province: {
     type: String,
     required: true,

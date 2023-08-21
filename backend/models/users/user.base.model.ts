@@ -39,6 +39,8 @@ const UserSchema: Schema<UserDocument & PassportLocalDocument> = new Schema({
   displayName: {
     type: String,
     required: true,
+    minlength: 3,
+    maxlength: 32,
     validate: {
       validator: validateDisplayNameFormat,
       message: (props: any) => `${props.value} is not a valid display name!`,
@@ -48,6 +50,8 @@ const UserSchema: Schema<UserDocument & PassportLocalDocument> = new Schema({
   firstName: {
     type: String,
     required: true,
+    minlength: 1,
+    maxlength: 32,
     validate: {
       validator: validateNameFormat,
       message: (props: any) => `${props.value} is not a valid first name!`,
@@ -56,6 +60,8 @@ const UserSchema: Schema<UserDocument & PassportLocalDocument> = new Schema({
   lastName: {
     type: String,
     required: true,
+    minlength: 1,
+    maxlength: 32,
     validate: {
       validator: validateNameFormat,
       message: (props: any) => `${props.value} is not a valid last name!`,
