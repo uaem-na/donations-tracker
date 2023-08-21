@@ -10,6 +10,8 @@ import { tryParsePaginationQuery, tryParsePostFilterQuery } from "../utils";
 import {
   validatePaginationRequest,
   validatePostsFilterRequest,
+  validateUpdatePassword,
+  validateUpdateUserInfo,
 } from "./validators";
 
 const log = debug("backend:user");
@@ -28,36 +30,32 @@ export class UserController {
   });
 
   updateUser = expressAsyncHandler(async (req, res, next) => {
-    await body("firstName").notEmpty().run(req);
-    await body("lastName").notEmpty().run(req);
+    await validateUpdateUserInfo({ req, optional: false });
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      res.status(400).json({ errors: errors.array() });
+      res.status(400).json({ errors: errors.array({ onlyFirstError: true }) });
       return;
     }
 
-    const { firstName, lastName } = req.body;
-    const currentUser = req.user as UserDto;
-    const currentUserId = currentUser.id as string;
-    const updatedUser = await this.userService.updateUser(currentUserId, {
+    const { displayName, firstName, lastName } = req.body;
+    const updatedUser = await this.userService.updateUser(req.user!.id, {
+      displayName,
       firstName,
       lastName,
     });
 
-    log(`Updated user ${currentUserId}.`);
+    log(`Updated user ${req.user!.id}.`);
 
     res.status(200).json(UserDto.fromDocument(updatedUser));
   });
 
   updatePassword = expressAsyncHandler(async (req, res, next) => {
-    await body("password").notEmpty().run(req);
-    await body("newPassword").notEmpty().run(req);
-    await body("confirmNewPassword").notEmpty().run(req);
+    await validateUpdatePassword({ req, optional: false });
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      res.status(400).json({ errors: errors.array() });
+      res.status(400).json({ errors: errors.array({ onlyFirstError: true }) });
       return;
     }
 
@@ -70,7 +68,7 @@ export class UserController {
     }
 
     const currentUser = req.user as UserDto;
-    const currentUserId = currentUser.id as string;
+    const currentUserId = currentUser.id;
     const updatedUser = await this.userService.updatePassword(
       currentUserId,
       password,

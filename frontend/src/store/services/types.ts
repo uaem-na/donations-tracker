@@ -75,6 +75,7 @@ export namespace ApiModel {
 export namespace ApiResponse {
   export type Session = {
     id: string;
+    displayName: string;
     username: string;
     email: string;
     role: string;

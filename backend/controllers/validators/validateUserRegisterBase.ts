@@ -22,6 +22,16 @@ export const validateUserRegisterBase = async ({
       min: 3,
       max: 32,
     });
+
+  let validateDisplayName = body("displayName")
+    .trim()
+    .notEmpty()
+    .isString()
+    .isLength({
+      min: 3,
+      max: 32,
+    });
+
   let validateEmail = body("email").trim().notEmpty().isEmail();
 
   let validateFirstName = body("firstName")
@@ -54,6 +64,7 @@ export const validateUserRegisterBase = async ({
   if (optional) {
     validateType = validateType.optional();
     validateUsername = validateUsername.optional();
+    validateDisplayName = validateDisplayName.optional();
     validateEmail = validateEmail.optional();
     validateFirstName = validateFirstName.optional();
     validateLastName = validateLastName.optional();
@@ -63,6 +74,7 @@ export const validateUserRegisterBase = async ({
   return await Promise.all([
     validateType.run(req),
     validateUsername.run(req),
+    validateDisplayName.run(req),
     validateEmail.run(req),
     validateFirstName.run(req),
     validateLastName.run(req),

@@ -1,12 +1,12 @@
 import { Alert } from "@components";
 import { Button, Input } from "@components/Controls";
 import { useToast } from "@components/Toast";
-import { updatePasswordSchema } from "@features/YupSchemas";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Label } from "@radix-ui/react-label";
 import { useChangePasswordMutation } from "@services/api";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { updatePasswordSchema } from "./schemas/UpdatePasswordSchema";
 
 export const UpdatePasswordForm = () => {
   const toast = useToast();

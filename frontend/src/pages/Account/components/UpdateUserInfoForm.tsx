@@ -1,7 +1,6 @@
 import { Alert } from "@components";
 import { Button, Input, Tooltip } from "@components/Controls";
 import { useToast } from "@components/Toast";
-import { updateUserInfoSchema } from "@features/YupSchemas";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -9,6 +8,17 @@ import { Label } from "@radix-ui/react-label";
 import { useGetSessionQuery, useUpdateUserMutation } from "@services/api";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { updateUserInfoSchema } from "./schemas/UpdateUserInfoSchema";
+
+const Heading = (text: string) => {
+  return (
+    <div className="md:col-span-1">
+      <h2 className="text-base font-semibold leading-7 text-gray-900">
+        {text}
+      </h2>
+    </div>
+  );
+};
 
 export const UpdateUserInfoForm = () => {
   const toast = useToast();
@@ -27,6 +37,7 @@ export const UpdateUserInfoForm = () => {
       defaultValues: {
         firstName: session.firstName,
         lastName: session.lastName,
+        displayName: session.displayName,
       },
     }),
   });
@@ -50,6 +61,7 @@ export const UpdateUserInfoForm = () => {
   // handle server error message
   useEffect(() => {
     if (error) {
+      console.log(error);
       if ("status" in error) {
         const err: any = "error" in error ? error.error : error.data;
         setServerMessage(err.errors.join(",") ?? "An error occurred");
@@ -58,16 +70,6 @@ export const UpdateUserInfoForm = () => {
       }
     }
   }, [error]);
-
-  const Heading = (text: string) => {
-    return (
-      <div className="md:col-span-1">
-        <h2 className="text-base font-semibold leading-7 text-gray-900">
-          {text}
-        </h2>
-      </div>
-    );
-  };
 
   return (
     <form
@@ -90,6 +92,21 @@ export const UpdateUserInfoForm = () => {
                 placeholder="username"
                 disabled={true}
                 value={session?.username}
+              />
+            </div>
+          </div>
+
+          <div className="col-span-full">
+            <Label htmlFor="displayName">Display name</Label>
+            <div className="mt-2">
+              <Input
+                {...register("displayName")}
+                type="text"
+                name="displayName"
+                id="displayName"
+                autoComplete="nickname"
+                placeholder="Display name"
+                errorMessage={errors.displayName?.message}
               />
             </div>
           </div>
