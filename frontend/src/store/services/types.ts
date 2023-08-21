@@ -16,12 +16,10 @@ export namespace ApiModel {
     countryCode: string;
   };
 
-  export type PostAuthor = {
-    firstName: string;
-    id: string;
-    lastName: string;
-    email: string;
-  };
+  export type PostAuthor = Pick<
+    User,
+    "id" | "displayName" | "email" | "firstName" | "lastName"
+  >;
 
   export type PostItem = {
     name: string;
@@ -62,6 +60,7 @@ export namespace ApiModel {
     username: string;
     email: string;
     role: string;
+    displayName: string;
     firstName: string;
     lastName: string;
     verified: boolean;

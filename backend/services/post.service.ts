@@ -49,7 +49,7 @@ export class PostService {
       .sort(sort)
       .skip((page - 1) * limit)
       .limit(limit)
-      .populate("author", "role firstName lastName userName -__t");
+      .populate("author", "role displayName -__t");
 
     return [posts, await PostModel.countDocuments(filter)];
   }
@@ -59,7 +59,7 @@ export class PostService {
       ...(filter && { ...filter }),
     })
       .sort({ updatedAt: -1, createdAt: -1 })
-      .populate("author", "firstName lastName userName -__t");
+      .populate("author", "displayName -__t");
 
     return posts;
   }

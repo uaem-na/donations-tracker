@@ -36,7 +36,7 @@ export const UserList = ({ users }: UserListProps) => {
           <UserItem
             key={user.id}
             id={user.id}
-            displayName={user.firstName + " " + user.lastName}
+            displayName={user.displayName}
             verified={user.verified}
             type={user.role}
           />
