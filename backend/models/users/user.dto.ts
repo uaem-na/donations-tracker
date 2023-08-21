@@ -10,6 +10,7 @@ type UserLocationDto = Omit<Location, "_id"> & {
 
 export class UserDto {
   id: string;
+  displayName: string;
   username: string;
   email: string;
   firstName: string;
@@ -38,9 +39,18 @@ export class UserDto {
     | undefined;
 
   private constructor(id: string, user: User | OrganizationUser) {
-    const { username, email, firstName, lastName, location, role } = user;
+    const {
+      displayName,
+      username,
+      email,
+      firstName,
+      lastName,
+      location,
+      role,
+    } = user;
 
     this.id = id;
+    this.displayName = displayName;
     this.username = username;
     this.email = email;
     this.firstName = firstName;

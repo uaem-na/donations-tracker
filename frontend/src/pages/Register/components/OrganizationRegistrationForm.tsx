@@ -114,6 +114,20 @@ export const OrganizationRegistrationForm = () => {
         </div>
       </div>
 
+      <div>
+        <Label htmlFor="displayName">Display name</Label>
+        <div className="mt-2">
+          <Input
+            {...register("displayName")}
+            id="displayName"
+            type="text"
+            autoComplete="nickname"
+            placeholder="Display name"
+            errorMessage={errors.displayName?.message}
+          />
+        </div>
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-6">
         <div>
           <Label htmlFor="firstName">First name</Label>

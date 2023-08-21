@@ -21,6 +21,10 @@ const validateNameFormat = (val: string) => {
   return /^[a-zA-ZÀ-ÖØ-öø-ÿ-' ]+$/.test(val);
 };
 
+const validateDisplayNameFormat = (val: string) => {
+  return /^[0-9a-zA-ZÀ-ÖØ-öø-ÿ-_.]+$/.test(val);
+};
+
 // ! TODO: reset password mechanism
 const UserSchema: Schema<UserDocument & PassportLocalDocument> = new Schema({
   email: {
@@ -30,6 +34,16 @@ const UserSchema: Schema<UserDocument & PassportLocalDocument> = new Schema({
       validator: validateEmailFormat,
       message: (props: any) => `${props.value} is not a valid email address!`,
     },
+    unique: true,
+  },
+  displayName: {
+    type: String,
+    required: true,
+    validate: {
+      validator: validateDisplayNameFormat,
+      message: (props: any) => `${props.value} is not a valid display name!`,
+    },
+    unique: true,
   },
   firstName: {
     type: String,

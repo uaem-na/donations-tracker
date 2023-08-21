@@ -55,7 +55,7 @@ export type Organization = {
 // * User model related types
 export type User = {
   _id: string;
-  kind: string; // ! discriminator key
+  displayName: string;
   username: string;
   email: string;
   recoveryEmail: string;

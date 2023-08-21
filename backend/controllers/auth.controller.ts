@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import debug from "debug";
 import { Request } from "express";
 import expressAsyncHandler from "express-async-handler";
@@ -125,9 +126,11 @@ export class AuthController {
   private async registerIndividualUser<P, ResBody, ReqBody, ReqQuery>(
     req: Request<ParamsDictionary, any, any, QueryString.ParsedQs>
   ) {
-    const { username, email, firstName, lastName, password } = req.body;
+    const { displayName, username, email, firstName, lastName, password } =
+      req.body;
     return await UserModel.register(
       new IndividualUserModel({
+        displayName,
         username,
         email,
         firstName,
@@ -148,6 +151,7 @@ export class AuthController {
     await body("province").notEmpty().run(req);
     const {
       type,
+      displayName,
       username,
       email,
       firstName,
@@ -163,6 +167,7 @@ export class AuthController {
 
     return await UserModel.register(
       new OrganizationUserModel({
+        displayName,
         username,
         email,
         firstName,

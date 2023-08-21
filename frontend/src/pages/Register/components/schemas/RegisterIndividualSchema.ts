@@ -4,6 +4,15 @@ import YupPassword from "yup-password";
 YupPassword(yup); // ! extend yup for password validation
 
 export const registerIndividualSchema = yup.object().shape({
+  displayName: yup
+    .string()
+    .min(3, "Must be 3 characters or more")
+    .max(32, "Must be less than 32 characters")
+    .matches(
+      /[0-9a-zA-ZÀ-ÖØ-öø-ÿ-_.]+$/,
+      "Must contain only letters, numbers, and symbols(-_.)"
+    )
+    .required("Display name is required"),
   username: yup
     .string()
     .min(3, "Must be 3 characters or more")

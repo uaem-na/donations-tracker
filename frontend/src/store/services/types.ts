@@ -185,6 +185,7 @@ export namespace MutationArgs {
     };
 
     export type IndividualRegister = {
+      displayName: string;
       username: string;
       email: string;
       password: string;
@@ -192,12 +193,7 @@ export namespace MutationArgs {
       lastName: string;
     };
 
-    export type OrganizationRegister = {
-      username: string;
-      email: string;
-      password: string;
-      firstName: string;
-      lastName: string;
+    export type OrganizationRegister = IndividualRegister & {
       phone: string;
       organization: string;
       streetAddress: string;
