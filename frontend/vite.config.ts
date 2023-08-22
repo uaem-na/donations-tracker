@@ -11,6 +11,9 @@ export default defineConfig({
   server: {
     host: true, // required for docker container to export port
     port: 8080,
+    watch: {
+      usePolling: true,
+    },
   },
   plugins: [react(), viteTsconfigPaths(), svgrPlugin()],
 });

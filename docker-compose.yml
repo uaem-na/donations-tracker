@@ -36,9 +36,6 @@ services:
     container_name: donations-tracker-frontend
     environment:
       PORT: 8080
-      WDS_SOCKET_HOST: 127.0.0.1 
-      CHOKIDAR_USEPOLLING: true
-      WATCHPACK_POLLING: true
     ports:
       - 8080:8080
     networks:
