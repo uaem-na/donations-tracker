@@ -51,7 +51,7 @@ export class PostService {
       .limit(limit)
       .populate("author", "role displayName -__t");
 
-    return [posts, await PostModel.countDocuments(filter)];
+    return [posts || [], await PostModel.countDocuments(filter)];
   }
 
   async getPosts(filter?: FilterQuery<PostDocument>): Promise<PostDocument[]> {
@@ -61,7 +61,7 @@ export class PostService {
       .sort({ updatedAt: -1, createdAt: -1 })
       .populate("author", "displayName -__t");
 
-    return posts;
+    return posts || [];
   }
 
   async getPost(id: string): Promise<PostDocument | null> {
