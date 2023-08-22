@@ -194,6 +194,11 @@ const GoogleMap = ({
       const coords = postsResponse.data.map((post) => {
         return [post.location.lat!, post.location.lng!, post.id];
       });
+
+      if (coords.length === 0) {
+        return;
+      }
+
       const cluster = new GeoCluster(coords, zoomBias);
       const postCluster: Cluster[] = cluster.getGeoCluster();
       setPostCluster(postCluster);
