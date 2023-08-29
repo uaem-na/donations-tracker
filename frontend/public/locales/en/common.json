@@ -6,6 +6,7 @@
   "remove": "Remove",
   "cancel": "Cancel",
   "submit": "Submit",
+  "report": "Report",
   "activate": "Activate",
   "deactivate": "Deactivate",
   "loading": "Loading...",
@@ -66,6 +67,10 @@
       "toy": "Toy",
       "other": "Other"
     }
+  },
+  "reports": {
+    "notes": "Notes",
+    "reason": "Please add your reason for reporting this post."
   },
   "users": {
     "title": "Users",

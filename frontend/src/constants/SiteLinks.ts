@@ -3,6 +3,7 @@ import {
   faCircleQuestion,
   faClipboardCheck,
   faFileSignature,
+  faFlag,
   faHome,
   faPersonCircleQuestion,
   faUsers,
@@ -29,6 +30,12 @@ export const siteLinks: ISiteLinks[] = [
     path: "/posts",
     menu: true,
     icon: faFileSignature,
+  },
+  {
+    name: "Reports",
+    path: "/reports",
+    menu: true,
+    icon: faFlag,
   },
   { name: "FAQ", path: "/faq", menu: true, icon: faCircleQuestion },
   {

@@ -6,7 +6,7 @@ import { UserDto } from "../users";
 export class ReportDto {
   id: string;
   reporter: UserDto;
-  resolver: UserDto;
+  resolver: UserDto | null;
   post: PostDto;
   status: "resolved" | "unresolved";
   notes: string;
@@ -14,7 +14,7 @@ export class ReportDto {
   private constructor(id: string, report: Report) {
     const { reporter, resolver, post, status, notes } = report;
     this.id = id;
-    this.reporter = UserDto.fromUser(reporter);
+    this.reporter = UserDto.fromUser(reporter)!;
     this.resolver = UserDto.fromUser(resolver);
     this.post = PostDto.fromPost(post);
     this.status = status;

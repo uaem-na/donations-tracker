@@ -378,6 +378,13 @@ export const api = createApi({
         { type: "users", id: args.userId },
       ],
     }),
+    reportPost: builder.mutation<unknown, MutationArgs.Reports.CreateReport>({
+      query: ({ postId, notes }) => ({
+        url: `reports`,
+        method: "POST",
+        body: { postId, notes },
+      }),
+    }),
   }),
 });
 
@@ -412,6 +419,7 @@ export const {
   useGetPostsAdminQuery,
   useApprovePostAdminMutation,
   useRejectPostAdminMutation,
+  useReportPostMutation,
 } = api;
 
 export * from "./types";

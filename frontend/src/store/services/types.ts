@@ -161,6 +161,8 @@ export namespace QueryArgs {
     };
   }
 
+  export namespace Reports {}
+
   export namespace Users {
     export type GetUser = {
       userId: string;
@@ -222,6 +224,13 @@ export namespace MutationArgs {
 
     export type VerifyUser = {
       userId: string;
+    };
+  }
+
+  export namespace Reports {
+    export type CreateReport = {
+      postId: string;
+      notes: string;
     };
   }
 }

@@ -6,6 +6,7 @@
   "remove": "Supprimer",
   "cancel": "Annuler",
   "submit": "Soumettre",
+  "report": "Rapport",
   "activate": "Activer",
   "deactivate": "Désactiver",
   "loading": "Chargement...",
@@ -66,6 +67,10 @@
       "toy": "Jouet",
       "other": "Autre"
     }
+  },
+  "reports": {
+    "notes": "Remarques",
+    "reason": "Please add your reason for reporting this post."
   },
   "users": {
     "title": "Utilisateurs",

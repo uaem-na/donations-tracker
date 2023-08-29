@@ -32,7 +32,7 @@ export class PostDto {
     this.createdAt = post.createdAt.toISOString();
     this.updatedAt = post.updatedAt.toISOString();
 
-    this.author = UserDto.fromUser(author);
+    this.author = UserDto.fromUser(author)!;
 
     if (location) {
       this.location = LocationDto.fromLocation(location);
