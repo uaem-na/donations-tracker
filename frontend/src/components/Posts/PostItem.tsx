@@ -88,7 +88,7 @@ export const PostItem = ({
         <div className="grow flex gap-x-4">
           <div className="min-w-0 flex-auto">
             <p className="text-sm font-semibold leading-6 text-gray-900">
-              <Link to={`${id}`}>
+              <Link to={`/posts/${id}`}>
                 <span className="absolute inset-0 -mx-4 -my-5"></span>
                 <Badge
                   color={type === "offer" ? "purple" : "blue"}
