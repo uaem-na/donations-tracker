@@ -69,6 +69,7 @@
     }
   },
   "reports": {
+    "manage_reported_posts": "Manage reported posts",
     "notes": "Notes",
     "reason": "Please add your reason for reporting this post."
   },

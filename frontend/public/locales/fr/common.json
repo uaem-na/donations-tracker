@@ -69,8 +69,9 @@
     }
   },
   "reports": {
+    "manage_reported_posts": "Gérer les publications signalées",
     "notes": "Remarques",
-    "reason": "Please add your reason for reporting this post."
+    "reason": "Veuillez ajouter la raison pour laquelle vous signalez ce message."
   },
   "users": {
     "title": "Utilisateurs",
