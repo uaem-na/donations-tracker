@@ -25,7 +25,7 @@ import {
   SecurityPage,
 } from "@pages";
 import AdminPostsPage from "@pages/Admin/Posts";
-import { ReportsPage } from "@pages/Reports/Reports";
+import { ReportsPage } from "@pages/Admin/Reports";
 import { Layout } from "layout";
 
 function App() {
@@ -77,6 +77,15 @@ function App() {
                   </RequireAuth>
                 }
               />
+
+              <Route
+                path="reports"
+                element={
+                  <RequireAuth>
+                    <ReportsPage />
+                  </RequireAuth>
+                }
+              />
             </Route>
 
             {/* Private pages */}
@@ -121,15 +130,6 @@ function App() {
               element={
                 <RequireAuth>
                   <EditPostPage />
-                </RequireAuth>
-              }
-            />
-
-            <Route
-              path="/reports"
-              element={
-                <RequireAuth>
-                  <ReportsPage />
                 </RequireAuth>
               }
             />

@@ -13,7 +13,7 @@ import {
 import { faCancel, faFlag } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { CreateReportSchema } from "@pages/Reports/components/schemas/CreateReportSchema";
+import { CreateReportSchema } from "@pages/Admin/components/schemas/CreateReportSchema";
 import { DialogClose } from "@radix-ui/react-dialog";
 import { useReportPostMutation } from "@services/api";
 import { PropsWithChildren, useEffect, useMemo, useState } from "react";

@@ -13,7 +13,7 @@ import {
 import { PostType } from "@constants";
 import { faCancel, faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { CreateReportFormDialog } from "@pages/Reports/components/CreateReportFormDialog";
+import { CreateReportFormDialog } from "@pages/Admin/components/CreateReportFormDialog";
 import { DialogClose } from "@radix-ui/react-dialog";
 import {
   useDeletePostMutation,

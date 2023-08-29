@@ -31,12 +31,6 @@ export const siteLinks: ISiteLinks[] = [
     menu: true,
     icon: faFileSignature,
   },
-  {
-    name: "Reports",
-    path: "/reports",
-    menu: true,
-    icon: faFlag,
-  },
   { name: "FAQ", path: "/faq", menu: true, icon: faCircleQuestion },
   {
     name: "Users",
@@ -50,6 +44,13 @@ export const siteLinks: ISiteLinks[] = [
     path: "/admin/posts",
     menu: true,
     icon: faClipboardCheck,
+    adminOnly: true,
+  },
+  {
+    name: "Reports",
+    path: "/admin/reports",
+    menu: true,
+    icon: faFlag,
     adminOnly: true,
   },
 ];
