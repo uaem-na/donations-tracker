@@ -47,6 +47,15 @@ export namespace ApiModel {
     location: Location;
   };
 
+  export type Report = {
+    id: string;
+    reporter: User;
+    resolver?: User;
+    post: Post;
+    status: "resolved" | "unresolved";
+    notes: string;
+  };
+
   export type UserOrganization = {
     name: string;
     address: Address;
@@ -161,6 +170,14 @@ export namespace QueryArgs {
     };
   }
 
+  export namespace Reports {
+    export type GetPaginatedReportedPosts = Pagination;
+
+    export type ReportedPost = {
+      postId: string;
+    };
+  }
+
   export namespace Users {
     export type GetUser = {
       userId: string;
@@ -222,6 +239,18 @@ export namespace MutationArgs {
 
     export type VerifyUser = {
       userId: string;
+    };
+  }
+
+  export namespace Reports {
+    export type CreateReport = {
+      postId: string;
+      notes: string;
+    };
+
+    export type UpdateReport = {
+      id: string;
+      status: "resolved" | "unresolved";
     };
   }
 }

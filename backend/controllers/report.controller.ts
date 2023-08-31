@@ -3,8 +3,11 @@ import expressAsyncHandler from "express-async-handler";
 import { body, param, validationResult } from "express-validator";
 import { AuthorizationError, NotFoundError, ValidationError } from "../errors";
 import { ReportDto } from "../models/reports";
+import { ReportedPostDto } from "../models/reports/report.dto";
 import { PostService, ReportService, UserService } from "../services";
-import { hasUser } from "./validators";
+import { PaginatedResponse } from "../types";
+import { tryParsePaginationQuery } from "../utils";
+import { hasUser, validatePaginationRequest } from "./validators";
 
 const log = debug("backend:report");
 
@@ -16,10 +19,32 @@ export class ReportController {
   ) {}
 
   getAllReports = expressAsyncHandler(async (req, res, next) => {
-    const reports = await this.reportService.getReports();
-    const reportDtos = reports.map((report) => ReportDto.fromDocument(report));
+    await validatePaginationRequest({ req, optional: false });
 
-    res.json(reportDtos || []);
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      res.status(400).json({ errors: errors.array({ onlyFirstError: true }) });
+      return;
+    }
+
+    const { page, limit } = tryParsePaginationQuery(req);
+
+    const [reports, count] = await this.reportService.getReportedPosts(
+      page,
+      limit
+    );
+    const reportDtos = reports.map((report) =>
+      ReportedPostDto.fromDocument(report)
+    );
+
+    const response: PaginatedResponse<ReportedPostDto> = {
+      data: reportDtos || [],
+      page: page,
+      per_page: limit,
+      total: count,
+    };
+
+    res.json(response);
   });
 
   createReport = expressAsyncHandler(async (req, res, next) => {
@@ -63,7 +88,7 @@ export class ReportController {
     res.status(201).json(ReportDto.fromDocument(report));
   });
 
-  getReport = expressAsyncHandler(async (req, res, next) => {
+  getReportedPost = expressAsyncHandler(async (req, res, next) => {
     await param("id").notEmpty().run(req);
 
     const errors = validationResult(req);
@@ -72,13 +97,17 @@ export class ReportController {
     }
 
     const { id } = req.params;
-    const report = await this.reportService.getReport(id);
+    const reports = await this.reportService.getReportedPost(id);
 
-    if (!report) {
+    if (!reports) {
       throw new NotFoundError(`Error finding report ${id}.`);
     }
 
-    res.status(200).json(ReportDto.fromDocument(report));
+    const reportDtos = reports.map((report) => {
+      return ReportDto.fromDocument(report);
+    });
+
+    res.json(reportDtos || []);
   });
 
   updateReportStatus = expressAsyncHandler(async (req, res, next) => {

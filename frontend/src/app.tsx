@@ -25,6 +25,8 @@ import {
   SecurityPage,
 } from "@pages";
 import AdminPostsPage from "@pages/Admin/Posts";
+import { ReportDetailsPage } from "@pages/Admin/ReportDetails";
+import { ReportsPage } from "@pages/Admin/Reports";
 import { Layout } from "layout";
 
 function App() {
@@ -73,6 +75,24 @@ function App() {
                 element={
                   <RequireAuth role={UserRole.ADMIN}>
                     <AdminPostDetailsPage />
+                  </RequireAuth>
+                }
+              />
+
+              <Route
+                path="reports"
+                element={
+                  <RequireAuth>
+                    <ReportsPage />
+                  </RequireAuth>
+                }
+              />
+
+              <Route
+                path="reports/post/:id"
+                element={
+                  <RequireAuth>
+                    <ReportDetailsPage />
                   </RequireAuth>
                 }
               />

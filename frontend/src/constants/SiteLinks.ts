@@ -3,6 +3,7 @@ import {
   faCircleQuestion,
   faClipboardCheck,
   faFileSignature,
+  faFlag,
   faHome,
   faPersonCircleQuestion,
   faUsers,
@@ -43,6 +44,13 @@ export const siteLinks: ISiteLinks[] = [
     path: "/admin/posts",
     menu: true,
     icon: faClipboardCheck,
+    adminOnly: true,
+  },
+  {
+    name: "Reports",
+    path: "/admin/reports",
+    menu: true,
+    icon: faFlag,
     adminOnly: true,
   },
 ];

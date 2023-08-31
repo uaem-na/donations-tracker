@@ -17,7 +17,7 @@ const reportController = new ReportController(
 // * wire up routes with controller
 router.post("/", ensureAuthenticated, reportController.createReport);
 router.get("/", ensureAuthenticated, reportController.getAllReports);
-router.get("/:id", ensureAuthenticated, reportController.getReport);
+router.get("/post/:id", ensureAuthenticated, reportController.getReportedPost);
 router.post("/:id", ensureAuthenticated, reportController.updateReportStatus);
 router.delete("/:id", ensureAuthenticated, reportController.deleteReport);
 router.get(

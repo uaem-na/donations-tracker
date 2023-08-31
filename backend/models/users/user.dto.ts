@@ -96,7 +96,10 @@ export class UserDto {
     return new UserDto(req.user.id, user);
   }
 
-  static fromUser(user: User): UserDto {
-    return new UserDto(user._id, user);
+  static fromUser(user: User): UserDto | null {
+    if (user) {
+      return new UserDto(user._id, user);
+    }
+    return null;
   }
 }

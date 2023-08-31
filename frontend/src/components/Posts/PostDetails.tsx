@@ -13,6 +13,7 @@ import {
 import { PostType } from "@constants";
 import { faCancel, faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { CreateReportFormDialog } from "@pages/Admin/components/CreateReportFormDialog";
 import { DialogClose } from "@radix-ui/react-dialog";
 import {
   useDeletePostMutation,
@@ -31,6 +32,7 @@ interface PostDetailsProps {
   onError: (err) => void;
   redirectOnDelete?: boolean;
   hideEditDelete?: boolean;
+  hideReportButton?: boolean;
 }
 
 /*TODO: add email if current user is logged in*/
@@ -39,6 +41,7 @@ export const PostDetails = ({
   onError,
   redirectOnDelete = true,
   hideEditDelete = false,
+  hideReportButton = false,
 }: PostDetailsProps) => {
   const { t } = useTranslation();
   const { data: currentSession } = useGetSessionQuery();
@@ -184,10 +187,11 @@ export const PostDetails = ({
         </dl>
       </div>
 
-      {!hideEditDelete && (
-        <div>
-          <div className="mt-4 flex justify-end gap-2.5">
-            {currentSession && currentSession.id === post.author.id && (
+      <div>
+        <div className="mt-4 flex justify-end gap-2.5">
+          {!hideEditDelete &&
+            currentSession &&
+            currentSession.id === post.author.id && (
               <>
                 <Button
                   type="button"
@@ -215,41 +219,43 @@ export const PostDetails = ({
                       <DialogTitle>
                         {t("posts.delete_confirm_title")}
                       </DialogTitle>
-                      <DialogDescription>
-                        {t("posts.delete_confirm_description")}
-                      </DialogDescription>
-                      <DialogFooter>
-                        <div className="mt-5 sm:mt-4 flex flex-row-reverse gap-2">
+                    </DialogHeader>
+                    <DialogDescription>
+                      {t("posts.delete_confirm_description")}
+                    </DialogDescription>
+                    <DialogFooter>
+                      <div className="mt-5 sm:mt-4 flex flex-row-reverse gap-2">
+                        <Button
+                          type="button"
+                          intent="danger"
+                          className="flex gap-1.5 justify-center items-center"
+                          onClick={onDelete}
+                        >
+                          <FontAwesomeIcon icon={faTrash} />
+                          {t("delete")}
+                        </Button>
+
+                        <DialogClose asChild>
                           <Button
                             type="button"
-                            intent="danger"
+                            intent="secondary"
                             className="flex gap-1.5 justify-center items-center"
-                            onClick={onDelete}
                           >
-                            <FontAwesomeIcon icon={faTrash} />
-                            {t("delete")}
+                            <FontAwesomeIcon icon={faCancel} />
+                            {t("cancel")}
                           </Button>
-
-                          <DialogClose asChild>
-                            <Button
-                              type="button"
-                              intent="secondary"
-                              className="flex gap-1.5 justify-center items-center"
-                            >
-                              <FontAwesomeIcon icon={faCancel} />
-                              {t("cancel")}
-                            </Button>
-                          </DialogClose>
-                        </div>
-                      </DialogFooter>
-                    </DialogHeader>
+                        </DialogClose>
+                      </div>
+                    </DialogFooter>
                   </DialogContent>
                 </Dialog>
               </>
             )}
-          </div>
+          {!hideReportButton && currentSession && (
+            <CreateReportFormDialog postId={post.id} />
+          )}
         </div>
-      )}
+      </div>
 
       <div className="flex justify-end mt-16">
         <span className="text-xs">

@@ -14,7 +14,7 @@ export const api = createApi({
       return qs.stringify(params, { arrayFormat: "bracket" });
     },
   }),
-  tagTypes: ["session", "posts", "users"],
+  tagTypes: ["session", "posts", "users", "reports", "reported-posts"],
   endpoints: (builder) => ({
     getSession: builder.query<ApiResponse.Session, void>({
       query: () => ({
@@ -66,7 +66,7 @@ export const api = createApi({
         response: ApiResponse.PaginatedList<ApiModel.Post>
       ): ApiResponse.PaginatedList<ApiModel.Post> => {
         const posts = response.data;
-        response.data = posts.map((post) => ({
+        response.data = posts?.map((post) => ({
           ...post,
           createdAt: new Date(post.createdAt).toLocaleDateString(),
           updatedAt: new Date(post.updatedAt).toLocaleDateString(),
@@ -378,6 +378,70 @@ export const api = createApi({
         { type: "users", id: args.userId },
       ],
     }),
+    getReportedPost: builder.query<
+      ApiModel.Report[],
+      QueryArgs.Reports.ReportedPost
+    >({
+      query: ({ postId }) => ({
+        url: `reports/post/${postId}`,
+        method: "GET",
+      }),
+      providesTags: (result): any =>
+        result
+          ? [
+              ...result.map(({ id }) => ({ type: "reports" as const, id })),
+              { type: "reports", id: "reports-list" },
+            ]
+          : [{ type: "reports", id: "reports-list" }],
+    }),
+    getReportedPosts: builder.query<
+      ApiResponse.PaginatedList<{
+        id: string;
+        outstanding_reports: number;
+        post: ApiModel.Post;
+      }>,
+      QueryArgs.Reports.GetPaginatedReportedPosts
+    >({
+      query: (args) => ({
+        url: "reports",
+        method: "GET",
+        params: { ...args },
+      }),
+      providesTags: (result, error, args): any[] =>
+        result
+          ? [
+              ...result.data?.map(({ id }) => ({
+                type: "reported-posts" as const,
+                id,
+              })),
+              { type: "reported-posts", id: "reported-posts-list" },
+            ]
+          : [{ type: "reported-posts", id: "reported-posts-list" }],
+    }),
+    reportPost: builder.mutation<unknown, MutationArgs.Reports.CreateReport>({
+      query: ({ postId, notes }) => ({
+        url: `reports`,
+        method: "POST",
+        body: { postId, notes },
+      }),
+      invalidatesTags: (result, error, args): any => [
+        { type: "reported-posts", id: args.postId },
+      ],
+    }),
+    updateReportPost: builder.mutation<
+      unknown,
+      MutationArgs.Reports.UpdateReport
+    >({
+      query: ({ id, status }) => ({
+        url: `reports/${id}`,
+        method: "POST",
+        body: { id, status },
+      }),
+      invalidatesTags: (result, error, args): any => [
+        { type: "reports", id: args.id },
+        { type: "reports", id: "reports-list" },
+      ],
+    }),
   }),
 });
 
@@ -412,6 +476,10 @@ export const {
   useGetPostsAdminQuery,
   useApprovePostAdminMutation,
   useRejectPostAdminMutation,
+  useGetReportedPostQuery,
+  useGetReportedPostsQuery,
+  useReportPostMutation,
+  useUpdateReportPostMutation,
 } = api;
 
 export * from "./types";
