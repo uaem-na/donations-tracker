@@ -70,8 +70,19 @@
   },
   "reports": {
     "manage_reported_posts": "Gérer les publications signalées",
+    "report_outstanding": "rapport en suspens",
+    "reports_outstanding": "rapports en suspens",
+    "total_reports":"Total des rapports",
+    "view_post_details": "Afficher les détails de la publication",
     "notes": "Remarques",
-    "reason": "Veuillez ajouter la raison pour laquelle vous signalez ce message."
+    "reason": "Veuillez ajouter la raison pour laquelle vous signalez ce message.",
+    "resolved": "Résolue",
+    "unresolved": "Non résolu",
+    "reporter": "Journaliste",
+    "mark_as_resolved": "Marquer comme résolu",
+    "no_reports_found": "Aucun rapport trouvé",
+    "resolution": "Résolution",
+    "confirmation": "Êtes-vous sûr de vouloir marquer ce problème comme résolu ?"
   },
   "users": {
     "title": "Utilisateurs",

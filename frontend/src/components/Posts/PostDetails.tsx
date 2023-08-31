@@ -32,6 +32,7 @@ interface PostDetailsProps {
   onError: (err) => void;
   redirectOnDelete?: boolean;
   hideEditDelete?: boolean;
+  hideReportButton?: boolean;
 }
 
 /*TODO: add email if current user is logged in*/
@@ -40,6 +41,7 @@ export const PostDetails = ({
   onError,
   redirectOnDelete = true,
   hideEditDelete = false,
+  hideReportButton = false,
 }: PostDetailsProps) => {
   const { t } = useTranslation();
   const { data: currentSession } = useGetSessionQuery();
@@ -249,7 +251,9 @@ export const PostDetails = ({
                 </Dialog>
               </>
             )}
-          {currentSession && <CreateReportFormDialog postId={post.id} />}
+          {!hideReportButton && currentSession && (
+            <CreateReportFormDialog postId={post.id} />
+          )}
         </div>
       </div>
 

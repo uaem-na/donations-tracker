@@ -15,6 +15,8 @@ const buttonVariants = cva(
           "bg-red-600 text-white hover:bg-red-500 focus-visible:outline-red-400",
         "outline-danger":
           "bg-white text-red-600 ring-red-600 ring-1 ring-inset hover:bg-red-50",
+        success:
+          "bg-green-600 text-white hover:bg-green-700 focus-visible:outline-green-600",
       },
     },
     defaultVariants: {

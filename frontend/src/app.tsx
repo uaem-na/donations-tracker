@@ -25,6 +25,7 @@ import {
   SecurityPage,
 } from "@pages";
 import AdminPostsPage from "@pages/Admin/Posts";
+import { ReportDetailsPage } from "@pages/Admin/ReportDetails";
 import { ReportsPage } from "@pages/Admin/Reports";
 import { Layout } from "layout";
 
@@ -83,6 +84,15 @@ function App() {
                 element={
                   <RequireAuth>
                     <ReportsPage />
+                  </RequireAuth>
+                }
+              />
+
+              <Route
+                path="reports/post/:id"
+                element={
+                  <RequireAuth>
+                    <ReportDetailsPage />
                   </RequireAuth>
                 }
               />

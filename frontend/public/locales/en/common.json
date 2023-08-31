@@ -70,8 +70,19 @@
   },
   "reports": {
     "manage_reported_posts": "Manage reported posts",
+    "report_outstanding": "report outstanding",
+    "reports_outstanding": "reports outstanding",
+    "total_reports":"Total reports",
+    "view_post_details": "View post details",
     "notes": "Notes",
-    "reason": "Please add your reason for reporting this post."
+    "reason": "Please add your reason for reporting this post.",
+    "resolved": "Resolved",
+    "unresolved": "Unresolved",
+    "reporter": "Reporter",
+    "mark_as_resolved": "Mark as resolved",
+    "no_reports_found": "No reports found",
+    "resolution": "Resolution",
+    "confirmation": "Are you sure you want to mark this as resolved?"
   },
   "users": {
     "title": "Users",
