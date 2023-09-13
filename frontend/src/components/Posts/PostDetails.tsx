@@ -10,6 +10,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@components/Dialog";
+import { SingleMarkerGoogleMap } from "@components/GoogleMapWrapper/SingleMarkerGoogleMap";
 import { PostType } from "@constants";
 import { faCancel, faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -35,7 +36,6 @@ interface PostDetailsProps {
   hideReportButton?: boolean;
 }
 
-/*TODO: add email if current user is logged in*/
 export const PostDetails = ({
   id,
   onError,
@@ -140,20 +140,29 @@ export const PostDetails = ({
         <h2 className="text-base font-semibold leading-6 text-gray-900">
           {t("posts.contact_information")}
         </h2>
-        <dl className="mt-6 text-sm leading-6">
-          <div>
-            <dt className="inline text-gray-500 mr-3">{t("posts.author")}</dt>
-            <dd className="inline text-gray-700">{post.author.displayName}</dd>
-          </div>
-          {currentSession && (
+        <div className="flex flex-col gap-y-4">
+          <dl className="mt-6 text-sm leading-6">
             <div>
-              <dt className="inline text-gray-500 mr-3">{t("email")}</dt>
+              <dt className="inline text-gray-500 mr-3">{t("posts.author")}</dt>
               <dd className="inline text-gray-700">
-                <a href={`mailto:${post.author.email}`}>{post.author.email}</a>
+                {post.author.displayName}
               </dd>
             </div>
-          )}
-        </dl>
+            {currentSession && (
+              <div>
+                <dt className="inline text-gray-500 mr-3">{t("email")}</dt>
+                <dd className="inline text-gray-700">
+                  <a href={`mailto:${post.author.email}`}>
+                    {post.author.email}
+                  </a>
+                </dd>
+              </div>
+            )}
+          </dl>
+          <div className="w-[440px] h-[272px]">
+            <SingleMarkerGoogleMap post={post} />
+          </div>
+        </div>
       </div>
 
       <div className="mt-4 pr-4 py-4">
