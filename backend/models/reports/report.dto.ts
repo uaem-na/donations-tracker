@@ -1,5 +1,5 @@
 import { Document } from "mongoose";
-import { PostDocument, Report } from "../../types";
+import { PostDocument, Report, UserDocument } from "../../types";
 import { PostDto } from "../posts";
 import { UserDto } from "../users";
 
@@ -14,9 +14,9 @@ export class ReportDto {
   private constructor(id: string, report: Report) {
     const { reporter, resolver, post, status, notes } = report;
     this.id = id;
-    this.reporter = UserDto.fromUser(reporter)!;
-    this.resolver = UserDto.fromUser(resolver);
-    this.post = PostDto.fromPost(post);
+    this.reporter = UserDto.fromUserDocument(reporter as UserDocument)!;
+    this.resolver = UserDto.fromUserDocument(resolver as UserDocument);
+    this.post = PostDto.fromPostDocument(post as PostDocument);
     this.status = status;
     this.notes = notes;
   }

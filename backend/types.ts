@@ -18,7 +18,6 @@ export type OptionallyPaginatedListResponse<T> = Omit<
 };
 
 export type Location = {
-  _id: string;
   lat: number;
   lng: number;
   postalCode: string;
@@ -32,8 +31,9 @@ export type ImageFile = {
   contentType: string;
 };
 
+export type ImageFileDocument = ImageFile & Document;
+
 export type Address = {
-  _id: string;
   street: string;
   city: string;
   province: string;
@@ -43,8 +43,9 @@ export type Address = {
   countryCode: string;
 };
 
+export type AddressDocument = Address & Document;
+
 export type Organization = {
-  _id: string;
   name: string;
   address: Address;
   phone: string;
@@ -52,9 +53,10 @@ export type Organization = {
   verified: boolean;
 };
 
+export type OrganizationDocument = Organization & Document;
+
 // * User model related types
 export type User = {
-  _id: string;
   displayName: string;
   username: string;
   email: string;
@@ -89,7 +91,7 @@ export type Report = {
   _id: string;
   reporter: User;
   resolver: User;
-  post: Post;
+  post: Post | PostDocument;
   status: "resolved" | "unresolved";
   notes: string;
 };
@@ -98,7 +100,6 @@ export type ReportDocument = Report & Document;
 
 // * Post model related types
 export type PostItem = {
-  _id: string;
   name: string;
   quantity: number;
   price: number;
@@ -107,12 +108,13 @@ export type PostItem = {
   image: ImageFile;
 };
 
+export type PostItemDocument = PostItem & Document;
+
 export type Post = {
-  _id: string;
   author: User;
   authorType: "individual" | "organization";
-  location: Location;
-  item: PostItem;
+  location: Location | LocationDocument;
+  item: PostItem | PostItemDocument;
   status: "open" | "in-progress" | "closed" | "pending-approval";
   views: number;
   createdAt: Date;

@@ -39,6 +39,12 @@ export const validatePostCreation = async ({
     .isString()
     .isIn(PostCategories);
 
+  let validateLocationPostalCode = body("location.postalCode")
+    .trim()
+    .notEmpty()
+    .isString()
+    .isPostalCode("CA");
+
   // TODO: image not supported for now
   const validateImage = body("item.image").optional().isObject();
   const validateImageData = body("item.image.data")
@@ -59,6 +65,7 @@ export const validatePostCreation = async ({
     validateItemPrice = validateItemPrice.optional();
     validateItemDescription = validateItemDescription.optional();
     validateItemCategory = validateItemCategory.optional();
+    validateLocationPostalCode = validateLocationPostalCode.optional();
   }
 
   await validateType.run(req);
@@ -71,4 +78,5 @@ export const validatePostCreation = async ({
   await validateImage.run(req);
   await validateImageData.run(req);
   await validateImageContentType.run(req);
+  await validateLocationPostalCode.run(req);
 };

@@ -107,7 +107,7 @@ export const CreatePostForm = ({ type }: CreatePostFormProps) => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-x-6 gap-y-6">
           <div>
             <Label htmlFor="category">{t("posts.category")}</Label>
             <div className="mt-2">
@@ -144,6 +144,17 @@ export const CreatePostForm = ({ type }: CreatePostFormProps) => {
                 id="price"
                 type="number"
                 errorMessage={errors.item?.price?.message}
+              />
+            </div>
+          </div>
+          <div>
+            <Label htmlFor="category">{t("posts.postal_code")}</Label>
+            <div className="mt-2">
+              <Input
+                {...register(`location.postalCode`)}
+                id="postalCode"
+                type="text"
+                errorMessage={errors.location?.postalCode?.message}
               />
             </div>
           </div>

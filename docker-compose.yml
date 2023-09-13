@@ -14,6 +14,7 @@ services:
       SESSION_SECRET: top secret
       PORT: 8081
       DEBUG: backend:*
+      GOOGLE_GEOCODE_API_KEY: ${GOOGLE_GEOCODE_API_KEY}
     ports:
       - 8081:8081
     networks:

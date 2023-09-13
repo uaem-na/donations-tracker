@@ -55,6 +55,7 @@
     "new_request": "Je voudrais faire une demande...",
     "delete_confirm_title": "Etes-vous sûr que vous voulez supprimer?",
     "delete_confirm_description": "Cette action ne peut pas être annulée. Cela supprimera définitivement votre message.",
+    "postal_code": "Code postal",
     "item_categories": {
       "book": "Livre",
       "clothing": "Vêtement",
@@ -72,7 +73,7 @@
     "manage_reported_posts": "Gérer les publications signalées",
     "report_outstanding": "rapport en suspens",
     "reports_outstanding": "rapports en suspens",
-    "total_reports":"Total des rapports",
+    "total_reports": "Total des rapports",
     "view_post_details": "Afficher les détails de la publication",
     "notes": "Remarques",
     "reason": "Veuillez ajouter la raison pour laquelle vous signalez ce message.",

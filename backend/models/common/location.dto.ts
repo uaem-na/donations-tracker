@@ -1,5 +1,5 @@
 import { Document } from "mongoose";
-import { Location } from "../../types";
+import { Location, LocationDocument } from "../../types";
 
 export class LocationDto {
   id: string;
@@ -21,7 +21,7 @@ export class LocationDto {
     return new LocationDto(document.id, location);
   }
 
-  static fromLocation(location: Location): LocationDto {
+  static fromLocationDocument(location: LocationDocument): LocationDto {
     return new LocationDto(location._id, location);
   }
 }
