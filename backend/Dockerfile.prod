@@ -4,6 +4,10 @@ FROM node:lts-alpine
 # set the NODE_ENV environment variable to production
 ENV NODE_ENV=production
 
+# get argument for Google Geocode API key
+ARG GOOGLE_GEOCODE_API_KEY
+ENV GOOGLE_GEOCODE_API_KEY=$GOOGLE_GEOCODE_API_KEY
+
 # set all the files in the /backend directory as the working directory
 WORKDIR /backend
 

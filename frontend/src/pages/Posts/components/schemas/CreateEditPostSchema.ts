@@ -1,9 +1,19 @@
 import { TFunction } from "i18next";
 import * as yup from "yup";
 
+const postalCodeRegex = /^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/;
+
 export const CreateEditPostSchema = (t: TFunction) => {
   return yup.object().shape({
     type: yup.string(),
+    location: yup.object().shape({
+      postalCode: yup
+        .string()
+        .matches(postalCodeRegex, t("validation:postal_code.invalid"))
+        .required(
+          t("validation:field_required", { field: t("posts.postal_code") })
+        ),
+    }),
     item: yup.object().shape({
       name: yup
         .string()
@@ -12,6 +22,9 @@ export const CreateEditPostSchema = (t: TFunction) => {
         .required(t("validation:field_required", { field: t("posts.name") })),
       quantity: yup
         .number()
+        .typeError(
+          t("validation:number.type_mismatch", { field: t("posts.quantity") })
+        )
         .default(1)
         .min(1, t("validation:number.too_small", { min: 1 }))
         .required(
@@ -19,6 +32,9 @@ export const CreateEditPostSchema = (t: TFunction) => {
         ),
       price: yup
         .number()
+        .typeError(
+          t("validation:number.type_mismatch", { field: t("posts.price") })
+        )
         .default(0)
         .min(0, t("validation:number.too_small", { min: 0 }))
         .required(t("validation:field_required", { field: t("posts.price") })),

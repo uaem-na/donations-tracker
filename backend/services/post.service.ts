@@ -113,13 +113,15 @@ export class PostService {
       throw new Error(`Error tracking post. User does not exist.`);
     }
 
-    const postExists = user.starred.find(
+    const starredPosts = user.starred as PostDocument[];
+
+    const postExists = starredPosts.find(
       (post) => post._id.toString() === postId
     );
 
     if (postExists) {
       // remove post from user's starred posts
-      user.starred = user.starred.filter(
+      user.starred = starredPosts.filter(
         (post) => post._id.toString() !== postId
       );
       await user.save();

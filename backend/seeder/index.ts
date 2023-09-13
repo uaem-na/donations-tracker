@@ -25,6 +25,6 @@ const seed = async (destroy = false) => {
   console.log("Seeding database...");
 
   const users = await seedUsers(destroy, 5);
-  const posts = await seedPosts(destroy, 5, users);
-  const reports = await seedReports(destroy, users[0], posts);
+  const posts = await seedPosts(destroy, 1, users);
+  await seedReports(destroy, users[0], posts);
 };

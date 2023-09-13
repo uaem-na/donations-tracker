@@ -1,5 +1,13 @@
 import { Document } from "mongoose";
-import { Location, Post, PostItem } from "../../types";
+import {
+  Location,
+  LocationDocument,
+  Post,
+  PostDocument,
+  PostItem,
+  PostItemDocument,
+  UserDocument,
+} from "../../types";
 import { LocationDto } from "../common";
 import { UserDto } from "../users";
 
@@ -32,14 +40,16 @@ export class PostDto {
     this.createdAt = post.createdAt.toISOString();
     this.updatedAt = post.updatedAt.toISOString();
 
-    this.author = UserDto.fromUser(author)!;
+    this.author = UserDto.fromUserDocument(author as UserDocument)!;
 
     if (location) {
-      this.location = LocationDto.fromLocation(location);
+      this.location = LocationDto.fromLocationDocument(
+        location as LocationDocument
+      );
     }
 
     // convert PostItem object to PostItemDto
-    const { _id: itemId, image, ...itemRest } = item;
+    const { _id: itemId, image, ...itemRest } = item as PostItemDocument;
 
     // convert binary image data to base64 string
     const b64Image = image?.data.toString("base64");
@@ -56,7 +66,7 @@ export class PostDto {
     return new PostDto(document.id, post);
   }
 
-  static fromPost(post: Post): PostDto {
+  static fromPostDocument(post: PostDocument): PostDto {
     return new PostDto(post._id, post);
   }
 }

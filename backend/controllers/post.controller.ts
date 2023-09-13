@@ -12,11 +12,13 @@ import { AuthorizationError, NotFoundError, ValidationError } from "../errors";
 import { PostDto } from "../models/posts";
 import { PostService, UserService } from "../services";
 import {
+  Location,
   OptionallyPaginatedListResponse,
   PaginatedResponse,
   PostDocument,
 } from "../types";
 import { tryParsePaginationQuery, tryParsePostFilterQuery } from "../utils";
+import { geocode } from "../utils/geocode";
 import {
   hasUser,
   validateLocale,
@@ -102,17 +104,31 @@ export class PostController {
       throw new ValidationError(errors.array());
     }
 
-    const { type, item } = req.body;
+    const { type, item, location } = req.body;
     const user = await this.userService.getUserByUsername(req.user.username);
     if (!user) {
       throw new NotFoundError(`Error finding user ${req.user.username}.`);
+    }
+
+    const postalCode = location.postalCode as string;
+    const point = await geocode(postalCode);
+    console.log(point);
+    let postLocation: Location;
+    if (point) {
+      postLocation = {
+        lat: point[0],
+        lng: point[1],
+        postalCode,
+      };
+    } else {
+      postLocation = user.location;
     }
 
     const post = await this.postService.createPost({
       type,
       item,
       author: { ...user },
-      location: user.location,
+      location: postLocation,
       status:
         item.category === PostCategory.OTHER
           ? PostStatus.PENDING_APPROVAL

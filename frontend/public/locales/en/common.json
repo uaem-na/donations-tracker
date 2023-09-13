@@ -55,6 +55,7 @@
     "new_request": "I would like to make a request...",
     "delete_confirm_title": "Are you sure you want to delete?",
     "delete_confirm_description": "This action cannot be undone. This will permanently delete your post.",
+    "postal_code": "Postal code",
     "item_categories": {
       "book": "Book",
       "clothing": "Clothing",
@@ -72,7 +73,7 @@
     "manage_reported_posts": "Manage reported posts",
     "report_outstanding": "report outstanding",
     "reports_outstanding": "reports outstanding",
-    "total_reports":"Total reports",
+    "total_reports": "Total reports",
     "view_post_details": "View post details",
     "notes": "Notes",
     "reason": "Please add your reason for reporting this post.",

@@ -1,7 +1,13 @@
 import { Request } from "express";
 import { Document } from "mongoose";
 import { UserRole } from "../../constants";
-import { Location, OrganizationUser, User } from "../../types";
+import {
+  Location,
+  LocationDocument,
+  OrganizationUser,
+  User,
+  UserDocument,
+} from "../../types";
 import { LocationDto } from "../common";
 
 type UserLocationDto = Omit<Location, "_id"> & {
@@ -72,7 +78,9 @@ export class UserDto {
     }
 
     if (location) {
-      this.location = LocationDto.fromLocation(location);
+      this.location = LocationDto.fromLocationDocument(
+        location as LocationDocument
+      );
     }
 
     if (user.starred && user.starred.length > 0) {
@@ -96,7 +104,7 @@ export class UserDto {
     return new UserDto(req.user.id, user);
   }
 
-  static fromUser(user: User): UserDto | null {
+  static fromUserDocument(user: UserDocument): UserDto | null {
     if (user) {
       return new UserDto(user._id, user);
     }

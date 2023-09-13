@@ -6,10 +6,15 @@
   },
   "number": {
     "field_too_small": "Doit être au moins {{min}}",
-    "field_too_large": "Doit être au maximum {{max}}"
+    "field_too_large": "Doit être au maximum {{max}}",
+    "type_mismatch": "{{field}} doit être un nombre"
   },
   "file": {
     "too_big": "La taille du fichier doit être au maximum de {{max}} Mo",
-    "not_supported": "Le type de fichier n'est pas supporté"
+    "not_supported": "Le type de fichier n'est pas supporté",
+    "type_mismatch": "{{field}} doit être un fichier"
+  },
+  "postal_code": {
+    "invalid": "Code postal invalide"
   }
 }
