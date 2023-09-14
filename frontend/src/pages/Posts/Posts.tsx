@@ -18,12 +18,14 @@ export const PostsPage = () => {
   const [postType, setPostType] = useState<FilterPostType>("all");
   const [userType, setUserType] = useState<FilterUserType>("all");
   const [categories, setCategories] = useState<string[]>(["all"]);
+  const [date, setDate] = useState<Date>();
   const { data: postsResponse, isLoading } = useGetPostsQuery({
     per_page: perPage,
     page: page,
     post_type: postType,
     user_type: userType,
     categories: categories,
+    ...(date && { date: date.toISOString().substring(0, 10) }),
   });
 
   return (
@@ -41,7 +43,13 @@ export const PostsPage = () => {
           updatePostType={setPostType}
           updateUserType={setUserType}
           updateCategories={setCategories}
-          filters={{ postType: true, userType: true, categories: true }}
+          updateDate={setDate}
+          filters={{
+            postType: true,
+            userType: true,
+            categories: true,
+            date: true,
+          }}
         />
       </div>
     </>

@@ -33,6 +33,10 @@ export const validatePostsFilterRequest = async ({
     });
   // TODO: chain custom validator to check if category exists
 
+  const validateDateValue = query("date").optional().trim().isDate({
+    format: "YYYY-MM-DD",
+  });
+
   if (optional) {
     validatePostType = validatePostType.optional();
     validateUserType = validateUserType.optional();
@@ -44,4 +48,5 @@ export const validatePostsFilterRequest = async ({
   await validateUserType.run(req);
   await validateCategories.run(req);
   await validateCategoryValues.run(req);
+  await validateDateValue.run(req);
 };

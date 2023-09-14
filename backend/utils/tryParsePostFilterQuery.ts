@@ -3,7 +3,7 @@ import { FilterPostType, FilterUserType } from "../constants";
 import { isEnumValue } from "./isEnumValue";
 
 export const tryParsePostFilterQuery = (req: Request) => {
-  const { post_type, user_type, categories } = req.query;
+  const { post_type, user_type, categories, date } = req.query;
 
   const parsedPostType = isEnumValue(post_type, FilterPostType)
     ? post_type
@@ -23,9 +23,12 @@ export const tryParsePostFilterQuery = (req: Request) => {
     parsedCategories.splice(parsedCategories.indexOf("all"), 1);
   }
 
+  const parsedDateValue = date ? new Date(date as string) : null;
+
   return {
     ...(parsedPostType !== FilterPostType.ALL && { postType: parsedPostType }),
     ...(parsedUserType !== FilterUserType.ALL && { userType: parsedUserType }),
     ...(parsedCategories.length > 0 && { categories: parsedCategories }),
+    ...(parsedDateValue && { date: parsedDateValue }),
   };
 };

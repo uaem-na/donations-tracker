@@ -47,7 +47,11 @@ export class PostController {
     }
 
     const { page, limit } = tryParsePaginationQuery(req);
-    const { postType, userType, categories } = tryParsePostFilterQuery(req);
+    const { postType, userType, categories, date } =
+      tryParsePostFilterQuery(req);
+
+    //! date objects in MongoDB stored in UTC, adjust for ET
+    const easternTimeOffset = -4.0;
 
     const filterQuery: FilterQuery<PostDocument> = {
       status: PostStatus.OPEN,
@@ -55,6 +59,11 @@ export class PostController {
       ...(userType && { authorType: userType }),
       ...(categories && {
         "item.category": { $in: categories },
+      }),
+      ...(date && {
+        createdAt: {
+          $gte: new Date(date.getTime() - easternTimeOffset * 60 * 60 * 1000),
+        },
       }),
     };
 

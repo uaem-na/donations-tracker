@@ -159,7 +159,7 @@ export const FilterContainer = ({
             aria-expanded={expanded}
             onClick={() => setExpanded(!expanded)}
           >
-            <span className="font-medium text-gray-900">{ariaLabel}</span>
+            <span className="ml-1 font-medium text-gray-900">{ariaLabel}</span>
             <span className="ml-6 flex items-center">
               <span className="ml-6 flex h-7 items-center">
                 {expanded ? <CollapseIcon /> : <ExpandIcon />}

@@ -29,10 +29,12 @@ interface PostsContainerProps {
   updatePostType: (setter: SetStateAction<FilterPostType>) => void;
   updateUserType: (setter: SetStateAction<FilterUserType>) => void;
   updateCategories: (setter: SetStateAction<string[]>) => void;
+  updateDate?: (setter: SetStateAction<Date | undefined>) => void;
   filters: {
     postType: boolean;
     userType: boolean;
     categories: boolean;
+    date?: boolean;
   };
 }
 
@@ -48,6 +50,7 @@ export const PostsContainer = ({
   updatePostType,
   updateUserType,
   updateCategories,
+  updateDate,
   filters,
 }: PostsContainerProps) => {
   const { t } = useTranslation();
@@ -77,20 +80,26 @@ export const PostsContainer = ({
     updateCategories(categories);
   };
 
+  // display posts after a selected date
+  const handleDateFilterChange = (date: Date) => {
+    if (filters.date && updateDate !== undefined) {
+      // update parent container state
+      updatePage(1);
+      updateDate(date);
+    }
+  };
+
   const renderPaginationResults = useCallback(() => {
+    const from = total === 0 ? 0 : page * perPage - (perPage - 1);
+    const to = page * perPage > total ? total : page * perPage;
     return (
       <>
         <p className="flex gap-1 text-sm text-gray-700">
           <Trans
             i18nKey="showing_results"
             values={{
-              from:
-                total === 0
-                  ? 0
-                  : page === 1
-                  ? 1
-                  : page * perPage - (perPage - 1),
-              to: page * perPage > total ? total : page * perPage,
+              from: from,
+              to: to,
               total: total,
             }}
             components={{
@@ -123,6 +132,7 @@ export const PostsContainer = ({
       handleCategoryFilterChange={(options) =>
         handleCategoryFilterChange(options.map((opt) => opt.value))
       }
+      handleDateFilterChange={(value) => handleDateFilterChange(value)}
     >
       <div className="flex flex-col gap-y-4">
         <PostList posts={posts} />

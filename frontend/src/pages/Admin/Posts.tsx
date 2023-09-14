@@ -18,6 +18,7 @@ export const AdminPostsPage = () => {
   const [postType, setPostType] = useState<FilterPostType>("all");
   const [userType, setUserType] = useState<FilterUserType>("all");
   const [categories, setCategories] = useState<string[]>(["all"]);
+  const [date, setDate] = useState<Date>();
   const { data: postsResponse, isLoading } = useGetPostsAdminQuery(
     {
       per_page: perPage,
@@ -25,6 +26,7 @@ export const AdminPostsPage = () => {
       post_type: postType,
       user_type: userType,
       categories: categories,
+      ...(date && { date: date.toISOString().substring(0, 10) }),
     },
     {
       refetchOnMountOrArgChange: 30,
@@ -46,7 +48,13 @@ export const AdminPostsPage = () => {
           updatePostType={setPostType}
           updateUserType={setUserType}
           updateCategories={setCategories}
-          filters={{ postType: true, userType: true, categories: true }}
+          updateDate={setDate}
+          filters={{
+            postType: true,
+            userType: true,
+            categories: true,
+            date: true,
+          }}
         />
       </div>
     </>

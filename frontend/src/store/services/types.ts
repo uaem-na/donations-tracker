@@ -123,7 +123,11 @@ export namespace QueryArgs {
       status?: "all" | "open" | "closed" | "pending-approval";
     };
 
-    export type All = PostType & UserType & Categories & PostStatus;
+    export type Date = {
+      date?: string;
+    };
+
+    export type All = PostType & UserType & Categories & PostStatus & Date;
   }
 
   export type Pagination = {
