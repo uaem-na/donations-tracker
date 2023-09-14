@@ -14,8 +14,12 @@ import {
 } from "@components/Drawer";
 import { faFilter } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import * as Popover from "@radix-ui/react-popover";
 import { ApiModel } from "@services/api";
+import { formatISO } from "date-fns";
 import { PropsWithChildren, useState } from "react";
+import { ClassNames, DayPicker, DayPickerSingleProps } from "react-day-picker";
+import dayPickerStyles from "react-day-picker/dist/style.module.css";
 import { useTranslation } from "react-i18next";
 
 interface IFilterLayoutProps extends PropsWithChildren {
@@ -24,13 +28,29 @@ interface IFilterLayoutProps extends PropsWithChildren {
   handlePostTypeFilterChange: (postType: FilterPostType) => void;
   handleUserTypeFilterChange: (userType: FilterUserType) => void;
   handleCategoryFilterChange: (categories: ApiModel.PostItemCategory[]) => void;
+  handleDateFilterChange: (date: Date) => void;
   categories: ApiModel.PostItemCategory[];
   filters: {
     postType: boolean;
     userType: boolean;
     categories: boolean;
+    date?: boolean;
   };
 }
+
+let datePickerOptions: DayPickerSingleProps = {
+  mode: "single",
+  fromDate: new Date(2023, 1, 1),
+  toDate: new Date(),
+  showOutsideDays: true,
+  fixedWeeks: true,
+};
+
+let datePickerClassNames: ClassNames = {
+  ...dayPickerStyles,
+  root: dayPickerStyles.root + " bg-white rounded-lg shadow-lg p-6 m-0",
+  day_selected: "!bg-purple-100 !text-purple-800",
+};
 
 export const FilterLayout = ({
   heading,
@@ -38,20 +58,17 @@ export const FilterLayout = ({
   handlePostTypeFilterChange,
   handleUserTypeFilterChange,
   handleCategoryFilterChange,
+  handleDateFilterChange,
   categories,
   filters,
   children,
 }: IFilterLayoutProps) => {
   const { t } = useTranslation();
-
-  const allOptions = {
-    label: t("all"),
-    value: "all",
-  };
-
   const [selectedType, setSelectedType] = useState<Option>();
   const [selectedUserType, setSelectedUserType] = useState<Option>();
   const [selectedCategories, setSelectedCategories] = useState<Option[]>();
+  const [selectedDate, setSelectedDate] = useState<Date>();
+  const [isDayPickerOpen, setIsDayPickerOpen] = useState<boolean>(false);
 
   return (
     <div>
@@ -82,12 +99,7 @@ export const FilterLayout = ({
             </div>
           </div>
 
-          <Drawer
-            onOpenChange={(state) => {
-              if (!state) {
-              }
-            }}
-          >
+          <Drawer>
             <DrawerTrigger asChild>
               <button
                 type="button"
@@ -147,6 +159,33 @@ export const FilterLayout = ({
                           setSelectedUserType(option);
                         }}
                       />
+                    </div>
+                  )}
+
+                  {filters.date && (
+                    <div className="border-b border-gray-200 pt-3 pb-6">
+                      <div className="flex flex-wrap w-full items-center justify-between bg-white py-3 text-sm text-gray-700 hover:text-gray-900">
+                        <span className="ml-1 font-medium text-gray-900">
+                          {t("posts.select_date")}
+                        </span>
+                        <span className="mr-1">
+                          {selectedDate &&
+                            formatISO(selectedDate, {
+                              representation: "date",
+                            })}
+                        </span>
+                        <span className="flex w-full justify-center">
+                          <DayPicker
+                            {...datePickerOptions}
+                            classNames={datePickerClassNames}
+                            selected={selectedDate}
+                            onSelect={(value) => {
+                              handleDateFilterChange(value);
+                              setSelectedDate(value);
+                            }}
+                          />
+                        </span>
+                      </div>
                     </div>
                   )}
 
@@ -218,6 +257,49 @@ export const FilterLayout = ({
                   }}
                   setValue={selectedUserType}
                 />
+              </div>
+            )}
+
+            {filters.date && (
+              <div className="border-b border-gray-200 pt-3 pb-3">
+                <h3 className="flow-root">
+                  <Popover.Root
+                    open={isDayPickerOpen}
+                    onOpenChange={setIsDayPickerOpen}
+                  >
+                    <Popover.Trigger asChild>
+                      <button
+                        type="button"
+                        className="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500"
+                      >
+                        <span className="ml-1 font-medium text-gray-900">
+                          {t("posts.select_date")}
+                        </span>
+                        <span className="mr-1">
+                          {selectedDate &&
+                            formatISO(selectedDate, {
+                              representation: "date",
+                            })}
+                        </span>
+                      </button>
+                    </Popover.Trigger>
+                    <Popover.Portal>
+                      <Popover.Content side="right" sideOffset={4}>
+                        <DayPicker
+                          {...datePickerOptions}
+                          classNames={datePickerClassNames}
+                          selected={selectedDate}
+                          onSelect={(value) => {
+                            handleDateFilterChange(value);
+                            setSelectedDate(value);
+                            setIsDayPickerOpen(false);
+                          }}
+                        />
+                        <Popover.Arrow width={20} height={10} />
+                      </Popover.Content>
+                    </Popover.Portal>
+                  </Popover.Root>
+                </h3>
               </div>
             )}
 

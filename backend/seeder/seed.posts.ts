@@ -7,6 +7,7 @@ export const fakePost = (
   author: UserDocument,
   type: PostType
 ): PostDocument => {
+  const randDate = faker.date.past();
   const content = {
     title: faker.lorem.words(5),
     author: author,
@@ -32,6 +33,8 @@ export const fakePost = (
       description: faker.commerce.productDescription(),
       category: faker.helpers.arrayElement(PostCategories),
     },
+    createdAt: randDate,
+    updatedAt: randDate,
   };
 
   // instantiate RequestPostModel if type is PostType.REQUEST else instantiate OfferPostModel
