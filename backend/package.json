@@ -5,9 +5,11 @@
   "private": true,
   "author": "Universities Allied for Essential Medicines",
   "license": "MIT",
+  "main": "app.js",
   "scripts": {
-    "prebuild": "eslint --fix --ignore-path .gitignore --ext .js,.ts .",
+    "build": "tsc",
     "start": "ts-node app.ts",
+    "start:production": "node app.js",
     "dev": "nodemon --legacy-watch --exec ts-node app.ts",
     "lint": "eslint --ignore-path .gitignore --ext .js,.ts .",
     "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\""

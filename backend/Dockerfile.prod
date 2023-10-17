@@ -4,20 +4,30 @@ FROM node:lts-alpine
 # set the NODE_ENV environment variable to production
 ENV NODE_ENV=production
 
-# set all the files in the /backend directory as the working directory
-WORKDIR /backend
+# set tmp workdir
+WORKDIR /tmp
 
-# copy the package.json and package-lock.json files to the working directory
-COPY package.json package-lock.json ./
+# copy everything to the working directory
+COPY . ./
 
-# install the dependencies
+# install everything
 RUN npm ci --include=dev
 
-# copy the rest of the files to the working directory; this respects .dockerignore
-COPY . ./
+# build the app
+RUN npm run build
+
+# set working directory for running the server
+WORKDIR /backend
+
+# copy the built code to the working directory
+RUN cp -r /tmp/dist/. /backend
+RUN cp /tmp/package*.json /backend
+
+# install production
+RUN npm ci
 
 # expose port 8080
 EXPOSE 8080
 
 # start the server
-CMD ["npm", "start"]
+CMD ["npm", "run", "start:production"]
