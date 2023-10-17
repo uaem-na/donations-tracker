@@ -44,8 +44,6 @@ services:
     volumes:
       - "/app/node_modules/"
       - "./frontend:/app"
-    depends_on:
-      - backend
   db:
     image: mongo:latest
     restart: unless-stopped
