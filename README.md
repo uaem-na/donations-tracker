@@ -3,11 +3,7 @@
 - [UAEM Donations Tracker Application for McGill UAEM chapter](#uaem-donations-tracker-application-for-mcgill-uaem-chapter)
   - [Project description](#project-description)
     - [Running locally](#running-locally)
-  - [TODOs](#todos)
-    - [Housekeeping](#housekeeping)
-    - [Admin features](#admin-features)
-    - [Features](#features)
-    - [Out of scope](#out-of-scope)
+    - [DevTools](#devtools)
   - [Contributors](#contributors)
 
 ## Project description
@@ -16,7 +12,18 @@ General-purpose distribution platform developed for the McGill chapter of the Un
 
 ### Running locally
 
-Set up the `.env` file in the root directory based on `.env.sample` file. As of writing, you only need to provide your own Google Maps API key and Google Map ID for local development.
+Set up the `.env` file in the root directory based on `.env.sample` file. 
+
+To run the application locally, you need to have docker and docker compose installed.
+
+It is recommended to run Docker in rootless mode on supported platforms. If you are developing on Windows, you may want to use WSL2 to run Docker. Follow this [guide](https://docs.docker.com/desktop/windows/wsl/) to set up Docker in WSL2.
+
+Also, you will need the following API keys from Google Cloud Platform:
+* Google Maps API key
+* Google Geocode API key
+* Google Maps ID
+
+Follow this [Google maps documentation](https://developers.google.com/maps/documentation/javascript/get-api-key) to get your API key.
 
 Follow this [Google maps documentation](https://developers.google.com/maps/documentation/get-map-id) to get your map id.
 
@@ -32,38 +39,14 @@ Then run the following command to use docker compose for local development.
 To build without cache:
 `docker compose build --no-cache && docker compose up -d`
 
-## TODOs
+### DevTools
 
-### Housekeeping
-
-- [ ] Bilingual support (English and French)
-- [ ] Human friendly error messages
-- [ ] Fix error mapping in API (not returning arrays anymore in validation)
-- [ ] E-mail addresses must be verified
-
-### Admin features
-
-- [x] Users table
-- [x] Activate/deactivate accounts
-- [x] Verify organization accounts
-- [x] Approve posts when "other" category is selected
-- [ ] Review post reports
-
-### Features
-
-- [x] Public post listings
-- [x] Post creation
-- [x] Post editing
-- [x] Post deletion
-- [x] Landing page map with posts
-- [x] Star possts and track them in dashboard
-- [x] View own posts in dashboard
-- [ ] Report posts
-
-### Out of scope
-
-- [ ] When there is an activity on the post, authors must be notified
-- [ ] Post image support
+Feel free to use any IDE that you are comfortable with. However, we recommend using VSCode with the following extensions:
+* [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
+* [MongoDB for VS Code](https://marketplace.visualstudio.com/items?itemName=mongodb.mongodb-vscode)
+* [Docker](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-docker)
+* [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
+* [Better Comments](https://marketplace.visualstudio.com/items?itemName=aaron-bond.better-comments)
 
 ## Contributors 
 
