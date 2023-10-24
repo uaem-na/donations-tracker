@@ -1,3 +1,4 @@
+import { UserRole } from "@constants";
 import { useGetSessionQuery } from "@services/api";
 import { ReactNode } from "react";
 import { Navigate, useLocation } from "react-router-dom";
@@ -31,6 +32,14 @@ export const RequireAuth = ({ children, role }: RequireAuthProps) => {
 
   // session exists, check pathname to see if already on login page
   if (pathname === "/login") {
+    return <Navigate to="/account/dashboard" />;
+  }
+
+  // if individual user is trying to create new request post, redirect to account page
+  if (
+    pathname === "/posts/request/new" &&
+    session.role.includes(UserRole.INDIVIDUAL)
+  ) {
     return <Navigate to="/account/dashboard" />;
   }
 

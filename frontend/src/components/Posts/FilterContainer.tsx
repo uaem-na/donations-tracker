@@ -1,4 +1,6 @@
 import { CollapseIcon, ExpandIcon } from "@components/Icons";
+import { PostType, UserRole } from "@constants";
+import { useGetSessionQuery } from "@store/services/api";
 import { classMerge } from "@utils/ClassMerge";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -10,6 +12,7 @@ export type Option = {
 
 type SharedContainerProps = {
   name: string;
+  header?: string;
   activeClassNames?: string;
   inactiveClassNames?: string;
   ariaLabel: string;
@@ -31,6 +34,7 @@ type FilterContainerProps<TMultiple = boolean> = TMultiple extends true
 
 export const FilterContainer = ({
   name,
+  header,
   multiSelect,
   activeClassNames,
   inactiveClassNames,
@@ -42,6 +46,8 @@ export const FilterContainer = ({
   defaultExpanded = true,
 }: FilterContainerProps) => {
   const { t } = useTranslation();
+  const { data: user } = useGetSessionQuery();
+
   const optionsWithAll = [
     {
       label: t("all"),
@@ -52,7 +58,7 @@ export const FilterContainer = ({
   const [selected, setSelected] = useState<Option | Option[]>(
     multiSelect
       ? (defaultOption as Option[]) ?? [optionsWithAll[0]]
-      : (defaultOption as Option) ?? optionsWithAll[0]
+      : (defaultOption as Option) ?? optionsWithAll[0],
   );
 
   const [expanded, setExpanded] = useState<boolean>(defaultExpanded);
@@ -97,7 +103,7 @@ export const FilterContainer = ({
     if (alreadySelected) {
       // Option is already selected, remove it
       const filtered = (selected as Option[]).filter(
-        (option) => option.value !== value
+        (option) => option.value !== value,
       );
       if (!filtered || filtered.length === 0) {
         // If there are no options selected, set the default option
@@ -114,11 +120,23 @@ export const FilterContainer = ({
       } else {
         // Else, remove "all" option from selected array and add selectedOption
         const filtered = (selected as Option[]).filter(
-          (option) => option.value !== "all"
+          (option) => option.value !== "all",
         );
         setSelected([...filtered, selectedOption]);
       }
     }
+  };
+
+  // don't show "requests" filter on individual user's "my posts" tab
+  const hideFiltersFromIndividual = (postType: string) => {
+    return (
+      !header ||
+      !(
+        header === t("posts.my_posts") &&
+        user?.role === UserRole.INDIVIDUAL &&
+        postType === PostType.REQUEST
+      )
+    );
   };
 
   const renderSingleFilter = () => {
@@ -129,20 +147,23 @@ export const FilterContainer = ({
           role="list"
           className="space-y-1.5 border-b border-gray-200 pb-6 text-sm font-medium"
         >
-          {optionsWithAll.map((option) => (
-            <li
-              key={option.value}
-              className={classMerge(
-                "rounded-md px-3 py-1.5 text-sm font-medium cursor-pointer",
-                (selected as Option).value === option.value
-                  ? activeClassNames
-                  : inactiveClassNames
-              )}
-              onClick={() => handleChange(option.value)}
-            >
-              <span>{option.label}</span>
-            </li>
-          ))}
+          {optionsWithAll.map(
+            (option) =>
+              hideFiltersFromIndividual(option.value) && (
+                <li
+                  key={option.value}
+                  className={classMerge(
+                    "rounded-md px-3 py-1.5 text-sm font-medium cursor-pointer",
+                    (selected as Option).value === option.value
+                      ? activeClassNames
+                      : inactiveClassNames,
+                  )}
+                  onClick={() => handleChange(option.value)}
+                >
+                  <span>{option.label}</span>
+                </li>
+              ),
+          )}
         </ul>
       </>
     );

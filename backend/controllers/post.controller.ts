@@ -6,7 +6,9 @@ import {
   PostCategories,
   PostCategory,
   PostStatus,
+  PostType,
   PostTypes,
+  UserRole,
 } from "../constants";
 import { AuthorizationError, NotFoundError, ValidationError } from "../errors";
 import { PostDto } from "../models/posts";
@@ -115,8 +117,15 @@ export class PostController {
 
     const { type, item, location } = req.body;
     const user = await this.userService.getUserByUsername(req.user.username);
+
     if (!user) {
       throw new NotFoundError(`Error finding user ${req.user.username}.`);
+    }
+
+    if (user.role === UserRole.INDIVIDUAL && type === PostType.REQUEST) {
+      throw new AuthorizationError(
+        `Individual users are unable to create request posts.`
+      );
     }
 
     const postalCode = location.postalCode as string;

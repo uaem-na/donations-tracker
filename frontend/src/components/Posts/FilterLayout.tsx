@@ -117,6 +117,7 @@ export const FilterLayout = ({
                     <div>
                       <FilterContainer
                         name="mobile_postType"
+                        header={heading}
                         activeClassNames="bg-purple-100 text-purple-800"
                         inactiveClassNames="text-gray-500 hover:text-gray-700 hover:bg-gray-50"
                         ariaLabel={t("posts.select_type")}
@@ -128,7 +129,7 @@ export const FilterLayout = ({
                         defaultOption={selectedType}
                         onChange={(option) => {
                           handlePostTypeFilterChange(
-                            option.value as FilterPostType
+                            option.value as FilterPostType,
                           );
                           setSelectedType(option);
                         }}
@@ -154,7 +155,7 @@ export const FilterLayout = ({
                         defaultOption={selectedUserType}
                         onChange={(option) => {
                           handleUserTypeFilterChange(
-                            option.value as FilterUserType
+                            option.value as FilterUserType,
                           );
                           setSelectedUserType(option);
                         }}
@@ -222,6 +223,7 @@ export const FilterLayout = ({
               <div>
                 <FilterContainer
                   name="postType"
+                  header={heading}
                   activeClassNames="bg-purple-100 text-purple-800"
                   inactiveClassNames="text-gray-500 hover:text-gray-700 hover:bg-gray-50"
                   ariaLabel={t("posts.select_type")}
