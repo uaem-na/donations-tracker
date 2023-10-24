@@ -32,6 +32,9 @@ export const CreatePostForm = ({ type }: CreatePostFormProps) => {
     useCreatePostMutation();
   const [serverMessage, setServerMessage] = useState("");
 
+  // keep track of checkbox value for donation
+  const [isDonation, setIsDonation] = useState(false);
+
   const {
     register,
     formState: { errors },
@@ -67,14 +70,14 @@ export const CreatePostForm = ({ type }: CreatePostFormProps) => {
         const errorMessages = err.errors.map(
           (error) =>
             `${error.msg}: ${error.location}.${error.path} = ${JSON.stringify(
-              error.value
-            )}`
+              error.value,
+            )}`,
         );
         setServerMessage(errorMessages.join(","));
       } else {
         err.errors.length > 0
           ? setServerMessage(
-              err.errors.join(",") ?? t("errors.unknown_server_error")
+              err.errors.join(",") ?? t("errors.unknown_server_error"),
             )
           : setServerMessage(err.message ?? t("errors.unknown_server_error"));
       }
@@ -140,7 +143,7 @@ export const CreatePostForm = ({ type }: CreatePostFormProps) => {
             <Label htmlFor="price">{t("posts.price")}</Label>
             <div className="mt-2">
               <Input
-                {...register(`item.price`)}
+                {...register(`item.price`, { disabled: isDonation })}
                 id="price"
                 type="number"
                 errorMessage={errors.item?.price?.message}
@@ -155,6 +158,18 @@ export const CreatePostForm = ({ type }: CreatePostFormProps) => {
                 id="postalCode"
                 type="text"
                 errorMessage={errors.location?.postalCode?.message}
+              />
+            </div>
+          </div>
+          <div>
+            <Label htmlFor="isDonation">{t("posts.is_donation")}</Label>
+            <div className="w-10">
+              <Input
+                {...register(`isDonation`, {
+                  onChange: (e) => setIsDonation(!isDonation),
+                })}
+                id="isDonation"
+                type="checkbox"
               />
             </div>
           </div>
