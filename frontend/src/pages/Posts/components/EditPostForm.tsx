@@ -230,7 +230,7 @@ export const EditPostForm = ({ id, onError }: EditPostFormProps) => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-x-6 gap-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-x-4 gap-y-6">
           <div>
             <Label htmlFor="isDonation">{t("posts.is_donation")}</Label>
             <div className="flex">
@@ -240,11 +240,8 @@ export const EditPostForm = ({ id, onError }: EditPostFormProps) => {
                 })}
                 id="isDonation"
                 type="checkbox"
-                className="h-6"
+                className="w-6 h-6"
               />
-              <Label htmlFor="isDonation" className="ml-4 mt-2">
-                Note: this sets the price to 0.
-              </Label>
             </div>
           </div>
           <div>
