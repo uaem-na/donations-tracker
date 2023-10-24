@@ -110,6 +110,19 @@ export const CreatePostForm = ({ type }: CreatePostFormProps) => {
           </div>
         </div>
 
+        <div>
+          <Label htmlFor="isDonation">{t("posts.is_donation")}</Label>
+          <div className="flex h-6">
+            <Input
+              {...register(`isDonation`, {
+                onChange: (e) => setIsDonation(!isDonation),
+              })}
+              id="isDonation"
+              type="checkbox"
+            />
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-4 gap-x-6 gap-y-6">
           <div>
             <Label htmlFor="category">{t("posts.category")}</Label>
@@ -158,18 +171,6 @@ export const CreatePostForm = ({ type }: CreatePostFormProps) => {
                 id="postalCode"
                 type="text"
                 errorMessage={errors.location?.postalCode?.message}
-              />
-            </div>
-          </div>
-          <div>
-            <Label htmlFor="isDonation">{t("posts.is_donation")}</Label>
-            <div className="w-10">
-              <Input
-                {...register(`isDonation`, {
-                  onChange: (e) => setIsDonation(!isDonation),
-                })}
-                id="isDonation"
-                type="checkbox"
               />
             </div>
           </div>
