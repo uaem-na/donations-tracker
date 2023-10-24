@@ -110,20 +110,23 @@ export const CreatePostForm = ({ type }: CreatePostFormProps) => {
           </div>
         </div>
 
-        <div>
-          <Label htmlFor="isDonation">{t("posts.is_donation")}</Label>
-          <div className="flex h-6">
-            <Input
-              {...register(`isDonation`, {
-                onChange: (e) => setIsDonation(!isDonation),
-              })}
-              id="isDonation"
-              type="checkbox"
-            />
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-x-6 gap-y-6">
+          <div>
+            <Label htmlFor="isDonation">{t("posts.is_donation")}</Label>
+            <div className="flex">
+              <Input
+                {...register(`isDonation`, {
+                  onChange: (e) => setIsDonation(!isDonation),
+                })}
+                id="isDonation"
+                type="checkbox"
+                className="h-6"
+              />
+            </div>
+            <Label htmlFor="isDonation" className="ml-4 mt-2">
+              Note: this sets the price to 0.
+            </Label>
           </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-x-6 gap-y-6">
           <div>
             <Label htmlFor="category">{t("posts.category")}</Label>
             <div className="mt-2">
