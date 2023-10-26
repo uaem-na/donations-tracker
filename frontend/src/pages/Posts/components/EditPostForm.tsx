@@ -232,7 +232,7 @@ export const EditPostForm = ({ id, onError }: EditPostFormProps) => {
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-x-4 gap-y-6">
           <div>
-            <Label htmlFor="isDonation">{t("posts.is_donation")}</Label>
+            <Label htmlFor="isDonation">{t("posts.donation")}</Label>
             <div className="flex">
               <Input
                 {...register(`isDonation`, {

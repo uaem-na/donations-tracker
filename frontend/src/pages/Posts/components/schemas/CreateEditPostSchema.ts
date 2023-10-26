@@ -17,9 +17,7 @@ export const CreateEditPostSchema = (t: TFunction) => {
     isDonation: yup
       .boolean()
       .default(false)
-      .required(
-        t("validation:field_required", { field: t("posts.is_donation") }),
-      ),
+      .required(t("validation:field_required", { field: t("posts.donation") })),
     item: yup.object().shape({
       name: yup
         .string()

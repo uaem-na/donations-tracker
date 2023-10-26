@@ -56,6 +56,7 @@
     "delete_confirm_title": "Etes-vous sûr que vous voulez supprimer?",
     "delete_confirm_description": "Cette action ne peut pas être annulée. Cela supprimera définitivement votre message.",
     "postal_code": "Code postal",
+    "donation": "Donation",
     "item_categories": {
       "book": "Livre",
       "clothing": "Vêtement",
