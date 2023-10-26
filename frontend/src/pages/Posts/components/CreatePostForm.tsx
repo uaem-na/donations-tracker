@@ -35,10 +35,16 @@ export const CreatePostForm = ({ type }: CreatePostFormProps) => {
   // keep track of checkbox value for donation
   const [isDonation, setIsDonation] = useState(false);
 
+  const handleDonation = () => {
+    setIsDonation((prev) => !prev);
+    setValue("item.price", 0);
+  };
+
   const {
     register,
     formState: { errors },
     handleSubmit,
+    setValue,
   } = useForm({
     resolver: yupResolver(schema),
   });
@@ -115,12 +121,11 @@ export const CreatePostForm = ({ type }: CreatePostFormProps) => {
             <Label htmlFor="isDonation">{t("posts.donation")}?</Label>
             <div className="flex">
               <Input
-                {...register(`isDonation`, {
-                  onChange: (e) => setIsDonation(!isDonation),
-                })}
+                {...register(`isDonation`)}
                 id="isDonation"
                 type="checkbox"
                 className="w-6 h-6"
+                onChange={handleDonation}
               />
             </div>
           </div>

@@ -60,11 +60,17 @@ export const EditPostForm = ({ id, onError }: EditPostFormProps) => {
   // keep track of checkbox value for donation
   const [isDonation, setIsDonation] = useState(false);
 
+  const handleDonation = () => {
+    setIsDonation((prev) => !prev);
+    setValue("item.price", 0);
+  };
+
   const {
     register,
     formState: { errors },
     handleSubmit,
     setValue,
+    getValues,
   } = useForm({
     resolver: yupResolver(schema),
   });
@@ -95,6 +101,11 @@ export const EditPostForm = ({ id, onError }: EditPostFormProps) => {
     if (isPostLoaded) {
       setValue("type", post.type, { shouldValidate: true });
       setValue("item", post.item, { shouldValidate: true });
+
+      if (getValues("item.price") === 0) {
+        setIsDonation(true);
+        setValue("isDonation", true, { shouldValidate: true });
+      }
     }
 
     if (isPostError) {
@@ -235,12 +246,11 @@ export const EditPostForm = ({ id, onError }: EditPostFormProps) => {
             <Label htmlFor="isDonation">{t("posts.donation")}</Label>
             <div className="flex">
               <Input
-                {...register(`isDonation`, {
-                  onChange: (e) => setIsDonation(!isDonation),
-                })}
+                {...register(`isDonation`)}
                 id="isDonation"
                 type="checkbox"
                 className="w-6 h-6"
+                onChange={handleDonation}
               />
             </div>
           </div>
