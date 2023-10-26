@@ -1,4 +1,5 @@
 import { Avatar } from "@components";
+import { UserRole } from "@constants";
 import { faHandshake, faUser } from "@fortawesome/free-regular-svg-icons";
 import {
   faArrowRightFromBracket,
@@ -62,18 +63,20 @@ const ProfileMenu = () => {
                   />
                   {t("user_actions.make_offer")}
                 </DropdownMenu.Item>
-                <DropdownMenu.Item
-                  onSelect={() => {
-                    navigate("/posts/request/new");
-                  }}
-                  className="block px-3 py-1 text-sm leading-6 font-light text-gray-900 cursor-pointer hover:bg-gray-50"
-                >
-                  <FontAwesomeIcon
-                    icon={faFileSignature}
-                    className="mr-2 w-[20px]"
-                  />
-                  {t("user_actions.make_request")}
-                </DropdownMenu.Item>
+                {user.role !== UserRole.INDIVIDUAL && (
+                  <DropdownMenu.Item
+                    onSelect={() => {
+                      navigate("/posts/request/new");
+                    }}
+                    className="block px-3 py-1 text-sm leading-6 font-light text-gray-900 cursor-pointer hover:bg-gray-50"
+                  >
+                    <FontAwesomeIcon
+                      icon={faFileSignature}
+                      className="mr-2 w-[20px]"
+                    />
+                    {t("user_actions.make_request")}
+                  </DropdownMenu.Item>
+                )}
               </DropdownMenu.Group>
               <DropdownMenu.Separator className="h-px bg-gray-900/10 m-0.5" />
               <DropdownMenu.Item
