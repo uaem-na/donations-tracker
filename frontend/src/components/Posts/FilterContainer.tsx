@@ -128,7 +128,7 @@ export const FilterContainer = ({
   };
 
   // don't show "requests" filter on individual user's "my posts" tab
-  const hideFiltersFromIndividual = (postType: string) => {
+  const showFilterForIndividual = (postType: string) => {
     return (
       !header ||
       !(
@@ -149,7 +149,7 @@ export const FilterContainer = ({
         >
           {optionsWithAll.map(
             (option) =>
-              hideFiltersFromIndividual(option.value) && (
+              showFilterForIndividual(option.value) && (
                 <li
                   key={option.value}
                   className={classMerge(
