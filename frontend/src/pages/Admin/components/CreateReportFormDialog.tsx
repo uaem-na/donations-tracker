@@ -42,6 +42,7 @@ export const CreateReportFormDialog = ({
     register,
     formState: { errors },
     handleSubmit,
+    resetField,
   } = useForm({
     resolver: yupResolver(schema),
   });
@@ -57,7 +58,7 @@ export const CreateReportFormDialog = ({
     if (reportError) {
       if (!("status" in reportError)) {
         setServerMessage(
-          reportError.message ?? t("errors.unknown_server_error")
+          reportError.message ?? t("errors.unknown_server_error"),
         );
         return;
       }
@@ -68,19 +69,25 @@ export const CreateReportFormDialog = ({
         const errorMessages = err.errors.map(
           (error) =>
             `${error.msg}: ${error.location}.${error.path} = ${JSON.stringify(
-              error.value
-            )}`
+              error.value,
+            )}`,
         );
         setServerMessage(errorMessages.join(","));
       } else {
         err.errors.length > 0
           ? setServerMessage(
-              err.errors.join(",") ?? t("errors.unknown_server_error")
+              err.errors.join(",") ?? t("errors.unknown_server_error"),
             )
           : setServerMessage(err.message ?? t("errors.unknown_server_error"));
       }
     }
   }, [reportError]);
+
+  useEffect(() => {
+    if (!isReportSuccess) return;
+
+    resetField(`notes`);
+  }, [isReportSuccess]);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
