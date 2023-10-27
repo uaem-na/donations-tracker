@@ -48,8 +48,6 @@ export const CreateReportFormDialog = ({
   });
 
   const onSubmit = async (data) => {
-    console.log(isReportSuccess);
-
     data.postId = postId;
 
     reportPostApi(data);
@@ -87,8 +85,6 @@ export const CreateReportFormDialog = ({
 
   useEffect(() => {
     if (!isReportSuccess) return;
-
-    console.log(isReportSuccess);
 
     resetField(`notes`);
   }, [isReportSuccess]);
