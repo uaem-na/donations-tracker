@@ -92,7 +92,7 @@ export const PostDetails = ({
 
     err.errors.length > 0
       ? setServerMessage(
-          err.errors.join(",") ?? t("errors.unknown_server_error")
+          err.errors.join(",") ?? t("errors.unknown_server_error"),
         )
       : setServerMessage(err.message ?? t("errors.unknown_server_error"));
   };
@@ -192,6 +192,12 @@ export const PostDetails = ({
                 currency: "CAD",
               }).format(post.item.price)}
             </dd>
+          </div>
+          <div>
+            <dt className="inline text-gray-500 mr-3">
+              {t("posts.description")}
+            </dt>
+            <dd className="inline text-gray-700">{post.item.description}</dd>
           </div>
         </dl>
       </div>
