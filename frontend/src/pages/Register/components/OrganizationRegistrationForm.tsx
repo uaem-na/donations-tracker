@@ -37,6 +37,7 @@ export const OrganizationRegistrationForm = () => {
   const onSubmit = (data) => {
     data = {
       ...data,
+      displayName: data.organization, // Display name will be the same as organization by default
       type: UserDiscriminator.ORGANIZATION,
     };
     registerApi(data);
@@ -111,20 +112,6 @@ export const OrganizationRegistrationForm = () => {
             placeholder="Username"
             errorMessage={errors.username?.message}
           ></Input>
-        </div>
-      </div>
-
-      <div>
-        <Label htmlFor="displayName">Display name</Label>
-        <div className="mt-2">
-          <Input
-            {...register("displayName")}
-            id="displayName"
-            type="text"
-            autoComplete="nickname"
-            placeholder="Display name"
-            errorMessage={errors.displayName?.message}
-          />
         </div>
       </div>
 
