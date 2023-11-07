@@ -1,5 +1,7 @@
 import { Alert } from "@components";
-import { Button, Input, Label } from "@components/Controls";
+import { Button, Input, Label, Tooltip } from "@components/Controls";
+import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { PlaceAutocomplete } from "@components/Controls/PlaceAutocomplete";
 import { SelectInput } from "@components/Controls/Select";
 import { UserDiscriminator } from "@constants";
@@ -174,8 +176,22 @@ export const OrganizationRegistrationForm = () => {
         </div>
       </div>
 
-      <div>
-        <Label htmlFor="organization">Organization</Label>
+      <div className="col-span-full">
+        <Label htmlFor="organization">
+          <span className="mr-2">Organization</span>
+          <Tooltip
+            asChild
+            message={
+              "This will be used as the display name i.e. must have only letters, numbers and symbols(-_.)."
+            }
+          >
+            <FontAwesomeIcon
+              tabIndex={0}
+              className=" text-gray-6400"
+              icon={faInfoCircle}
+            />
+          </Tooltip>
+        </Label>
         <div className="mt-2">
           <Input
             {...register("organization")}
