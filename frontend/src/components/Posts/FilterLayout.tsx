@@ -1,9 +1,17 @@
+import { PropsWithChildren, useState } from "react";
+
+import { formatISO } from "date-fns";
+import { ClassNames, DayPicker, DayPickerSingleProps } from "react-day-picker";
+import dayPickerStyles from "react-day-picker/dist/style.module.css";
+import { useTranslation } from "react-i18next";
+
 import {
   FilterContainer,
   FilterPostType,
   FilterUserType,
   Option,
 } from "@components";
+import { Tooltip } from "@components/Controls";
 import { SelectInput } from "@components/Controls/Select";
 import {
   Drawer,
@@ -12,15 +20,11 @@ import {
   DrawerHeader,
   DrawerTrigger,
 } from "@components/Drawer";
+import { faCircleQuestion } from "@fortawesome/free-regular-svg-icons";
 import { faFilter } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as Popover from "@radix-ui/react-popover";
 import { ApiModel } from "@services/api";
-import { formatISO } from "date-fns";
-import { PropsWithChildren, useState } from "react";
-import { ClassNames, DayPicker, DayPickerSingleProps } from "react-day-picker";
-import dayPickerStyles from "react-day-picker/dist/style.module.css";
-import { useTranslation } from "react-i18next";
 
 interface IFilterLayoutProps extends PropsWithChildren {
   heading: string;
@@ -69,6 +73,11 @@ export const FilterLayout = ({
   const [selectedCategories, setSelectedCategories] = useState<Option[]>();
   const [selectedDate, setSelectedDate] = useState<Date>();
   const [isDayPickerOpen, setIsDayPickerOpen] = useState<boolean>(false);
+  const [showPriceTooltip, setShowPriceTooltip] = useState(false);
+
+  const toggleShowPriceTooltip = () => {
+    setShowPriceTooltip(!showPriceTooltip);
+  };
 
   return (
     <div>
@@ -129,7 +138,7 @@ export const FilterLayout = ({
                         defaultOption={selectedType}
                         onChange={(option) => {
                           handlePostTypeFilterChange(
-                            option.value as FilterPostType,
+                            option.value as FilterPostType
                           );
                           setSelectedType(option);
                         }}
@@ -155,7 +164,7 @@ export const FilterLayout = ({
                         defaultOption={selectedUserType}
                         onChange={(option) => {
                           handleUserTypeFilterChange(
-                            option.value as FilterUserType,
+                            option.value as FilterUserType
                           );
                           setSelectedUserType(option);
                         }}
@@ -168,6 +177,14 @@ export const FilterLayout = ({
                       <div className="flex flex-wrap w-full items-center justify-between bg-white py-3 text-sm text-gray-700 hover:text-gray-900">
                         <span className="ml-1 font-medium text-gray-900">
                           {t("posts.select_date")}
+                          <Tooltip message={t("posts.date_tooltip")}>
+                            <FontAwesomeIcon
+                              icon={faCircleQuestion}
+                              className="mx-2"
+                              onMouseEnter={toggleShowPriceTooltip}
+                              onMouseLeave={toggleShowPriceTooltip}
+                            />
+                          </Tooltip>
                         </span>
                         <span className="mr-1">
                           {selectedDate &&
@@ -276,6 +293,14 @@ export const FilterLayout = ({
                       >
                         <span className="ml-1 font-medium text-gray-900">
                           {t("posts.select_date")}
+                          <Tooltip message={t("posts.date_tooltip")}>
+                            <FontAwesomeIcon
+                              icon={faCircleQuestion}
+                              className="mx-2"
+                              onMouseEnter={toggleShowPriceTooltip}
+                              onMouseLeave={toggleShowPriceTooltip}
+                            />
+                          </Tooltip>
                         </span>
                         <span className="mr-1">
                           {selectedDate &&

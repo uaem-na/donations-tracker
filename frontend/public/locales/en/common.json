@@ -42,6 +42,7 @@
     "select_user_type": "Select a user type",
     "select_category": "Select a category",
     "select_date": "Select a date",
+    "date_tooltip": "Select a date to see posts from that day",
     "no_items": "No items",
     "created_at": "Created at {{date}}",
     "updated_at": "Updated at {{date}}",
