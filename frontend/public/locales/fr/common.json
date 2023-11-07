@@ -36,6 +36,7 @@
     "quantity": "Quantité",
     "description": "Description",
     "price": "Prix (CAD)",
+    "price_tooltip": "Veuillez saisir un nombre supérieur à 0",
     "category": "Catégorie",
     "create": "Créer",
     "select_type": "Sélectionnez un type",
