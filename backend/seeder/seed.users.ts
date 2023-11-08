@@ -21,7 +21,7 @@ export const fakeAdminUser = async (
     location: {
       lat: faker.location.latitude(),
       lng: faker.location.longitude(),
-      postalCode: faker.location.zipCode(),
+      postalCode: faker.location.zipCode().replace(/ /g,''),
     },
     role: UserRole.ADMIN,
   });
@@ -44,7 +44,7 @@ export const fakeOrganizationUser = async (
     location: {
       lat: faker.location.latitude(),
       lng: faker.location.longitude(),
-      postalCode: faker.location.zipCode(), // * note postalCodes won't match
+      postalCode: faker.location.zipCode().replace(/ /g,''), // * note postalCodes won't match
     },
     organization: {
       name: faker.company.name(),
@@ -53,7 +53,7 @@ export const fakeOrganizationUser = async (
         city: faker.location.city(),
         province: faker.location.state(), // * note that province & its code won't match
         provinceCode: faker.location.state({ abbreviated: true }),
-        postalCode: faker.location.zipCode(),
+        postalCode: faker.location.zipCode().replace(/ /g,''),
       },
       phone: faker.phone.number(),
       type: faker.word.noun(),
@@ -79,7 +79,7 @@ export const fakeIndividualUser = async (
     location: {
       lat: faker.location.latitude(),
       lng: faker.location.longitude(),
-      postalCode: faker.location.zipCode(),
+      postalCode: faker.location.zipCode().replace(/ /g,''),
     },
     role: UserRole.INDIVIDUAL,
   });

@@ -88,7 +88,7 @@ export const OrganizationRegistrationForm = () => {
   };
 
   const postalCodeFormatting = (val: string) => {
-    const postalCodeRegex = /^([A-Za-z]\d[A-Za-z])[ -]?(\d[A-Za-z]\d)$/;
+    const postalCodeRegex = /^[A-Z]\d[A-Z]\d[A-Z]\d$/;
     const value = val;
     if (postalCodeRegex.test(value)) {
       const formatted = value.toUpperCase().replace(postalCodeRegex, "$1 $2");

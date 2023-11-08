@@ -68,7 +68,7 @@ export const registerOrganizationSchema = yup.object().shape({
   postalCode: yup
     .string()
     .matches(
-      /^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/,
+      /^[A-Z]\d[A-Z]\d[A-Z]\d$/,
       (obj) => `${obj.value} is not a valid postal code`
     )
     .required("Postal code is required"),
