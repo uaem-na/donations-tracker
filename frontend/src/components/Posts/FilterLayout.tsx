@@ -177,7 +177,7 @@ export const FilterLayout = ({
                       <div className="flex flex-wrap w-full items-center justify-between bg-white py-3 text-sm text-gray-700 hover:text-gray-900">
                         <span className="ml-1 font-medium text-gray-900">
                           {t("posts.select_date")}
-                          <Tooltip message={t("posts.date_tooltip")} asChild>
+                          <Tooltip asChild message={t("posts.date_tooltip")}>
                             <FontAwesomeIcon
                               icon={faCircleQuestion}
                               className="mx-2"
@@ -293,7 +293,7 @@ export const FilterLayout = ({
                       >
                         <span className="ml-1 font-medium text-gray-900">
                           {t("posts.select_date")}
-                          <Tooltip message={t("posts.date_tooltip")} asChild>
+                          <Tooltip asChild message={t("posts.date_tooltip")}>
                             <FontAwesomeIcon
                               icon={faCircleQuestion}
                               className="mx-2"
