@@ -1,36 +1,27 @@
-import {
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import { useEffect, useMemo, useState } from "react";
 
-import { useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 
-import { Alert } from '@components';
-import {
-  Button,
-  Input,
-  Label,
-  Tooltip,
-} from '@components/Controls';
-import { SelectInput } from '@components/Controls/Select';
-import { Textarea } from '@components/Controls/Textarea';
-import { PostType } from '@constants';
-import { faCircleQuestion } from '@fortawesome/free-regular-svg-icons';
+import { Alert } from "@components";
+import { Button, Input, Label, Tooltip } from "@components/Controls";
+import { SelectInput } from "@components/Controls/Select";
+import { Textarea } from "@components/Controls/Textarea";
+import { PostType } from "@constants";
+import { faCircleQuestion } from "@fortawesome/free-regular-svg-icons";
 import {
   faFileSignature,
   faHandshake,
-} from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { yupResolver } from '@hookform/resolvers/yup';
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { yupResolver } from "@hookform/resolvers/yup";
 import {
   useCreatePostMutation,
   useGetItemCategoriesQuery,
-} from '@services/api';
+} from "@services/api";
 
-import { CreateEditPostSchema } from './schemas/CreateEditPostSchema';
+import { CreateEditPostSchema } from "./schemas/CreateEditPostSchema";
 
 type Type = (typeof PostType)[keyof typeof PostType];
 
@@ -180,7 +171,7 @@ export const CreatePostForm = ({ type }: CreatePostFormProps) => {
           <div>
             <Label htmlFor="price">
               {t("posts.price")}
-              <Tooltip message={t("posts.price_tooltip")} asChild>
+              <Tooltip asChild message={t("posts.price_tooltip")}>
                 <FontAwesomeIcon
                   icon={faCircleQuestion}
                   className="mx-2"

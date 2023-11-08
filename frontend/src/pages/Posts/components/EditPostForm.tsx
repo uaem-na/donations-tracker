@@ -294,7 +294,7 @@ export const EditPostForm = ({ id, onError }: EditPostFormProps) => {
           <div>
             <Label htmlFor="price">
               {t("posts.price")}
-              <Tooltip message={t("posts.price_tooltip")}>
+              <Tooltip asChild message={t("posts.price_tooltip")}>
                 <FontAwesomeIcon
                   icon={faCircleQuestion}
                   className="mx-2"
