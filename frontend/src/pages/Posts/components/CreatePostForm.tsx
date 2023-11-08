@@ -180,12 +180,11 @@ export const CreatePostForm = ({ type }: CreatePostFormProps) => {
           <div>
             <Label htmlFor="price">
               {t("posts.price")}
-              <Tooltip message={t("posts.price_tooltip")}>
+              <Tooltip message={t("posts.price_tooltip")} asChild>
                 <FontAwesomeIcon
                   icon={faCircleQuestion}
                   className="mx-2"
-                  onMouseEnter={toggleShowPriceTooltip}
-                  onMouseLeave={toggleShowPriceTooltip}
+                  onClick={toggleShowPriceTooltip}
                 />
               </Tooltip>
             </Label>
