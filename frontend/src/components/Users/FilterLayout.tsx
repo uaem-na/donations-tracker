@@ -1,6 +1,10 @@
 import { FilterContainer, FilterUserType } from "@components";
+import { Tooltip } from "@components/Controls";
 import { SelectInput } from "@components/Controls/Select";
-import { PropsWithChildren } from "react";
+import { faCircleQuestion } from "@fortawesome/free-regular-svg-icons";
+// import { faCircleQuestion } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { PropsWithChildren, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 interface IFilterLayoutProps extends PropsWithChildren {
@@ -20,6 +24,11 @@ export const FilterLayout = ({
   children,
 }: IFilterLayoutProps) => {
   const { t } = useTranslation();
+  const [showUserGuideTooltip, setShowUserGuideTooltip] = useState(false);
+
+  const toggleShowUserGuideTooltip = () => {
+    setShowUserGuideTooltip(!showUserGuideTooltip);
+  };
 
   return (
     <div>
@@ -27,6 +36,16 @@ export const FilterLayout = ({
         <h1 className="text-2xl font-bold leading-10 tracking-tight text-gray-900">
           {heading}
         </h1>
+        <span className=" absolute mt-3 ml-16">
+          <Tooltip asChild message={t("users.admin_guide")}>
+            <FontAwesomeIcon
+              icon={faCircleQuestion}
+              className="mx-2"
+              onMouseEnter={toggleShowUserGuideTooltip}
+              onMouseLeave={toggleShowUserGuideTooltip}
+            />
+          </Tooltip>
+        </span>
 
         <div className="flex items-center">
           <div className="relative inline-block text-left">

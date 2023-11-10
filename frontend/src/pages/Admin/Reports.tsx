@@ -1,6 +1,8 @@
 import { getPerPageOption, PerPageOption } from "@components";
-import { Button } from "@components/Controls";
+import { Button, Tooltip } from "@components/Controls";
 import { SelectInput } from "@components/Controls/Select";
+import { faCircleQuestion } from "@fortawesome/free-regular-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ReportedPostItem } from "@pages/Admin/components/ReportedPostItem";
 import { ApiModel, useGetReportedPostsQuery } from "@services/api";
 import { useCallback, useState } from "react";
@@ -10,6 +12,11 @@ export const ReportsPage = () => {
   const { t } = useTranslation();
   const [page, setPage] = useState(1);
   const [perPage, setPerPage] = useState<PerPageOption>(10);
+  const [showReportGuideTooltip, setShowReportGuideTooltip] = useState(false);
+
+  const toggleShowReportrGuideTooltip = () => {
+    setShowReportGuideTooltip(!showReportGuideTooltip);
+  };
 
   const { data: reportedPostsResponse, isLoading } = useGetReportedPostsQuery({
     per_page: perPage,
@@ -58,6 +65,16 @@ export const ReportsPage = () => {
         <h1 className="text-2xl font-bold leading-10 tracking-tight text-gray-900">
           {t("reports.manage_reported_posts")}
         </h1>
+        <span className=" absolute mt-2.5 ml-[250px]">
+          <Tooltip asChild message={t("reports.admin_guide")}>
+            <FontAwesomeIcon
+              icon={faCircleQuestion}
+              className="mx-2"
+              onMouseEnter={toggleShowReportrGuideTooltip}
+              onMouseLeave={toggleShowReportrGuideTooltip}
+            />
+          </Tooltip>
+        </span>
       </div>
 
       <div className="flex items-center justify-end">

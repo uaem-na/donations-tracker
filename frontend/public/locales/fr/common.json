@@ -22,6 +22,7 @@
   "all": "Tous",
   "posts": {
     "title": "Messages",
+    "admin_guide": "Cliquez pour voir des guides plus détaillés sur la page des articles.",
     "author": "Auteur",
     "available": "Disponible",
     "type": "Type",
@@ -74,6 +75,7 @@
   },
   "reports": {
     "manage_reported_posts": "Gérer les publications signalées",
+    "admin_guide": "Cliquez pour voir des guides plus détaillés sur la page des rapports.",
     "report_outstanding": "rapport en suspens",
     "reports_outstanding": "rapports en suspens",
     "total_reports": "Total des rapports",
@@ -90,6 +92,7 @@
   },
   "users": {
     "title": "Utilisateurs",
+    "admin_guide": "Cliquez pour voir des guides plus détaillés sur la page des utilisateurs.",
     "admin": "Admin",
     "individual": "Individuel",
     "organization": "Organisation",
