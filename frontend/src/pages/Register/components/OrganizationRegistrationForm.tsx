@@ -1,5 +1,7 @@
 import { Alert } from "@components";
-import { Button, Input, Label } from "@components/Controls";
+import { Button, Input, Label, Tooltip } from "@components/Controls";
+import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { PlaceAutocomplete } from "@components/Controls/PlaceAutocomplete";
 import { SelectInput } from "@components/Controls/Select";
 import { UserDiscriminator } from "@constants";
@@ -37,6 +39,7 @@ export const OrganizationRegistrationForm = () => {
   const onSubmit = (data) => {
     data = {
       ...data,
+      displayName: data.organization, // Display name will be the same as organization by default
       type: UserDiscriminator.ORGANIZATION,
     };
     registerApi(data);
@@ -114,20 +117,6 @@ export const OrganizationRegistrationForm = () => {
         </div>
       </div>
 
-      <div>
-        <Label htmlFor="displayName">Display name</Label>
-        <div className="mt-2">
-          <Input
-            {...register("displayName")}
-            id="displayName"
-            type="text"
-            autoComplete="nickname"
-            placeholder="Display name"
-            errorMessage={errors.displayName?.message}
-          />
-        </div>
-      </div>
-
       <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-6">
         <div>
           <Label htmlFor="firstName">First name</Label>
@@ -187,8 +176,22 @@ export const OrganizationRegistrationForm = () => {
         </div>
       </div>
 
-      <div>
-        <Label htmlFor="organization">Organization</Label>
+      <div className="col-span-full">
+        <Label htmlFor="organization">
+          <span className="mr-2">Organization</span>
+          <Tooltip
+            asChild
+            message={
+              "This will be used as the display name i.e. must have only letters, numbers and symbols(-_.)."
+            }
+          >
+            <FontAwesomeIcon
+              tabIndex={0}
+              className=" text-gray-6400"
+              icon={faInfoCircle}
+            />
+          </Tooltip>
+        </Label>
         <div className="mt-2">
           <Input
             {...register("organization")}
