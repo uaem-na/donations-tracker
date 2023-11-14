@@ -65,18 +65,6 @@ export const ReportsPage = () => {
           {t("reports.manage_reported_posts")}
         </h1>
         <Guide className="mt-2.5 ml-[250px]" guideType={"reports"} />
-
-        {/* <span className="absolute mt-2.5 ml-[250px]">
-
-          <Tooltip asChild message={t("reports.admin_guide")}>
-            <FontAwesomeIcon
-              icon={faCircleQuestion}
-              className="mx-2"
-              onMouseEnter={toggleShowReportGuideTooltip}
-              onMouseLeave={toggleShowReportGuideTooltip}
-            />
-          </Tooltip>
-        </span> */}
       </div>
 
       <div className="flex items-center justify-end">

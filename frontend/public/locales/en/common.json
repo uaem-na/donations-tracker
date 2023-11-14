@@ -27,8 +27,8 @@
     "admin_guide_description": [
       "This page allows admins to see all request/offer items that have been reported by users.",
       "To see detailed information regarding reports, simply click on the specific item in the reports list.",
-      "All reports concerning the item will be displayed on the left and those that have been resolved on the right. ",
-      "Admins must:",
+      "All reports concerning the item will be displayed on the left and those that have been resolved on the right.",
+      "As admins, you must:",
       "Regularly check on items that have been flagged with reports and investigate the issues by accessing the detailed information for the related item posts.",
       "In the worst case, contact the author of posts to resolve the reported issues"
     ],
@@ -89,7 +89,7 @@
     "admin_guide_description": [
       "This page allows admins to see all request/offer items that have been reported by users.",
       "To see detailed information regarding reports, simply click on the specific item in the reports list.",
-      "All reports concerning the item will be displayed on the left and those that have been resolved on the right. ",
+      "All reports concerning the item will be displayed on the left and those that have been resolved on the right.",
       "As admins, you must:",
       "Regularly check on items that have been flagged with reports and investigate the issues by accessing the detailed information for the related item posts.",
       "In the worst case, contact the author of posts to resolve the reported issues"
