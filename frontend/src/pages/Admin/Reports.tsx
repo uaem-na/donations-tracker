@@ -1,8 +1,7 @@
 import { getPerPageOption, PerPageOption } from "@components";
-import { Button, Tooltip } from "@components/Controls";
+import { Button } from "@components/Controls";
 import { SelectInput } from "@components/Controls/Select";
-import { faCircleQuestion } from "@fortawesome/free-regular-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Guide } from "@components/Users/Guide";
 import { ReportedPostItem } from "@pages/Admin/components/ReportedPostItem";
 import { ApiModel, useGetReportedPostsQuery } from "@services/api";
 import { useCallback, useState } from "react";
@@ -14,7 +13,7 @@ export const ReportsPage = () => {
   const [perPage, setPerPage] = useState<PerPageOption>(10);
   const [showReportGuideTooltip, setShowReportGuideTooltip] = useState(false);
 
-  const toggleShowReportrGuideTooltip = () => {
+  const toggleShowReportGuideTooltip = () => {
     setShowReportGuideTooltip(!showReportGuideTooltip);
   };
 
@@ -65,16 +64,19 @@ export const ReportsPage = () => {
         <h1 className="text-2xl font-bold leading-10 tracking-tight text-gray-900">
           {t("reports.manage_reported_posts")}
         </h1>
-        <span className=" absolute mt-2.5 ml-[250px]">
+        <Guide className="mt-2.5 ml-[250px]" guideType={"reports"} />
+
+        {/* <span className="absolute mt-2.5 ml-[250px]">
+
           <Tooltip asChild message={t("reports.admin_guide")}>
             <FontAwesomeIcon
               icon={faCircleQuestion}
               className="mx-2"
-              onMouseEnter={toggleShowReportrGuideTooltip}
-              onMouseLeave={toggleShowReportrGuideTooltip}
+              onMouseEnter={toggleShowReportGuideTooltip}
+              onMouseLeave={toggleShowReportGuideTooltip}
             />
           </Tooltip>
-        </span>
+        </span> */}
       </div>
 
       <div className="flex items-center justify-end">
