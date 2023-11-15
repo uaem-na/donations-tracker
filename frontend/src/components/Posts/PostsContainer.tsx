@@ -1,14 +1,17 @@
+import { SetStateAction, useCallback } from "react";
+
+import { Trans, useTranslation } from "react-i18next";
+
 import { Button } from "@components/Controls";
 import { PostList } from "@components/Posts";
 import { FilterLayout } from "@components/Posts/FilterLayout";
 import { ApiModel, useGetItemCategoriesQuery } from "@services/api";
-import { SetStateAction, useCallback } from "react";
-import { Trans, useTranslation } from "react-i18next";
+
 import {
   FilterPostType,
   FilterUserType,
-  PerPageOption,
   getPerPageOption,
+  PerPageOption,
 } from "./types";
 
 interface FilterProps {
@@ -34,6 +37,7 @@ interface PostsContainerProps {
     postType: boolean;
     userType: boolean;
     categories: boolean;
+    pricing: boolean;
     date?: boolean;
   };
 }

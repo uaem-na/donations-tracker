@@ -1,13 +1,15 @@
+import { useState } from "react";
+
+import { useTranslation } from "react-i18next";
+
 import {
   FilterPostType,
   FilterUserType,
+  getPerPageOption,
   PerPageOption,
   PostsContainer,
-  getPerPageOption,
 } from "@components/Posts";
 import { useGetPostsQuery } from "@services/api";
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
 
 export const PostsPage = () => {
   const { t } = useTranslation();
@@ -48,6 +50,7 @@ export const PostsPage = () => {
             postType: true,
             userType: true,
             categories: true,
+            pricing: true,
             date: true,
           }}
         />

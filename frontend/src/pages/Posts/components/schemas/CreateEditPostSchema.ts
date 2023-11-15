@@ -11,7 +11,7 @@ export const CreateEditPostSchema = (t: TFunction) => {
         .string()
         .matches(postalCodeRegex, t("validation:postal_code.invalid"))
         .required(
-          t("validation:field_required", { field: t("posts.postal_code") }),
+          t("validation:field_required", { field: t("posts.postal_code") })
         ),
     }),
     isDonation: yup
@@ -27,32 +27,36 @@ export const CreateEditPostSchema = (t: TFunction) => {
       quantity: yup
         .number()
         .typeError(
-          t("validation:number.type_mismatch", { field: t("posts.quantity") }),
+          t("validation:number.type_mismatch", { field: t("posts.quantity") })
         )
         .default(1)
         .min(1, t("validation:number.too_small", { min: 1 }))
         .required(
-          t("validation:field_required", { field: t("posts.quantity") }),
+          t("validation:field_required", { field: t("posts.quantity") })
         ),
       price: yup
         .number()
         .typeError(
-          t("validation:number.type_mismatch", { field: t("posts.price") }),
+          t("validation:number.type_mismatch", {
+            field: t("posts.price.label"),
+          })
         )
         .default(0)
         .min(0, t("validation:number.too_small", { min: 0 }))
-        .required(t("validation:field_required", { field: t("posts.price") })),
+        .required(
+          t("validation:field_required", { field: t("posts.price.label") })
+        ),
       description: yup
         .string()
         .min(1, t("validation:string.too_short", { min: 1 }))
         .max(1024, t("validation:string.too_long", { max: 1024 }))
         .required(
-          t("validation:field_required", { field: t("posts.description") }),
+          t("validation:field_required", { field: t("posts.description") })
         ),
       category: yup
         .string()
         .required(
-          t("validation:field_required", { field: t("posts.category") }),
+          t("validation:field_required", { field: t("posts.category") })
         ),
       // ! we do not support image upload yet... perhaps need Google Cloud Storage
       image: yup
@@ -67,7 +71,7 @@ export const CreateEditPostSchema = (t: TFunction) => {
         .test("fileType", t("validation:file.not_supported"), (value) => {
           if (value && "type" in value && typeof value.type === "string") {
             return ["image/jpeg", "image/png", "image/jpg"].includes(
-              value.type,
+              value.type
             );
           }
           return true;

@@ -1,13 +1,18 @@
+import { useState } from 'react';
+
+import { useTranslation } from 'react-i18next';
+
 import {
   FilterPostType,
   FilterUserType,
   getPerPageOption,
   PerPageOption,
   PostsContainer,
-} from "@components";
-import { useGetSessionQuery, useGetUserPostsQuery } from "@services/api";
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
+} from '@components';
+import {
+  useGetSessionQuery,
+  useGetUserPostsQuery,
+} from '@services/api';
 
 export const MyPosts = () => {
   const { t } = useTranslation();
@@ -44,7 +49,12 @@ export const MyPosts = () => {
       updatePostType={setPostType}
       updateUserType={setUserType}
       updateCategories={setCategories}
-      filters={{ postType: true, userType: false, categories: true }}
+      filters={{
+        postType: true,
+        userType: false,
+        pricing: true,
+        categories: true,
+      }}
     />
   );
 };

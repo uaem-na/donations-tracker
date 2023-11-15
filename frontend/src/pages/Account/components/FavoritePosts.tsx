@@ -1,13 +1,18 @@
+import { useState } from 'react';
+
+import { useTranslation } from 'react-i18next';
+
 import {
   FilterPostType,
   FilterUserType,
   getPerPageOption,
   PerPageOption,
   PostsContainer,
-} from "@components";
-import { useGetSessionQuery, useGetStarredPostsQuery } from "@services/api";
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
+} from '@components';
+import {
+  useGetSessionQuery,
+  useGetStarredPostsQuery,
+} from '@services/api';
 
 export const FavoritePosts = () => {
   const { t } = useTranslation();
@@ -44,7 +49,12 @@ export const FavoritePosts = () => {
       updatePostType={setPostType}
       updateUserType={setUserType}
       updateCategories={setCategories}
-      filters={{ postType: true, userType: true, categories: true }}
+      filters={{
+        postType: true,
+        userType: true,
+        pricing: true,
+        categories: true,
+      }}
     />
   );
 };
