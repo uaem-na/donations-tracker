@@ -1,40 +1,30 @@
-import {
-  PropsWithChildren,
-  useState,
-} from 'react';
+import { PropsWithChildren, useState } from "react";
 
-import { formatISO } from 'date-fns';
-import {
-  ClassNames,
-  DayPicker,
-  DayPickerSingleProps,
-} from 'react-day-picker';
-import dayPickerStyles from 'react-day-picker/dist/style.module.css';
-import { useTranslation } from 'react-i18next';
+import { formatISO } from "date-fns";
+import { ClassNames, DayPicker, DayPickerSingleProps } from "react-day-picker";
+import dayPickerStyles from "react-day-picker/dist/style.module.css";
+import { useTranslation } from "react-i18next";
 
 import {
   FilterContainer,
   FilterPostType,
   FilterUserType,
   Option,
-} from '@components';
-import {
-  Input,
-  Tooltip,
-} from '@components/Controls';
-import { SelectInput } from '@components/Controls/Select';
+} from "@components";
+import { Input, Tooltip } from "@components/Controls";
+import { SelectInput } from "@components/Controls/Select";
 import {
   Drawer,
   DrawerContent,
   DrawerDescription,
   DrawerHeader,
   DrawerTrigger,
-} from '@components/Drawer';
-import { faCircleQuestion } from '@fortawesome/free-regular-svg-icons';
-import { faFilter } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import * as Popover from '@radix-ui/react-popover';
-import { ApiModel } from '@services/api';
+} from "@components/Drawer";
+import { faCircleQuestion } from "@fortawesome/free-regular-svg-icons";
+import { faFilter } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import * as Popover from "@radix-ui/react-popover";
+import { ApiModel } from "@services/api";
 
 interface IFilterLayoutProps extends PropsWithChildren {
   heading: string;
@@ -366,8 +356,8 @@ export const FilterLayout = ({
                 <span className="ml-1 font-medium text-gray-900">
                   {t("posts.price.label")}
                 </span>
-                <div className="flex w-3/4">
-                  <div className="mr-4">
+                <div className="flex w-3/4 items-center">
+                  <div className="mr-4 mb-2">
                     <Input
                       // {...register(`item.price`)}
                       id="price"
@@ -375,7 +365,7 @@ export const FilterLayout = ({
                       // errorMessage={errors.item?.price?.message}
                     />
                   </div>
-                  <div className="mr-4">
+                  <div className="mr-4 mb-2">
                     <Input
                       // {...register(`item.price`)}
                       id="price"
@@ -385,7 +375,7 @@ export const FilterLayout = ({
                   </div>
                   <button
                     type="button"
-                    className="rounded bg-purple-200 px-2 py-1 text-xs text-purple-800 font-semibold hover:bg-purple-300 hover:text-purple-900 cursor-pointer"
+                    className="rounded bg-purple-100 px-2 py-1 text-xs text-purple-800 font-semibold hover:bg-gray-100 hover:text-purple-900 cursor-pointer h-7"
                     onClick={updatePriceFilter}
                   >
                     {t("posts.price.apply")}
