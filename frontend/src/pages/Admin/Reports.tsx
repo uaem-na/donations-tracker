@@ -11,11 +11,6 @@ export const ReportsPage = () => {
   const { t } = useTranslation();
   const [page, setPage] = useState(1);
   const [perPage, setPerPage] = useState<PerPageOption>(10);
-  const [showReportGuideTooltip, setShowReportGuideTooltip] = useState(false);
-
-  const toggleShowReportGuideTooltip = () => {
-    setShowReportGuideTooltip(!showReportGuideTooltip);
-  };
 
   const { data: reportedPostsResponse, isLoading } = useGetReportedPostsQuery({
     per_page: perPage,

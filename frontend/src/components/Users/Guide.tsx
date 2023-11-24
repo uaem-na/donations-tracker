@@ -46,23 +46,23 @@ export const Guide = ({ className, guideType }: GuideProps) => {
       </DialogTrigger>
       <DialogContent className="overflow-auto">
         <DialogHeader>
-          <DialogTitle className="text-xl">
+          <DialogTitle className="ml-5 text-xl">
             {t(`${guideType}.admin_guide_title`)}
           </DialogTitle>
         </DialogHeader>
-        <div className="border border-gray-200 rounded-md p-3 mt-2">
+        <div className="border border-gray-200 rounded-md p-5 mt-1">
           {data[guideType].admin_guide_description.map((desc) => {
             if (
               desc.match("As admins, you must:") ||
               desc.match("En tant qu'administrateurs, vous devez :")
             )
               return (
-                <p className=" text-base font-medium leading-6 pb-2 pt-3 text-gray-900">
+                <p className=" text-base font-medium leading-5 pb-2 pt-3 text-gray-900">
                   {desc}
                 </p>
               );
             return (
-              <p className="text-sm leading-6 pb-4 text-gray-700">{t(desc)}</p>
+              <p className="text-sm leading-5 pb-4 text-gray-700">{t(desc)}</p>
             );
           })}
         </div>
