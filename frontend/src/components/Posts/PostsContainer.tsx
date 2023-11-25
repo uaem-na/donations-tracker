@@ -36,6 +36,7 @@ interface PostsContainerProps {
     categories: boolean;
     date?: boolean;
   };
+  role? : string;
 }
 
 export const PostsContainer = ({
@@ -52,6 +53,7 @@ export const PostsContainer = ({
   updateCategories,
   updateDate,
   filters,
+  role
 }: PostsContainerProps) => {
   const { t } = useTranslation();
   const { data: categories } = useGetItemCategoriesQuery({ locale: "en" });
@@ -133,6 +135,7 @@ export const PostsContainer = ({
         handleCategoryFilterChange(options.map((opt) => opt.value))
       }
       handleDateFilterChange={(value) => handleDateFilterChange(value)}
+      role={role}
     >
       <div className="flex flex-col gap-y-4">
         <PostList posts={posts} />

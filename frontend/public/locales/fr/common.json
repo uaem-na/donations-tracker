@@ -24,6 +24,14 @@
     "title": "Messages",
     "admin_guide": "Cliquez pour voir des guides plus détaillés sur la page des articles.",
     "admin_guide_title": "Bienvenue sur la page des messages!",
+    "admin_guide_description": [
+      "Cette page permet aux administrateurs de passer en revue tous les messages qui ont été définis comme 'autres'.",
+      "De cette façon, il est plus facile de classer les messages et de s'assurer que tous les messages sont correctement étiquetés.",
+      "Les messages dont les catégories sont déjà définies ne seront pas affichés ici.",
+      "En tant qu'administrateurs, vous devez :",
+      "Approuver les messages avant qu'ils ne soient mis à la disposition du public.",
+      "Contactez l'auteur des articles pour confirmer les catégories définies pour les articles."
+    ],
     "author": "Auteur",
     "available": "Disponible",
     "type": "Type",

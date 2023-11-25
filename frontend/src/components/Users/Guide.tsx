@@ -51,18 +51,23 @@ export const Guide = ({ className, guideType }: GuideProps) => {
           </DialogTitle>
         </DialogHeader>
         <div className="border border-gray-200 rounded-md p-5 mt-1">
-          {data[guideType].admin_guide_description.map((desc) => {
+          {data[guideType].admin_guide_description.map((desc, idx) => {
             if (
               desc.match("As admins, you must:") ||
               desc.match("En tant qu'administrateurs, vous devez :")
             )
               return (
-                <p className=" text-base font-medium leading-5 pb-2 pt-3 text-gray-900">
+                <p
+                  key={idx}
+                  className=" text-base font-medium leading-5 pb-2 pt-3 text-gray-900"
+                >
                   {desc}
                 </p>
               );
             return (
-              <p className="text-sm leading-5 pb-4 text-gray-700">{t(desc)}</p>
+              <p key={idx} className="text-sm leading-5 pb-4 text-gray-700">
+                {t(desc)}
+              </p>
             );
           })}
         </div>

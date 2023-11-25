@@ -5,10 +5,10 @@ import {
   PostsContainer,
   getPerPageOption,
 } from "@components/Posts";
+import { useRole } from "@hooks/useRole";
 import { useGetPostsAdminQuery } from "@services/api";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-
 export const AdminPostsPage = () => {
   const { t } = useTranslation();
   const [page, setPage] = useState(1);
@@ -33,6 +33,8 @@ export const AdminPostsPage = () => {
     }
   );
 
+  const status = useRole();
+
   return (
     <>
       <div className="px-4 py-5">
@@ -55,6 +57,7 @@ export const AdminPostsPage = () => {
             categories: true,
             date: true,
           }}
+          role={status}
         />
       </div>
     </>
