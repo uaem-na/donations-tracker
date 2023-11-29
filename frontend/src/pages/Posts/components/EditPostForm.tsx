@@ -141,8 +141,8 @@ export const EditPostForm = ({ id, onError }: EditPostFormProps) => {
       const errorMessages = err.errors.map(
         (error) =>
           `${error.msg}: ${error.location}.${error.path} = ${JSON.stringify(
-            error.value,
-          )},`
+            error.value
+          )}`
       );
       setServerMessage(errorMessages.join(","));
     } else {
