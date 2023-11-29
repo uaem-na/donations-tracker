@@ -164,7 +164,7 @@ export const FilterLayout = ({
                         defaultOption={selectedUserType}
                         onChange={(option) => {
                           handleUserTypeFilterChange(
-                            option.value as FilterUserType
+                            option.value as FilterUserType,
                           );
                           setSelectedUserType(option);
                         }}
