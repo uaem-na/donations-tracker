@@ -1,5 +1,11 @@
+import { useEffect, useMemo, useState } from "react";
+
+import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
+
 import { Alert } from "@components";
-import { Button, Input, Label } from "@components/Controls";
+import { Button, Input, Label, Tooltip } from "@components/Controls";
 import { SelectInput } from "@components/Controls/Select";
 import { Textarea } from "@components/Controls/Textarea";
 import {
@@ -12,6 +18,7 @@ import {
   DialogTrigger,
 } from "@components/Dialog";
 import { PostType } from "@constants";
+import { faCircleQuestion } from "@fortawesome/free-regular-svg-icons";
 import { faCancel, faCheck, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -22,10 +29,7 @@ import {
   useGetItemCategoriesQuery,
   useGetPostQuery,
 } from "@services/api";
-import { useEffect, useMemo, useState } from "react";
-import { useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+
 import { CreateEditPostSchema } from "./schemas/CreateEditPostSchema";
 
 type Type = (typeof PostType)[keyof typeof PostType];
@@ -59,10 +63,15 @@ export const EditPostForm = ({ id, onError }: EditPostFormProps) => {
 
   // keep track of checkbox value for donation
   const [isDonation, setIsDonation] = useState(false);
+  const [showPriceTooltip, setShowPriceTooltip] = useState(false);
 
   const handleDonation = () => {
     setIsDonation((prev) => !prev);
     setValue("item.price", 0);
+  };
+
+  const toggleShowPriceTooltip = () => {
+    setShowPriceTooltip(!showPriceTooltip);
   };
 
   const {
@@ -132,14 +141,14 @@ export const EditPostForm = ({ id, onError }: EditPostFormProps) => {
       const errorMessages = err.errors.map(
         (error) =>
           `${error.msg}: ${error.location}.${error.path} = ${JSON.stringify(
-            error.value,
-          )}`,
+            error.value
+          )}`
       );
       setServerMessage(errorMessages.join(","));
     } else {
       err.errors.length > 0
         ? setServerMessage(
-            err.errors.join(",") ?? t("errors.unknown_server_error"),
+            err.errors.join(",") ?? t("errors.unknown_server_error")
           )
         : setServerMessage(err.message ?? t("errors.unknown_server_error"));
     }
@@ -283,7 +292,17 @@ export const EditPostForm = ({ id, onError }: EditPostFormProps) => {
             </div>
           </div>
           <div>
-            <Label htmlFor="price">{t("posts.price")}</Label>
+            <Label htmlFor="price">
+              {t("posts.price")}
+              <Tooltip asChild message={t("posts.price_tooltip")}>
+                <FontAwesomeIcon
+                  icon={faCircleQuestion}
+                  className="mx-2"
+                  onMouseEnter={toggleShowPriceTooltip}
+                  onMouseLeave={toggleShowPriceTooltip}
+                />
+              </Tooltip>
+            </Label>
             <div className="mt-2">
               <Input
                 {...register(`item.price`, { disabled: isDonation })}

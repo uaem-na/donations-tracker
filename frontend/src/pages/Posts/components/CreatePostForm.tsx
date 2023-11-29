@@ -1,20 +1,26 @@
+import { useEffect, useMemo, useState } from "react";
+
+import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
+
 import { Alert } from "@components";
-import { Button, Input, Label } from "@components/Controls";
+import { Button, Input, Label, Tooltip } from "@components/Controls";
 import { SelectInput } from "@components/Controls/Select";
 import { Textarea } from "@components/Controls/Textarea";
 import { PostType } from "@constants";
-import { faHandshake } from "@fortawesome/free-regular-svg-icons";
-import { faFileSignature } from "@fortawesome/free-solid-svg-icons";
+import { faCircleQuestion } from "@fortawesome/free-regular-svg-icons";
+import {
+  faFileSignature,
+  faHandshake,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
   useCreatePostMutation,
   useGetItemCategoriesQuery,
 } from "@services/api";
-import { useEffect, useMemo, useState } from "react";
-import { useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+
 import { CreateEditPostSchema } from "./schemas/CreateEditPostSchema";
 
 type Type = (typeof PostType)[keyof typeof PostType];
@@ -34,6 +40,7 @@ export const CreatePostForm = ({ type }: CreatePostFormProps) => {
 
   // keep track of checkbox value for donation
   const [isDonation, setIsDonation] = useState(false);
+  const [showPriceTooltip, setShowPriceTooltip] = useState(false);
 
   const handleDonation = () => {
     setIsDonation((prev) => !prev);
@@ -53,6 +60,10 @@ export const CreatePostForm = ({ type }: CreatePostFormProps) => {
     // append type to data
     data.type = type;
     createPostApi(data);
+  };
+
+  const toggleShowPriceTooltip = () => {
+    setShowPriceTooltip(!showPriceTooltip);
   };
 
   // handle successful request
@@ -76,14 +87,14 @@ export const CreatePostForm = ({ type }: CreatePostFormProps) => {
         const errorMessages = err.errors.map(
           (error) =>
             `${error.msg}: ${error.location}.${error.path} = ${JSON.stringify(
-              error.value,
-            )}`,
+              error.value
+            )}`
         );
         setServerMessage(errorMessages.join(","));
       } else {
         err.errors.length > 0
           ? setServerMessage(
-              err.errors.join(",") ?? t("errors.unknown_server_error"),
+              err.errors.join(",") ?? t("errors.unknown_server_error")
             )
           : setServerMessage(err.message ?? t("errors.unknown_server_error"));
       }
@@ -158,7 +169,17 @@ export const CreatePostForm = ({ type }: CreatePostFormProps) => {
             </div>
           </div>
           <div>
-            <Label htmlFor="price">{t("posts.price")}</Label>
+            <Label htmlFor="price">
+              {t("posts.price")}
+              <Tooltip asChild message={t("posts.price_tooltip")}>
+                <FontAwesomeIcon
+                  icon={faCircleQuestion}
+                  className="mx-2"
+                  onClick={toggleShowPriceTooltip}
+                />
+              </Tooltip>
+            </Label>
+
             <div className="mt-2">
               <Input
                 {...register(`item.price`, { disabled: isDonation })}
@@ -169,7 +190,16 @@ export const CreatePostForm = ({ type }: CreatePostFormProps) => {
             </div>
           </div>
           <div>
-            <Label htmlFor="category">{t("posts.postal_code")}</Label>
+            <Label htmlFor="category">
+              {t("posts.postal_code")}
+              <Tooltip asChild message={t("posts.postal_code_tooltip")}>
+                <FontAwesomeIcon
+                  icon={faCircleQuestion}
+                  className="mx-2"
+                  onClick={toggleShowPriceTooltip}
+                />
+              </Tooltip>
+            </Label>
             <div className="mt-2">
               <Input
                 {...register(`location.postalCode`)}

@@ -9,6 +9,7 @@ import { useGetSessionQuery, useUpdateUserMutation } from "@services/api";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { updateUserInfoSchema } from "./schemas/UpdateUserInfoSchema";
+import { UserRole } from "@constants";
 
 const Heading = (text: string) => {
   return (
@@ -100,7 +101,9 @@ export const UpdateUserInfoForm = () => {
             <Label htmlFor="displayName">Display name</Label>
             <div className="mt-2">
               <Input
-                {...register("displayName")}
+                {...register("displayName", {
+                  disabled: session?.role.includes(UserRole.ORGANIZATION),
+                })}
                 type="text"
                 name="displayName"
                 id="displayName"
