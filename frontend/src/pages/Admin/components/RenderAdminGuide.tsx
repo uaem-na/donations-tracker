@@ -1,15 +1,16 @@
 import { Guide, GuideProps } from "@components/Users/Guide";
 import { useRole } from "@hooks/useRole";
 export const RenderAdminGuide = ({
-  role,
+  // role,
   guideType,
 }: {
-  role?: string;
+  // role?: string;
   guideType: GuideProps;
 }) => {
-  if (role === undefined) return;
+  const role = useRole();
+  // if (role === undefined) return;
 
-  if (role === "fulfilled") {
+  if (role === "admin") {
     return <Guide guideType={guideType.guideType} />;
   }
 };

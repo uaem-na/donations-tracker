@@ -88,7 +88,7 @@ export const FilterLayout = ({
         <h1 className="text-2xl font-bold leading-10 tracking-tight text-gray-900">
           {heading}
         </h1>
-        <RenderAdminGuide role={role!} guideType={{ guideType: "posts" }} />
+        <RenderAdminGuide guideType={{ guideType: "posts" }} />
 
         <div className="flex items-center">
           <div className="relative inline-block text-left">

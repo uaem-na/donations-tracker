@@ -33,7 +33,7 @@ export const AdminPostsPage = () => {
     }
   );
 
-  const status = useRole();
+  const role = useRole();
 
   return (
     <>
@@ -57,7 +57,7 @@ export const AdminPostsPage = () => {
             categories: true,
             date: true,
           }}
-          role={status}
+          role={role}
         />
       </div>
     </>
