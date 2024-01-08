@@ -32,7 +32,7 @@ export const validateUserRegisterOrg = async ({
     });
 
   let validatePostalCode = body("postalCode")
-    .trim()
+    .replace(/ /g,'')
     .notEmpty()
     .isString()
     .isPostalCode("CA");

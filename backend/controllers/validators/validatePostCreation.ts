@@ -40,7 +40,7 @@ export const validatePostCreation = async ({
     .isIn(PostCategories);
 
   let validateLocationPostalCode = body("location.postalCode")
-    .trim()
+    .replace(/ /g,'')
     .notEmpty()
     .isString()
     .isPostalCode("CA");

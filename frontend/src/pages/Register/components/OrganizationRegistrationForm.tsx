@@ -90,10 +90,10 @@ export const OrganizationRegistrationForm = () => {
   };
 
   const postalCodeFormatting = (val: string) => {
-    const postalCodeRegex = /^([A-Za-z]\d[A-Za-z])[ -]?(\d[A-Za-z]\d)$/;
+    const postalCodeRegex = /^[A-Z]\d[A-Z]\d[A-Z]\d$/;
     const value = val;
     if (postalCodeRegex.test(value)) {
-      const formatted = value.toUpperCase().replace(postalCodeRegex, "$1 $2");
+      const formatted = value.toUpperCase().replace(postalCodeRegex, "$&");
       setValue("postalCode", formatted);
     }
   };
@@ -219,7 +219,21 @@ export const OrganizationRegistrationForm = () => {
         </div>
 
         <div className="md:col-span-1">
-          <Label htmlFor="postalCode">Postal code</Label>
+          <Label htmlFor="postalCode">
+          <span className="mr-2">Postal Code</span>
+            <Tooltip
+            asChild
+            message={
+              "Please format all uppercase and no spaces. Eg: A1A1A1"
+            }
+          >
+            <FontAwesomeIcon
+              tabIndex={0}
+              className=" text-gray-6400"
+              icon={faInfoCircle}
+            />
+          </Tooltip>
+            </Label>
           <div className="mt-2">
             <Input
               {...register("postalCode", {

@@ -68,6 +68,7 @@
     "delete_confirm_title": "Etes-vous sûr que vous voulez supprimer?",
     "delete_confirm_description": "Cette action ne peut pas être annulée. Cela supprimera définitivement votre message.",
     "postal_code": "Code postal",
+    "postal_code_tooltip": "Veuillez formater tout en majuscules et sans espaces. Exemple : A1A1A1",
     "donation": "Donation",
     "item_categories": {
       "book": "Livre",

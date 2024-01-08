@@ -190,7 +190,16 @@ export const CreatePostForm = ({ type }: CreatePostFormProps) => {
             </div>
           </div>
           <div>
-            <Label htmlFor="category">{t("posts.postal_code")}</Label>
+            <Label htmlFor="category">
+              {t("posts.postal_code")}
+              <Tooltip asChild message={t("posts.postal_code_tooltip")}>
+                <FontAwesomeIcon
+                  icon={faCircleQuestion}
+                  className="mx-2"
+                  onClick={toggleShowPriceTooltip}
+                />
+              </Tooltip>
+            </Label>
             <div className="mt-2">
               <Input
                 {...register(`location.postalCode`)}

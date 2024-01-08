@@ -68,6 +68,7 @@
     "delete_confirm_title": "Are you sure you want to delete?",
     "delete_confirm_description": "This action cannot be undone. This will permanently delete your post.",
     "postal_code": "Postal code",
+    "postal_code_tooltip": "Please format all uppercase and no spaces. Eg: A1A1A1",
     "donation": "Donation",
     "item_categories": {
       "book": "Book",
