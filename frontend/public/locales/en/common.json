@@ -22,6 +22,16 @@
   "all": "All",
   "posts": {
     "title": "Posts",
+    "admin_guide": "Click to see more detailed guides on posts page.",
+    "admin_guide_title": "Welcome to the posts page!",
+    "admin_guide_description": [
+      "This page allows admins to review all posts that have been set to 'other'.",
+      "This way it's easier to categorize posts and make sure that all posts are labelled correctly.",
+      "Posts with categories already defined won't be displayed here.",
+      "As admins, you must:",
+      "Approve posts before they become available to the public.",
+      "Contact the author of posts to confirm the categories set for the posts."
+    ],
     "author": "Author",
     "available": "Available",
     "type": "Type",
@@ -75,6 +85,16 @@
   },
   "reports": {
     "manage_reported_posts": "Manage reported posts",
+    "admin_guide": "Click to see more detailed guides on reports page.",
+    "admin_guide_title": "Welcome to the reports page!",
+    "admin_guide_description": [
+      "This page allows admins to see all request/offer items that have been reported by users.",
+      "To see detailed information regarding reports, simply click on the specific item in the reports list.",
+      "All reports concerning the item will be displayed on the left and those that have been resolved on the right.",
+      "As admins, you must:",
+      "Regularly check on items that have been flagged with reports and investigate the issues by accessing the detailed information for the related item posts.",
+      "In the worst case, contact the author of posts to resolve the reported issues"
+    ],
     "report_outstanding": "report outstanding",
     "reports_outstanding": "reports outstanding",
     "total_reports": "Total reports",
@@ -91,6 +111,16 @@
   },
   "users": {
     "title": "Users",
+    "admin_guide": "Click to see more detailed guides on users page.",
+    "admin_guide_title": "Welcome to the users page!",
+    "admin_guide_description": [
+      "This page allows admins to see all types of users who have registered to UAEM donations tracker app.",
+      "All users have their verification status displayed on the right and admins can see their detailed information by clicking on the user.",
+      "As admins, you must:",
+      "Ensure that users registered as organization are confirmed members of the organization they've put and verify them.",
+      "Monitor users who have been previously flagged with suspicious reports and deactivate them once their illegal activities have been proven.",
+      "To verify unapproved users or deactivate any users reported for suspicious activities, clicking on the user will show their information."
+    ],
     "admin": "Admin",
     "individual": "Individual",
     "organization": "Organization",

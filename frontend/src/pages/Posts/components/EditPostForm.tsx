@@ -148,7 +148,7 @@ export const EditPostForm = ({ id, onError }: EditPostFormProps) => {
     } else {
       err.errors.length > 0
         ? setServerMessage(
-            err.errors.join(",") ?? t("errors.unknown_server_error"),
+            err.errors.join(",") ?? t("errors.unknown_server_error")
           )
         : setServerMessage(err.message ?? t("errors.unknown_server_error"));
     }
