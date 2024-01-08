@@ -1,7 +1,7 @@
 import { getPerPageOption, PerPageOption } from "@components";
+import { AdminGuide } from "@components/AdminGuide";
 import { Button } from "@components/Controls";
 import { SelectInput } from "@components/Controls/Select";
-import { Guide } from "@components/Users/Guide";
 import { ReportedPostItem } from "@pages/Admin/components/ReportedPostItem";
 import { ApiModel, useGetReportedPostsQuery } from "@services/api";
 import { useCallback, useState } from "react";
@@ -59,7 +59,7 @@ export const ReportsPage = () => {
         <h1 className="text-2xl font-bold leading-10 tracking-tight text-gray-900">
           {t("reports.manage_reported_posts")}
         </h1>
-        <Guide className="mt-2.5 ml-[250px]" guideType={"reports"} />
+        <AdminGuide className="mt-2.5 ml-[250px]" guideType={"reports"} />
       </div>
 
       <div className="flex items-center justify-end">

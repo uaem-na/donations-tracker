@@ -11,20 +11,24 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { classMerge } from "@utils/ClassMerge";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import * as data from "../../../public/locales/en/common.json";
 
-export type GuideProps = {
+export type AdminGuideProps = {
   className?: string;
   guideType: "users" | "posts" | "reports";
 };
 
-export const Guide = ({ className, guideType }: GuideProps) => {
+export const AdminGuide = ({ className, guideType }: AdminGuideProps) => {
   const { t } = useTranslation();
   const [showGuideTooltip, setShowGuideTooltip] = useState(false);
 
   const toggleShowGuideTooltip = () => {
     setShowGuideTooltip(!showGuideTooltip);
   };
+
+  const guideTitle = t(`${guideType}.admin_guide_title`);
+  const guideContentArray = t(`${guideType}.admin_guide_description`, {
+    returnObjects: true,
+  }) as Array<string>;
 
   return (
     <Dialog>
@@ -46,16 +50,14 @@ export const Guide = ({ className, guideType }: GuideProps) => {
       </DialogTrigger>
       <DialogContent className="overflow-auto">
         <DialogHeader>
-          <DialogTitle className="ml-5 text-xl">
-            {t(`${guideType}.admin_guide_title`)}
-          </DialogTitle>
+          <DialogTitle className="ml-5 text-xl">{guideTitle}</DialogTitle>
         </DialogHeader>
         <div className="border border-gray-200 rounded-md p-5 mt-1">
-          {data[guideType].admin_guide_description.map((desc, idx) => {
+          {guideContentArray.map((desc, idx) => {
             if (
               desc.match("As admins, you must:") ||
               desc.match("En tant qu'administrateurs, vous devez :")
-            )
+            ) {
               return (
                 <p
                   key={idx}
@@ -64,9 +66,10 @@ export const Guide = ({ className, guideType }: GuideProps) => {
                   {desc}
                 </p>
               );
+            }
             return (
               <p key={idx} className="text-sm leading-5 pb-4 text-gray-700">
-                {t(desc)}
+                {desc}
               </p>
             );
           })}

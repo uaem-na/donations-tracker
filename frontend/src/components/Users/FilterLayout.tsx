@@ -2,7 +2,7 @@ import { FilterContainer, FilterUserType } from "@components";
 import { SelectInput } from "@components/Controls/Select";
 import { PropsWithChildren } from "react";
 import { useTranslation } from "react-i18next";
-import { Guide } from "./Guide";
+import { AdminGuide } from "../AdminGuide/AdminGuide";
 interface IFilterLayoutProps extends PropsWithChildren {
   heading: string;
   handlePerPageChange: (val: string) => void;
@@ -27,7 +27,7 @@ export const FilterLayout = ({
         <h1 className="text-2xl font-bold leading-10 tracking-tight text-gray-900">
           {heading}
         </h1>
-        <Guide guideType={"users"} />
+        <AdminGuide guideType={"users"} />
 
         <div className="flex items-center">
           <div className="relative inline-block text-left">
