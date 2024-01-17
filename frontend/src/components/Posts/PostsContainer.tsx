@@ -1,18 +1,27 @@
-import { SetStateAction, useCallback } from "react";
+import {
+  SetStateAction,
+  useCallback,
+} from 'react';
 
-import { Trans, useTranslation } from "react-i18next";
+import {
+  Trans,
+  useTranslation,
+} from 'react-i18next';
 
-import { Button } from "@components/Controls";
-import { PostList } from "@components/Posts";
-import { FilterLayout } from "@components/Posts/FilterLayout";
-import { ApiModel, useGetItemCategoriesQuery } from "@services/api";
+import { Button } from '@components/Controls';
+import { PostList } from '@components/Posts';
+import { FilterLayout } from '@components/Posts/FilterLayout';
+import {
+  ApiModel,
+  useGetItemCategoriesQuery,
+} from '@services/api';
 
 import {
   FilterPostType,
   FilterUserType,
   getPerPageOption,
   PerPageOption,
-} from "./types";
+} from './types';
 
 interface FilterProps {
   userType: "individual" | "organization";
@@ -32,6 +41,7 @@ interface PostsContainerProps {
   updatePostType: (setter: SetStateAction<FilterPostType>) => void;
   updateUserType: (setter: SetStateAction<FilterUserType>) => void;
   updateCategories: (setter: SetStateAction<string[]>) => void;
+  updatePriceRange: (setter: SetStateAction<[number, number]>) => void;
   updateDate?: (setter: SetStateAction<Date | undefined>) => void;
   filters: {
     postType: boolean;
@@ -54,6 +64,7 @@ export const PostsContainer = ({
   updatePostType,
   updateUserType,
   updateCategories,
+  updatePriceRange,
   updateDate,
   filters,
 }: PostsContainerProps) => {
@@ -91,6 +102,13 @@ export const PostsContainer = ({
       updatePage(1);
       updateDate(date);
     }
+  };
+
+  // display posts after a new price range is selected
+  const handlePriceRangeFilterChange = (newPriceRange: [number, number]) => {
+    // update parent container state
+    updatePage(1);
+    updatePriceRange(newPriceRange);
   };
 
   const renderPaginationResults = useCallback(() => {
@@ -133,6 +151,9 @@ export const PostsContainer = ({
         handleUserTypeFilterChange(option)
       }
       categories={categories ?? []}
+      handlePriceRangeFilterChange={(newPriceRange) =>
+        handlePriceRangeFilterChange(newPriceRange)
+      }
       handleCategoryFilterChange={(options) =>
         handleCategoryFilterChange(options.map((opt) => opt.value))
       }

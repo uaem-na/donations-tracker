@@ -123,11 +123,20 @@ export namespace QueryArgs {
       status?: "all" | "open" | "closed" | "pending-approval";
     };
 
+    export type PriceRange = {
+      price_range?: [number, number];
+    };
+
     export type Date = {
       date?: string;
     };
 
-    export type All = PostType & UserType & Categories & PostStatus & Date;
+    export type All = PostType &
+      UserType &
+      Categories &
+      PostStatus &
+      PriceRange &
+      Date;
   }
 
   export type Pagination = {
@@ -190,6 +199,7 @@ export namespace QueryArgs {
     export type GetStarredPosts = Pagination &
       Filters.PostType &
       Filters.UserType &
+      Filters.PriceRange &
       Filters.Categories & {
         userId: string;
       };

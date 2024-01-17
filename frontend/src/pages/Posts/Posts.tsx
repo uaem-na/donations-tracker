@@ -20,12 +20,14 @@ export const PostsPage = () => {
   const [postType, setPostType] = useState<FilterPostType>("all");
   const [userType, setUserType] = useState<FilterUserType>("all");
   const [categories, setCategories] = useState<string[]>(["all"]);
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 100]);
   const [date, setDate] = useState<Date>();
   const { data: postsResponse, isLoading } = useGetPostsQuery({
     per_page: perPage,
     page: page,
     post_type: postType,
     user_type: userType,
+    price_range: priceRange,
     categories: categories,
     ...(date && { date: date.toISOString().substring(0, 10) }),
   });
@@ -45,6 +47,7 @@ export const PostsPage = () => {
           updatePostType={setPostType}
           updateUserType={setUserType}
           updateCategories={setCategories}
+          updatePriceRange={setPriceRange}
           updateDate={setDate}
           filters={{
             postType: true,

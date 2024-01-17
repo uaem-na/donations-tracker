@@ -23,6 +23,7 @@ export const FavoritePosts = () => {
   // default filter should be "all" otherwise 400 error will be returned
   const [postType, setPostType] = useState<FilterPostType>("all");
   const [userType, setUserType] = useState<FilterUserType>("all");
+  const [priceRange, setPriceRange] = useState<[number, number]>([0,100]);
   const [categories, setCategories] = useState<string[]>(["all"]);
 
   const { data: user, isLoading: isSessionLoading } = useGetSessionQuery();
@@ -33,6 +34,7 @@ export const FavoritePosts = () => {
       page: page,
       post_type: postType,
       user_type: userType,
+      price_range: priceRange,
       categories: categories,
     });
 
@@ -48,6 +50,7 @@ export const FavoritePosts = () => {
       updatePerPage={setPerPage}
       updatePostType={setPostType}
       updateUserType={setUserType}
+      updatePriceRange={setPriceRange}
       updateCategories={setCategories}
       filters={{
         postType: true,
