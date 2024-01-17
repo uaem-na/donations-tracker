@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState } from 'react';
 
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
 
 import {
   FilterPostType,
@@ -8,8 +8,9 @@ import {
   getPerPageOption,
   PerPageOption,
   PostsContainer,
-} from "@components/Posts";
-import { useGetPostsAdminQuery } from "@services/api";
+} from '@components/Posts';
+import { useRole } from '@hooks/useRole';
+import { useGetPostsAdminQuery } from '@services/api';
 
 export const AdminPostsPage = () => {
   const { t } = useTranslation();
@@ -37,6 +38,8 @@ export const AdminPostsPage = () => {
     }
   );
 
+  const role = useRole();
+
   return (
     <>
       <div className="px-4 py-5">
@@ -61,6 +64,7 @@ export const AdminPostsPage = () => {
             pricing: true,
             date: true,
           }}
+          role={role}
         />
       </div>
     </>

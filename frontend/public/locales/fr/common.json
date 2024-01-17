@@ -22,6 +22,16 @@
   "all": "Tous",
   "posts": {
     "title": "Messages",
+    "admin_guide": "Cliquez pour voir des guides plus détaillés sur la page des articles.",
+    "admin_guide_title": "Bienvenue sur la page des messages!",
+    "admin_guide_description": [
+      "Cette page permet aux administrateurs de passer en revue tous les messages qui ont été définis comme 'autres'.",
+      "De cette façon, il est plus facile de classer les messages et de s'assurer que tous les messages sont correctement étiquetés.",
+      "Les messages dont les catégories sont déjà définies ne seront pas affichés ici.",
+      "En tant qu'administrateurs, vous devez :",
+      "Approuver les messages avant qu'ils ne soient mis à la disposition du public.",
+      "Contactez l'auteur des articles pour confirmer les catégories définies pour les articles."
+    ],
     "author": "Auteur",
     "available": "Disponible",
     "type": "Type",
@@ -61,6 +71,7 @@
     "delete_confirm_title": "Etes-vous sûr que vous voulez supprimer?",
     "delete_confirm_description": "Cette action ne peut pas être annulée. Cela supprimera définitivement votre message.",
     "postal_code": "Code postal",
+    "postal_code_tooltip": "Veuillez formater tout en majuscules et sans espaces. Exemple : A1A1A1",
     "donation": "Donation",
     "item_categories": {
       "book": "Livre",
@@ -77,6 +88,16 @@
   },
   "reports": {
     "manage_reported_posts": "Gérer les publications signalées",
+    "admin_guide": "Cliquez pour voir des guides plus détaillés sur la page des rapports.",
+    "admin_guide_title": "Bienvenue sur la page des rapports!",
+    "admin_guide_description": [
+      "Cette page permet aux administrateurs de visualiser toutes les demandes et offres signalées par les utilisateurs",
+      "Pour obtenir des informations détaillées sur les rapports, il suffit de cliquer sur l'élément spécifique dans la liste des rapports.",
+      "Tous les rapports concernant l'élément seront affichés à gauche et ceux qui ont été résolus à droite.",
+      "En tant qu'administrateurs, vous devez :",
+      "Vérifiez régulièrement les éléments qui ont été signalés par des rapports et examinez les problèmes en accédant aux informations détaillées des postes de l'élément concerné.",
+      "Dans le pire des cas, contactez l'auteur des messages pour résoudre les problèmes signalés."
+    ],
     "report_outstanding": "rapport en suspens",
     "reports_outstanding": "rapports en suspens",
     "total_reports": "Total des rapports",
@@ -93,6 +114,16 @@
   },
   "users": {
     "title": "Utilisateurs",
+    "admin_guide": "Cliquez pour voir des guides plus détaillés sur la page des utilisateurs.",
+    "admin_guide_title": "Bienvenue sur la page des utilisateurs",
+    "admin_guide_description": [
+      "Cette page permet aux administrateurs de voir tous les types d'utilisateurs qui se sont inscrits à l'application de suivi des dons UAEM.",
+      "L'état de vérification de tous les utilisateurs est affiché à droite et les administrateurs peuvent consulter leurs informations détaillées en cliquant sur l'utilisateur.",
+      "En tant qu'administrateurs, vous devez :",
+      "s'assurer que les utilisateurs enregistrés en tant qu'organisation sont des membres confirmés de l'organisation qu'ils ont indiquée et les vérifier.",
+      "surveiller les utilisateurs qui ont déjà fait l'objet de rapports suspects et les désactiver une fois que leurs activités illégales ont été prouvées.",
+      "Pour vérifier les utilisateurs non approuvés ou désactiver les utilisateurs signalés pour des activités suspectes, il suffit de cliquer sur l'utilisateur pour afficher les informations le concernant."
+    ],
     "admin": "Admin",
     "individual": "Individuel",
     "organization": "Organisation",

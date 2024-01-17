@@ -1,7 +1,7 @@
 import { TFunction } from "i18next";
 import * as yup from "yup";
 
-const postalCodeRegex = /^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/;
+const postalCodeRegex = /^[A-Z]\d[A-Z]\d[A-Z]\d$/;
 
 export const CreateEditPostSchema = (t: TFunction) => {
   return yup.object().shape({

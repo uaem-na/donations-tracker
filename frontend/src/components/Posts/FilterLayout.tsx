@@ -30,9 +30,12 @@ import {
   DrawerHeader,
   DrawerTrigger,
 } from '@components/Drawer';
-import { faCircleQuestion } from '@fortawesome/free-regular-svg-icons';
-import { faFilter } from '@fortawesome/free-solid-svg-icons';
+import {
+  faCircleQuestion,
+  faFilter,
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { RenderAdminGuide } from '@pages/Admin/components/RenderAdminGuide';
 import * as Popover from '@radix-ui/react-popover';
 import { ApiModel } from '@services/api';
 
@@ -52,6 +55,7 @@ interface IFilterLayoutProps extends PropsWithChildren {
     pricing: boolean;
     date?: boolean;
   };
+  role?: string;
 }
 
 let datePickerOptions: DayPickerSingleProps = {
@@ -79,6 +83,7 @@ export const FilterLayout = ({
   categories,
   filters,
   children,
+  role,
 }: IFilterLayoutProps) => {
   const { t } = useTranslation();
   const [selectedType, setSelectedType] = useState<Option>();
@@ -104,6 +109,7 @@ export const FilterLayout = ({
         <h1 className="text-2xl font-bold leading-10 tracking-tight text-gray-900">
           {heading}
         </h1>
+        <RenderAdminGuide guideType={{ guideType: "posts" }} />
 
         <div className="flex items-center">
           <div className="relative inline-block text-left">

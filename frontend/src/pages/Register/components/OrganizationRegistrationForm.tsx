@@ -1,11 +1,10 @@
 import { Alert } from "@components";
 import { Button, Input, Label, Tooltip } from "@components/Controls";
-import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { PlaceAutocomplete } from "@components/Controls/PlaceAutocomplete";
 import { SelectInput } from "@components/Controls/Select";
 import { UserDiscriminator } from "@constants";
-import { ProvinceCode, ProvinceName } from "@constants/Provinces";
+import { ProvinceName } from "@constants/Provinces";
+import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
   useGetSessionQuery,
@@ -91,10 +90,10 @@ export const OrganizationRegistrationForm = () => {
   };
 
   const postalCodeFormatting = (val: string) => {
-    const postalCodeRegex = /^([A-Za-z]\d[A-Za-z])[ -]?(\d[A-Za-z]\d)$/;
+    const postalCodeRegex = /^[A-Z]\d[A-Z]\d[A-Z]\d$/;
     const value = val;
     if (postalCodeRegex.test(value)) {
-      const formatted = value.toUpperCase().replace(postalCodeRegex, "$1 $2");
+      const formatted = value.toUpperCase().replace(postalCodeRegex, "$&");
       setValue("postalCode", formatted);
     }
   };
@@ -207,26 +206,34 @@ export const OrganizationRegistrationForm = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-6">
         <div className="md:col-span-2">
           <Label htmlFor="streetAddress">Address</Label>
-          <PlaceAutocomplete
-            control={control}
-            name="streetAddress"
-            id="streetAddress"
-            setValue={setValue}
-            placeholder="Address"
-            onSelect={(e) => {
-              setValue("streetAddress", `${e.street_number} ${e.street_name}`);
-              postalCodeFormatting(e.postalCode);
-              setValue("city", e.city);
-              const province = Object.keys(ProvinceCode).find((p) => {
-                return ProvinceCode[p] === e.provinceCode;
-              });
-              setValue("province", province!);
-            }}
-          />
+          <div className="mt-2">
+            <Input
+              {...register("streetAddress")}
+              id="streetAddress"
+              type="text"
+              autoComplete="street-address"
+              placeholder="Address"
+              errorMessage={errors.streetAddress?.message}
+            />
+          </div>
         </div>
 
         <div className="md:col-span-1">
-          <Label htmlFor="postalCode">Postal code</Label>
+          <Label htmlFor="postalCode">
+          <span className="mr-2">Postal Code</span>
+            <Tooltip
+            asChild
+            message={
+              "Please format all uppercase and no spaces. Eg: A1A1A1"
+            }
+          >
+            <FontAwesomeIcon
+              tabIndex={0}
+              className=" text-gray-6400"
+              icon={faInfoCircle}
+            />
+          </Tooltip>
+            </Label>
           <div className="mt-2">
             <Input
               {...register("postalCode", {
