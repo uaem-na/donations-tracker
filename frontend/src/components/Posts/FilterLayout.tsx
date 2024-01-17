@@ -1,43 +1,30 @@
-import {
-  PropsWithChildren,
-  useState,
-} from 'react';
+import { PropsWithChildren, useState } from "react";
 
-import { formatISO } from 'date-fns';
-import {
-  ClassNames,
-  DayPicker,
-  DayPickerSingleProps,
-} from 'react-day-picker';
-import dayPickerStyles from 'react-day-picker/dist/style.module.css';
-import { useTranslation } from 'react-i18next';
+import { formatISO } from "date-fns";
+import { ClassNames, DayPicker, DayPickerSingleProps } from "react-day-picker";
+import dayPickerStyles from "react-day-picker/dist/style.module.css";
+import { useTranslation } from "react-i18next";
 
 import {
   FilterContainer,
   FilterPostType,
   FilterUserType,
   Option,
-} from '@components';
-import {
-  Input,
-  Tooltip,
-} from '@components/Controls';
-import { SelectInput } from '@components/Controls/Select';
+} from "@components";
+import { Input, Tooltip } from "@components/Controls";
+import { SelectInput } from "@components/Controls/Select";
 import {
   Drawer,
   DrawerContent,
   DrawerDescription,
   DrawerHeader,
   DrawerTrigger,
-} from '@components/Drawer';
-import {
-  faCircleQuestion,
-  faFilter,
-} from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { RenderAdminGuide } from '@pages/Admin/components/RenderAdminGuide';
-import * as Popover from '@radix-ui/react-popover';
-import { ApiModel } from '@services/api';
+} from "@components/Drawer";
+import { faCircleQuestion, faFilter } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { RenderAdminGuide } from "@pages/Admin/components/RenderAdminGuide";
+import * as Popover from "@radix-ui/react-popover";
+import { ApiModel } from "@services/api";
 
 interface IFilterLayoutProps extends PropsWithChildren {
   heading: string;
@@ -376,7 +363,7 @@ export const FilterLayout = ({
                 <span className="ml-1 font-medium text-gray-900">
                   {t("posts.price.label")}
                 </span>
-                <div className="flex w-3/4 items-center">
+                <div className="flex items-center">
                   <div className="mr-4 mb-2">
                     <Input
                       id="price"
