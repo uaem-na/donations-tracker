@@ -124,7 +124,7 @@ export namespace QueryArgs {
     };
 
     export type PriceRange = {
-      price_range?: [number, number];
+      price_range: [number, number];
     };
 
     export type Date = {

@@ -357,7 +357,6 @@ export const FilterLayout = ({
                 </h3>
               </div>
             )}
-
             {filters.pricing && (
               <div className="border-b border-gray-200 pt-7 pb-7">
                 <span className="ml-1 font-medium text-gray-900">
