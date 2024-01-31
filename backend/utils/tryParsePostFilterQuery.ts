@@ -17,9 +17,9 @@ export const tryParsePostFilterQuery = (req: Request) => {
   const parsedPriceRange =
     Array.isArray(price_range) &&
     price_range.length == 2 &&
-    Number.isFinite(price_range[0]) &&
-    Number.isFinite(price_range[1])
-      ? price_range
+    /^\d+$/.test("" + price_range[0]) &&
+    /^\d+$/.test("" + price_range[1])
+      ? [Number(price_range[0]), Number(price_range[1])]
       : [0, 100];
 
   const parsedCategories =
@@ -37,7 +37,7 @@ export const tryParsePostFilterQuery = (req: Request) => {
   return {
     ...(parsedPostType !== FilterPostType.ALL && { postType: parsedPostType }),
     ...(parsedUserType !== FilterUserType.ALL && { userType: parsedUserType }),
-    ...{ priceRange: parsedPriceRange },
+    ...(parsedPriceRange && { priceRange: parsedPriceRange }),
     ...(parsedCategories.length > 0 && { categories: parsedCategories }),
     ...(parsedDateValue && { date: parsedDateValue }),
   };

@@ -2,6 +2,7 @@ import debug from "debug";
 import expressAsyncHandler from "express-async-handler";
 import { body, param, validationResult } from "express-validator";
 import { FilterQuery } from "mongoose";
+
 import {
   PostCategories,
   PostCategory,
@@ -49,7 +50,7 @@ export class PostController {
     }
 
     const { page, limit } = tryParsePaginationQuery(req);
-    const { postType, userType, categories, date } =
+    const { postType, userType, priceRange, categories, date } =
       tryParsePostFilterQuery(req);
 
     //! date objects in MongoDB stored in UTC, adjust for ET
@@ -59,6 +60,7 @@ export class PostController {
       status: PostStatus.OPEN,
       ...(postType && { type: postType }),
       ...(userType && { authorType: userType }),
+      ...(priceRange && { priceRange: priceRange }),
       ...(categories && {
         "item.category": { $in: categories },
       }),
