@@ -226,6 +226,10 @@ export class AdminController {
 
     log(`${req.user?.id} toggled active for user ${userId} to ${user.active}.`);
 
+    const toggledPosts = await this.postService.setPostStatus(userId, user.active ? PostStatus.OPEN : PostStatus.CLOSED);
+
+    log(`Toggled ${toggledPosts} posts to ${user.active ? PostStatus.OPEN : PostStatus.CLOSED}.`);
+
     res.status(200).json({
       message: `Successfully set user ${userId} active status to ${user.active}.`,
     });
