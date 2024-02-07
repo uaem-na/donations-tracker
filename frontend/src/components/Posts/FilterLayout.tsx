@@ -372,7 +372,7 @@ export const FilterLayout = ({
             )}
             {filters.pricing && (
               <div className="border-b border-gray-200 pt-3 pb-3">
-                <span className="ml-1 font-medium text-gray-900">
+                <span className="text-sm ml-1 font-medium text-gray-900">
                   {t("posts.price.label")}
                 </span>
                 <div className="flex items-center">
