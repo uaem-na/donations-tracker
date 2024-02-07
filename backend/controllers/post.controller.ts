@@ -305,7 +305,8 @@ export class PostController {
     }
 
     const { page, limit } = tryParsePaginationQuery(req);
-    const { postType, userType, categories } = tryParsePostFilterQuery(req);
+    const { postType, userType, priceRange, categories } =
+      tryParsePostFilterQuery(req);
 
     const { userId } = req.params;
     const user = await this.userService.getUserById(userId);
@@ -316,6 +317,7 @@ export class PostController {
     const filterQuery: FilterQuery<PostDocument> = {
       ...(postType && { type: postType }),
       ...(userType && { authorType: userType }),
+      ...(priceRange && { priceRange: priceRange }),
       ...(userId && { author: { _id: userId } }),
       ...(categories && {
         "item.category": { $in: categories },
