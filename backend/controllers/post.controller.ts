@@ -10,7 +10,12 @@ import {
   PostTypes,
   UserRole,
 } from "../constants";
-import { AuthorizationError, NotFoundError, ValidationError } from "../errors";
+import {
+  AuthorizationError,
+  InvalidOperationError,
+  NotFoundError,
+  ValidationError,
+} from "../errors";
 import { PostDto } from "../models/posts";
 import { PostService, UserService } from "../services";
 import {
@@ -174,6 +179,42 @@ export class PostController {
     }
 
     res.json(PostDto.fromDocument(post));
+  });
+
+  findPosts = expressAsyncHandler(async (req, res, next) => {
+    const keyword = req.query.keyword;
+    if (!keyword || typeof keyword !== "string") {
+      throw new InvalidOperationError("Keyword is required for searching");
+    }
+
+    const searchQuery = {
+      $or: [
+        { title: new RegExp(keyword, "i") },
+        { description: new RegExp(keyword, "i") },
+      ],
+    };
+
+    const { page, limit } = tryParsePaginationQuery(req);
+    const pageSize = limit || 10;
+    const currentPage = page || 1;
+
+    const [posts, count] = await this.postService.getPaginatedPosts(
+      currentPage,
+      pageSize,
+      searchQuery,
+      { updatedAt: -1, createdAt: -1 }
+    );
+
+    const postDtos = posts.map((post) => PostDto.fromDocument(post));
+
+    const response = {
+      data: postDtos,
+      page: currentPage,
+      per_page: pageSize,
+      total: count,
+    };
+
+    res.json(response);
   });
 
   updatePost = expressAsyncHandler(async (req, res, next) => {

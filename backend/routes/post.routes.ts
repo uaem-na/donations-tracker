@@ -14,6 +14,7 @@ router.get("/", postController.getPublicPosts);
 router.get("/landing", postController.getAllPosts);
 router.get("/:id", postController.getPost);
 router.get("/items/categories", postController.getItemCategories);
+router.get("/search", postController.findPosts);
 
 // * wire up protected routes with controller
 router.post("/", ensureAuthenticated, postController.createPost);
