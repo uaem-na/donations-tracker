@@ -82,6 +82,14 @@ export class PostService {
     return await post.save();
   }
 
+  async setPostStatus(id: string, postStatus: PostStatus): Promise<number> {
+    const result = await PostModel.updateMany({ author: id }, [
+      { $set: { status: postStatus } }
+    ]);
+
+    return result.modifiedCount;
+  }
+
   async deletePost(id: string): Promise<void> {
     const result = await PostModel.deleteOne({ _id: id });
 

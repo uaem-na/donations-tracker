@@ -128,6 +128,12 @@ export class PostController {
       );
     }
 
+    if (user.active === false) {
+      throw new AuthorizationError(
+        `User ${user.username} is deactivated and is not authorized to create a post.`
+      );
+    }
+
     const postalCode = location.postalCode as string;
     const point = await geocode(postalCode);
     console.log(point);
