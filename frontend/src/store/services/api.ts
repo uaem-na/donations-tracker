@@ -440,6 +440,7 @@ export const api = createApi({
       invalidatesTags: (result, error, args): any => [
         { type: "reports", id: args.id },
         { type: "reports", id: "reports-list" },
+        { type: "reported-posts", id: "reported-posts-list" },
       ],
     }),
   }),
