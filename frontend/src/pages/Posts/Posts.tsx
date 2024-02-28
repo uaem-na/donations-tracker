@@ -1,13 +1,15 @@
+import { useState } from 'react';
+
+import { useTranslation } from 'react-i18next';
+
 import {
   FilterPostType,
   FilterUserType,
+  getPerPageOption,
   PerPageOption,
   PostsContainer,
-  getPerPageOption,
-} from "@components/Posts";
-import { useGetPostsQuery } from "@services/api";
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
+} from '@components/Posts';
+import { useGetPostsQuery } from '@services/api';
 
 export const PostsPage = () => {
   const { t } = useTranslation();
@@ -18,12 +20,14 @@ export const PostsPage = () => {
   const [postType, setPostType] = useState<FilterPostType>("all");
   const [userType, setUserType] = useState<FilterUserType>("all");
   const [categories, setCategories] = useState<string[]>(["all"]);
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 100]);
   const [date, setDate] = useState<Date>();
   const { data: postsResponse, isLoading } = useGetPostsQuery({
     per_page: perPage,
     page: page,
     post_type: postType,
     user_type: userType,
+    price_range: priceRange,
     categories: categories,
     ...(date && { date: date.toISOString().substring(0, 10) }),
   });
@@ -43,11 +47,13 @@ export const PostsPage = () => {
           updatePostType={setPostType}
           updateUserType={setUserType}
           updateCategories={setCategories}
+          updatePriceRange={setPriceRange}
           updateDate={setDate}
           filters={{
             postType: true,
             userType: true,
             categories: true,
+            pricing: true,
             date: true,
           }}
         />

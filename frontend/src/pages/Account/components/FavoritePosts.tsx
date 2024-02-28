@@ -1,13 +1,18 @@
+import { useState } from 'react';
+
+import { useTranslation } from 'react-i18next';
+
 import {
   FilterPostType,
   FilterUserType,
   getPerPageOption,
   PerPageOption,
   PostsContainer,
-} from "@components";
-import { useGetSessionQuery, useGetStarredPostsQuery } from "@services/api";
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
+} from '@components';
+import {
+  useGetSessionQuery,
+  useGetStarredPostsQuery,
+} from '@services/api';
 
 export const FavoritePosts = () => {
   const { t } = useTranslation();
@@ -18,6 +23,7 @@ export const FavoritePosts = () => {
   // default filter should be "all" otherwise 400 error will be returned
   const [postType, setPostType] = useState<FilterPostType>("all");
   const [userType, setUserType] = useState<FilterUserType>("all");
+  const [priceRange, setPriceRange] = useState<[number, number]>([0,100]);
   const [categories, setCategories] = useState<string[]>(["all"]);
 
   const { data: user, isLoading: isSessionLoading } = useGetSessionQuery();
@@ -28,6 +34,7 @@ export const FavoritePosts = () => {
       page: page,
       post_type: postType,
       user_type: userType,
+      price_range: priceRange,
       categories: categories,
     });
 
@@ -43,8 +50,14 @@ export const FavoritePosts = () => {
       updatePerPage={setPerPage}
       updatePostType={setPostType}
       updateUserType={setUserType}
+      updatePriceRange={setPriceRange}
       updateCategories={setCategories}
-      filters={{ postType: true, userType: true, categories: true }}
+      filters={{
+        postType: true,
+        userType: true,
+        pricing: true,
+        categories: true,
+      }}
     />
   );
 };

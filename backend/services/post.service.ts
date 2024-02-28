@@ -1,4 +1,5 @@
 import { FilterQuery, SortOrder } from "mongoose";
+
 import {
   BilingualPostCategory,
   FilterPostType,
@@ -43,8 +44,13 @@ export class PostService {
       throw new Error("Error paginating posts. Invalid page or limit.");
     }
 
+    const { priceRange, ...restFilters } = filter;
     const posts = await PostModel.find({
-      ...(filter && { ...filter }),
+      "item.price": {
+        $gte: Number(priceRange[0]),
+        $lte: Number(priceRange[1]),
+      },
+      ...(restFilters && { ...restFilters }),
     })
       .sort(sort)
       .skip((page - 1) * limit)

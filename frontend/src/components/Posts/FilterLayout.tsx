@@ -1,31 +1,43 @@
-import { PropsWithChildren, useState } from "react";
+import {
+  PropsWithChildren,
+  useState,
+} from 'react';
 
-import { formatISO } from "date-fns";
-import { ClassNames, DayPicker, DayPickerSingleProps } from "react-day-picker";
-import dayPickerStyles from "react-day-picker/dist/style.module.css";
-import { useTranslation } from "react-i18next";
+import { formatISO } from 'date-fns';
+import {
+  ClassNames,
+  DayPicker,
+  DayPickerSingleProps,
+} from 'react-day-picker';
+import dayPickerStyles from 'react-day-picker/dist/style.module.css';
+import { useTranslation } from 'react-i18next';
 
 import {
   FilterContainer,
   FilterPostType,
   FilterUserType,
   Option,
-} from "@components";
-import { Tooltip } from "@components/Controls";
-import { SelectInput } from "@components/Controls/Select";
+} from '@components';
+import {
+  Input,
+  Tooltip,
+} from '@components/Controls';
+import { SelectInput } from '@components/Controls/Select';
 import {
   Drawer,
   DrawerContent,
   DrawerDescription,
   DrawerHeader,
   DrawerTrigger,
-} from "@components/Drawer";
-import { faCircleQuestion } from "@fortawesome/free-regular-svg-icons";
-import { faFilter } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { RenderAdminGuide } from "@pages/Admin/components/RenderAdminGuide";
-import * as Popover from "@radix-ui/react-popover";
-import { ApiModel } from "@services/api";
+} from '@components/Drawer';
+import {
+  faCircleQuestion,
+  faFilter,
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { RenderAdminGuide } from '@pages/Admin/components/RenderAdminGuide';
+import * as Popover from '@radix-ui/react-popover';
+import { ApiModel } from '@services/api';
 
 interface IFilterLayoutProps extends PropsWithChildren {
   heading: string;
@@ -34,11 +46,13 @@ interface IFilterLayoutProps extends PropsWithChildren {
   handleUserTypeFilterChange: (userType: FilterUserType) => void;
   handleCategoryFilterChange: (categories: ApiModel.PostItemCategory[]) => void;
   handleDateFilterChange: (date: Date) => void;
+  handlePriceRangeFilterChange: (priceRange: [number, number]) => void;
   categories: ApiModel.PostItemCategory[];
   filters: {
     postType: boolean;
     userType: boolean;
     categories: boolean;
+    pricing: boolean;
     date?: boolean;
   };
   role?: string;
@@ -65,6 +79,7 @@ export const FilterLayout = ({
   handleUserTypeFilterChange,
   handleCategoryFilterChange,
   handleDateFilterChange,
+  handlePriceRangeFilterChange,
   categories,
   filters,
   children,
@@ -76,6 +91,12 @@ export const FilterLayout = ({
   const [selectedCategories, setSelectedCategories] = useState<Option[]>();
   const [selectedDate, setSelectedDate] = useState<Date>();
   const [isDayPickerOpen, setIsDayPickerOpen] = useState<boolean>(false);
+  const [selectedPriceRange, setSelectedPriceRange] = useState<
+    [number, number]
+  >([0, 100]);
+  const [currentPriceRange, setCurrentPriceRange] = useState<[number, number]>([
+    0, 100,
+  ]);
   const [showPriceTooltip, setShowPriceTooltip] = useState(false);
 
   const toggleShowPriceTooltip = () => {
@@ -211,6 +232,22 @@ export const FilterLayout = ({
                     </div>
                   )}
 
+                  {filters.pricing && (
+                    <div className="border-b border-gray-200 pt-6 last:pb-6">
+                      <FilterContainer
+                        name="mobile_pricing"
+                        ariaLabel={t("posts.price.label")}
+                        options={categories ?? []}
+                        multiSelect={true}
+                        defaultOption={selectedCategories}
+                        onChange={(options) => {
+                          handleCategoryFilterChange(options);
+                          setSelectedCategories(options);
+                        }}
+                      />
+                    </div>
+                  )}
+
                   {filters.categories && (
                     <div className="border-b border-gray-200 pt-6 last:pb-6">
                       <FilterContainer
@@ -331,6 +368,53 @@ export const FilterLayout = ({
                     </Popover.Portal>
                   </Popover.Root>
                 </h3>
+              </div>
+            )}
+            {filters.pricing && (
+              <div className="border-b border-gray-200 pt-3 pb-3">
+                <span className="text-sm ml-1 font-medium text-gray-900">
+                  {t("posts.price.label")}
+                </span>
+                <div className="flex items-center">
+                  <div className="mr-4 mb-2">
+                    <Input
+                      id="price"
+                      type="number"
+                      value={currentPriceRange[0]}
+                      defaultValue={selectedPriceRange[0]}
+                      onChange={(event) => {
+                        setCurrentPriceRange([
+                          event.target.valueAsNumber,
+                          currentPriceRange[1],
+                        ]);
+                      }}
+                    />
+                  </div>
+                  <div className="mr-4 mb-2">
+                    <Input
+                      id="price"
+                      type="number"
+                      value={currentPriceRange[1]}
+                      defaultValue={selectedPriceRange[1]}
+                      onChange={(event) => {
+                        setCurrentPriceRange([
+                          currentPriceRange[0],
+                          event.target.valueAsNumber,
+                        ]);
+                      }}
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    className="rounded bg-purple-100 px-2 py-1 text-xs text-purple-800 font-semibold hover:bg-gray-100 hover:text-purple-900 cursor-pointer h-7"
+                    onClick={() => {
+                      handlePriceRangeFilterChange(currentPriceRange);
+                      setSelectedPriceRange(currentPriceRange);
+                    }}
+                  >
+                    {t("posts.price.apply")}
+                  </button>
+                </div>
               </div>
             )}
 

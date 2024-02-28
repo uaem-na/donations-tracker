@@ -1,14 +1,17 @@
+import { useState } from 'react';
+
+import { useTranslation } from 'react-i18next';
+
 import {
   FilterPostType,
   FilterUserType,
+  getPerPageOption,
   PerPageOption,
   PostsContainer,
-  getPerPageOption,
-} from "@components/Posts";
-import { useRole } from "@hooks/useRole";
-import { useGetPostsAdminQuery } from "@services/api";
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
+} from '@components/Posts';
+import { useRole } from '@hooks/useRole';
+import { useGetPostsAdminQuery } from '@services/api';
+
 export const AdminPostsPage = () => {
   const { t } = useTranslation();
   const [page, setPage] = useState(1);
@@ -17,6 +20,7 @@ export const AdminPostsPage = () => {
   // default filter should be "all" otherwise 400 error will be returned
   const [postType, setPostType] = useState<FilterPostType>("all");
   const [userType, setUserType] = useState<FilterUserType>("all");
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 100]);
   const [categories, setCategories] = useState<string[]>(["all"]);
   const [date, setDate] = useState<Date>();
   const { data: postsResponse, isLoading } = useGetPostsAdminQuery(
@@ -25,6 +29,7 @@ export const AdminPostsPage = () => {
       page: page,
       post_type: postType,
       user_type: userType,
+      price_range: priceRange,
       categories: categories,
       ...(date && { date: date.toISOString().substring(0, 10) }),
     },
@@ -49,12 +54,14 @@ export const AdminPostsPage = () => {
           updatePerPage={setPerPage}
           updatePostType={setPostType}
           updateUserType={setUserType}
+          updatePriceRange={setPriceRange}
           updateCategories={setCategories}
           updateDate={setDate}
           filters={{
             postType: true,
             userType: true,
             categories: true,
+            pricing: true,
             date: true,
           }}
           role={role}
