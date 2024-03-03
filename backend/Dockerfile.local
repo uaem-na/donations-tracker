@@ -5,6 +5,14 @@ FROM node:lts-alpine
 ARG GOOGLE_GEOCODE_API_KEY
 ENV GOOGLE_GEOCODE_API_KEY=$GOOGLE_GEOCODE_API_KEY
 
+# get argument for Resend API key
+ARG RESEND_API_KEY
+ENV RESEND_API_KEY=$RESEND_API_KEY
+
+# get argument for Resend E-mail from
+ARG RESEND_EMAIL_FROM
+ENV RESEND_EMAIL_FROM=$RESEND_EMAIL_FROM
+
 # set all the files in the /backend directory as the working directory
 WORKDIR /backend
 

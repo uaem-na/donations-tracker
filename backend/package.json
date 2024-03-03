@@ -32,6 +32,7 @@
     "passport": "^0.6.0",
     "passport-local": "^1.0.0",
     "passport-local-mongoose": "^8.0.0",
+    "resend": "^3.2.0",
     "ts-node": "^10.9.2"
   },
   "devDependencies": {

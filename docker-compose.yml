@@ -15,6 +15,8 @@ services:
       PORT: 8081
       DEBUG: backend:*
       GOOGLE_GEOCODE_API_KEY: ${GOOGLE_GEOCODE_API_KEY}
+      RESEND_API_KEY: ${RESEND_API_KEY}
+      RESEND_EMAIL_FROM: ${RESEND_EMAIL_FROM}
     ports:
       - 8081:8081
     networks:
