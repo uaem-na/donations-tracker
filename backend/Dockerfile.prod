@@ -26,6 +26,9 @@ RUN cp /tmp/package*.json /backend
 # install production
 RUN npm ci
 
+# switch to non-root user
+USER node
+
 # expose port 8080
 EXPOSE 8080
 

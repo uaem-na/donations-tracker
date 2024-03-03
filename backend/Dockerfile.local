@@ -14,6 +14,9 @@ COPY package.json package-lock.json /backend/
 # install the dependencies
 RUN npm ci
 
+# switch to non-root user
+USER node
+
 # expose port 8081
 EXPOSE 8081
 
