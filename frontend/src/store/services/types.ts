@@ -90,6 +90,7 @@ export namespace ApiResponse {
     firstName: string;
     lastName: string;
     verified: boolean;
+    isEmailVerified: boolean;
     starred: string[]; // post ids
   };
 

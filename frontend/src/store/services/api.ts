@@ -71,6 +71,15 @@ export const api = createApi({
         body: data,
       }),
     }),
+    resendEmailVerification: builder.mutation<
+      ApiResponse.MessageResponse,
+      void
+    >({
+      query: () => ({
+        url: "auth/resend-verification",
+        method: "POST",
+      }),
+    }),
     getStarredPosts: builder.query<
       ApiResponse.PaginatedList<ApiModel.Post>,
       QueryArgs.Users.GetStarredPosts
@@ -490,6 +499,7 @@ export const {
   useRegisterMutation,
   useForgotPasswordMutation,
   useResetPasswordMutation,
+  useResendEmailVerificationMutation,
   useToggleUserActiveAdminMutation,
   useStarPostMutation,
   useUpdateUserMutation,

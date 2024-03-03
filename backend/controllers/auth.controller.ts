@@ -180,9 +180,34 @@ export class AuthController {
     const frontendUrl = process.env.FRONTEND_URL;
     if (frontendUrl) {
       res.redirect(301, `${frontendUrl}`);
+      return;
     }
 
     res.status(200).send("Email verified.");
+  });
+
+  resendEmailVerification = expressAsyncHandler(async (req, res, next) => {
+    if (!req.user) {
+      throw new InvalidOperationError("User is not logged in.");
+    }
+
+    const user = await UserModel.findById(req.user.id);
+    if (!user) {
+      throw new InvalidOperationError("User not found.");
+    }
+
+    user.emailVerificationToken = this.authService.generateRandomToken();
+    await user.save();
+
+    await this.sendEmailVerification({
+      userId: user.id,
+      email: user.email,
+      emailVerificationToken: user.emailVerificationToken,
+    });
+
+    res
+      .status(200)
+      .json({ message: "Email verification link sent to your email." });
   });
 
   forgotPassword = expressAsyncHandler(async (req, res, next) => {

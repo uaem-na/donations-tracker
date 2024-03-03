@@ -10,10 +10,13 @@ const authController = new AuthController(authService, resendService);
 
 // * wire up routes with controller
 router.get("/session", authController.getSession);
-router.get("/verify/:id", authController.verifyEmail);
 router.post("/register", authController.register);
 router.post("/login", authController.localStrategy, authController.login);
 router.post("/logout", authController.logout);
+
+// * email verification routes
+router.post("/resend-verification", authController.resendEmailVerification);
+router.get("/verify/:id", authController.verifyEmail);
 
 // * reset password routes
 router.post("/forgot-password", authController.forgotPassword);

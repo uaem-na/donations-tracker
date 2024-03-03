@@ -5,6 +5,7 @@ import {
   faTriangleExclamation,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { classMerge } from "@utils";
 import { PropsWithChildren, useCallback } from "react";
 
 export type AlertTypes = "info" | "warn" | "error" | "success";
@@ -12,12 +13,14 @@ export type AlertTypes = "info" | "warn" | "error" | "success";
 interface IAlertProps {
   type: AlertTypes;
   heading?: string;
+  className?: string;
 }
 
 export const Alert = ({
   type,
   heading,
   children,
+  className,
 }: PropsWithChildren<IAlertProps>) => {
   const renderTypeIcon = () => {
     switch (type) {
@@ -95,14 +98,20 @@ export const Alert = ({
   return (
     <div className={`rounded-md p-4 ${backgroundColor()}`} role="alert">
       <div className="flex">
-        <div className="flex-shrink-0">{renderTypeIcon()}</div>
-        <div className="ml-3">
+        <div className="flex-shrink-0 self-center">{renderTypeIcon()}</div>
+        <div className="ml-3 w-full">
           {heading && (
             <h3 className={`text-sm font-medium ${headerTextColor()}`}>
               {heading}
             </h3>
           )}
-          <div className={`text-sm ${messageTextColor()} ${heading && "mt-2"}`}>
+          <div
+            className={classMerge(
+              `text-sm ${messageTextColor()}`,
+              { "mt-2": heading },
+              className
+            )}
+          >
             {children}
           </div>
         </div>
