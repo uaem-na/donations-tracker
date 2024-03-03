@@ -13,6 +13,12 @@ ENV RESEND_API_KEY=$RESEND_API_KEY
 ARG RESEND_EMAIL_FROM
 ENV RESEND_EMAIL_FROM=$RESEND_EMAIL_FROM
 
+# get argument for frontend & backend url
+ARG FRONTEND_URL
+ENV FRONTEND_URL=$FRONTEND_URL
+ARG BACKEND_URL
+ENV BACKEND_URL=$BACKEND_URL
+
 # set all the files in the /backend directory as the working directory
 WORKDIR /backend
 

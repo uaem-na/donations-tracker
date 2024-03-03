@@ -3,18 +3,18 @@ import debug from "debug";
 import { Request } from "express";
 import expressAsyncHandler from "express-async-handler";
 import { ParamsDictionary } from "express-serve-static-core";
-import { body, validationResult } from "express-validator";
+import { body, param, query, validationResult } from "express-validator";
 import passport from "passport";
 import QueryString from "qs";
 import { ProvinceCode, ProvinceName, UserDiscriminator } from "../constants";
-import { InvalidOperationError } from "../errors";
+import { InvalidOperationError, NotFoundError } from "../errors";
 import {
   IndividualUserModel,
   OrganizationUserModel,
   UserDto,
   UserModel,
 } from "../models/users";
-import { AuthService } from "../services";
+import { AuthService, ResendService } from "../services";
 import { UserDocument } from "../types";
 import {
   validateUserRegisterBase,
@@ -24,7 +24,10 @@ import {
 const log = debug("backend:auth");
 
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private resendService: ResendService,
+  ) {}
 
   getSession = expressAsyncHandler(async (req, res, next) => {
     const session = this.authService.getSession(req);
@@ -136,26 +139,77 @@ export class AuthController {
     }
   });
 
+  verifyEmail = expressAsyncHandler(async (req, res, next) => {
+    await param("id").notEmpty().run(req);
+    await query("token").notEmpty().run(req);
+
+    const { id } = req.params;
+    const { token } = req.query;
+    if (!token) {
+      throw new NotFoundError("Token not found.");
+    }
+
+    const user = await UserModel.findOne({ _id: id });
+    if (!user) {
+      throw new NotFoundError("User not found.");
+    }
+
+    if (user.emailVerificationToken !== token) {
+      throw new InvalidOperationError("Invalid token.");
+    }
+
+    user.isEmailVerified = true;
+    user.emailVerificationToken = "";
+
+    await user.save();
+
+    log(`User ${user.id} email verified.`);
+
+    const frontendUrl = process.env.FRONTEND_URL;
+    if (frontendUrl) {
+      res.redirect(301, `${frontendUrl}`);
+    }
+
+    res.status(200).send("Email verified.");
+  });
+
   private async registerIndividualUser(
-    req: Request<ParamsDictionary, any, any, QueryString.ParsedQs>
+    req: Request<ParamsDictionary, any, any, QueryString.ParsedQs>,
   ) {
     // * validation already happened in parent function
     const { displayName, username, email, firstName, lastName, password } =
       req.body;
-    return await UserModel.register(
+
+    const emailVerificationToken =
+      this.authService.generateEmailVerificationToken();
+
+    const result = await UserModel.register(
       new IndividualUserModel({
         displayName,
         username,
         email,
         firstName,
         lastName,
+        emailVerificationToken,
       }),
-      password
+      password,
     );
+
+    if (!result._id) {
+      throw new InvalidOperationError("User _id is not set.");
+    }
+
+    await this.sendEmailVerification({
+      userId: result._id,
+      email,
+      emailVerificationToken,
+    });
+
+    return result;
   }
 
   private async registerOrganizationUser(
-    req: Request<ParamsDictionary, any, any, QueryString.ParsedQs>
+    req: Request<ParamsDictionary, any, any, QueryString.ParsedQs>,
   ) {
     const {
       displayName,
@@ -172,13 +226,17 @@ export class AuthController {
       province,
     } = req.body;
 
-    return await UserModel.register(
+    const emailVerificationToken =
+      this.authService.generateEmailVerificationToken();
+
+    const result = await UserModel.register(
       new OrganizationUserModel({
         displayName,
         username,
         email,
         firstName,
         lastName,
+        emailVerificationToken,
         organization: {
           name: organization,
           phone,
@@ -191,7 +249,47 @@ export class AuthController {
           },
         },
       }),
-      password
+      password,
     );
+
+    if (!result._id) {
+      throw new InvalidOperationError("User _id is not set.");
+    }
+
+    await this.sendEmailVerification({
+      userId: result._id,
+      email,
+      emailVerificationToken,
+    });
+
+    return result;
+  }
+
+  private async sendEmailVerification({
+    userId,
+    email,
+    emailVerificationToken,
+  }: {
+    userId: string;
+    email: string;
+    emailVerificationToken: string;
+  }) {
+    if (!emailVerificationToken) {
+      throw new InvalidOperationError("Email verification token is not set.");
+    }
+
+    let backendUrl = process.env.BACKEND_URL;
+    if (!backendUrl) {
+      backendUrl = "http://localhost:8081";
+      log(`backendUrl is not set, using default: ${backendUrl}`);
+    }
+
+    const verificationLink = `${backendUrl}/auth/verify/${userId}?token=${emailVerificationToken}`;
+
+    this.resendService.send({
+      to: email,
+      subject: "Please verify your email address",
+      html: `Click <a href="${verificationLink}">here</a> to verify your email address.`,
+    });
   }
 }

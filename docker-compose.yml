@@ -10,13 +10,15 @@ services:
     container_name: donations-tracker-backend
     environment:
       CONNECTION_STRING: mongodb://donations-tracker-db:27017/dev
-      CLIENT_ORIGIN: http://localhost:8080
+      CLIENT_ORIGIN: ${FRONTEND_URL}
       SESSION_SECRET: top secret
       PORT: 8081
       DEBUG: backend:*
       GOOGLE_GEOCODE_API_KEY: ${GOOGLE_GEOCODE_API_KEY}
       RESEND_API_KEY: ${RESEND_API_KEY}
       RESEND_EMAIL_FROM: ${RESEND_EMAIL_FROM}
+      FRONTEND_URL: ${FRONTEND_URL}
+      BACKEND_URL: ${BACKEND_URL}
     ports:
       - 8081:8081
     networks:
