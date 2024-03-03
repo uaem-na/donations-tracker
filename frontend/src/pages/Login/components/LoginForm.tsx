@@ -8,7 +8,7 @@ import {
 } from "@services/api";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { loginSchema } from "./schemas/LoginSchema";
 
 export const LoginForm = () => {
@@ -19,6 +19,7 @@ export const LoginForm = () => {
   const [loginApi, { isLoading: isLoggingIn, isSuccess, error }] =
     useLoginMutation();
   const [serverMessage, setServerMessage] = useState("");
+  const [showResetPassword, setShowResetPassword] = useState(false);
 
   const {
     register,
@@ -44,12 +45,15 @@ export const LoginForm = () => {
   // handle server error message
   useEffect(() => {
     if (error) {
+      setShowResetPassword(true);
       if ("status" in error) {
         const err: any = "error" in error ? error.error : error.data;
         setServerMessage(err.errors.join(",") ?? "An error occurred");
       } else {
         setServerMessage(error.message ?? "An error occurred");
       }
+    } else {
+      setShowResetPassword(false);
     }
   }, [error]);
 
@@ -72,54 +76,62 @@ export const LoginForm = () => {
   }
 
   return (
-    <>
-      <form className="space-y-6" onSubmit={handleSubmit(onSubmit)} noValidate>
+    <form className="space-y-4" onSubmit={handleSubmit(onSubmit)} noValidate>
+      {serverMessage && (
         <div>
-          {serverMessage && <Alert type="error">{serverMessage}</Alert>}
+          <Alert type="error">{serverMessage}</Alert>
         </div>
+      )}
 
-        <div>
-          <Label htmlFor="username">Username</Label>
-          <div className="mt-2">
-            <Input
-              {...register("username")}
-              id="username"
-              name="username"
-              type="text"
-              autoComplete="username"
-              placeholder="Username"
-              required
-              errorMessage={errors.username?.message}
-            />
-          </div>
+      <div>
+        <Label htmlFor="username">Username</Label>
+        <div className="mt-2">
+          <Input
+            {...register("username")}
+            id="username"
+            name="username"
+            type="text"
+            autoComplete="username"
+            placeholder="Username"
+            required
+            errorMessage={errors.username?.message}
+          />
         </div>
+      </div>
 
-        <div>
-          <Label htmlFor="password">Password</Label>
-          <div className="mt-2">
-            <Input
-              {...register("password")}
-              id="password"
-              type="password"
-              autoComplete="current-password"
-              placeholder="Password"
-              required
-              errorMessage={errors.password?.message}
-            />
-          </div>
+      <div>
+        <Label htmlFor="password">Password</Label>
+        <div className="mt-2">
+          <Input
+            {...register("password")}
+            id="password"
+            type="password"
+            autoComplete="current-password"
+            placeholder="Password"
+            required
+            errorMessage={errors.password?.message}
+          />
         </div>
+      </div>
 
+      {showResetPassword && (
         <div>
-          <Button
-            disabled={isLoggingIn}
-            type="submit"
-            className="flex w-full justify-center"
-          >
-            Sign in
-          </Button>
+          <p className="mt-2 text-sm leading-6 text-gray-500">
+            <Link to="/forgot-password">Click here to reset your password</Link>
+          </p>
         </div>
-      </form>
-    </>
+      )}
+
+      <div>
+        <Button
+          disabled={isLoggingIn}
+          type="submit"
+          className="flex w-full justify-center"
+        >
+          Sign in
+        </Button>
+      </div>
+    </form>
   );
 };
 

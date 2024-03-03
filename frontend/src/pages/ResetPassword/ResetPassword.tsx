@@ -1,19 +1,24 @@
-import { Link } from "@components/Controls";
-import { LoginForm } from "./components/LoginForm";
+import { Navigate, useParams, useSearchParams } from "react-router-dom";
+import { ResetPasswordForm } from "./components/ResetPasswordForm";
 
-export const LoginPage = () => {
+export const ResetPasswordPage = () => {
+  const { id } = useParams();
+  const [searchParams] = useSearchParams();
+  const token = searchParams.get("token");
+
+  if (!id || !token) {
+    return <Navigate to="/" />;
+  }
+
   return (
     <div className="flex min-h-full">
       <div className="flex flex-1 flex-col justify-center px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
         <div className="mx-auto w-full max-w-sm lg:w-96">
           <div className="flex flex-col gap-4">
             <h2 className="text-2xl font-bold leading-9 tracking-tight text-gray-900">
-              Sign in to your account
+              Reset your password
             </h2>
-            <p className="text-sm leading-6 text-gray-500">
-              Not a member? <Link to="/register">Click here to register</Link>
-            </p>
-            <LoginForm />
+            <ResetPasswordForm userId={id} token={token} />
           </div>
         </div>
       </div>

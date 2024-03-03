@@ -7,8 +7,10 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { PropsWithChildren, useCallback } from "react";
 
+export type AlertTypes = "info" | "warn" | "error" | "success";
+
 interface IAlertProps {
-  type: "info" | "warn" | "error" | "success";
+  type: AlertTypes;
   heading?: string;
 }
 

@@ -7,7 +7,7 @@ import { body, param, query, validationResult } from "express-validator";
 import passport from "passport";
 import QueryString from "qs";
 import { ProvinceCode, ProvinceName, UserDiscriminator } from "../constants";
-import { InvalidOperationError, NotFoundError } from "../errors";
+import { InvalidOperationError } from "../errors";
 import {
   IndividualUserModel,
   OrganizationUserModel,
@@ -146,16 +146,28 @@ export class AuthController {
     const { id } = req.params;
     const { token } = req.query;
     if (!token) {
-      throw new NotFoundError("Token not found.");
+      res.status(401).json({ message: "Invalid token." });
+      return;
     }
 
     const user = await UserModel.findOne({ _id: id });
     if (!user) {
-      throw new NotFoundError("User not found.");
+      res.status(403).json({ message: "Could not verify email." });
+      return;
     }
 
+    if (
+      !user.emailVerificationToken ||
+      user.emailVerificationToken.length === 0
+    ) {
+      res.status(403).json({ message: "Could not verify email." });
+      return;
+    }
+
+    // TODO: handle this better with timing safe equals to prevent timing attacks
     if (user.emailVerificationToken !== token) {
-      throw new InvalidOperationError("Invalid token.");
+      res.status(403).json({ message: "Invalid token." });
+      return;
     }
 
     user.isEmailVerified = true;
@@ -173,6 +185,93 @@ export class AuthController {
     res.status(200).send("Email verified.");
   });
 
+  forgotPassword = expressAsyncHandler(async (req, res, next) => {
+    await body("email").isEmail().run(req);
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      res.status(400).json({ errors: errors.array({ onlyFirstError: true }) });
+      return;
+    }
+
+    const { email } = req.body;
+
+    const user = await UserModel.findOne({ email });
+    if (!user) {
+      res
+        .status(200)
+        .json({ message: "Password reset link sent to your email." });
+      return;
+    }
+
+    const resetPasswordToken = this.authService.generateRandomToken();
+
+    user.resetPasswordToken = resetPasswordToken;
+
+    await user.save();
+
+    const frontendUrl = process.env.FRONTEND_URL;
+    if (!frontendUrl) {
+      throw new InvalidOperationError("Frontend URL is not set.");
+    }
+
+    const resetPasswordLink = `${frontendUrl}/reset-password/${user.id}?token=${resetPasswordToken}`;
+
+    this.resendService.send({
+      to: email,
+      subject: "Reset your password",
+      html: `Click <a href="${resetPasswordLink}">here</a> to reset your password.`,
+    });
+
+    res
+      .status(200)
+      .json({ message: "Password reset link sent to your email." });
+  });
+
+  resetPassword = expressAsyncHandler(async (req, res, next) => {
+    await body("userId").notEmpty().run(req);
+    await body("token").notEmpty().run(req);
+    await body("password").notEmpty().run(req);
+    await body("confirmPassword").notEmpty().run(req);
+
+    const { userId, token, password, confirmPassword } = req.body;
+    if (!token) {
+      res.status(401).json({ message: "Invalid token." });
+      return;
+    }
+
+    const user = await UserModel.findOne({ _id: userId });
+    if (!user) {
+      res.status(403).json({ message: "Could not reset password." });
+      return;
+    }
+
+    if (!user.resetPasswordToken || user.resetPasswordToken.length === 0) {
+      res.status(403).json({ message: "Could not reset password." });
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      res.status(500).json({ message: "Passwords do not match." });
+      return;
+    }
+
+    // TODO: handle this better with timing safe equals to prevent timing attacks
+    if (user.resetPasswordToken !== token) {
+      res.status(403).json({ message: "Invalid token." });
+      return;
+    }
+
+    await user.setPassword(password);
+    user.resetPasswordToken = "";
+
+    await user.save();
+
+    log(`User ${user.id} password reset.`);
+
+    res.status(200).json({ message: "Password reset." });
+  });
+
   private async registerIndividualUser(
     req: Request<ParamsDictionary, any, any, QueryString.ParsedQs>,
   ) {
@@ -180,8 +279,7 @@ export class AuthController {
     const { displayName, username, email, firstName, lastName, password } =
       req.body;
 
-    const emailVerificationToken =
-      this.authService.generateEmailVerificationToken();
+    const emailVerificationToken = this.authService.generateRandomToken();
 
     const result = await UserModel.register(
       new IndividualUserModel({
@@ -226,8 +324,7 @@ export class AuthController {
       province,
     } = req.body;
 
-    const emailVerificationToken =
-      this.authService.generateEmailVerificationToken();
+    const emailVerificationToken = this.authService.generateRandomToken();
 
     const result = await UserModel.register(
       new OrganizationUserModel({

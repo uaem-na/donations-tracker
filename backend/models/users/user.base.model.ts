@@ -42,6 +42,11 @@ const UserSchema: Schema<UserDocument & PassportLocalDocument> = new Schema({
     required: false,
     maxlength: 512,
   },
+  resetPasswordToken: {
+    type: String,
+    required: false,
+    maxlength: 512,
+  },
   displayName: {
     type: String,
     required: true,

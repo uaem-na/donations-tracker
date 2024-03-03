@@ -13,10 +13,11 @@ export class AuthService {
   }
 
   /**
-   * Generates an email verification token.
-   * @returns The generated email verification token.
+   * Generates a random token.
+   *
+   * @returns A string representing the random token.
    */
-  generateEmailVerificationToken(): string {
+  generateRandomToken(): string {
     return randomBytes(64).toString("hex");
   }
 }

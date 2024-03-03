@@ -15,4 +15,8 @@ router.post("/register", authController.register);
 router.post("/login", authController.localStrategy, authController.login);
 router.post("/logout", authController.logout);
 
+// * reset password routes
+router.post("/forgot-password", authController.forgotPassword);
+router.post("/reset-password", authController.resetPassword);
+
 export default router;
