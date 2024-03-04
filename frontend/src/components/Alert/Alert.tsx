@@ -55,7 +55,7 @@ export const Alert = ({
     }
   };
 
-  const backgroundColor = useCallback(() => {
+  const backgroundColor = () => {
     const colorLevel = 50;
     switch (type) {
       case "info":
@@ -67,9 +67,9 @@ export const Alert = ({
       case "success":
         return `bg-green-50`;
     }
-  }, []);
+  };
 
-  const headerTextColor = useCallback(() => {
+  const headerTextColor = () => {
     switch (type) {
       case "info":
         return `text-blue-800`;
@@ -80,9 +80,9 @@ export const Alert = ({
       case "success":
         return `text-green-800`;
     }
-  }, []);
+  };
 
-  const messageTextColor = useCallback(() => {
+  const messageTextColor = () => {
     switch (type) {
       case "info":
         return `text-blue-700`;
@@ -93,7 +93,7 @@ export const Alert = ({
       case "success":
         return `text-green-700`;
     }
-  }, []);
+  };
 
   return (
     <div className={`rounded-md p-4 ${backgroundColor()}`} role="alert">
