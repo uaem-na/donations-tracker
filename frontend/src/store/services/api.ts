@@ -51,6 +51,35 @@ export const api = createApi({
         invalidatesTags: ["session"],
       }
     ),
+    forgotPassword: builder.mutation<
+      ApiResponse.MessageResponse,
+      MutationArgs.Auth.ForgotPassword
+    >({
+      query: (data) => ({
+        url: "auth/forgot-password",
+        method: "POST",
+        body: data,
+      }),
+    }),
+    resetPassword: builder.mutation<
+      ApiResponse.MessageResponse,
+      MutationArgs.Auth.ResetPassword
+    >({
+      query: (data) => ({
+        url: "auth/reset-password",
+        method: "POST",
+        body: data,
+      }),
+    }),
+    resendEmailVerification: builder.mutation<
+      ApiResponse.MessageResponse,
+      void
+    >({
+      query: () => ({
+        url: "auth/resend-verification",
+        method: "POST",
+      }),
+    }),
     getStarredPosts: builder.query<
       ApiResponse.PaginatedList<ApiModel.Post>,
       QueryArgs.Users.GetStarredPosts
@@ -468,6 +497,9 @@ export const {
   useLoginMutation,
   useLogoutMutation,
   useRegisterMutation,
+  useForgotPasswordMutation,
+  useResetPasswordMutation,
+  useResendEmailVerificationMutation,
   useToggleUserActiveAdminMutation,
   useStarPostMutation,
   useUpdateUserMutation,

@@ -60,7 +60,9 @@ export type User = {
   displayName: string;
   username: string;
   email: string;
-  recoveryEmail: string;
+  isEmailVerified: boolean;
+  emailVerificationToken: string;
+  resetPasswordToken: string;
   firstName: string;
   lastName: string;
   active: boolean;

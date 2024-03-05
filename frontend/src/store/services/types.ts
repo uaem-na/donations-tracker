@@ -90,6 +90,7 @@ export namespace ApiResponse {
     firstName: string;
     lastName: string;
     verified: boolean;
+    isEmailVerified: boolean;
     starred: string[]; // post ids
   };
 
@@ -234,6 +235,17 @@ export namespace MutationArgs {
     };
 
     export type Register = IndividualRegister & OrganizationRegister;
+
+    export type ForgotPassword = {
+      email: string;
+    };
+
+    export type ResetPassword = {
+      userId: string;
+      password: string;
+      confirmPassword: string;
+      token: string;
+    };
   }
 
   export namespace Posts {

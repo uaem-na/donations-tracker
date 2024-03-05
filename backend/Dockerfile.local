@@ -5,6 +5,20 @@ FROM node:lts-alpine
 ARG GOOGLE_GEOCODE_API_KEY
 ENV GOOGLE_GEOCODE_API_KEY=$GOOGLE_GEOCODE_API_KEY
 
+# get argument for Resend API key
+ARG RESEND_API_KEY
+ENV RESEND_API_KEY=$RESEND_API_KEY
+
+# get argument for Resend E-mail from
+ARG RESEND_EMAIL_FROM
+ENV RESEND_EMAIL_FROM=$RESEND_EMAIL_FROM
+
+# get argument for frontend & backend url
+ARG FRONTEND_URL
+ENV FRONTEND_URL=$FRONTEND_URL
+ARG BACKEND_URL
+ENV BACKEND_URL=$BACKEND_URL
+
 # set all the files in the /backend directory as the working directory
 WORKDIR /backend
 
@@ -13,6 +27,9 @@ COPY package.json package-lock.json /backend/
 
 # install the dependencies
 RUN npm ci
+
+# switch to non-root user
+USER node
 
 # expose port 8081
 EXPOSE 8081

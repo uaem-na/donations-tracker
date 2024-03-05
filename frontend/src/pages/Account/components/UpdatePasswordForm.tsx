@@ -1,4 +1,4 @@
-import { Alert } from "@components";
+import { Alert, AlertTypes } from "@components/Alert";
 import { Button, Input } from "@components/Controls";
 import { useToast } from "@components/Toast";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -6,8 +6,13 @@ import { Label } from "@radix-ui/react-label";
 import { useChangePasswordMutation } from "@services/api";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { getErrorMessage } from "utils/GetErrorMessage";
 import { updatePasswordSchema } from "./schemas/UpdatePasswordSchema";
 
+type ServerMessage = {
+  type: AlertTypes;
+  message: string;
+};
 const Heading = (text: string) => {
   return (
     <div className="md:col-span-1">
@@ -22,7 +27,7 @@ export const UpdatePasswordForm = () => {
   const toast = useToast();
   const [changePasswordApi, { isLoading: loading, isSuccess, error }] =
     useChangePasswordMutation();
-  const [serverMessage, setServerMessage] = useState("");
+  const [serverMessage, setServerMessage] = useState<ServerMessage | null>();
 
   const {
     register,
@@ -40,12 +45,9 @@ export const UpdatePasswordForm = () => {
   // handle successful request
   useEffect(() => {
     if (isSuccess) {
-      setServerMessage("");
-      reset();
-      toast.open({
+      setServerMessage({
         type: "success",
-        duration: 5,
-        content: "Your password has been successfully changed!",
+        message: "Your password has been successfully changed!",
       });
     }
   }, [isSuccess, reset]);
@@ -53,12 +55,11 @@ export const UpdatePasswordForm = () => {
   // handle server error message
   useEffect(() => {
     if (error) {
-      if ("status" in error) {
-        const err: any = "error" in error ? error.error : error.data;
-        setServerMessage(err.errors.join(",") ?? "An error occurred");
-      } else {
-        setServerMessage(error.message ?? "An error occurred");
-      }
+      const message = getErrorMessage(error);
+      setServerMessage({
+        type: "error",
+        message: message,
+      });
     }
   }, [error]);
 
@@ -118,7 +119,7 @@ export const UpdatePasswordForm = () => {
         </div>
 
         <div className="md:col-start-2 md:col-span-2">
-          {serverMessage && <Alert type="error">{serverMessage}</Alert>}
+          {serverMessage && <Alert type={serverMessage.type}>{serverMessage.message}</Alert>}
 
           <div className="mt-2 flex">
             <Button type="submit" disabled={loading}>

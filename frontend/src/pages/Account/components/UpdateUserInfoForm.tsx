@@ -1,6 +1,7 @@
 import { Alert } from "@components";
 import { Button, Input, Tooltip } from "@components/Controls";
 import { useToast } from "@components/Toast";
+import { UserRole } from "@constants";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -8,8 +9,8 @@ import { Label } from "@radix-ui/react-label";
 import { useGetSessionQuery, useUpdateUserMutation } from "@services/api";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { EmailVerifiedStatus } from "./EmailVerifiedStatus";
 import { updateUserInfoSchema } from "./schemas/UpdateUserInfoSchema";
-import { UserRole } from "@constants";
 
 const Heading = (text: string) => {
   return (
@@ -144,7 +145,7 @@ export const UpdateUserInfoForm = () => {
             </div>
           </div>
 
-          <div className="col-span-full">
+          <div className="col-span-full flex flex-col gap-2">
             <Label htmlFor="email">
               <span className="mr-2">Email</span>
               <Tooltip
@@ -160,7 +161,8 @@ export const UpdateUserInfoForm = () => {
                 />
               </Tooltip>
             </Label>
-            <div className="mt-2">
+            <EmailVerifiedStatus />
+            <div>
               <Input
                 id="email"
                 name="email"
