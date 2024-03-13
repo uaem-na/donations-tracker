@@ -31,13 +31,11 @@ import {
 } from "./validators";
 
 const log = debug("backend:post");
-
 export class PostController {
   constructor(
     private postService: PostService,
     private userService: UserService
-  ) {}
-
+  ) { }
   // this API is called on public post listings page without authentication
   getPublicPosts = expressAsyncHandler(async (req, res, next) => {
     await validatePaginationRequest({ req, optional: false });
@@ -71,12 +69,20 @@ export class PostController {
       }),
     };
 
-    const [posts, count] = await this.postService.getPaginatedPosts(
-      page,
-      limit,
-      filterQuery,
-      { updatedAt: -1, createdAt: -1 }
-    );
+    let posts, count;
+    try {
+      [posts, count] = await this.postService.getPaginatedPosts(
+        page,
+        limit,
+        filterQuery,
+        { updatedAt: -1, createdAt: -1 }
+      );
+    } catch (error) {
+      console.error(error);
+      // You can also send a response to the client indicating that an error occurred
+      res.status(500).json({ error: 'An error occurred while fetching paginated posts' });
+      return;
+    }
 
     const postDtos = posts.map((post) => PostDto.fromDocument(post));
 

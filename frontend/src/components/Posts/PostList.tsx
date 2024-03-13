@@ -9,6 +9,7 @@ interface PostListProps {
 }
 
 export const PostList = ({ posts }: PostListProps) => {
+
   const { t } = useTranslation();
   if (posts === undefined || posts.length === 0) {
     return (

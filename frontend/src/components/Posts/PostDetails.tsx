@@ -84,17 +84,20 @@ export const PostDetails = ({
       return;
     }
     deletePostApi({ id: post.id });
+
   };
 
   // handle successful requests
   useEffect(() => {
     if (isDeleteSuccess && redirectOnDelete) {
-      navigate(`/posts/list`);
+      console.log("JAEWON TESTING FRONTEND");
+      navigate(`/posts`);
     }
   }, [isDeleteSuccess]);
 
   // handle server error message
   useEffect(() => {
+    console.log("deleteError", deleteError)
     if (deleteError) {
       handleServerErrors(deleteError);
     }
@@ -105,8 +108,8 @@ export const PostDetails = ({
 
     err.errors.length > 0
       ? setServerMessage(
-          err.errors.join(",") ?? t("errors.unknown_server_error"),
-        )
+        err.errors.join(",") ?? t("errors.unknown_server_error"),
+      )
       : setServerMessage(err.message ?? t("errors.unknown_server_error"));
   };
 
@@ -115,6 +118,7 @@ export const PostDetails = ({
   }
 
   if (!post) {
+    console.log("post", post);
     return <p>{t("errors.unknown_server_error")}</p>;
   }
 
