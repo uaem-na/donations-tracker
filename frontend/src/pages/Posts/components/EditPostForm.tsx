@@ -125,7 +125,7 @@ export const EditPostForm = ({ id, onError }: EditPostFormProps) => {
   // handle successful requests
   useEffect(() => {
     if (isEditSuccess || isDeleteSuccess) {
-      navigate(`/posts/l`);
+      navigate(`/posts`);
     }
   }, [isEditSuccess, isDeleteSuccess]);
 
