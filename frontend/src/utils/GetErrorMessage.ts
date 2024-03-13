@@ -18,7 +18,7 @@ const hasErrors = (errorData: unknown): errorData is ErrorWithErrors => {
 };
 
 export const getErrorMessage = (
-  error: FetchBaseQueryError | SerializedError
+  error: FetchBaseQueryError | SerializedError,
 ) => {
   if (!("status" in error)) {
     return (

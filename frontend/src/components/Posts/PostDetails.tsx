@@ -1,15 +1,12 @@
-import {
-  useEffect,
-  useState,
-} from 'react';
+import { useEffect, useState } from "react";
 
-import { format } from 'date-fns';
-import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { format } from "date-fns";
+import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 
-import { Alert } from '@components';
-import { Badge } from '@components/Badge';
-import { Button } from '@components/Controls';
+import { Alert } from "@components";
+import { Badge } from "@components/Badge";
+import { Button } from "@components/Controls";
 import {
   Dialog,
   DialogContent,
@@ -18,28 +15,20 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@components/Dialog';
-import {
-  SingleMarkerGoogleMap,
-} from '@components/GoogleMapWrapper/SingleMarkerGoogleMap';
-import { PostType } from '@constants';
-import {
-  faCancel,
-  faEdit,
-  faTrash,
-} from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  CreateReportFormDialog,
-} from '@pages/Admin/components/CreateReportFormDialog';
-import { DialogClose } from '@radix-ui/react-dialog';
+} from "@components/Dialog";
+import { SingleMarkerGoogleMap } from "@components/GoogleMapWrapper/SingleMarkerGoogleMap";
+import { PostType } from "@constants";
+import { faCancel, faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { CreateReportFormDialog } from "@pages/Admin/components/CreateReportFormDialog";
+import { DialogClose } from "@radix-ui/react-dialog";
 import {
   useDeletePostMutation,
   useGetPostQuery,
   useGetSessionQuery,
-} from '@services/api';
-import { capitalizeFirstLetter } from '@utils';
-import { getStatusIndicator } from '@utils/GetStatusIndicator';
+} from "@services/api";
+import { capitalizeFirstLetter } from "@utils";
+import { getStatusIndicator } from "@utils/GetStatusIndicator";
 
 interface PostDetailsProps {
   id: string;
@@ -198,7 +187,9 @@ export const PostDetails = ({
             <dd className="inline text-gray-700">{post.item.quantity}</dd>
           </div>
           <div>
-            <dt className="inline text-gray-500 mr-3">{t("posts.price.label")}</dt>
+            <dt className="inline text-gray-500 mr-3">
+              {t("posts.price.label")}
+            </dt>
             <dd className="inline text-gray-700">
               {new Intl.NumberFormat("en-CA", {
                 style: "currency",

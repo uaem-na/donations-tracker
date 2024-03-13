@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState } from "react";
 
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 import {
   FilterPostType,
@@ -8,8 +8,8 @@ import {
   getPerPageOption,
   PerPageOption,
   PostsContainer,
-} from '@components/Posts';
-import { useGetPostsQuery } from '@services/api';
+} from "@components/Posts";
+import { useGetPostsQuery } from "@services/api";
 
 export const PostsPage = () => {
   const { t } = useTranslation();

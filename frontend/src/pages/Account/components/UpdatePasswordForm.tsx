@@ -119,7 +119,9 @@ export const UpdatePasswordForm = () => {
         </div>
 
         <div className="md:col-start-2 md:col-span-2">
-          {serverMessage && <Alert type={serverMessage.type}>{serverMessage.message}</Alert>}
+          {serverMessage && (
+            <Alert type={serverMessage.type}>{serverMessage.message}</Alert>
+          )}
 
           <div className="mt-2 flex">
             <Button type="submit" disabled={loading}>

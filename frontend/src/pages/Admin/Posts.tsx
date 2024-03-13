@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState } from "react";
 
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 import {
   FilterPostType,
@@ -8,9 +8,9 @@ import {
   getPerPageOption,
   PerPageOption,
   PostsContainer,
-} from '@components/Posts';
-import { useRole } from '@hooks/useRole';
-import { useGetPostsAdminQuery } from '@services/api';
+} from "@components/Posts";
+import { useRole } from "@hooks/useRole";
+import { useGetPostsAdminQuery } from "@services/api";
 
 export const AdminPostsPage = () => {
   const { t } = useTranslation();
@@ -35,7 +35,7 @@ export const AdminPostsPage = () => {
     },
     {
       refetchOnMountOrArgChange: 30,
-    }
+    },
   );
 
   const role = useRole();

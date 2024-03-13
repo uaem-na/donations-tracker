@@ -109,7 +109,7 @@ export const Alert = ({
             className={classMerge(
               `text-sm ${messageTextColor()}`,
               { "mt-2": heading },
-              className
+              className,
             )}
           >
             {children}
