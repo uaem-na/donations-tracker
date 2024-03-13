@@ -61,7 +61,6 @@ export class PostService {
   }
 
   async getPosts(filter?: FilterQuery<PostDocument>): Promise<PostDocument[]> {
-    // print filter
     const posts = await PostModel.find({
       ...(filter && { ...filter }),
     })
