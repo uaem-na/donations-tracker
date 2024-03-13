@@ -105,7 +105,8 @@ export class UserService {
   async toggleActive(id: string): Promise<UserDocument> {
     const user = await UserModel.findOneAndUpdate({ _id: id }, [
       { $set: { active: { $eq: [false, "$active"] } } },
-    ]);
+    ], { new: true });
+    
     if (!user) {
       throw new Error(
         `Error toggling active for id(${id}). User does not exist.`

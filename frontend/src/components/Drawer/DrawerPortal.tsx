@@ -1,11 +1,7 @@
 import * as DrawerPrimitive from "@radix-ui/react-dialog";
-import { classMerge } from "@utils/ClassMerge";
 
-const DrawerPortal = ({
-  className,
-  ...props
-}: DrawerPrimitive.DialogPortalProps) => (
-  <DrawerPrimitive.Portal className={classMerge(className)} {...props} />
+const DrawerPortal = ({ ...props }: DrawerPrimitive.DialogPortalProps) => (
+  <DrawerPrimitive.Portal {...props} />
 );
 DrawerPortal.displayName = DrawerPrimitive.Portal.displayName;
 

@@ -1,3 +1,9 @@
+import { useEffect, useState } from "react";
+
+import { format } from "date-fns";
+import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
+
 import { Alert } from "@components";
 import { Badge } from "@components/Badge";
 import { Button } from "@components/Controls";
@@ -23,10 +29,6 @@ import {
 } from "@services/api";
 import { capitalizeFirstLetter } from "@utils";
 import { getStatusIndicator } from "@utils/GetStatusIndicator";
-import { format } from "date-fns";
-import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
 
 interface PostDetailsProps {
   id: string;
@@ -71,20 +73,17 @@ export const PostDetails = ({
       return;
     }
     deletePostApi({ id: post.id });
-
   };
 
   // handle successful requests
   useEffect(() => {
     if (isDeleteSuccess && redirectOnDelete) {
-      console.log("JAEWON TESTING FRONTEND");
-      navigate(`/posts`);
+      navigate(`/posts/list`);
     }
   }, [isDeleteSuccess]);
 
   // handle server error message
   useEffect(() => {
-    console.log("deleteError", deleteError)
     if (deleteError) {
       handleServerErrors(deleteError);
     }
@@ -95,8 +94,8 @@ export const PostDetails = ({
 
     err.errors.length > 0
       ? setServerMessage(
-        err.errors.join(",") ?? t("errors.unknown_server_error"),
-      )
+          err.errors.join(",") ?? t("errors.unknown_server_error"),
+        )
       : setServerMessage(err.message ?? t("errors.unknown_server_error"));
   };
 
@@ -105,7 +104,6 @@ export const PostDetails = ({
   }
 
   if (!post) {
-    console.log("post", post);
     return <p>{t("errors.unknown_server_error")}</p>;
   }
 
@@ -189,7 +187,9 @@ export const PostDetails = ({
             <dd className="inline text-gray-700">{post.item.quantity}</dd>
           </div>
           <div>
-            <dt className="inline text-gray-500 mr-3">{t("posts.price")}</dt>
+            <dt className="inline text-gray-500 mr-3">
+              {t("posts.price.label")}
+            </dt>
             <dd className="inline text-gray-700">
               {new Intl.NumberFormat("en-CA", {
                 style: "currency",

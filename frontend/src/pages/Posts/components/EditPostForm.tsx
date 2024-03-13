@@ -125,7 +125,7 @@ export const EditPostForm = ({ id, onError }: EditPostFormProps) => {
   // handle successful requests
   useEffect(() => {
     if (isEditSuccess || isDeleteSuccess) {
-      navigate(`/posts`);
+      navigate(`/posts/list`);
     }
   }, [isEditSuccess, isDeleteSuccess]);
 
@@ -293,7 +293,7 @@ export const EditPostForm = ({ id, onError }: EditPostFormProps) => {
           </div>
           <div>
             <Label htmlFor="price">
-              {t("posts.price")}
+              {t("posts.price.label")}
               <Tooltip asChild message={t("posts.price_tooltip")}>
                 <FontAwesomeIcon
                   icon={faCircleQuestion}

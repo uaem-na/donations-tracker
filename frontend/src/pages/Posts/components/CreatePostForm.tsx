@@ -87,14 +87,14 @@ export const CreatePostForm = ({ type }: CreatePostFormProps) => {
         const errorMessages = err.errors.map(
           (error) =>
             `${error.msg}: ${error.location}.${error.path} = ${JSON.stringify(
-              error.value
-            )}`
+              error.value,
+            )}`,
         );
         setServerMessage(errorMessages.join(","));
       } else {
         err.errors.length > 0
           ? setServerMessage(
-              err.errors.join(",") ?? t("errors.unknown_server_error")
+              err.errors.join(",") ?? t("errors.unknown_server_error"),
             )
           : setServerMessage(err.message ?? t("errors.unknown_server_error"));
       }
@@ -170,7 +170,7 @@ export const CreatePostForm = ({ type }: CreatePostFormProps) => {
           </div>
           <div>
             <Label htmlFor="price">
-              {t("posts.price")}
+              {t("posts.price.label")}
               <Tooltip asChild message={t("posts.price_tooltip")}>
                 <FontAwesomeIcon
                   icon={faCircleQuestion}

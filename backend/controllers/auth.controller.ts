@@ -3,7 +3,7 @@ import debug from "debug";
 import { Request } from "express";
 import expressAsyncHandler from "express-async-handler";
 import { ParamsDictionary } from "express-serve-static-core";
-import { body, validationResult } from "express-validator";
+import { body, param, query, validationResult } from "express-validator";
 import passport from "passport";
 import QueryString from "qs";
 import { ProvinceCode, ProvinceName, UserDiscriminator } from "../constants";
@@ -14,7 +14,7 @@ import {
   UserDto,
   UserModel,
 } from "../models/users";
-import { AuthService } from "../services";
+import { AuthService, ResendService } from "../services";
 import { UserDocument } from "../types";
 import {
   validateUserRegisterBase,
@@ -24,7 +24,10 @@ import {
 const log = debug("backend:auth");
 
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private resendService: ResendService,
+  ) {}
 
   getSession = expressAsyncHandler(async (req, res, next) => {
     const session = this.authService.getSession(req);
@@ -136,26 +139,200 @@ export class AuthController {
     }
   });
 
+  verifyEmail = expressAsyncHandler(async (req, res, next) => {
+    await param("id").notEmpty().run(req);
+    await query("token").notEmpty().run(req);
+
+    const { id } = req.params;
+    const { token } = req.query;
+    if (!token) {
+      res.status(401).json({ message: "Invalid token." });
+      return;
+    }
+
+    const user = await UserModel.findOne({ _id: id });
+    if (!user) {
+      res.status(403).json({ message: "Could not verify email." });
+      return;
+    }
+
+    if (
+      !user.emailVerificationToken ||
+      user.emailVerificationToken.length === 0
+    ) {
+      res.status(403).json({ message: "Could not verify email." });
+      return;
+    }
+
+    // TODO: handle this better with timing safe equals to prevent timing attacks
+    if (user.emailVerificationToken !== token) {
+      res.status(403).json({ message: "Invalid token." });
+      return;
+    }
+
+    user.isEmailVerified = true;
+    user.emailVerificationToken = "";
+
+    await user.save();
+
+    log(`User ${user.id} email verified.`);
+
+    const frontendUrl = process.env.FRONTEND_URL;
+    if (frontendUrl) {
+      res.redirect(301, `${frontendUrl}`);
+      return;
+    }
+
+    res.status(200).send("Email verified.");
+  });
+
+  resendEmailVerification = expressAsyncHandler(async (req, res, next) => {
+    if (!req.user) {
+      throw new InvalidOperationError("User is not logged in.");
+    }
+
+    const user = await UserModel.findById(req.user.id);
+    if (!user) {
+      throw new InvalidOperationError("User not found.");
+    }
+
+    user.emailVerificationToken = this.authService.generateRandomToken();
+    await user.save();
+
+    await this.sendEmailVerification({
+      userId: user.id,
+      email: user.email,
+      emailVerificationToken: user.emailVerificationToken,
+    });
+
+    res
+      .status(200)
+      .json({ message: "Email verification link sent to your email." });
+  });
+
+  forgotPassword = expressAsyncHandler(async (req, res, next) => {
+    await body("email").isEmail().run(req);
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      res.status(400).json({ errors: errors.array({ onlyFirstError: true }) });
+      return;
+    }
+
+    const { email } = req.body;
+
+    const user = await UserModel.findOne({ email });
+    if (!user) {
+      res
+        .status(200)
+        .json({ message: "Password reset link sent to your email." });
+      return;
+    }
+
+    const resetPasswordToken = this.authService.generateRandomToken();
+
+    user.resetPasswordToken = resetPasswordToken;
+
+    await user.save();
+
+    const frontendUrl = process.env.FRONTEND_URL;
+    if (!frontendUrl) {
+      throw new InvalidOperationError("Frontend URL is not set.");
+    }
+
+    const resetPasswordLink = `${frontendUrl}/reset-password/${user.id}?token=${resetPasswordToken}`;
+
+    this.resendService.send({
+      to: email,
+      subject: "Reset your password",
+      html: `Click <a href="${resetPasswordLink}">here</a> to reset your password.`,
+    });
+
+    res
+      .status(200)
+      .json({ message: "Password reset link sent to your email." });
+  });
+
+  resetPassword = expressAsyncHandler(async (req, res, next) => {
+    await body("userId").notEmpty().run(req);
+    await body("token").notEmpty().run(req);
+    await body("password").notEmpty().run(req);
+    await body("confirmPassword").notEmpty().run(req);
+
+    const { userId, token, password, confirmPassword } = req.body;
+    if (!token) {
+      res.status(401).json({ message: "Invalid token." });
+      return;
+    }
+
+    const user = await UserModel.findOne({ _id: userId });
+    if (!user) {
+      res.status(403).json({ message: "Could not reset password." });
+      return;
+    }
+
+    if (!user.resetPasswordToken || user.resetPasswordToken.length === 0) {
+      res.status(403).json({ message: "Could not reset password." });
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      res.status(500).json({ message: "Passwords do not match." });
+      return;
+    }
+
+    // TODO: handle this better with timing safe equals to prevent timing attacks
+    if (user.resetPasswordToken !== token) {
+      res.status(403).json({ message: "Invalid token." });
+      return;
+    }
+
+    await user.setPassword(password);
+    user.resetPasswordToken = "";
+
+    await user.save();
+
+    log(`User ${user.id} password reset.`);
+
+    res.status(200).json({ message: "Password reset." });
+  });
+
   private async registerIndividualUser(
-    req: Request<ParamsDictionary, any, any, QueryString.ParsedQs>
+    req: Request<ParamsDictionary, any, any, QueryString.ParsedQs>,
   ) {
     // * validation already happened in parent function
     const { displayName, username, email, firstName, lastName, password } =
       req.body;
-    return await UserModel.register(
+
+    const emailVerificationToken = this.authService.generateRandomToken();
+
+    const result = await UserModel.register(
       new IndividualUserModel({
         displayName,
         username,
         email,
         firstName,
         lastName,
+        emailVerificationToken,
       }),
-      password
+      password,
     );
+
+    if (!result._id) {
+      throw new InvalidOperationError("User _id is not set.");
+    }
+
+    await this.sendEmailVerification({
+      userId: result._id,
+      email,
+      emailVerificationToken,
+    });
+
+    return result;
   }
 
   private async registerOrganizationUser(
-    req: Request<ParamsDictionary, any, any, QueryString.ParsedQs>
+    req: Request<ParamsDictionary, any, any, QueryString.ParsedQs>,
   ) {
     const {
       displayName,
@@ -172,13 +349,16 @@ export class AuthController {
       province,
     } = req.body;
 
-    return await UserModel.register(
+    const emailVerificationToken = this.authService.generateRandomToken();
+
+    const result = await UserModel.register(
       new OrganizationUserModel({
         displayName,
         username,
         email,
         firstName,
         lastName,
+        emailVerificationToken,
         organization: {
           name: organization,
           phone,
@@ -191,7 +371,47 @@ export class AuthController {
           },
         },
       }),
-      password
+      password,
     );
+
+    if (!result._id) {
+      throw new InvalidOperationError("User _id is not set.");
+    }
+
+    await this.sendEmailVerification({
+      userId: result._id,
+      email,
+      emailVerificationToken,
+    });
+
+    return result;
+  }
+
+  private async sendEmailVerification({
+    userId,
+    email,
+    emailVerificationToken,
+  }: {
+    userId: string;
+    email: string;
+    emailVerificationToken: string;
+  }) {
+    if (!emailVerificationToken) {
+      throw new InvalidOperationError("Email verification token is not set.");
+    }
+
+    let backendUrl = process.env.BACKEND_URL;
+    if (!backendUrl) {
+      backendUrl = "http://localhost:8081";
+      log(`backendUrl is not set, using default: ${backendUrl}`);
+    }
+
+    const verificationLink = `${backendUrl}/auth/verify/${userId}?token=${emailVerificationToken}`;
+
+    this.resendService.send({
+      to: email,
+      subject: "Please verify your email address",
+      html: `Click <a href="${verificationLink}">here</a> to verify your email address.`,
+    });
   }
 }

@@ -49,8 +49,37 @@ export const api = createApi({
           body: data,
         }),
         invalidatesTags: ["session"],
-      }
+      },
     ),
+    forgotPassword: builder.mutation<
+      ApiResponse.MessageResponse,
+      MutationArgs.Auth.ForgotPassword
+    >({
+      query: (data) => ({
+        url: "auth/forgot-password",
+        method: "POST",
+        body: data,
+      }),
+    }),
+    resetPassword: builder.mutation<
+      ApiResponse.MessageResponse,
+      MutationArgs.Auth.ResetPassword
+    >({
+      query: (data) => ({
+        url: "auth/reset-password",
+        method: "POST",
+        body: data,
+      }),
+    }),
+    resendEmailVerification: builder.mutation<
+      ApiResponse.MessageResponse,
+      void
+    >({
+      query: () => ({
+        url: "auth/resend-verification",
+        method: "POST",
+      }),
+    }),
     getStarredPosts: builder.query<
       ApiResponse.PaginatedList<ApiModel.Post>,
       QueryArgs.Users.GetStarredPosts
@@ -63,7 +92,7 @@ export const api = createApi({
         },
       }),
       transformResponse: (
-        response: ApiResponse.PaginatedList<ApiModel.Post>
+        response: ApiResponse.PaginatedList<ApiModel.Post>,
       ): ApiResponse.PaginatedList<ApiModel.Post> => {
         const posts = response.data;
         response.data = posts?.map((post) => ({
@@ -94,7 +123,7 @@ export const api = createApi({
         params: { ...args },
       }),
       transformResponse: (
-        response: ApiResponse.PaginatedList<ApiModel.Post>
+        response: ApiResponse.PaginatedList<ApiModel.Post>,
       ): ApiResponse.PaginatedList<ApiModel.Post> => {
         const posts = response.data;
         response.data = posts.map((post) => ({
@@ -125,7 +154,7 @@ export const api = createApi({
         params: { ...args },
       }),
       transformResponse: (
-        response: ApiResponse.PaginatedList<ApiModel.Post>
+        response: ApiResponse.PaginatedList<ApiModel.Post>,
       ): ApiResponse.PaginatedList<ApiModel.Post> => {
         const posts = response.data;
         response.data = posts.map((post) => ({
@@ -159,7 +188,7 @@ export const api = createApi({
         method: "GET",
       }),
       transformResponse: (
-        response: ApiResponse.PaginatedList<ApiModel.Post>
+        response: ApiResponse.PaginatedList<ApiModel.Post>,
       ): ApiResponse.PaginatedList<ApiModel.Post> => {
         const posts = response.data;
         response.data = posts.map((post) => ({
@@ -291,7 +320,7 @@ export const api = createApi({
         params: { ...args },
       }),
       transformResponse: (
-        response: ApiResponse.PaginatedList<ApiModel.Post>
+        response: ApiResponse.PaginatedList<ApiModel.Post>,
       ): ApiResponse.PaginatedList<ApiModel.Post> => {
         const posts = response.data;
         response.data = posts.map((post) => ({
@@ -440,6 +469,7 @@ export const api = createApi({
       invalidatesTags: (result, error, args): any => [
         { type: "reports", id: args.id },
         { type: "reports", id: "reports-list" },
+        { type: "reported-posts", id: "reported-posts-list" },
       ],
     }),
   }),
@@ -467,6 +497,9 @@ export const {
   useLoginMutation,
   useLogoutMutation,
   useRegisterMutation,
+  useForgotPasswordMutation,
+  useResetPasswordMutation,
+  useResendEmailVerificationMutation,
   useToggleUserActiveAdminMutation,
   useStarPostMutation,
   useUpdateUserMutation,

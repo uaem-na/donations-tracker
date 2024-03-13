@@ -1,5 +1,5 @@
 import * as yup from "yup";
-
+import { isProfane } from "utils/FilterProfaneWords";
 import YupPassword from "yup-password";
 YupPassword(yup); // ! extend yup for password validation
 
@@ -58,6 +58,12 @@ export const registerOrganizationSchema = yup.object().shape({
     .matches(
       /^[0-9a-zA-ZÀ-ÖØ-öø-ÿ-_.]+$/,
       "Must contain only letters, numbers, and symbols(-_.)",
+    )
+    // custom validator to prevent profane language
+    .test(
+      "test-word-profanity",
+      "Display name cannot contain profane words",
+      (value) => !isProfane(value!),
     )
     .required("Organization is required"),
   streetAddress: yup.string().required("Address is required"),

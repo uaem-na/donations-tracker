@@ -1,4 +1,5 @@
 import { TFunction } from "i18next";
+import { isProfane } from "utils/FilterProfaneWords";
 import * as yup from "yup";
 
 const postalCodeRegex = /^[A-Z]\d[A-Z]\d[A-Z]\d$/;
@@ -23,6 +24,11 @@ export const CreateEditPostSchema = (t: TFunction) => {
         .string()
         .min(1, t("validation:string.too_short", { min: 1 }))
         .max(256, t("validation:string.too_long", { max: 256 }))
+        .test(
+          "test-word-profanity",
+          "Display name cannot contain profane words",
+          (value) => !isProfane(value!),
+        )
         .required(t("validation:field_required", { field: t("posts.name") })),
       quantity: yup
         .number()
@@ -37,15 +43,24 @@ export const CreateEditPostSchema = (t: TFunction) => {
       price: yup
         .number()
         .typeError(
-          t("validation:number.type_mismatch", { field: t("posts.price") }),
+          t("validation:number.type_mismatch", {
+            field: t("posts.price.label"),
+          }),
         )
         .default(0)
         .min(0, t("validation:number.too_small", { min: 0 }))
-        .required(t("validation:field_required", { field: t("posts.price") })),
+        .required(
+          t("validation:field_required", { field: t("posts.price.label") }),
+        ),
       description: yup
         .string()
         .min(1, t("validation:string.too_short", { min: 1 }))
         .max(1024, t("validation:string.too_long", { max: 1024 }))
+        .test(
+          "test-word-profanity",
+          "Display name cannot contain profane words",
+          (value) => !isProfane(value!),
+        )
         .required(
           t("validation:field_required", { field: t("posts.description") }),
         ),

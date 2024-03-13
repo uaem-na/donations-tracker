@@ -45,7 +45,10 @@
     "name": "Name",
     "quantity": "Quantity",
     "description": "Description",
-    "price": "Price (CAD)",
+    "price": {
+      "label": "Price (CAD)",
+      "apply": "Go"
+    },
     "price_tooltip": "Please input a number greater than 0",
     "category": "Category",
     "create": "Create",
