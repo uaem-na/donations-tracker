@@ -189,8 +189,8 @@ export class PostController {
 
     const searchQuery = {
       $or: [
-        { title: new RegExp(keyword, "i") },
-        { description: new RegExp(keyword, "i") },
+        { 'item.name': new RegExp(keyword, "i") },
+        { 'item.description': new RegExp(keyword, "i") },
       ],
     };
 
@@ -204,6 +204,8 @@ export class PostController {
       searchQuery,
       { updatedAt: -1, createdAt: -1 }
     );
+
+    console.log("posts found" + posts.length + "\n")
 
     const postDtos = posts.map((post) => PostDto.fromDocument(post));
 
