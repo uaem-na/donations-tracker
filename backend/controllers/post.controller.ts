@@ -205,8 +205,6 @@ export class PostController {
       { updatedAt: -1, createdAt: -1 }
     );
 
-    console.log("posts found" + posts.length + "\n")
-
     const postDtos = posts.map((post) => PostDto.fromDocument(post));
 
     const response = {
