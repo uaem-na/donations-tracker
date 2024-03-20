@@ -1,5 +1,5 @@
 import { Button } from "@components/Controls";
-import { PostDetails } from "@components/Posts";
+import { PostDetails, PostItem } from "@components/Posts";
 import {
   faCircleXmark,
   faClipboardCheck,
@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   useApprovePostAdminMutation,
   useRejectPostAdminMutation,
+  useGetPostQuery, // added
 } from "@services/api";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -26,6 +27,9 @@ export const AdminPostDetailsPage = () => {
     return;
   }
 
+  const { data: postData, error: postError } = useGetPostQuery(id); // TODO: FIX THIS
+
+
   const handleError = (err) => {
     if (err.status === 404) {
       navigate("/errors/404");
@@ -35,13 +39,18 @@ export const AdminPostDetailsPage = () => {
   };
 
   const handleApproveClick = () => {
-    approvePostApi({ postId: id });
+    if (postData && postData.item.category === "Other") {
+      approvePostApi({ postId: id });
+    } else {
+      approvePostApi({ postId: id });
+    }
   };
 
   const handleRejectClick = () => {
     alert("coming soon");
     // rejectPostApi({ postId: id });
   };
+
 
   return (
     <div className="container mx-auto">
