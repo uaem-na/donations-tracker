@@ -11,7 +11,7 @@ import {
   DialogTrigger,
 } from "@components/Dialog";
 import { SingleMarkerGoogleMap } from "@components/GoogleMapWrapper/SingleMarkerGoogleMap";
-import { PostType } from "@constants";
+import { PostType, UserRole } from "@constants";
 import { faCancel, faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CreateReportFormDialog } from "@pages/Admin/components/CreateReportFormDialog";
@@ -34,6 +34,7 @@ interface PostDetailsProps {
   redirectOnDelete?: boolean;
   hideEditDelete?: boolean;
   hideReportButton?: boolean;
+  hideApproveButton?: boolean; // ADDED
 }
 
 export const PostDetails = ({
@@ -42,6 +43,7 @@ export const PostDetails = ({
   redirectOnDelete = true,
   hideEditDelete = false,
   hideReportButton = false,
+  hideApproveButton = false, // ADDED
 }: PostDetailsProps) => {
   const { t } = useTranslation();
   const { data: currentSession } = useGetSessionQuery();
@@ -269,12 +271,15 @@ export const PostDetails = ({
           {!hideReportButton && currentSession && (
             <CreateReportFormDialog postId={post.id} />
           )}
-                  <Button
-          intent="primary"
-          className="flex gap-1.5 justify-center items-center"
-        >
+          {!hideApproveButton &&
+            currentSession &&
+            currentSession.role.includes(UserRole.ADMIN) && (
+        <Button
+            intent="primary"
+            className="flex gap-1.5 justify-center items-center"
+          >
           Approve
-        </Button>
+        </Button>)}
         </div>
       </div>
 
