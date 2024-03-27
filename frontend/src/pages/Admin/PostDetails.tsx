@@ -27,7 +27,7 @@ export const AdminPostDetailsPage = () => {
     return;
   }
 
-  const { data: postData, error: postError } = useGetPostQuery(id); // TODO: FIX THIS
+  const { data: postData, error: postError } = useGetPostQuery({postId: id}); // TODO: FIX THIS
 
 
   const handleError = (err) => {
