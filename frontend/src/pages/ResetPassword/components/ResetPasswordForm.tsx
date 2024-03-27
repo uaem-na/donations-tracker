@@ -45,7 +45,7 @@ export const ResetPasswordForm = ({
     if (isSuccess) {
       setServerMessage({
         type: "success",
-        message: data.message ?? "Password reset successfully.",
+        message: data?.message ?? "Password reset successfully.",
       });
 
       navigate("/login");
