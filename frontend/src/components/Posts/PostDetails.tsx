@@ -269,6 +269,12 @@ export const PostDetails = ({
           {!hideReportButton && currentSession && (
             <CreateReportFormDialog postId={post.id} />
           )}
+                  <Button
+          intent="primary"
+          className="flex gap-1.5 justify-center items-center"
+        >
+          Approve
+        </Button>
         </div>
       </div>
 

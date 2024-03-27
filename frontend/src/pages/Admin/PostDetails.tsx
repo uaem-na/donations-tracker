@@ -27,7 +27,7 @@ export const AdminPostDetailsPage = () => {
     return;
   }
 
-  const { data: postData, error: postError } = useGetPostQuery({postId: id}); // TODO: FIX THIS
+  const { data: postData, error: postError } = useGetPostQuery({postId: id});
 
 
   const handleError = (err) => {
@@ -40,6 +40,7 @@ export const AdminPostDetailsPage = () => {
 
   const handleApproveClick = () => {
     if (postData && postData.item.category === "Other") {
+      // create button here
       approvePostApi({ postId: id });
     } else {
       approvePostApi({ postId: id });
