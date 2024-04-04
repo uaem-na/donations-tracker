@@ -402,10 +402,10 @@ export const api = createApi({
       }>,
       QueryArgs.Reports.GetPaginatedReportedPosts
     >({
-      query: ({ userId, ...params }) => ({
+      query: (args) => ({
         url: "reports",
         method: "GET",
-        params: userId ? { ...params, userId } : params,
+        params: { ...args },
       }),
       providesTags: (result, error, args): any[] =>
         result

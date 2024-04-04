@@ -68,7 +68,7 @@ export const ReportsByUserPage = () => {
         <div className="px-4 py-5">
             <div className="flex items-baseline justify-between border-b border-gray-200 pb-6">
                 <h1 className="text-2xl font-bold leading-10 tracking-tight text-gray-900">
-                    {t("reports.manage_reported_posts")}
+                    {t("reports.my_reports")}
                 </h1>
                 <AdminGuide className="mt-2.5 ml-[250px]" guideType={"reports"} />
             </div>
