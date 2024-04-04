@@ -175,7 +175,9 @@ export namespace QueryArgs {
   }
 
   export namespace Reports {
-    export type GetPaginatedReportedPosts = Pagination;
+    export type GetPaginatedReportedPosts = Pagination & {
+      userId?: string; // Add this as an optional property
+    };
 
     export type ReportedPost = {
       postId: string;
