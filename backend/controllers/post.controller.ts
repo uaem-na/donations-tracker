@@ -71,7 +71,7 @@ export class PostController {
         createdAt: {
           $gte: new Date(date.getTime() - easternTimeOffset * 60 * 60 * 1000),
         },
-      }),
+      }),  
     };
 
     const [posts, count] = await this.postService.getPaginatedPosts(
@@ -183,16 +183,20 @@ export class PostController {
 
   findPosts = expressAsyncHandler(async (req, res, next) => {
     const keyword = req.query.keyword;
-    if (!keyword || typeof keyword !== "string") {
-      throw new InvalidOperationError("Keyword is required for searching");
-    }
+    let searchQuery = {};
 
-    const searchQuery = {
-      $or: [
-        { 'item.name': new RegExp(keyword, "i") },
-        { 'item.description': new RegExp(keyword, "i") },
-      ],
-    };
+    // if (!keyword || typeof keyword !== "string") {
+    //   throw new InvalidOperationError("Keyword is required for searching");
+    // }
+
+    if (keyword && typeof keyword === "string" && keyword.trim() !== "") {
+      searchQuery = {
+        $or: [
+          { 'item.name': new RegExp(keyword, "i") },
+          { 'item.description': new RegExp(keyword, "i") },
+        ],
+      };
+    }
 
     const { page, limit } = tryParsePaginationQuery(req);
     const pageSize = limit || 10;

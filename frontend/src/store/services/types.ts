@@ -172,6 +172,9 @@ export namespace QueryArgs {
     export type GetUserPosts = GetPaginatedPosts & {
       userId: string;
     };
+    export type FindPosts = {
+      keyword: string;
+    };
   }
 
   export namespace Reports {

@@ -1,14 +1,18 @@
 import { Button } from "@components/Controls";
-import { PostList } from "@components/Posts";
+import { PostList, SearchBar } from "@components/Posts";
 import { FilterLayout } from "@components/Posts/FilterLayout";
-import { ApiModel, useGetItemCategoriesQuery } from "@services/api";
-import { SetStateAction, useCallback } from "react";
+import {
+  ApiModel,
+  useFindPostsQuery,
+  useGetItemCategoriesQuery
+} from "@services/api";
+import { SetStateAction, useCallback, useEffect, useState } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import {
   FilterPostType,
   FilterUserType,
   PerPageOption,
-  getPerPageOption,
+  getPerPageOption
 } from "./types";
 
 interface FilterProps {
@@ -55,6 +59,22 @@ export const PostsContainer = ({
 }: PostsContainerProps) => {
   const { t } = useTranslation();
   const { data: categories } = useGetItemCategoriesQuery({ locale: "en" });
+
+  // const [searchTerm, setSearchTerm] = useState("");
+  // const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
+
+  // useEffect(() => {
+  //   const timerId = setTimeout(() => {
+  //     setDebouncedSearchTerm(searchTerm);
+  //   }, 500); // Delay in ms
+
+  //   return () => clearTimeout(timerId); // Cleanup
+  // }, [searchTerm]);
+
+  // const { data: findPostsData, isLoading: findPostsIsLoading } =
+  //   useFindPostsQuery({
+  //     keyword: debouncedSearchTerm
+  //   });
 
   const handlePerPageChange = (val: string) => {
     // update parent container state
@@ -135,6 +155,11 @@ export const PostsContainer = ({
       handleDateFilterChange={(value) => handleDateFilterChange(value)}
     >
       <div className="flex flex-col gap-y-4">
+        {/* <SearchBar
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+        /> */}
+        <SearchBar />
         <PostList posts={posts} />
 
         <nav

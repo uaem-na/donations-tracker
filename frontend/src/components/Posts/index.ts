@@ -4,3 +4,4 @@ export * from "./PostItem";
 export * from "./PostList";
 export * from "./PostsContainer";
 export * from "./types";
+export * from "./SearchBar";

@@ -184,6 +184,17 @@ export const api = createApi({
             ]
           : [{ type: "posts", id: "landing-list" }],
     }),
+    findPosts: builder.query<
+      ApiResponse.PaginatedList<ApiModel.Post>, 
+      QueryArgs.Posts.FindPosts
+    >({
+      query: ({ keyword }) => ({
+        url: `posts/search/`,
+        method: "GET",
+        params: {keyword}
+      }),
+    }),
+
     getPost: builder.query<ApiModel.Post, QueryArgs.Posts.GetPost>({
       query: ({ postId }) => `/posts/${postId}`,
       providesTags: (result, error, arg) => [{ type: "posts", id: arg.postId }],
@@ -453,6 +464,7 @@ export const {
   useDeletePostMutation,
   useDeleteUserMutation,
   useEditPostMutation,
+  useFindPostsQuery,
   useGetItemCategoriesQuery,
   useGetPostQuery,
   useGetPostsQuery,
