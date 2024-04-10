@@ -1,4 +1,4 @@
-export type FilterUserType = "all" | "admin" | "individual" | "organization";
+export type FilterUserType = "all" | "admin" | "individual" | "organization" | "reported";
 
 export type PerPageOption = 10 | 20 | 50 | 100;
 export const getPerPageOption = (num: number): PerPageOption => {

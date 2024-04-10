@@ -29,6 +29,19 @@ export class UserService {
     return [posts, await UserModel.countDocuments(filter)];
   }
 
+  async toggleReported(id: string): Promise<UserDocument> {
+    const user = await UserModel.findOneAndUpdate({ _id: id }, [
+      { $set: { reported: { $eq: [false, "$reported"] } } },
+    ]);
+    if (!user) {
+      throw new Error(
+        `Error toggling reported for id(${id}). User does not exist.`
+      );
+    }
+
+    return user;
+  }
+
   /**
    * Get all active users, optionally get all users when active is set to false
    * @param filterInactive set to false to get all users including inactive users

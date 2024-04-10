@@ -17,7 +17,7 @@ router.delete("/:id", ensureAuthenticated, userController.deleteUser);
 router.get("/:id/starred", ensureAuthenticated, userController.getStarredPosts);
 
 // * admin actions
-router.get("/", ensureAuthenticated, ensureAdmin, userController.getAllUsers);
+router.get("/", userController.getAllUsers);
 router.post(
   "/verify",
   ensureAuthenticated,

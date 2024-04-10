@@ -44,6 +44,7 @@ export enum FilterUserTypeAdmin {
   ADMIN = "admin",
   ORGANIZATION = "organization",
   INDIVIDUAL = "individual",
+  REPORTED = 'reported',
 }
 
 export const FilterableUserTypesAdmin = [
@@ -51,6 +52,7 @@ export const FilterableUserTypesAdmin = [
   FilterUserTypeAdmin.ADMIN,
   FilterUserTypeAdmin.ORGANIZATION,
   FilterUserTypeAdmin.INDIVIDUAL,
+  FilterUserTypeAdmin.REPORTED,
 ];
 
 export enum PostStatus {

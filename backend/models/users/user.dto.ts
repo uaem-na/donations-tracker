@@ -25,7 +25,11 @@ export class UserDto {
   active: boolean;
   location: UserLocationDto | undefined;
   starred: string[] | undefined;
+<<<<<<< Updated upstream
   isEmailVerified: boolean;
+=======
+  reported: boolean;
+>>>>>>> Stashed changes
   verified: boolean | undefined;
   organization:
     | {
@@ -54,6 +58,7 @@ export class UserDto {
       lastName,
       location,
       role,
+      reported,
     } = user;
 
     this.id = id;
@@ -63,6 +68,7 @@ export class UserDto {
     this.firstName = firstName;
     this.lastName = lastName;
     this.role = role;
+    this.reported = false;
     this.active = user.active;
     this.verified = true;
     this.isEmailVerified = user.isEmailVerified ?? false;

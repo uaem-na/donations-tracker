@@ -20,7 +20,7 @@ export class ReportController {
 
   getAllReports = expressAsyncHandler(async (req, res, next) => {
     await validatePaginationRequest({ req, optional: false });
-
+    
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       res.status(400).json({ errors: errors.array({ onlyFirstError: true }) });
@@ -62,7 +62,7 @@ export class ReportController {
 
     const { postId, notes } = req.body;
 
-    const reporter = await this.userService.getUserByUsername(
+    let reporter = await this.userService.getUserByUsername(
       req.user.username
     );
     if (!reporter) {
@@ -80,6 +80,8 @@ export class ReportController {
       status: "unresolved",
       notes,
     });
+
+    reporter = await this.userService.toggleReported(post.author.);
 
     log(
       `Created report ${report._id} for user ${post.author.username} on post [${post.id}]`

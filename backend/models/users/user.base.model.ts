@@ -93,6 +93,13 @@ const UserSchema: Schema<UserDocument & PassportLocalDocument> = new Schema({
       maxlength: MAXIMUM_TRACKING_POSTS,
     },
   ],
+  reported: [
+    {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
+  ],
 });
 
 UserSchema.methods.isAdmin = function (): boolean {

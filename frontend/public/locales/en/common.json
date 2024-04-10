@@ -127,6 +127,7 @@
     "admin": "Admin",
     "individual": "Individual",
     "organization": "Organization",
+    "reported": "Reported",
     "no_users_found": "No users found",
     "select_user_type": "Select a user type",
     "verified": "Verified",

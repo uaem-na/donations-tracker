@@ -84,6 +84,7 @@ export const PostDetails = ({
       return;
     }
     deletePostApi({ id: post.id });
+    
   };
 
   // handle successful requests

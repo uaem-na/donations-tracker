@@ -71,6 +71,7 @@ export type User = {
   role: string;
   location: Location | LocationDocument;
   starred: Post[] | PostDocument[];
+  reported: boolean;
   isAdmin: () => boolean;
   isOrganization: () => boolean;
   isIndividual: () => boolean;

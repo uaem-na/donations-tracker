@@ -71,6 +71,7 @@ export const FilterLayout = ({
                     { value: "admin", label: t("users.admin") },
                     { value: "individual", label: t("users.individual") },
                     { value: "organization", label: t("users.organization") },
+                    { value: "reported", label: t("users.reported") }
                   ]}
                   multiSelect={false}
                   onChange={(option) =>

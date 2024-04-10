@@ -2,7 +2,7 @@ import { debug } from "debug";
 import expressAsyncHandler from "express-async-handler";
 import { validationResult } from "express-validator";
 import { FilterQuery } from "mongoose";
-import { PostStatus } from "../constants";
+import { FilterUserTypeAdmin, PostStatus } from "../constants";
 import { AuthorizationError } from "../errors";
 import { PostDto } from "../models/posts";
 import { UserDto } from "../models/users";
@@ -136,7 +136,7 @@ export class AdminController {
     const { userType } = tryParseUserFilterQuery(req);
 
     const filterQuery: FilterQuery<UserDocument> = {
-      ...(userType && { role: userType }),
+      ...(userType && userType !== FilterUserTypeAdmin.REPORTED ? { role: userType } : {reported: true}),
     };
 
     const [users, count] = await this.userService.getPaginatedUsers(

@@ -27,8 +27,7 @@ router.put(
 
 router.get(
   "/users",
-  ensureAuthenticated,
-  ensureAdmin,
+
   adminController.getUsersToVerify
 );
 
