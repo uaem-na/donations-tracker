@@ -3,10 +3,9 @@ import { PostList, SearchBar } from "@components/Posts";
 import { FilterLayout } from "@components/Posts/FilterLayout";
 import {
   ApiModel,
-  useFindPostsQuery,
   useGetItemCategoriesQuery
 } from "@services/api";
-import { SetStateAction, useCallback, useEffect, useState } from "react";
+import { SetStateAction, useCallback } from "react";
 import { Trans, useTranslation } from "react-i18next";
 import {
   FilterPostType,
@@ -34,11 +33,14 @@ interface PostsContainerProps {
   updateUserType: (setter: SetStateAction<FilterUserType>) => void;
   updateCategories: (setter: SetStateAction<string[]>) => void;
   updateDate?: (setter: SetStateAction<Date | undefined>) => void;
+  updateKeyword?: (setter: SetStateAction<string>) => void;
+  keyword?: string;
   filters: {
     postType: boolean;
     userType: boolean;
     categories: boolean;
     date?: boolean;
+    keyword?: boolean;
   };
 }
 
@@ -55,26 +57,12 @@ export const PostsContainer = ({
   updateUserType,
   updateCategories,
   updateDate,
+  updateKeyword,
+  keyword,
   filters,
 }: PostsContainerProps) => {
   const { t } = useTranslation();
   const { data: categories } = useGetItemCategoriesQuery({ locale: "en" });
-
-  // const [searchTerm, setSearchTerm] = useState("");
-  // const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
-
-  // useEffect(() => {
-  //   const timerId = setTimeout(() => {
-  //     setDebouncedSearchTerm(searchTerm);
-  //   }, 500); // Delay in ms
-
-  //   return () => clearTimeout(timerId); // Cleanup
-  // }, [searchTerm]);
-
-  // const { data: findPostsData, isLoading: findPostsIsLoading } =
-  //   useFindPostsQuery({
-  //     keyword: debouncedSearchTerm
-  //   });
 
   const handlePerPageChange = (val: string) => {
     // update parent container state
@@ -109,6 +97,12 @@ export const PostsContainer = ({
     }
   };
 
+  const handleKeywordChange = (keyword: string) => {
+    if(filters.keyword && updateKeyword !== undefined) {
+      updatePage(1);
+      updateKeyword(keyword);
+    }
+  }
   const renderPaginationResults = useCallback(() => {
     const from = total === 0 ? 0 : page * perPage - (perPage - 1);
     const to = page * perPage > total ? total : page * perPage;
@@ -155,13 +149,8 @@ export const PostsContainer = ({
       handleDateFilterChange={(value) => handleDateFilterChange(value)}
     >
       <div className="flex flex-col gap-y-4">
-        {/* <SearchBar
-          searchTerm={searchTerm}
-          setSearchTerm={setSearchTerm}
-        /> */}
-        <SearchBar />
+        <SearchBar keyword={keyword} setKeyword={handleKeywordChange} />
         <PostList posts={posts} />
-
         <nav
           className="flex items-center justify-between px-4 py-3 sm:px-6"
           aria-label="Pagination"

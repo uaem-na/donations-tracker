@@ -60,6 +60,8 @@ export class PostController {
     //! date objects in MongoDB stored in UTC, adjust for ET
     const easternTimeOffset = -4.0;
 
+    const keyword = req.query.keyword;
+
     const filterQuery: FilterQuery<PostDocument> = {
       status: PostStatus.OPEN,
       ...(postType && { type: postType }),
@@ -71,7 +73,14 @@ export class PostController {
         createdAt: {
           $gte: new Date(date.getTime() - easternTimeOffset * 60 * 60 * 1000),
         },
-      }),  
+      }),
+
+      ...(typeof keyword === "string" && keyword && {
+        $or: [
+          { 'item.name': new RegExp(keyword, "i") },
+          { 'item.description': new RegExp(keyword, "i") },
+        ],
+      }),
     };
 
     const [posts, count] = await this.postService.getPaginatedPosts(
@@ -179,46 +188,6 @@ export class PostController {
     }
 
     res.json(PostDto.fromDocument(post));
-  });
-
-  findPosts = expressAsyncHandler(async (req, res, next) => {
-    const keyword = req.query.keyword;
-    let searchQuery = {};
-
-    // if (!keyword || typeof keyword !== "string") {
-    //   throw new InvalidOperationError("Keyword is required for searching");
-    // }
-
-    if (keyword && typeof keyword === "string" && keyword.trim() !== "") {
-      searchQuery = {
-        $or: [
-          { 'item.name': new RegExp(keyword, "i") },
-          { 'item.description': new RegExp(keyword, "i") },
-        ],
-      };
-    }
-
-    const { page, limit } = tryParsePaginationQuery(req);
-    const pageSize = limit || 10;
-    const currentPage = page || 1;
-
-    const [posts, count] = await this.postService.getPaginatedPosts(
-      currentPage,
-      pageSize,
-      searchQuery,
-      { updatedAt: -1, createdAt: -1 }
-    );
-
-    const postDtos = posts.map((post) => PostDto.fromDocument(post));
-
-    const response = {
-      data: postDtos,
-      page: currentPage,
-      per_page: pageSize,
-      total: count,
-    };
-
-    res.json(response);
   });
 
   updatePost = expressAsyncHandler(async (req, res, next) => {

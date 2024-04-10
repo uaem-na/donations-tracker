@@ -6,7 +6,7 @@ import {
   getPerPageOption,
 } from "@components/Posts";
 import { useGetPostsQuery } from "@services/api";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 
 export const PostsPage = () => {
@@ -19,6 +19,18 @@ export const PostsPage = () => {
   const [userType, setUserType] = useState<FilterUserType>("all");
   const [categories, setCategories] = useState<string[]>(["all"]);
   const [date, setDate] = useState<Date>();
+  const [keyword, setKeyword] = useState<string>("");
+  const [debouncedKeyword, setDebouncedKeyword] = useState<string>(keyword);
+
+  useEffect(() => {
+    const timerId = setTimeout(() => {
+      setDebouncedKeyword(keyword);
+    }, 400); // Delay in ms
+
+    return () => clearTimeout(timerId); // Cleanup
+  }, [keyword]);
+
+  
   const { data: postsResponse, isLoading } = useGetPostsQuery({
     per_page: perPage,
     page: page,
@@ -26,6 +38,7 @@ export const PostsPage = () => {
     user_type: userType,
     categories: categories,
     ...(date && { date: date.toISOString().substring(0, 10) }),
+    keyword: debouncedKeyword,
   });
 
   return (
@@ -44,11 +57,14 @@ export const PostsPage = () => {
           updateUserType={setUserType}
           updateCategories={setCategories}
           updateDate={setDate}
+          updateKeyword={setKeyword}
+          keyword={keyword}
           filters={{
             postType: true,
             userType: true,
             categories: true,
             date: true,
+            keyword: true,
           }}
         />
       </div>
