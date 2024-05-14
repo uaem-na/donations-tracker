@@ -49,7 +49,7 @@ export const api = createApi({
           body: data,
         }),
         invalidatesTags: ["session"],
-      }
+      },
     ),
     forgotPassword: builder.mutation<
       ApiResponse.MessageResponse,
@@ -92,7 +92,7 @@ export const api = createApi({
         },
       }),
       transformResponse: (
-        response: ApiResponse.PaginatedList<ApiModel.Post>
+        response: ApiResponse.PaginatedList<ApiModel.Post>,
       ): ApiResponse.PaginatedList<ApiModel.Post> => {
         const posts = response.data;
         response.data = posts?.map((post) => ({
@@ -123,7 +123,7 @@ export const api = createApi({
         params: { ...args },
       }),
       transformResponse: (
-        response: ApiResponse.PaginatedList<ApiModel.Post>
+        response: ApiResponse.PaginatedList<ApiModel.Post>,
       ): ApiResponse.PaginatedList<ApiModel.Post> => {
         const posts = response.data;
         response.data = posts.map((post) => ({
@@ -154,7 +154,7 @@ export const api = createApi({
         params: { ...args },
       }),
       transformResponse: (
-        response: ApiResponse.PaginatedList<ApiModel.Post>
+        response: ApiResponse.PaginatedList<ApiModel.Post>,
       ): ApiResponse.PaginatedList<ApiModel.Post> => {
         const posts = response.data;
         response.data = posts.map((post) => ({
@@ -188,7 +188,7 @@ export const api = createApi({
         method: "GET",
       }),
       transformResponse: (
-        response: ApiResponse.PaginatedList<ApiModel.Post>
+        response: ApiResponse.PaginatedList<ApiModel.Post>,
       ): ApiResponse.PaginatedList<ApiModel.Post> => {
         const posts = response.data;
         response.data = posts.map((post) => ({
@@ -320,7 +320,7 @@ export const api = createApi({
         params: { ...args },
       }),
       transformResponse: (
-        response: ApiResponse.PaginatedList<ApiModel.Post>
+        response: ApiResponse.PaginatedList<ApiModel.Post>,
       ): ApiResponse.PaginatedList<ApiModel.Post> => {
         const posts = response.data;
         response.data = posts.map((post) => ({

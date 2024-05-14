@@ -1,27 +1,18 @@
-import {
-  SetStateAction,
-  useCallback,
-} from 'react';
+import { SetStateAction, useCallback } from "react";
 
-import {
-  Trans,
-  useTranslation,
-} from 'react-i18next';
+import { Trans, useTranslation } from "react-i18next";
 
-import { Button } from '@components/Controls';
-import { PostList } from '@components/Posts';
-import { FilterLayout } from '@components/Posts/FilterLayout';
-import {
-  ApiModel,
-  useGetItemCategoriesQuery,
-} from '@services/api';
+import { Button } from "@components/Controls";
+import { PostList } from "@components/Posts";
+import { FilterLayout } from "@components/Posts/FilterLayout";
+import { ApiModel, useGetItemCategoriesQuery } from "@services/api";
 
 import {
   FilterPostType,
   FilterUserType,
   getPerPageOption,
   PerPageOption,
-} from './types';
+} from "./types";
 
 interface FilterProps {
   userType: "individual" | "organization";

@@ -1,22 +1,13 @@
-import {
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import { useEffect, useMemo, useState } from "react";
 
-import { useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 
-import { Alert } from '@components';
-import {
-  Button,
-  Input,
-  Label,
-  Tooltip,
-} from '@components/Controls';
-import { SelectInput } from '@components/Controls/Select';
-import { Textarea } from '@components/Controls/Textarea';
+import { Alert } from "@components";
+import { Button, Input, Label, Tooltip } from "@components/Controls";
+import { SelectInput } from "@components/Controls/Select";
+import { Textarea } from "@components/Controls/Textarea";
 import {
   Dialog,
   DialogContent,
@@ -25,25 +16,21 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@components/Dialog';
-import { PostType } from '@constants';
-import { faCircleQuestion } from '@fortawesome/free-regular-svg-icons';
-import {
-  faCancel,
-  faCheck,
-  faTrash,
-} from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { DialogClose } from '@radix-ui/react-dialog';
+} from "@components/Dialog";
+import { PostType } from "@constants";
+import { faCircleQuestion } from "@fortawesome/free-regular-svg-icons";
+import { faCancel, faCheck, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { DialogClose } from "@radix-ui/react-dialog";
 import {
   useDeletePostMutation,
   useEditPostMutation,
   useGetItemCategoriesQuery,
   useGetPostQuery,
-} from '@services/api';
+} from "@services/api";
 
-import { CreateEditPostSchema } from './schemas/CreateEditPostSchema';
+import { CreateEditPostSchema } from "./schemas/CreateEditPostSchema";
 
 type Type = (typeof PostType)[keyof typeof PostType];
 
@@ -154,14 +141,14 @@ export const EditPostForm = ({ id, onError }: EditPostFormProps) => {
       const errorMessages = err.errors.map(
         (error) =>
           `${error.msg}: ${error.location}.${error.path} = ${JSON.stringify(
-            error.value
-          )}`
+            error.value,
+          )}`,
       );
       setServerMessage(errorMessages.join(","));
     } else {
       err.errors.length > 0
         ? setServerMessage(
-            err.errors.join(",") ?? t("errors.unknown_server_error")
+            err.errors.join(",") ?? t("errors.unknown_server_error"),
           )
         : setServerMessage(err.message ?? t("errors.unknown_server_error"));
     }
