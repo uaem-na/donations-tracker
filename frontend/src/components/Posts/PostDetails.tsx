@@ -17,12 +17,13 @@ import {
   DialogTrigger,
 } from "@components/Dialog";
 import { SingleMarkerGoogleMap } from "@components/GoogleMapWrapper/SingleMarkerGoogleMap";
-import { PostType } from "@constants";
+import { PostType, UserRole } from "@constants";
 import { faCancel, faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CreateReportFormDialog } from "@pages/Admin/components/CreateReportFormDialog";
 import { DialogClose } from "@radix-ui/react-dialog";
 import {
+  useApprovePostAdminMutation,
   useDeletePostMutation,
   useGetPostQuery,
   useGetSessionQuery,
@@ -34,22 +35,29 @@ interface PostDetailsProps {
   id: string;
   onError: (err) => void;
   redirectOnDelete?: boolean;
+  redirectOnApprove?: boolean;
   hideEditDelete?: boolean;
   hideReportButton?: boolean;
+  hideApproveButton?: boolean; // ADDED
 }
 
 export const PostDetails = ({
   id,
   onError,
   redirectOnDelete = true,
+  redirectOnApprove = true, // ADDED
   hideEditDelete = false,
   hideReportButton = false,
+  hideApproveButton = false, // ADDED
 }: PostDetailsProps) => {
   const { t } = useTranslation();
   const { data: currentSession } = useGetSessionQuery();
   const navigate = useNavigate();
 
   const [serverMessage, setServerMessage] = useState();
+
+  const [approvePostApi, {isSuccess: isApproveSuccess, error: approveError}] =
+  useApprovePostAdminMutation();
 
   const [deletePostApi, { isSuccess: isDeleteSuccess, error: deleteError }] =
     useDeletePostMutation();
@@ -75,12 +83,20 @@ export const PostDetails = ({
     deletePostApi({ id: post.id });
   };
 
+  const onApprove = async () => {
+    if (!post?.id) {
+      onError({ status: 500, message: "Post ID must be available" });
+      return;
+    }
+    approvePostApi({ postId: post.id });
+  }
+
   // handle successful requests
   useEffect(() => {
-    if (isDeleteSuccess && redirectOnDelete) {
-      navigate(`/posts/list`);
+    if ((isDeleteSuccess && redirectOnDelete) || (isApproveSuccess && redirectOnApprove)) {
+      navigate(`/posts`);
     }
-  }, [isDeleteSuccess]);
+  }, [isDeleteSuccess, isApproveSuccess]);
 
   // handle server error message
   useEffect(() => {
@@ -260,7 +276,7 @@ export const PostDetails = ({
                             intent="secondary"
                             className="flex gap-1.5 justify-center items-center"
                           >
-                            <FontAwesomeIcon icon={faCancel} />
+                            <FontAwesomeIcon icon={faCancel} /> 
                             {t("cancel")}
                           </Button>
                         </DialogClose>
@@ -273,6 +289,16 @@ export const PostDetails = ({
           {!hideReportButton && currentSession && (
             <CreateReportFormDialog postId={post.id} />
           )}
+          {!hideApproveButton &&
+            currentSession &&
+            currentSession.role.includes(UserRole.ADMIN) && post.item.category.includes("other") && (
+        <Button 
+            intent="primary"
+            className="flex gap-1.5 justify-center items-center"
+            onClick={onApprove}
+          >
+          Approve
+        </Button>)}
         </div>
       </div>
 
