@@ -36,6 +36,17 @@ const UserSchema: Schema<UserDocument & PassportLocalDocument> = new Schema({
     },
     unique: true,
   },
+  isEmailVerified: { type: Boolean, default: false },
+  emailVerificationToken: {
+    type: String,
+    required: false,
+    maxlength: 512,
+  },
+  resetPasswordToken: {
+    type: String,
+    required: false,
+    maxlength: 512,
+  },
   displayName: {
     type: String,
     required: true,
@@ -69,7 +80,6 @@ const UserSchema: Schema<UserDocument & PassportLocalDocument> = new Schema({
   },
   location: { type: LocationSchema, required: false },
   active: { type: Boolean, default: true }, // TODO: add deactivation mechanism
-  recoveryEmail: { type: String, required: false }, // TODO: add recovery email mechanism
   role: {
     type: String,
     enum: [UserRole.ADMIN, UserRole.ORGANIZATION, UserRole.INDIVIDUAL],
@@ -105,7 +115,7 @@ UserSchema.plugin(passportLocalMongoose, {
   unlockInterval: 10 * 60 * 1000, // 10 minutes
   passwordValidator: (
     password: string,
-    cb: (arg0: { message: string } | null) => unknown
+    cb: (arg0: { message: string } | null) => unknown,
   ) => {
     if (password.length >= 256) {
       return cb({

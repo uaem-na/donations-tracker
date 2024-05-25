@@ -1,9 +1,9 @@
 import {
   FilterPostType,
   FilterUserType,
+  getPerPageOption,
   PerPageOption,
   PostsContainer,
-  getPerPageOption,
 } from "@components/Posts";
 import { useGetPostsQuery } from "@services/api";
 import { useState, useEffect } from "react";
@@ -18,6 +18,7 @@ export const PostsPage = () => {
   const [postType, setPostType] = useState<FilterPostType>("all");
   const [userType, setUserType] = useState<FilterUserType>("all");
   const [categories, setCategories] = useState<string[]>(["all"]);
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 100]);
   const [date, setDate] = useState<Date>();
   const [keyword, setKeyword] = useState<string>("");
   const [debouncedKeyword, setDebouncedKeyword] = useState<string>(keyword);
@@ -36,6 +37,7 @@ export const PostsPage = () => {
     page: page,
     post_type: postType,
     user_type: userType,
+    price_range: priceRange,
     categories: categories,
     ...(date && { date: date.toISOString().substring(0, 10) }),
     keyword: debouncedKeyword,
@@ -56,6 +58,7 @@ export const PostsPage = () => {
           updatePostType={setPostType}
           updateUserType={setUserType}
           updateCategories={setCategories}
+          updatePriceRange={setPriceRange}
           updateDate={setDate}
           updateKeyword={setKeyword}
           keyword={keyword}
@@ -63,6 +66,7 @@ export const PostsPage = () => {
             postType: true,
             userType: true,
             categories: true,
+            pricing: true,
             date: true,
             keyword: true,
           }}

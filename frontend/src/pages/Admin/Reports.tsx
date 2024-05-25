@@ -1,4 +1,5 @@
 import { getPerPageOption, PerPageOption } from "@components";
+import { AdminGuide } from "@components/AdminGuide";
 import { Button } from "@components/Controls";
 import { SelectInput } from "@components/Controls/Select";
 import { ReportedPostItem } from "@pages/Admin/components/ReportedPostItem";
@@ -33,8 +34,8 @@ export const ReportsPage = () => {
                 reportedPostsResponse?.total === 0
                   ? 0
                   : page === 1
-                  ? 1
-                  : page * perPage - (perPage - 1),
+                    ? 1
+                    : page * perPage - (perPage - 1),
               to:
                 page * perPage > reportedPostsResponse?.total!
                   ? reportedPostsResponse?.total
@@ -58,6 +59,7 @@ export const ReportsPage = () => {
         <h1 className="text-2xl font-bold leading-10 tracking-tight text-gray-900">
           {t("reports.manage_reported_posts")}
         </h1>
+        <AdminGuide className="mt-2.5 ml-[250px]" guideType={"reports"} />
       </div>
 
       <div className="flex items-center justify-end">

@@ -49,8 +49,37 @@ export const api = createApi({
           body: data,
         }),
         invalidatesTags: ["session"],
-      }
+      },
     ),
+    forgotPassword: builder.mutation<
+      ApiResponse.MessageResponse,
+      MutationArgs.Auth.ForgotPassword
+    >({
+      query: (data) => ({
+        url: "auth/forgot-password",
+        method: "POST",
+        body: data,
+      }),
+    }),
+    resetPassword: builder.mutation<
+      ApiResponse.MessageResponse,
+      MutationArgs.Auth.ResetPassword
+    >({
+      query: (data) => ({
+        url: "auth/reset-password",
+        method: "POST",
+        body: data,
+      }),
+    }),
+    resendEmailVerification: builder.mutation<
+      ApiResponse.MessageResponse,
+      void
+    >({
+      query: () => ({
+        url: "auth/resend-verification",
+        method: "POST",
+      }),
+    }),
     getStarredPosts: builder.query<
       ApiResponse.PaginatedList<ApiModel.Post>,
       QueryArgs.Users.GetStarredPosts
@@ -63,7 +92,7 @@ export const api = createApi({
         },
       }),
       transformResponse: (
-        response: ApiResponse.PaginatedList<ApiModel.Post>
+        response: ApiResponse.PaginatedList<ApiModel.Post>,
       ): ApiResponse.PaginatedList<ApiModel.Post> => {
         const posts = response.data;
         response.data = posts?.map((post) => ({
@@ -94,7 +123,7 @@ export const api = createApi({
         params: { ...args },
       }),
       transformResponse: (
-        response: ApiResponse.PaginatedList<ApiModel.Post>
+        response: ApiResponse.PaginatedList<ApiModel.Post>,
       ): ApiResponse.PaginatedList<ApiModel.Post> => {
         const posts = response.data;
         response.data = posts.map((post) => ({
@@ -125,7 +154,7 @@ export const api = createApi({
         params: { ...args },
       }),
       transformResponse: (
-        response: ApiResponse.PaginatedList<ApiModel.Post>
+        response: ApiResponse.PaginatedList<ApiModel.Post>,
       ): ApiResponse.PaginatedList<ApiModel.Post> => {
         const posts = response.data;
         response.data = posts.map((post) => ({
@@ -145,9 +174,9 @@ export const api = createApi({
       providesTags: (result, error, arg) =>
         result
           ? [
-              ...result.data.map(({ id }) => ({ type: "posts" as const, id })),
-              { type: "posts", id: "list" },
-            ]
+            ...result.data.map(({ id }) => ({ type: "posts" as const, id })),
+            { type: "posts", id: "list" },
+          ]
           : [{ type: "posts", id: "list" }],
     }),
     getPostsForLandingPage: builder.query<
@@ -159,7 +188,7 @@ export const api = createApi({
         method: "GET",
       }),
       transformResponse: (
-        response: ApiResponse.PaginatedList<ApiModel.Post>
+        response: ApiResponse.PaginatedList<ApiModel.Post>,
       ): ApiResponse.PaginatedList<ApiModel.Post> => {
         const posts = response.data;
         response.data = posts.map((post) => ({
@@ -179,9 +208,9 @@ export const api = createApi({
       providesTags: (result, error, arg) =>
         result
           ? [
-              ...result.data.map(({ id }) => ({ type: "posts" as const, id })),
-              { type: "posts", id: "landing-list" },
-            ]
+            ...result.data.map(({ id }) => ({ type: "posts" as const, id })),
+            { type: "posts", id: "landing-list" },
+          ]
           : [{ type: "posts", id: "landing-list" }],
     }),
 
@@ -240,9 +269,9 @@ export const api = createApi({
       providesTags: (result) =>
         result
           ? [
-              ...result.map(({ id }) => ({ type: "users" as const, id })),
-              { type: "users", id: "list" },
-            ]
+            ...result.map(({ id }) => ({ type: "users" as const, id })),
+            { type: "users", id: "list" },
+          ]
           : [{ type: "users", id: "list" }],
     }),
     updateUser: builder.mutation({
@@ -292,7 +321,7 @@ export const api = createApi({
         params: { ...args },
       }),
       transformResponse: (
-        response: ApiResponse.PaginatedList<ApiModel.Post>
+        response: ApiResponse.PaginatedList<ApiModel.Post>,
       ): ApiResponse.PaginatedList<ApiModel.Post> => {
         const posts = response.data;
         response.data = posts.map((post) => ({
@@ -312,9 +341,9 @@ export const api = createApi({
       providesTags: (result, error, arg) =>
         result
           ? [
-              ...result.data.map(({ id }) => ({ type: "posts" as const, id })),
-              { type: "posts", id: "admin-list" },
-            ]
+            ...result.data.map(({ id }) => ({ type: "posts" as const, id })),
+            { type: "posts", id: "admin-list" },
+          ]
           : [{ type: "posts", id: "admin-list" }],
     }),
     approvePostAdmin: builder.mutation<
@@ -355,9 +384,9 @@ export const api = createApi({
       providesTags: (result) =>
         result
           ? [
-              ...result.data.map(({ id }) => ({ type: "users" as const, id })),
-              { type: "users", id: "admin-list" },
-            ]
+            ...result.data.map(({ id }) => ({ type: "users" as const, id })),
+            { type: "users", id: "admin-list" },
+          ]
           : [{ type: "users", id: "admin-list" }],
     }),
     getUserAdmin: builder.query<ApiModel.User, QueryArgs.Users.GetUser>({
@@ -390,9 +419,9 @@ export const api = createApi({
       providesTags: (result): any =>
         result
           ? [
-              ...result.map(({ id }) => ({ type: "reports" as const, id })),
-              { type: "reports", id: "reports-list" },
-            ]
+            ...result.map(({ id }) => ({ type: "reports" as const, id })),
+            { type: "reports", id: "reports-list" },
+          ]
           : [{ type: "reports", id: "reports-list" }],
     }),
     getReportedPosts: builder.query<
@@ -411,12 +440,12 @@ export const api = createApi({
       providesTags: (result, error, args): any[] =>
         result
           ? [
-              ...result.data?.map(({ id }) => ({
-                type: "reported-posts" as const,
-                id,
-              })),
-              { type: "reported-posts", id: "reported-posts-list" },
-            ]
+            ...result.data?.map(({ id }) => ({
+              type: "reported-posts" as const,
+              id,
+            })),
+            { type: "reported-posts", id: "reported-posts-list" },
+          ]
           : [{ type: "reported-posts", id: "reported-posts-list" }],
     }),
     reportPost: builder.mutation<unknown, MutationArgs.Reports.CreateReport>({
@@ -441,6 +470,7 @@ export const api = createApi({
       invalidatesTags: (result, error, args): any => [
         { type: "reports", id: args.id },
         { type: "reports", id: "reports-list" },
+        { type: "reported-posts", id: "reported-posts-list" },
       ],
     }),
   }),
@@ -468,6 +498,9 @@ export const {
   useLoginMutation,
   useLogoutMutation,
   useRegisterMutation,
+  useForgotPasswordMutation,
+  useResetPasswordMutation,
+  useResendEmailVerificationMutation,
   useToggleUserActiveAdminMutation,
   useStarPostMutation,
   useUpdateUserMutation,

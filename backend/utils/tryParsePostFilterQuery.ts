@@ -1,9 +1,10 @@
 import { Request } from "express";
+
 import { FilterPostType, FilterUserType } from "../constants";
 import { isEnumValue } from "./isEnumValue";
 
 export const tryParsePostFilterQuery = (req: Request) => {
-  const { post_type, user_type, categories, date } = req.query;
+  const { post_type, user_type, price_range, categories, date } = req.query;
 
   const parsedPostType = isEnumValue(post_type, FilterPostType)
     ? post_type
@@ -12,6 +13,14 @@ export const tryParsePostFilterQuery = (req: Request) => {
   const parsedUserType = isEnumValue(user_type, FilterUserType)
     ? user_type
     : FilterUserType.ALL;
+
+  const parsedPriceRange =
+    Array.isArray(price_range) &&
+    price_range.length == 2 &&
+    /^\d+$/.test("" + price_range[0]) &&
+    /^\d+$/.test("" + price_range[1])
+      ? [Number(price_range[0]), Number(price_range[1])]
+      : [0, 100];
 
   const parsedCategories =
     Array.isArray(categories) && categories.length > 0
@@ -28,6 +37,7 @@ export const tryParsePostFilterQuery = (req: Request) => {
   return {
     ...(parsedPostType !== FilterPostType.ALL && { postType: parsedPostType }),
     ...(parsedUserType !== FilterUserType.ALL && { userType: parsedUserType }),
+    ...(parsedPriceRange && { priceRange: parsedPriceRange }),
     ...(parsedCategories.length > 0 && { categories: parsedCategories }),
     ...(parsedDateValue && { date: parsedDateValue }),
   };

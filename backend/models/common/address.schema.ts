@@ -53,8 +53,8 @@ export const AddressSchema: Schema<Address> = new Schema({
     required: true,
     validate: {
       validator: (v: string) => {
-        // should accept H2X 1X1, H2X1X1, H2X-1X1, H2X 1X1
-        return /^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/.test(v);
+        // should accept H2X1X1
+        return /^[A-Z]\d[A-Z]\d[A-Z]\d$/.test(v);
       },
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       message: (props: any) => `${props.value} is not a valid postal code!`,

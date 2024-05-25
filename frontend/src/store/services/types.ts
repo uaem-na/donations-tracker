@@ -90,6 +90,7 @@ export namespace ApiResponse {
     firstName: string;
     lastName: string;
     verified: boolean;
+    isEmailVerified: boolean;
     starred: string[]; // post ids
   };
 
@@ -121,6 +122,10 @@ export namespace QueryArgs {
 
     export type PostStatus = {
       status?: "all" | "open" | "closed" | "pending-approval";
+    };
+
+    export type PriceRange = {
+      price_range: [number, number];
     };
 
     export type Date = {
@@ -179,7 +184,9 @@ export namespace QueryArgs {
   }
 
   export namespace Reports {
-    export type GetPaginatedReportedPosts = Pagination;
+    export type GetPaginatedReportedPosts = Pagination & {
+      userId?: string; // Add this as an optional property
+    };
 
     export type ReportedPost = {
       postId: string;
@@ -194,6 +201,7 @@ export namespace QueryArgs {
     export type GetStarredPosts = Pagination &
       Filters.PostType &
       Filters.UserType &
+      Filters.PriceRange &
       Filters.Categories & {
         userId: string;
       };
@@ -228,6 +236,17 @@ export namespace MutationArgs {
     };
 
     export type Register = IndividualRegister & OrganizationRegister;
+
+    export type ForgotPassword = {
+      email: string;
+    };
+
+    export type ResetPassword = {
+      userId: string;
+      password: string;
+      confirmPassword: string;
+      token: string;
+    };
   }
 
   export namespace Posts {

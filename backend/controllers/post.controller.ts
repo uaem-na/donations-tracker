@@ -2,6 +2,7 @@ import debug from "debug";
 import expressAsyncHandler from "express-async-handler";
 import { body, param, validationResult } from "express-validator";
 import { FilterQuery } from "mongoose";
+
 import {
   PostCategories,
   PostCategory,
@@ -54,7 +55,7 @@ export class PostController {
     }
 
     const { page, limit } = tryParsePaginationQuery(req);
-    const { postType, userType, categories, date } =
+    const { postType, userType, priceRange, categories, date } =
       tryParsePostFilterQuery(req);
 
     //! date objects in MongoDB stored in UTC, adjust for ET
@@ -66,6 +67,7 @@ export class PostController {
       status: PostStatus.OPEN,
       ...(postType && { type: postType }),
       ...(userType && { authorType: userType }),
+      ...(priceRange && { priceRange: priceRange }),
       ...(categories && {
         "item.category": { $in: categories },
       }),
@@ -139,6 +141,12 @@ export class PostController {
     if (user.role === UserRole.INDIVIDUAL && type === PostType.REQUEST) {
       throw new AuthorizationError(
         `Individual users are unable to create request posts.`
+      );
+    }
+
+    if (user.active === false) {
+      throw new AuthorizationError(
+        `User ${user.username} is deactivated and is not authorized to create a post.`
       );
     }
 
@@ -317,7 +325,8 @@ export class PostController {
     }
 
     const { page, limit } = tryParsePaginationQuery(req);
-    const { postType, userType, categories } = tryParsePostFilterQuery(req);
+    const { postType, userType, priceRange, categories } =
+      tryParsePostFilterQuery(req);
 
     const { userId } = req.params;
     const user = await this.userService.getUserById(userId);
@@ -328,6 +337,7 @@ export class PostController {
     const filterQuery: FilterQuery<PostDocument> = {
       ...(postType && { type: postType }),
       ...(userType && { authorType: userType }),
+      ...(priceRange && { priceRange: priceRange }),
       ...(userId && { author: { _id: userId } }),
       ...(categories && {
         "item.category": { $in: categories },

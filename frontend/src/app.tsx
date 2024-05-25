@@ -14,6 +14,7 @@ import {
   DashboardPage,
   EditPostPage,
   FaqPage,
+  ForgotPasswordPage,
   GeneralPage,
   InternalServerErrorPage,
   LandingPage,
@@ -21,6 +22,7 @@ import {
   PostDetailsPage,
   PostsPage,
   RegisterPage,
+  ResetPasswordPage,
   ResourceNotFoundErrorPage,
   SecurityPage,
 } from "@pages";
@@ -148,6 +150,8 @@ function App() {
 
             {/* Authentication pages */}
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+            <Route path="/reset-password/:id" element={<ResetPasswordPage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route
               path="/register/individual-account"

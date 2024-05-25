@@ -1,17 +1,18 @@
+import { SetStateAction, useCallback } from "react";
+
+import { Trans, useTranslation } from "react-i18next";
+
 import { Button } from "@components/Controls";
 import { PostList, SearchBar } from "@components/Posts";
 import { FilterLayout } from "@components/Posts/FilterLayout";
-import {
-  ApiModel,
-  useGetItemCategoriesQuery
-} from "@services/api";
-import { SetStateAction, useCallback } from "react";
-import { Trans, useTranslation } from "react-i18next";
+
+import { ApiModel, useGetItemCategoriesQuery } from "@services/api";
+
 import {
   FilterPostType,
   FilterUserType,
+  getPerPageOption,
   PerPageOption,
-  getPerPageOption
 } from "./types";
 
 interface FilterProps {
@@ -32,6 +33,7 @@ interface PostsContainerProps {
   updatePostType: (setter: SetStateAction<FilterPostType>) => void;
   updateUserType: (setter: SetStateAction<FilterUserType>) => void;
   updateCategories: (setter: SetStateAction<string[]>) => void;
+  updatePriceRange: (setter: SetStateAction<[number, number]>) => void;
   updateDate?: (setter: SetStateAction<Date | undefined>) => void;
   updateKeyword?: (setter: SetStateAction<string>) => void;
   keyword?: string;
@@ -39,9 +41,11 @@ interface PostsContainerProps {
     postType: boolean;
     userType: boolean;
     categories: boolean;
+    pricing: boolean;
     date?: boolean;
     keyword?: boolean;
   };
+  role?: string;
 }
 
 export const PostsContainer = ({
@@ -56,10 +60,12 @@ export const PostsContainer = ({
   updatePostType,
   updateUserType,
   updateCategories,
+  updatePriceRange,
   updateDate,
   updateKeyword,
   keyword,
   filters,
+  role,
 }: PostsContainerProps) => {
   const { t } = useTranslation();
   const { data: categories } = useGetItemCategoriesQuery({ locale: "en" });
@@ -103,6 +109,7 @@ export const PostsContainer = ({
       updateKeyword(keyword);
     }
   }
+
   const renderPaginationResults = useCallback(() => {
     const from = total === 0 ? 0 : page * perPage - (perPage - 1);
     const to = page * perPage > total ? total : page * perPage;
@@ -143,10 +150,14 @@ export const PostsContainer = ({
         handleUserTypeFilterChange(option)
       }
       categories={categories ?? []}
+      handlePriceRangeFilterChange={(newPriceRange) =>
+        handlePriceRangeFilterChange(newPriceRange)
+      }
       handleCategoryFilterChange={(options) =>
         handleCategoryFilterChange(options.map((opt) => opt.value))
       }
       handleDateFilterChange={(value) => handleDateFilterChange(value)}
+      role={role}
     >
       <div className="flex flex-col gap-y-4">
         <SearchBar keyword={keyword} setKeyword={handleKeywordChange} />
