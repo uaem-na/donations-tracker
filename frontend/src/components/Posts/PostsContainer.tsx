@@ -3,8 +3,9 @@ import { SetStateAction, useCallback } from "react";
 import { Trans, useTranslation } from "react-i18next";
 
 import { Button } from "@components/Controls";
-import { PostList } from "@components/Posts";
+import { PostList, SearchBar } from "@components/Posts";
 import { FilterLayout } from "@components/Posts/FilterLayout";
+
 import { ApiModel, useGetItemCategoriesQuery } from "@services/api";
 
 import {
@@ -34,12 +35,15 @@ interface PostsContainerProps {
   updateCategories: (setter: SetStateAction<string[]>) => void;
   updatePriceRange: (setter: SetStateAction<[number, number]>) => void;
   updateDate?: (setter: SetStateAction<Date | undefined>) => void;
+  updateKeyword?: (setter: SetStateAction<string>) => void;
+  keyword?: string;
   filters: {
     postType: boolean;
     userType: boolean;
     categories: boolean;
     pricing: boolean;
     date?: boolean;
+    keyword?: boolean;
   };
   role?: string;
 }
@@ -58,6 +62,8 @@ export const PostsContainer = ({
   updateCategories,
   updatePriceRange,
   updateDate,
+  updateKeyword,
+  keyword,
   filters,
   role,
 }: PostsContainerProps) => {
@@ -97,12 +103,12 @@ export const PostsContainer = ({
     }
   };
 
-  // display posts after a new price range is selected
-  const handlePriceRangeFilterChange = (newPriceRange: [number, number]) => {
-    // update parent container state
-    updatePage(1);
-    updatePriceRange(newPriceRange);
-  };
+  const handleKeywordChange = (keyword: string) => {
+    if(filters.keyword && updateKeyword !== undefined) {
+      updatePage(1);
+      updateKeyword(keyword);
+    }
+  }
 
   const renderPaginationResults = useCallback(() => {
     const from = total === 0 ? 0 : page * perPage - (perPage - 1);
@@ -154,8 +160,8 @@ export const PostsContainer = ({
       role={role}
     >
       <div className="flex flex-col gap-y-4">
+        <SearchBar keyword={keyword} setKeyword={handleKeywordChange} />
         <PostList posts={posts} />
-
         <nav
           className="flex items-center justify-between px-4 py-3 sm:px-6"
           aria-label="Pagination"

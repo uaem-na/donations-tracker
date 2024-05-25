@@ -11,7 +11,12 @@ import {
   PostTypes,
   UserRole,
 } from "../constants";
-import { AuthorizationError, NotFoundError, ValidationError } from "../errors";
+import {
+  AuthorizationError,
+  InvalidOperationError,
+  NotFoundError,
+  ValidationError,
+} from "../errors";
 import { PostDto } from "../models/posts";
 import { PostService, UserService } from "../services";
 import {
@@ -56,6 +61,8 @@ export class PostController {
     //! date objects in MongoDB stored in UTC, adjust for ET
     const easternTimeOffset = -4.0;
 
+    const keyword = req.query.keyword;
+
     const filterQuery: FilterQuery<PostDocument> = {
       status: PostStatus.OPEN,
       ...(postType && { type: postType }),
@@ -68,6 +75,13 @@ export class PostController {
         createdAt: {
           $gte: new Date(date.getTime() - easternTimeOffset * 60 * 60 * 1000),
         },
+      }),
+
+      ...(typeof keyword === "string" && keyword && {
+        $or: [
+          { 'item.name': new RegExp(keyword, "i") },
+          { 'item.description': new RegExp(keyword, "i") },
+        ],
       }),
     };
 

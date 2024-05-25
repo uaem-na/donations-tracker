@@ -213,6 +213,7 @@ export const api = createApi({
           ]
           : [{ type: "posts", id: "landing-list" }],
     }),
+
     getPost: builder.query<ApiModel.Post, QueryArgs.Posts.GetPost>({
       query: ({ postId }) => `/posts/${postId}`,
       providesTags: (result, error, arg) => [{ type: "posts", id: arg.postId }],

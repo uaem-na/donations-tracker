@@ -1,7 +1,3 @@
-import { useState } from "react";
-
-import { useTranslation } from "react-i18next";
-
 import {
   FilterPostType,
   FilterUserType,
@@ -10,6 +6,8 @@ import {
   PostsContainer,
 } from "@components/Posts";
 import { useGetPostsQuery } from "@services/api";
+import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 export const PostsPage = () => {
   const { t } = useTranslation();
@@ -22,6 +20,18 @@ export const PostsPage = () => {
   const [categories, setCategories] = useState<string[]>(["all"]);
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 100]);
   const [date, setDate] = useState<Date>();
+  const [keyword, setKeyword] = useState<string>("");
+  const [debouncedKeyword, setDebouncedKeyword] = useState<string>(keyword);
+
+  useEffect(() => {
+    const timerId = setTimeout(() => {
+      setDebouncedKeyword(keyword);
+    }, 400); // Delay in ms
+
+    return () => clearTimeout(timerId); // Cleanup
+  }, [keyword]);
+
+  
   const { data: postsResponse, isLoading } = useGetPostsQuery({
     per_page: perPage,
     page: page,
@@ -30,6 +40,7 @@ export const PostsPage = () => {
     price_range: priceRange,
     categories: categories,
     ...(date && { date: date.toISOString().substring(0, 10) }),
+    keyword: debouncedKeyword,
   });
 
   return (
@@ -49,12 +60,15 @@ export const PostsPage = () => {
           updateCategories={setCategories}
           updatePriceRange={setPriceRange}
           updateDate={setDate}
+          updateKeyword={setKeyword}
+          keyword={keyword}
           filters={{
             postType: true,
             userType: true,
             categories: true,
             pricing: true,
             date: true,
+            keyword: true,
           }}
         />
       </div>
