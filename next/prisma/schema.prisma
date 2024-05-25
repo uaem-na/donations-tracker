@@ -1,0 +1,181 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+enum ItemCategory {
+  BOOK
+  CLOTHING
+  CUTLERY
+  ELECTRONICS
+  FOOD
+  FURNITURE
+  PPE
+  STATIONERY
+  TOY
+  OTHER
+}
+
+enum PostStatus {
+  PENDING_APPROVAL
+  OPEN
+  IN_PROGRESS
+  CLOSED
+}
+
+enum PostType {
+  OFFER
+  REQUEST
+}
+
+enum UserType {
+  ADMIN
+  INDIVIDUAL
+  ORGANIZATION
+}
+
+enum Country {
+  CANADA
+  UNITED_STATES
+}
+
+enum CountryCode {
+  CA
+  US
+}
+
+enum Province {
+  ALBERTA
+  BRITISH_COLUMBIA
+  MANITOBA
+  NEW_BRUNSWICK
+  NEWFOUNDLAND_AND_LABRADOR
+  NORTHWEST_TERRITORIES
+  NOVA_SCOTIA
+  NUNAVUT
+  ONTARIO
+  PRINCE_EDWARD_ISLAND
+  QUEBEC
+  SASKATCHEWAN
+  YUKON
+}
+
+enum ProvinceCode {
+  AB
+  BC
+  MB
+  NB
+  NL
+  NT
+  NS
+  NU
+  ON
+  PE
+  QC
+  SK
+  YT
+}
+
+type Location {
+  lat        Int
+  lng        Int
+  postalCode String
+}
+
+type PostItem {
+  category    ItemCategory @default(OTHER)
+  description String?
+  name        String
+  price       Int          @default(0)
+  quantity    Int          @default(1)
+}
+
+model Post {
+  id             String         @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  authorId       String // id from clerkjs
+  location       Location
+  items          PostItem[]
+  published      Boolean        @default(false)
+  reports        Report[]
+  starredByUsers PostsOnUsers[]
+  status         PostStatus     @default(OPEN)
+  type           PostType       @default(OFFER)
+  views          Int            @default(0)
+}
+
+model Report {
+  id         String       @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  note       String
+  post       Post         @relation(fields: [postId], references: [id])
+  reporterId String // id from clerkjs
+  resolverId String? // id from clerkjs
+  postId     String       @db.ObjectId
+  status     ReportStatus @default(UNRESOLVED)
+}
+
+enum ReportStatus {
+  UNRESOLVED
+  PENDING
+  RESOLVED
+}
+
+type Address {
+  city         String       @default("Montreal")
+  country      Country      @default(CANADA)
+  countryCode  CountryCode  @default(CA)
+  postalCode   String
+  province     Province     @default(QUEBEC)
+  provinceCode ProvinceCode @default(QC)
+  street       String
+}
+
+type OrganizationInfo {
+  address  Address
+  name     String
+  phone    String
+  verified Boolean @default(false)
+}
+
+model User {
+  id              String   @id @map("_id")
+  // clerkjs specific fields
+  createdAt       DateTime
+  updatedAt       DateTime
+  firstName       String?
+  lastName        String?
+  fullName        String?
+  privateMetadata Json?
+  publicMetadata  Json?
+  unsafeMetadata  Json?
+
+  // app specific fields
+  active           Boolean           @default(true)
+  displayName      String?
+  location         Location?
+  organizationInfo OrganizationInfo?
+  type             UserType          @default(INDIVIDUAL)
+
+  // MN relationships
+  starredPosts PostsOnUsers[]
+}
+
+model PostsOnUsers {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  post      Post     @relation(fields: [postId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+  postId    String   @db.ObjectId
+  userId    String
+
+  @@unique([postId, userId])
+  @@map("StarredPost")
+}
