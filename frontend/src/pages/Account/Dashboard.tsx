@@ -1,6 +1,7 @@
 import { AccountLayout } from "@pages/Account/components/AccountLayout";
 import { FavoritePosts } from "@pages/Account/components/FavoritePosts";
 import { MyPosts } from "@pages/Account/components/MyPosts";
+import { MyReports } from "@pages/Account/components/MyReports";
 import { classMerge } from "@utils/ClassMerge";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -40,6 +41,18 @@ export const DashboardPage = () => {
               >
                 {t("posts.my_posts")}
               </button>
+              <button
+                type="button"
+                onClick={() => setSelectedTabIndex(2)}
+                className={classMerge(
+                  "whitespace-nowrap border-b-2 pb-4 px-1 text-sm font-medium",
+                  selectedTabIndex === 2
+                    ? "border-purple-800 text-purple-700"
+                    : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
+                )}
+              >
+                {t("reports.my_reports")}
+              </button>
             </nav>
           </div>
         </div>
@@ -47,6 +60,7 @@ export const DashboardPage = () => {
         <div className="my-5">
           {selectedTabIndex === 0 ? <FavoritePosts /> : null}
           {selectedTabIndex === 1 ? <MyPosts /> : null}
+          {selectedTabIndex === 2 ? <MyReports /> : null}
         </div>
       </div>
     </AccountLayout>

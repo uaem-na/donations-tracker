@@ -110,7 +110,8 @@
     "mark_as_resolved": "Mark as resolved",
     "no_reports_found": "No reports found",
     "resolution": "Resolution",
-    "confirmation": "Are you sure you want to mark this as resolved?"
+    "confirmation": "Are you sure you want to mark this as resolved?",
+    "my_reports": "My reports"
   },
   "users": {
     "title": "Users",

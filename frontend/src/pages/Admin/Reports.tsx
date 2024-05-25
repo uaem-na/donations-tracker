@@ -34,8 +34,8 @@ export const ReportsPage = () => {
                 reportedPostsResponse?.total === 0
                   ? 0
                   : page === 1
-                  ? 1
-                  : page * perPage - (perPage - 1),
+                    ? 1
+                    : page * perPage - (perPage - 1),
               to:
                 page * perPage > reportedPostsResponse?.total!
                   ? reportedPostsResponse?.total
