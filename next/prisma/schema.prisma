@@ -145,26 +145,68 @@ type OrganizationInfo {
 }
 
 model User {
-  id              String   @id @map("_id")
-  // clerkjs specific fields
-  createdAt       DateTime
-  updatedAt       DateTime
-  firstName       String?
-  lastName        String?
-  fullName        String?
-  privateMetadata Json?
-  publicMetadata  Json?
-  unsafeMetadata  Json?
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 
   // app specific fields
-  active           Boolean           @default(true)
-  displayName      String?
-  location         Location?
-  organizationInfo OrganizationInfo?
-  type             UserType          @default(INDIVIDUAL)
+  displayName  String?
+  firstName    String?
+  lastName     String?
+  active       Boolean           @default(true)
+  location     Location?
+  organization OrganizationInfo?
+  type         UserType          @default(INDIVIDUAL)
 
   // MN relationships
   starredPosts PostsOnUsers[]
+}
+
+model Account {
+  id                String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String   @db.ObjectId
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?  @map("refreshToken") @db.String
+  access_token      String?  @map("accessToken") @db.String
+  expires_at        Int?     @map("expiresAt")
+  token_type        String?  @map("tokenType")
+  scope             String?
+  id_token          String?  @map("idToken") @db.String
+  session_state     String?  @map("sessionState") @db.String
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  sessionToken String   @unique
+  userId       String   @db.ObjectId
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model VerificationToken {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@unique([identifier, token])
 }
 
 model PostsOnUsers {
@@ -174,7 +216,7 @@ model PostsOnUsers {
   post      Post     @relation(fields: [postId], references: [id])
   user      User     @relation(fields: [userId], references: [id])
   postId    String   @db.ObjectId
-  userId    String
+  userId    String   @db.ObjectId
 
   @@unique([postId, userId])
   @@map("StarredPost")
