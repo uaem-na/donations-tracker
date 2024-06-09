@@ -27,8 +27,9 @@ export const geocode = async (
 
     const { lat, lng } = response.data.results[0].geometry.location;
 
-    return [lat, lng];
-  } catch (error) {
+    return [0,0];
+    //return [lat, lng];
+  }catch (error) {
     console.error(error);
     return [0, 0];
   }
