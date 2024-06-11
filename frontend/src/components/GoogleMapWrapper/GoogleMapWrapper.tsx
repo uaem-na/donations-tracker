@@ -1,8 +1,9 @@
 import Locate from "@components/GoogleMapWrapper/Locate";
 import { Marker, MarkerUtils } from "@components/GoogleMapWrapper/MarkerUtils";
+import { MarkerClusterer } from "@googlemaps/markerclusterer";
 import { Status, Wrapper } from "@googlemaps/react-wrapper";
 import { ApiModel, useGetPostsForLandingPageQuery } from "@services/api";
-import { GeoCluster } from "@utils/GeoCluster";
+import { GeoCluster } from "@utils";
 import {
   PropsWithChildren,
   useCallback,
@@ -83,6 +84,7 @@ const GoogleMap = ({
   google.maps.MapOptions & { post; handleVisiblePosts }
 >) => {
   const { data: postsResponse } = useGetPostsForLandingPageQuery();
+  console.log(postsResponse);
   const [map, setMap] = useState<google.maps.Map>();
   const [postCluster, setPostCluster] = useState<Cluster[]>([]);
   const [markers, setMarkers] = useState<Marker[]>([]);
@@ -128,7 +130,6 @@ const GoogleMap = ({
       });
       const ids = Array.prototype.concat.apply([], data);
       const p = postsResponse?.data.filter((x) => ids.includes(x.id));
-
       handleVisiblePosts(p);
     }
   }, [map, markers, postsResponse]);
@@ -189,7 +190,7 @@ const GoogleMap = ({
   };
 
   // calculate marker positions when map and posts are ready
-  useEffect(() => {
+  useEffect(() => {         
     if (map && postsResponse) {
       const coords = postsResponse.data.map((post) => {
         return [post.location.lat!, post.location.lng!, post.id];
@@ -198,7 +199,7 @@ const GoogleMap = ({
       if (coords.length === 0) {
         return;
       }
-
+      // const markerCluster = new MarkerClusterer({ map, markers });
       const cluster = new GeoCluster(coords, zoomBias);
       const postCluster: Cluster[] = cluster.getGeoCluster();
       setPostCluster(postCluster);
@@ -238,6 +239,7 @@ const GoogleMap = ({
       const marker = new google.maps.marker.AdvancedMarkerElement({
         map,
         position: { lat, lng },
+        gmpClickable: true,
         content: div,
       });
       marker["data"] = posts.map((p) => p.id);

@@ -1,4 +1,5 @@
 import { GoogleMapWrapper } from "@components/GoogleMapWrapper/GoogleMapWrapper";
+import { MapClusterWrapper } from "@components/GoogleMapWrapper/MapClusterWrapper";
 import { Posts } from "@pages/Landing/components/Posts";
 import { ApiModel } from "@services/api";
 import { useState } from "react";
@@ -20,7 +21,11 @@ export const LandingPage = () => {
 
   return (
     <div className="flex w-full h-full">
-      <GoogleMapWrapper
+      {/* <GoogleMapWrapper
+        post={selectedPost}
+        handleVisiblePosts={handleVisiblePosts}
+      /> */}
+      <MapClusterWrapper
         post={selectedPost}
         handleVisiblePosts={handleVisiblePosts}
       />
