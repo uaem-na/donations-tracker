@@ -1,4 +1,7 @@
 import axios from "axios";
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 type GeocodeResponse = {
   results: {
@@ -25,12 +28,20 @@ export const geocode = async (
       `https://maps.googleapis.com/maps/api/geocode/json?address=${postalCode}&key=${API_KEY}`
     );
 
+    if (response.data.results.length === 0) {
+      throw new Error("No results found for the given postal code.");
+    }
+    
     const { lat, lng } = response.data.results[0].geometry.location;
 
-    return [0,0];
-    //return [lat, lng];
+    return [lat, lng];
   }catch (error) {
-    console.error(error);
+    if (axios.isAxiosError(error)) 
+      console.error("Axios error:", error.message);
+    else if (error instanceof Error)
+      console.error("Geocode error:", error.message);
+    else 
+      console.error("Unknown error:", error);
     return [0, 0];
   }
 };
