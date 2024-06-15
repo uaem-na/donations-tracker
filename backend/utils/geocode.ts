@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 
 type GeocodeResponse = {
   results: {
@@ -46,20 +46,14 @@ export const geocode = async (
 
 export const geocodeDebug = async (
   postalCode: string,
-): Promise<[number, number]> => {
+): Promise<AxiosResponse> => {
   if (!API_KEY) {
     throw new Error("No Google Geocode API key found.");
   }
 
-  const response = await axios.get<GeocodeResponse>(
+  const response = await axios.get(
     `https://maps.googleapis.com/maps/api/geocode/json?address=${postalCode}&key=${API_KEY}`,
   );
 
-  if (response.data.results.length === 0) {
-    throw new Error("No results found for the given postal code.");
-  }
-
-  const { lat, lng } = response.data.results[0].geometry.location;
-
-  return [lat, lng];
+  return response;
 };

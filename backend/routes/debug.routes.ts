@@ -7,11 +7,20 @@ router.get("/geocode/:postalCode", async (req: Request, res: Response) => {
   const postalCode = req.params.postalCode;
 
   try {
-    const coords = await geocodeDebug(postalCode);
-    res.json({ postalCode, coords });
+    const response = await geocodeDebug(postalCode);
+    console.log(response);
+    res.json({ postalCode, response: response.data });
   } catch (error) {
     if (error instanceof Error) {
-      res.status(500).json({ error: error.message, postalCode });
+      const { cause, name, message } = error;
+      res.status(500).json({
+        error: {
+          cause,
+          name,
+          message,
+        },
+        postalCode,
+      });
     } else {
       res.status(500).json({ error: "An unknown error occured" });
     }
