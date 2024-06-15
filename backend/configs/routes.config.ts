@@ -5,6 +5,7 @@ import {
   PostRouter,
   ReportRouter,
   UserRouter,
+  DebugRouter,
 } from "../routes";
 
 export const configureRoutes = (app: Express) => {
@@ -13,4 +14,5 @@ export const configureRoutes = (app: Express) => {
   app.use("/reports", ReportRouter);
   app.use("/users", UserRouter);
   app.use("/admin", AdminRouter);
+  app.use("/debug", DebugRouter);
 };
