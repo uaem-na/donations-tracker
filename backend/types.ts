@@ -78,6 +78,7 @@ export type User = {
 
 export type OrganizationUser = User & {
   organization: Organization;
+  isApproved: boolean;
 };
 
 export type UserDocument = User &
