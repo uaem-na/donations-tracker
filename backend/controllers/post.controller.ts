@@ -11,12 +11,7 @@ import {
   PostTypes,
   UserRole,
 } from "../constants";
-import {
-  AuthorizationError,
-  InvalidOperationError,
-  NotFoundError,
-  ValidationError,
-} from "../errors";
+import { AuthorizationError, NotFoundError, ValidationError } from "../errors";
 import { PostDto } from "../models/posts";
 import { PostService, UserService } from "../services";
 import {
@@ -40,7 +35,7 @@ const log = debug("backend:post");
 export class PostController {
   constructor(
     private postService: PostService,
-    private userService: UserService
+    private userService: UserService,
   ) {}
 
   // this API is called on public post listings page without authentication
@@ -77,19 +72,20 @@ export class PostController {
         },
       }),
 
-      ...(typeof keyword === "string" && keyword && {
-        $or: [
-          { 'item.name': new RegExp(keyword, "i") },
-          { 'item.description': new RegExp(keyword, "i") },
-        ],
-      }),
+      ...(typeof keyword === "string" &&
+        keyword && {
+          $or: [
+            { "item.name": new RegExp(keyword, "i") },
+            { "item.description": new RegExp(keyword, "i") },
+          ],
+        }),
     };
 
     const [posts, count] = await this.postService.getPaginatedPosts(
       page,
       limit,
       filterQuery,
-      { updatedAt: -1, createdAt: -1 }
+      { updatedAt: -1, createdAt: -1 },
     );
 
     const postDtos = posts.map((post) => PostDto.fromDocument(post));
@@ -140,13 +136,19 @@ export class PostController {
 
     if (user.role === UserRole.INDIVIDUAL && type === PostType.REQUEST) {
       throw new AuthorizationError(
-        `Individual users are unable to create request posts.`
+        `Individual users are unable to create request posts.`,
       );
     }
 
     if (user.active === false) {
       throw new AuthorizationError(
-        `User ${user.username} is deactivated and is not authorized to create a post.`
+        `User ${user.username} is deactivated and is not authorized to create a post.`,
+      );
+    }
+
+    if (user.organization.verified != true) {
+      throw new AuthorizationError(
+        `Organizational users need to be verified before creating a post.`,
       );
     }
 
@@ -266,7 +268,7 @@ export class PostController {
 
     if (req.user.username !== post.author.username.toString()) {
       throw new AuthorizationError(
-        `User ${req.user.username} is not authorized to update post ${id}.`
+        `User ${req.user.username} is not authorized to update post ${id}.`,
       );
     }
 
@@ -302,7 +304,7 @@ export class PostController {
 
     if (req.user.username !== post.author.username.toString()) {
       throw new AuthorizationError(
-        `User ${req.user.username} is not authorized to delete post ${id}.`
+        `User ${req.user.username} is not authorized to delete post ${id}.`,
       );
     }
 
@@ -348,7 +350,7 @@ export class PostController {
       page,
       limit,
       filterQuery,
-      { updatedAt: -1, createdAt: -1 }
+      { updatedAt: -1, createdAt: -1 },
     );
     const postDtos = posts.map((post) => PostDto.fromDocument(post));
     const response: PaginatedResponse<PostDto> = {
@@ -371,7 +373,7 @@ export class PostController {
     const { locale } = req.query;
 
     const categories = this.postService.getItemCategories(
-      locale as "en" | "fr"
+      locale as "en" | "fr",
     );
 
     res.json(categories);

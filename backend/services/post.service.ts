@@ -20,7 +20,7 @@ export class PostService {
   }
 
   async getPostsCount(
-    type: FilterPostType = FilterPostType.ALL
+    type: FilterPostType = FilterPostType.ALL,
   ): Promise<number> {
     const count = await PostModel.countDocuments({
       ...(type !== FilterPostType.ALL && { type: type }),
@@ -38,7 +38,7 @@ export class PostService {
       | { [key: string]: SortOrder | { $meta: "textScore" } }
       | [string, SortOrder][]
       | null
-      | undefined = {}
+      | undefined = {},
   ): Promise<[PostDocument[], number]> {
     if (!page || !limit || page < 0 || limit < 0) {
       throw new Error("Error paginating posts. Invalid page or limit.");
@@ -90,7 +90,7 @@ export class PostService {
 
   async setPostStatus(id: string, postStatus: PostStatus): Promise<number> {
     const result = await PostModel.updateMany({ author: id }, [
-      { $set: { status: postStatus } }
+      { $set: { status: postStatus } },
     ]);
 
     return result.modifiedCount;
@@ -130,13 +130,13 @@ export class PostService {
     const starredPosts = user.starred as PostDocument[];
 
     const postExists = starredPosts.find(
-      (post) => post._id.toString() === postId
+      (post) => post._id.toString() === postId,
     );
 
     if (postExists) {
       // remove post from user's starred posts
       user.starred = starredPosts.filter(
-        (post) => post._id.toString() !== postId
+        (post) => post._id.toString() !== postId,
       );
       await user.save();
 

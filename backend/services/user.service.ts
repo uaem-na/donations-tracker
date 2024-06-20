@@ -13,7 +13,7 @@ export class UserService {
       | { [key: string]: SortOrder | { $meta: "textScore" } }
       | [string, SortOrder][]
       | null
-      | undefined = {}
+      | undefined = {},
   ): Promise<[UserDocument[], number]> {
     if (!page || !limit || page < 0 || limit < 0) {
       throw new Error("Error paginating users. Invalid page or limit.");
@@ -57,7 +57,7 @@ export class UserService {
   async updatePassword(
     id: string,
     oldPassword: string,
-    newPassword: string
+    newPassword: string,
   ): Promise<UserDocument> {
     const user = await this.getUserById(id);
     if (!user) {
@@ -66,7 +66,7 @@ export class UserService {
 
     return (await user.changePassword(
       oldPassword,
-      newPassword
+      newPassword,
     )) as UserDocument;
   }
 
@@ -90,11 +90,14 @@ export class UserService {
     }
   }
 
-  async verifyOrgniazationUser(id: string): Promise<UserDocument> {
+  async verifyOrganizationUser(id: string): Promise<UserDocument> {
     const user = await this.getUserById(id);
 
     if (!user) {
       throw new Error(`Error verifying user. User does not exist.`);
+    }
+    if (!user.isOrganization()) {
+      throw new Error(`User is not an organizational user.`);
     }
 
     user.organization.verified = true;
@@ -103,13 +106,15 @@ export class UserService {
   }
 
   async toggleActive(id: string): Promise<UserDocument> {
-    const user = await UserModel.findOneAndUpdate({ _id: id }, [
-      { $set: { active: { $eq: [false, "$active"] } } },
-    ], { new: true });
-    
+    const user = await UserModel.findOneAndUpdate(
+      { _id: id },
+      [{ $set: { active: { $eq: [false, "$active"] } } }],
+      { new: true },
+    );
+
     if (!user) {
       throw new Error(
-        `Error toggling active for id(${id}). User does not exist.`
+        `Error toggling active for id(${id}). User does not exist.`,
       );
     }
 
@@ -128,7 +133,7 @@ export class UserService {
     }
 
     const starredPostIds: string[] = user?.starred.map(
-      (oid: { toString: () => string }) => oid.toString()
+      (oid: { toString: () => string }) => oid.toString(),
     );
 
     return starredPostIds;
