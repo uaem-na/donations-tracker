@@ -10,7 +10,6 @@ import {
 import { createPortal } from "react-dom";
 import { createRoot } from "react-dom/client";
 import { MarkerUtils } from "./MarkerUtils";
-
 interface ISingleMarkerGoogleMapProps {
   post: ApiModel.Post;
 }
@@ -89,7 +88,7 @@ const GoogleMap = ({
       const { lat, lng } = post.location;
       // check if lat and lng is not NaN and create a marker if map is available
       if (map && lat && lng && !isNaN(lat) && !isNaN(lng)) {
-        createMarker({ lat, lng }, post.id);
+        createMarker({ lat, lng }, post.id, post.type);
       }
     }
   }, [map, post]);
@@ -98,7 +97,8 @@ const GoogleMap = ({
   const createMarker = useCallback(
     (
       { lat, lng }: google.maps.LatLngLiteral,
-      postId: string
+      postId: string,
+      postType: string
     ): google.maps.marker.AdvancedMarkerElement => {
       if (!MarkerUtils.isAdvancedMarkerAvailable(map)) {
         throw new Error(
@@ -107,7 +107,7 @@ const GoogleMap = ({
       }
       const div = document.createElement("div");
       const root = createRoot(div);
-      const el = createPortal(<CustomMarker />, div);
+      const el = createPortal(<CustomMarker postType={postType} />, div);
       root.render(el);
       const marker = new google.maps.marker.AdvancedMarkerElement({
         map,
@@ -128,13 +128,17 @@ const GoogleMap = ({
   );
 };
 
-const CustomMarker = () => {
+const CustomMarker = ({ postType }: { postType: string }) => {
   return (
     <>
       <div
         className={`rounded-full w-[25px] h-[25px] ring-1 ring-inset flex items-center justify-center p-[4px] relative transition ease-out delay-150
                     after:border-l-[9px] after:border-l-transparent after:border-r-[9px] after:border-r-transparent after:border-t-[9px]  after:left-[50%] after:absolute after:top-[90%] after:h-0 after:content-['']
-                    after:translate-x-[-50%] after:z-[1] bg-purple-800 text-white ring-purple-700/10 after:border-t-purple-800`}
+                    after:translate-x-[-50%] after:z-[1] ${
+                      postType === "offer"
+                        ? "bg-purple-800 ring-purple-700/10 after:border-t-purple-800"
+                        : "bg-blue-800 ring-blue-700/10 after:border-t-blue-800"
+                    } text-white `}
       >
         <span className="text-lg font-semibold"></span>
       </div>
