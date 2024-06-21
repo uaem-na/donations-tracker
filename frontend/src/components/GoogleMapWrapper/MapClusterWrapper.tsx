@@ -1,7 +1,8 @@
+import { useLandingContext } from "@contexts/LandingContext";
 import { GoogleMap, useJsApiLoader } from "@react-google-maps/api";
 import { memo } from "react";
+import { Locate } from "./Locate";
 import { PostCluster } from "./PostCluster";
-import { useLandingContext } from "@contexts/LandingContext";
 
 const center: google.maps.LatLngLiteral = {
   lat: 45.504717,
@@ -26,7 +27,7 @@ export const MapClusterWrapper = () => {
   const { isLoaded } = useJsApiLoader({
     id: MAP_ID,
     googleMapsApiKey: KEY,
-    libraries: ['marker']
+    libraries: ["marker"],
   });
 
   return isLoaded ? (
@@ -38,6 +39,7 @@ export const MapClusterWrapper = () => {
         options={mapOptions}
       >
         <PostCluster />
+        <Locate />
       </GoogleMap>
     </>
   ) : (

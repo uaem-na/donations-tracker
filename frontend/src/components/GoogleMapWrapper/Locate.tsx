@@ -1,4 +1,18 @@
-export default function Locate({ panTo }) {
+import { useGoogleMap } from "@react-google-maps/api";
+import { useCallback } from "react";
+export const Locate = () => {
+  const map = useGoogleMap();
+
+  const panTo = useCallback(
+    ({ lat, lng }) => {
+      if (map) {
+        map.panTo({ lat, lng });
+        map.setZoom(15);
+      }
+    },
+    [map]
+  );
+
   return (
     <button
       type="button"
@@ -22,4 +36,4 @@ export default function Locate({ panTo }) {
       />
     </button>
   );
-}
+};

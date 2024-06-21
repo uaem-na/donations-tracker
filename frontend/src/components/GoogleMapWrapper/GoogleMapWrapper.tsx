@@ -1,4 +1,3 @@
-import Locate from "@components/GoogleMapWrapper/Locate";
 import { Marker, MarkerUtils } from "@components/GoogleMapWrapper/MarkerUtils";
 import { MarkerClusterer } from "@googlemaps/markerclusterer";
 import { Status, Wrapper } from "@googlemaps/react-wrapper";
@@ -290,7 +289,7 @@ const GoogleMap = ({
 
   return (
     <div className="relative w-full">
-      <Locate panTo={panTo} />
+      {/* <Locate panTo={panTo} /> */}
       <div ref={ref} id="map" className="w-full h-full" />
     </div>
   );

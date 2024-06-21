@@ -36,8 +36,8 @@ const PinSvg = ({ type }: { type: string }) => {
           y2="36"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color={color} />
-          <stop offset="1" stop-color={color} />
+          <stop stopColor={color} />
+          <stop offset="1" stopColor={color} />
         </linearGradient>
       </defs>
       <path
