@@ -1,4 +1,4 @@
-import { MarkerF, MarkerProps, useGoogleMap } from "@react-google-maps/api";
+import { MarkerF, MarkerProps } from "@react-google-maps/api";
 import { ApiModel } from "@store/services/types";
 
 // is omitting position really necessary to hide location information?
@@ -8,9 +8,9 @@ interface PostMarkerProp extends Omit<MarkerProps, "position"> {
   clickable?: boolean;
 }
 
-const onLoad = marker => {
+const onLoad = (marker) => {
   console.log("marker: ", marker);
-}
+};
 
 export const PostMarker = ({ post, clusterer }: PostMarkerProp) => {
   return (
@@ -18,7 +18,6 @@ export const PostMarker = ({ post, clusterer }: PostMarkerProp) => {
       key={post.id}
       onLoad={onLoad}
       clusterer={clusterer}
-      icon={{url: "" }}
       position={new google.maps.LatLng(post.location.lat!, post.location.lng!)}
     ></MarkerF>
   );
