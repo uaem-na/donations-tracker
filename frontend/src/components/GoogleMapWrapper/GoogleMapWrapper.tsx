@@ -84,7 +84,6 @@ const GoogleMap = ({
   google.maps.MapOptions & { post; handleVisiblePosts }
 >) => {
   const { data: postsResponse } = useGetPostsForLandingPageQuery();
-  console.log(postsResponse);
   const [map, setMap] = useState<google.maps.Map>();
   const [postCluster, setPostCluster] = useState<Cluster[]>([]);
   const [markers, setMarkers] = useState<Marker[]>([]);
@@ -199,7 +198,6 @@ const GoogleMap = ({
       if (coords.length === 0) {
         return;
       }
-      // const markerCluster = new MarkerClusterer({ map, markers });
       const cluster = new GeoCluster(coords, zoomBias);
       const postCluster: Cluster[] = cluster.getGeoCluster();
       setPostCluster(postCluster);
