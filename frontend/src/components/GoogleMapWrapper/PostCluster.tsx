@@ -13,7 +13,7 @@ type PostMarker = google.maps.Marker & { postId: string };
 export const PostCluster = () => {
   const map = useGoogleMap();
   const { data: postResponse } = useGetPostsForLandingPageQuery();
-  const { setVisiblePosts, postToLocate } = useLandingContext();
+  const { setVisiblePosts, postToLocate, locatePost } = useLandingContext();
 
   useEffect(() => {
     if (map && postToLocate) {
@@ -58,6 +58,7 @@ export const PostCluster = () => {
                 url: MapPin(post.type),
                 scaledSize: new google.maps.Size(25, 30),
               }}
+              onClick={() => locatePost(post)}
               position={
                 new google.maps.LatLng(post.location.lat!, post.location.lng!)
               }
