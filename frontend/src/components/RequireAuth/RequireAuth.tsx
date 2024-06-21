@@ -43,6 +43,15 @@ export const RequireAuth = ({ children, role }: RequireAuthProps) => {
     return <Navigate to="/account/dashboard" />;
   }
 
+  // if unverified orgnaizational user is trying to create new request post, redirect to account page
+  if (
+    (pathname === "/posts/request/new" || pathname === "/posts/offer/new") &&
+    session.role.includes(UserRole.ORGANIZATION) &&
+    session.verified
+  ) {
+    return <Navigate to="/account/dashboard" />;
+  }
+
   // render the children
   return <>{children}</>;
 };
