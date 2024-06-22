@@ -29,6 +29,9 @@
     "dt_title": "Donations Trackers",
     "dt_description": "Le Donations Trackers est un site web qui fournit une plateforme permettant aux utilisateurs de partager efficacement et efficacement des dons dans la région du Grand Montréal. Le projet a été conçu par un groupe de membres de l'UAEM McGill au cours d'un sprint de conception appelé <1>Innovate4Health</1> organisé par <3>ReAct</3>, <5>l'IFMSA</5> (Fédération Internationale des Associations d'Étudiants en Médecine) et <7>l'Initiative IDEA</7> à l'École de Santé Publique Bloomberg de Johns Hopkins. À l'origine, le site web visait à augmenter la transparence dans la distribution de l'équipement de protection individuelle (EPI) en période de pénurie pendant la pandémie de COVID-19. Avec la pandémie qui se termine progressivement (et heureusement), l'équipe a décidé d'adapter le site web pour augmenter l'accessibilité aux dons/réceptions en général (par exemple, nourriture en conserve, biens essentiels, vêtements usés, etc.)."
   },
+  "faq": {
+    "title": "Foire Aux Questions"
+  },
   "posts": {
     "title": "Messages",
     "admin_guide": "Cliquez pour voir des guides plus détaillés sur la page des articles.",
