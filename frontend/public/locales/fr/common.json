@@ -21,8 +21,13 @@
   "showing_results": "Affichage des résultats <from>{{from}}</from> à <to>{{to}}</to> de <total>{{total}}</total>",
   "all": "Tous",
   "about_us": {
-    "title": "UAEM ",
-    "email": "$t(email)"
+    "title": "Chapitre UAEM de McGill",
+    "title_description": "est un réseau mondial d'étudiants universitaires qui s'efforcent d'accroître l'accès et l'abordabilité aux médicaments vitaux. Considérant que les universités sont des acteurs clés dans le pipeline de développement des médicaments, les étudiants peuvent promouvoir des pratiques de licence équitables en encourageant des changements de politique universitaire. Le chapitre UAEM de McGill est l'un des chapitres les plus actifs en Amérique du Nord. Actuellement, les principaux projets du chapitre incluent Donations Trackers, ainsi que le <1/> <2>Bulletin Canadien de l'UAEM</2>, la Science Ouverte, et plus encore.",
+    "email": "$t(email)",
+    "subtitle": "À propos de nous",
+    "subtitle_description": "Le Donations Trackers a été développé par des membres des <1>Universités Alliées pour les Médicaments</1> Essentiels (UAEM) et un groupe dévoué de développeurs web étudiants à l'Université McGill.",
+    "dt_title": "Donations Trackers",
+    "dt_description": "Le Donations Trackers est un site web qui fournit une plateforme permettant aux utilisateurs de partager efficacement et efficacement des dons dans la région du Grand Montréal. Le projet a été conçu par un groupe de membres de l'UAEM McGill au cours d'un sprint de conception appelé <1>Innovate4Health</1> organisé par <3>ReAct</3>, <5>l'IFMSA</5> (Fédération Internationale des Associations d'Étudiants en Médecine) et <7>l'Initiative IDEA</7> à l'École de Santé Publique Bloomberg de Johns Hopkins. À l'origine, le site web visait à augmenter la transparence dans la distribution de l'équipement de protection individuelle (EPI) en période de pénurie pendant la pandémie de COVID-19. Avec la pandémie qui se termine progressivement (et heureusement), l'équipe a décidé d'adapter le site web pour augmenter l'accessibilité aux dons/réceptions en général (par exemple, nourriture en conserve, biens essentiels, vêtements usés, etc.)."
   },
   "posts": {
     "title": "Messages",
