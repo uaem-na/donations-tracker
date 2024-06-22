@@ -122,12 +122,8 @@ export const FaqPage = () => {
             </FaqItem>
 
             <FaqItem question={t("faq.item_3.question")}>
-              <p className="mb-3 leading-5">
-                {t("faq.item_3.answer", { returnObjects: true })[0]}
-              </p>
-              <p className="mb-3 leading-5">
-                {t("faq.item_3.answer", { returnObjects: true })[1]}
-              </p>
+              <p className="mb-3 leading-5">{t("faq.item_3.answer.0")}</p>
+              <p className="mb-3 leading-5">{t("faq.item_3.answer.1")}</p>
             </FaqItem>
 
             <FaqItem question={t("faq.item_4.question")}>
@@ -161,12 +157,8 @@ export const FaqPage = () => {
                 </Trans>
               }
             >
-              <p className="mb-3 leading-5">
-                {t("faq.item_6.answer", { returnObjects: true })[0]}
-              </p>
-              <p className="mb-3 leading-5">
-                {t("faq.item_6.answer", { returnObjects: true })[1]}
-              </p>
+              <p className="mb-3 leading-5">{t("faq.item_6.answer.0")}</p>
+              <p className="mb-3 leading-5">{t("faq.item_6.answer.1")}</p>
             </FaqItem>
 
             <FaqItem question={t("faq.item_7.question")}>

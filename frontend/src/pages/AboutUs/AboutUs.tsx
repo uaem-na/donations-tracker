@@ -65,7 +65,7 @@ const HeroBackground = () => {
 };
 
 const HeroContent = () => {
-  const { t } = useTranslation(["common"]);
+  const { t } = useTranslation();
 
   return (
     <div className="overflow-hidden">
@@ -164,7 +164,7 @@ const ImagePanel = (props) => {
 };
 
 const AboutUsContent = () => {
-  const { t } = useTranslation(["common"]);
+  const { t } = useTranslation();
 
   return (
     <div className="mx-auto -mt-12 max-w-7xl px-6 sm:mt-0 lg:px-8 xl:-mt-8">

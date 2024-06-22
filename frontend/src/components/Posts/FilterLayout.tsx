@@ -90,6 +90,15 @@ export const FilterLayout = ({
     setShowPriceTooltip(!showPriceTooltip);
   };
 
+  const transformCategoriesToOptions = (
+    categories: ApiModel.PostItemCategory[]
+  ) => {
+    return categories.map((category) => ({
+      value: category.value,
+      label: t(`posts.item_categories.${category.label.toLowerCase()}`),
+    }));
+  };
+
   return (
     <div>
       <div className="flex items-baseline justify-between border-b border-gray-200 pb-6">
@@ -150,7 +159,7 @@ export const FilterLayout = ({
                         defaultOption={selectedType}
                         onChange={(option) => {
                           handlePostTypeFilterChange(
-                            option.value as FilterPostType,
+                            option.value as FilterPostType
                           );
                           setSelectedType(option);
                         }}
@@ -176,7 +185,7 @@ export const FilterLayout = ({
                         defaultOption={selectedUserType}
                         onChange={(option) => {
                           handleUserTypeFilterChange(
-                            option.value as FilterUserType,
+                            option.value as FilterUserType
                           );
                           setSelectedUserType(option);
                         }}
@@ -410,7 +419,7 @@ export const FilterLayout = ({
                 <FilterContainer
                   name="category"
                   ariaLabel={t("posts.category")}
-                  options={categories ?? []}
+                  options={transformCategoriesToOptions(categories)}
                   multiSelect={true}
                   onChange={(options) => {
                     handleCategoryFilterChange(options);
