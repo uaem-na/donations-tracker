@@ -131,17 +131,11 @@ export const FaqPage = () => {
             </FaqItem>
 
             <FaqItem question={t("faq.item_4.question")}>
-              <p className="mb-3 leading-5">
-                {t("faq.item_4.answer", { returnObjects: true })[0]}
-              </p>
+              <p className="mb-3 leading-5">{t("faq.item_4.answer.0")}</p>
               <ul className="list-disc list-inside my-5">
+                <li className="mb-3">{t("faq.item_4.answer.1")}</li>
                 <li className="mb-3">
-                  {t("faq.item_4.answer", { returnObjects: true })[1]}
-                </li>
-                <li className="mb-3">
-                  <Trans
-                    i18nKey={t("faq.item_4.answer", { returnObjects: true })[2]}
-                  >
+                  <Trans i18nKey="faq.item_4.answer.2">
                     General: Users can change their first, last, and display
                     names. If you want to change your associated email, please
                     contact the administrators at
@@ -151,9 +145,7 @@ export const FaqPage = () => {
                     .
                   </Trans>
                 </li>
-                <li className="mb-3">
-                  {t("faq.item_4.answer", { returnObjects: true })[3]}
-                </li>
+                <li className="mb-3">{t("faq.item_4.answer.3")}</li>
               </ul>
             </FaqItem>
 
@@ -163,7 +155,7 @@ export const FaqPage = () => {
 
             <FaqItem
               question={
-                <Trans i18nKey={t("faq.item_6.question")}>
+                <Trans i18nKey="faq.item_6.question">
                   What is the difference between registering as
                   <Highlight>an individual vs. organization?</Highlight>
                 </Trans>
@@ -178,21 +170,15 @@ export const FaqPage = () => {
             </FaqItem>
 
             <FaqItem question={t("faq.item_7.question")}>
-              <p className="mb-3 leading-5">
-                {t("faq.item_7.answer", { returnObjects: true })[0]}
-              </p>
+              <p className="mb-3 leading-5">{t("faq.item_7.answer.0")}</p>
               <ul className="list-disc list-inside my-5">
+                <li className="mb-3">{t("faq.item_7.answer.1")}</li>
                 <li className="mb-3">
-                  {t("faq.item_7.answer", { returnObjects: true })[1]}
-                </li>
-                <li className="mb-3">
-                  <Trans
-                    i18nKey={t("faq.item_7.answer", { returnObjects: true })[2]}
-                  >
+                  <Trans i18nKey="faq.item_7.answer.2">
                     If you have reasonable doubt about another user's
                     reliability/legitimacy, you can always report them by
                     clicking on the <Highlight>Report User</Highlight> button,
-                    which can be found on the _____. Once a user has been
+                    which can be found on the TBD. Once a user has been
                     reported, their activity will be temporarily blocked until
                     the website administrators conduct a background check.
                   </Trans>
@@ -202,48 +188,35 @@ export const FaqPage = () => {
 
             <FaqItem question={t("faq.item_8.question")}>
               <p className="mb-3 leading-5">
-                <Trans
-                  i18nKey={t("faq.item_8.answer", { returnObjects: true })[0]}
-                >
+                <Trans i18nKey="faq.item_8.answer.0">
                   We completely understand that issues with
                   donations/transactions may arise due to various causes (e.g.
                   technical difficulties).
                   <strong>
-                    {" "}
                     Donations Trackers is not responsible for any errors/issues
-                    that arise with a transaction/donation.{" "}
+                    that arise with a transaction/donation.
                   </strong>
                   Such errors/issues include but are not limited to:
                 </Trans>
               </p>
               <ul className="list-disc list-inside my-5">
-                <li className="mb-3">
-                  {t("faq.item_8.answer", { returnObjects: true })[1]}
-                </li>
-                <li className="mb-3">
-                  {t("faq.item_8.answer", { returnObjects: true })[2]}
-                </li>
-                <li className="mb-3">
-                  {t("faq.item_8.answer", { returnObjects: true })[3]}
-                </li>
-                <li className="mb-3">
-                  {t("faq.item_8.answer", { returnObjects: true })[4]}
-                </li>
+                <li className="mb-3">{t("faq.item_8.answer.1")}</li>
+                <li className="mb-3">{t("faq.item_8.answer.2")}</li>
+                <li className="mb-3">{t("faq.item_8.answer.3")}</li>
+                <li className="mb-3">{t("faq.item_8.answer.4")}</li>
               </ul>
-              <p className="mb-3 leading-5">
-                {t("faq.item_8.answer", { returnObjects: true })[5]}
-              </p>
+              <p className="mb-3 leading-5">{t("faq.item_8.answer.5")}</p>
             </FaqItem>
             <p className="mb-3 leading-10">
-              <Trans i18nKey={t("faq.further_question")}>
-                <i>
+              <i>
+                <Trans i18nKey="faq.further_question">
                   If you have any other questions/concerns, please email
                   <ExternalLink href="mailto: uaem@ssmu.ca">
                     uaem@ssmu.ca
                   </ExternalLink>
                   .
-                </i>
-              </Trans>
+                </Trans>
+              </i>
             </p>
           </dl>
         </div>

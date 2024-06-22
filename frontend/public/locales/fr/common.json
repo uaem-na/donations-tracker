@@ -30,7 +30,101 @@
     "dt_description": "Le Donations Trackers est un site web qui fournit une plateforme permettant aux utilisateurs de partager efficacement et efficacement des dons dans la région du Grand Montréal. Le projet a été conçu par un groupe de membres de l'UAEM McGill au cours d'un sprint de conception appelé <1>Innovate4Health</1> organisé par <3>ReAct</3>, <5>l'IFMSA</5> (Fédération Internationale des Associations d'Étudiants en Médecine) et <7>l'Initiative IDEA</7> à l'École de Santé Publique Bloomberg de Johns Hopkins. À l'origine, le site web visait à augmenter la transparence dans la distribution de l'équipement de protection individuelle (EPI) en période de pénurie pendant la pandémie de COVID-19. Avec la pandémie qui se termine progressivement (et heureusement), l'équipe a décidé d'adapter le site web pour augmenter l'accessibilité aux dons/réceptions en général (par exemple, nourriture en conserve, biens essentiels, vêtements usés, etc.)."
   },
   "faq": {
-    "title": "Foire Aux Questions"
+    "title": "Foire Aux Questions",
+    "item_1": {
+      "question": "Qu’est-ce que Donations Tracker?",
+      "answer": "Le Tracker des dons est une plateforme en ligne visant à promouvoir le partage des dons à Montréal. Sur cette plateforme, les utilisateurs peuvent demander et offrir des dons. Ce faisant, notre objectif est de renforcer la solidarité communautaire et de réduire les disparités socioéconomiques ici à Montréal."
+    },
+    "item_2": {
+      "question": "Comment puis-je faire une offre et/ou une demande de don sur l’outil de suivi des dons?",
+      "answer": [
+        {
+          "instruction": "S’INSCRIRE EN TANT QU’UTILISATEUR.",
+          "step": [
+            "Cliquez sur «Connexion » en haut à droite, puis sur « Cliquez ici pour vous inscrire ».",
+            "Vous pouvez vous inscrire en tant qu’individu ou organisation. Pour en savoir plus sur leurs différences, veuillez lire « Quelle est la différence entre l’inscription à titre d’individu ou d’organisation? » ci-dessous."
+          ]
+        },
+        {
+          "instruction": "FAIRE UNE OFFRE ET/OU UNE DEMANDE.",
+          "step": [
+            "Une fois que vous ouvrez une session, cliquez sur « Publications » dans la barre de menus à gauche. Cliquez sur « Faire une offre » ou « Faire une demande » et entrez les renseignements appropriés.",
+            "Remarque : Seuls des utilisateurs spécifiques peuvent faire une demande. Pour en savoir plus, veuillez consulter la section « Quelle est la différence entre l’inscription à titre de personne ou d’organisation? » ci-dessous.",
+            "Remarque : La version actuelle du site Web permet l’achat / vente de produits. Si vous voulez offrir ou demander un don, veuillez inscrire « 0 » comme prix."
+          ]
+        },
+        {
+          "instruction": "EXPLOREZ LA PAGE DES MESSAGES POUR CONNAÎTRE LES OFFRES ET LES DEMANDES AUXQUELLES VOUS VOULEZ RÉPONDRE.",
+          "step": [
+            "Faites défiler les offres et les demandes énumérées dans la section « Publications ». Vous pourriez avoir besoin de produits pour un autre utilisateur! Ou, un autre utilisateur peut offrir des articles que vous voulez!",
+            "Utilisez les filtres à gauche pour consulter des publications précises. Vous pouvez également ajouter certaines publications à vos « Favoris » en cliquant sur le bouton étoile."
+          ]
+        },
+        {
+          "instruction": "CLIQUEZ SUR L’OFFRE OU LA DEMANDE QUE VOUS VOULEZ. COMMUNIQUEZ AVEC L’AUTRE UTILISATEUR PAR COURRIEL INDIQUÉ DANS LE MESSAGE.",
+          "step": [
+            "Toutes les communications/transactions entre utilisateurs doivent se faire en dehors de la plateforme de suivi des dons."
+          ]
+        },
+        {
+          "instruction": "COMMUNIQUER AVEC L’AUTRE UTILISATEUR POUR COMPLÉTER LA TRANSACTION/LE DON.",
+          "step": []
+        },
+        {
+          "instruction": "FÉLICITATIONS! VOTRE OFFRE / DEMANDE A ÉTÉ REMPLIE! ENFIN, S’IL VOUS PLAÎT FERMER VOTRE POSTE SUR LE SITE WEB.",
+          "step": [
+            "Il est important que vous fermiez vos offres/demandes complétées afin que les autres utilisateurs sachent qu’elles ne sont plus actives. Nous vous remercions de votre collaboration!"
+          ]
+        }
+      ]
+    },
+    "item_3": {
+      "question": "Quelle est la catégorie « Autre » dans les demandes/offres?",
+      "answer": [
+        "« Autre » est une option de catégorie fournie lorsque les utilisateurs font une offre ou une demande.",
+        "La catégorie « Autre » doit être utilisée lorsque les articles offerts ou demandés ne correspondent à aucune des autres catégories énumérées. Lorsqu’ils utilisent la catégorie « Autre », les utilisateurs doivent décrire ou préciser l’élément dans la description de la publication. Ce message sera ensuite approuvé/refusé pour être rendu public par les modérateurs de Donations Tracker afin de s’assurer qu’aucun article de contrebande/illégal n’est offert ou demandé sur le site Web de Donations Tracker. Une fois approuvé, l’utilisateur qui a publié le message recevra un courriel l’informant que son message a été approuvé et l’offre ou la demande sera affichée, ce qui permettra à tous les utilisateurs de l’outil de suivi des dons de voir et d’interagir avec le message."
+      ]
+    },
+    "item_4": {
+      "question": "Que puis-je faire sur la page « Compte »?",
+      "answer": [
+        "La page « Compte » s’affiche pour les utilisateurs qui se sont connectés.",
+        "Tableau de bord: Les utilisateurs peuvent voir leurs propres publications ainsi que les publications marquées comme « Favorites ».",
+        "Général: Les utilisateurs peuvent modifier leur nom, leur prénom et leur nom d’affichage. Si vous souhaitez modifier votre courriel, veuillez communiquer avec les administrateurs à <1>uaem@ssmu.ca</1>.",
+        "Sécurité: Les utilisateurs peuvent modifier leur mot de passe."
+      ]
+    },
+    "item_5": {
+      "question": "Comment le “Donations Trackers” se distingue-t-il des autres sites web d’échange de produits?",
+      "answer": "Bien qu’il existe l’option de vendre/acheter des produits sur ce site web, le “Donations Trackers” se distingue des autres sites d’achat en ligne puisqu'il encourage le partage de dons. L'équipe de développement a réalisé qu’en dépit du grand nombre de platformes pour vendre/acheter des produits, il existe un manque de sites internet favorisant les dons. En rendant les dons plus accessibles, le “Donations Trackers” espère d’améliorer le moral et le bien-être de la communauté"
+    },
+    "item_6": {
+      "question": "Quelle est la différence entre s’inscire en tant <1>qu’individu et en tant qu’organisation?</1>",
+      "answer": [
+        "S’inscrire en tant qu’individu ne nécessite pas que l’utilisateur soit associé à une organisation (par exemple, ONG, entreprise). Il n’y a pas de restrictions géographiques pour les utilisateurs indidvuels (c’est-à-dire que les utilisateurs indidvuels n’ont pas besoin de vivre dans la ville de Montreal). Cependant, les utilisateurs indidividuels ne peuvent proposer des dons/produits (sans faire de demandes).",
+        "S’inscrire en tant qu’organisation rend obligatoire l’association de l’utilisateur avec une organisation légitime. La légitimité de l’;organisation sera approuvée par les administrateurs du site lors de l’inscription. Pour l’instant, il est requis que l’organisation soit basée dans la ville de Montreal à des fins du site. Les utilisateurs d’organisations peuvenet faire des offres et des demandes."
+      ]
+    },
+    "item_7": {
+      "question": "Comment les utilisateurs peuvent-ils être sûrs que le site web est sécurisé?",
+      "answer": [
+        "En tant que groupe d’étudiants universitaires créant ce site web, nous comprenons que la sécurité de cette site pourrait susciter des interrogations. Notre équipe de développement web a travaillé ardemment pour garantir que votre vie privée et vos informations d’authentificiation soient gérées en toute sécurité sur notre site web. Certains des moyens que nous avons mis en oeuvre pour vous assurer une expérience sûre et sécurisée sont énumérés ci-dessous",
+        "passerent par un processus d’authentification obligatoire pour s’assurer que l’organisation est légitime. Seulement après cela, l’inscription sera complétée et l’utilisateur pourra utiliser le site web.",
+        "Si vous avez des doutes raisonables concernant la fiablité ou la légitimité d’un autre utilisateur vous pouvez les signaler en cliquant sur le bouton <1>“Signaler l’utilisateur”</1>, qui se trouve sur “TBD”. Une fois qu’un utilisateur a été signalé, son activité sera temporarirement bloquée jusqu’à ce que les administrateurs du site web effectuent une vérification de l’arrière-plan."
+      ]
+    },
+    "item_8": {
+      "question": "En cas de problèmes ou d’erruers liés aux dons ou aux transactions monétaires, que devrions-nous faire?",
+      "answer": [
+        "Nous comprenons parfatiement que des problèmes liés aux dons ou aux transactions peuvenet survenir en raison de diverses causes (par exemple, des difficultés techniques). <1>Donations Trackers n’est pas responsables des erreurs ou problèmes survenant lors d’une transaction ou d’un don.</1> Ces erreurs ou problèmes comprennent, mais ne sont pas limités à:",
+        "Dommages aux produits - Nouse vous encourageons à vérifier que tous les produits sont dans l‘état souhaité avant de finaliser la transaction/don",
+        "Produits qui sont différents de leur description sur le site web - Nous vous encourageons à vérifier que tous les produits correspondent à leur description sur le site web",
+        "Non-réception des frais après la vente du produit",
+        "Erreur liées aux transactions - Veuillez contacter la banque correspondante pour toute erreur liée aux transactions monétaires",
+        "Si vous rencontrer des problèmes avec un utilisateur spécifique pendant une don/transaction, veuillez les signaler dès que possible en utilisant la fonction “Signaler l’utilisateur”, afin que l’activité de l’utilisatuer puisse être temporairement bloquée. Donations Trackers vous remercie de votre comréhension et de votre coopération."
+      ]
+    },
+    "further_question": "Si vous avez d’autres questions ou préoccupations, veuillez envoyer un courriel à <1>uaem@ssmu.ca</1>."
   },
   "posts": {
     "title": "Messages",
