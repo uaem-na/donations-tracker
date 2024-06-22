@@ -47,7 +47,9 @@ export const OrganizationRegistrationForm = () => {
   // handle successful request
   useEffect(() => {
     if (isSuccess) {
-      setServerMessage("");
+      setServerMessage(
+        "Thank you for registering as an organization. This is just to confirm that your registration was successful. Donations Tracker administrators will review your information to fully verify you as an organization user. Until then, you will not be allowed to make offers and requests. We aim to respond within 1-2 business days. We appreciate your understanding and commit to getting back to you as soon as possible."
+      );
       getSessionAfterRegister();
     }
   }, [getSessionAfterRegister, isSuccess]);
@@ -220,20 +222,18 @@ export const OrganizationRegistrationForm = () => {
 
         <div className="md:col-span-1">
           <Label htmlFor="postalCode">
-          <span className="mr-2">Postal Code</span>
+            <span className="mr-2">Postal Code</span>
             <Tooltip
-            asChild
-            message={
-              "Please format all uppercase and no spaces. Eg: A1A1A1"
-            }
-          >
-            <FontAwesomeIcon
-              tabIndex={0}
-              className=" text-gray-6400"
-              icon={faInfoCircle}
-            />
-          </Tooltip>
-            </Label>
+              asChild
+              message={"Please format all uppercase and no spaces. Eg: A1A1A1"}
+            >
+              <FontAwesomeIcon
+                tabIndex={0}
+                className=" text-gray-6400"
+                icon={faInfoCircle}
+              />
+            </Tooltip>
+          </Label>
           <div className="mt-2">
             <Input
               {...register("postalCode", {
