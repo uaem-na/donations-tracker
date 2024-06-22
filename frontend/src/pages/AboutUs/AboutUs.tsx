@@ -5,6 +5,7 @@
 import { ExternalLink } from "@components/Typography";
 import { getColorByString, initial } from "@utils";
 import { useState } from "react";
+import { Trans, useTranslation } from "react-i18next";
 
 const Hero = () => {
   return (
@@ -64,33 +65,38 @@ const HeroBackground = () => {
 };
 
 const HeroContent = () => {
+  const { t } = useTranslation(["common"]);
+
   return (
     <div className="overflow-hidden">
       <div className="mx-auto max-w-7xl px-6 pb-32 pt-36 sm:pt-60 lg:px-8 lg:pt-32">
         <div className="mx-auto max-w-2xl gap-x-14 lg:mx-0 lg:flex lg:max-w-none lg:items-center">
           <div className="w-full max-w-xl lg:shrink-0 xl:max-w-2xl">
             <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-              UAEM Chapter of McGill
+              {t("about_us.title")}
             </h1>
             <p className="relative mt-6 text-lg leading-8 text-gray-600 sm:max-w-md lg:max-w-none">
-              <ExternalLink href="https://www.uaem.org">UAEM</ExternalLink> is a
-              global network of university students striving to increase access
-              and affordability to life-saving medicines. Considering that
-              universities are key stakeholders in the drug development
-              pipeline, students can promote equitable licensing practices by
-              encouraging university policy changes. The UAEM chapter of McGill
-              is one of the most active chapters in North America. Currently,
-              the chapter's main projects include Donations Trackers, as well as
-              the{" "}
-              <ExternalLink href="https://newcanada.globalhealthgrades.org">
-                UAEM Canadian Report Card
-              </ExternalLink>
-              , Open Science, and more.
+              <ExternalLink href="https://www.uaem.org">UAEM</ExternalLink>{" "}
+              <Trans i18nKey="about_us.title_description">
+                is a global network of university students striving to increase
+                access and affordability to life-saving medicines. Considering
+                that universities are key stakeholders in the drug development
+                pipeline, students can promote equitable licensing practices by
+                encouraging university policy changes. The UAEM chapter of
+                McGill is one of the most active chapters in North America.
+                Currently, the chapter's main projects include Donations
+                Trackers, as well as the
+                <br />
+                <ExternalLink href="https://newcanada.globalhealthgrades.org">
+                  UAEM Canadian Report Card
+                </ExternalLink>
+                , Open Science, and more.
+              </Trans>
             </p>
             <div className="mt-5">
               <ul>
                 <li>
-                  Email:{" "}
+                  {t("about_us.email")}:{" "}
                   <ExternalLink href="mailto:uaem@ssmu.ca">
                     uaem@ssmu.ca
                   </ExternalLink>
@@ -158,30 +164,65 @@ const ImagePanel = (props) => {
 };
 
 const AboutUsContent = () => {
+  const { t } = useTranslation(["common"]);
+
   return (
     <div className="mx-auto -mt-12 max-w-7xl px-6 sm:mt-0 lg:px-8 xl:-mt-8">
       <div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-none">
         <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-          About Us
+          {t("about_us.subtitle")}
         </h2>
         <div className="mt-6 flex flex-col gap-x-8 gap-y-20 lg:flex-row">
           <div className="w-full lg:flex-auto">
             <p className="text-xl leading-8 text-gray-600">
-              Donations Trackers was developed by members of{" "}
-              <ExternalLink href="https://www.uaem.org">
-                Universities Allied for Essential Medicines
-              </ExternalLink>{" "}
-              (UAEM) and an astounding group of student web developers at McGill
-              University.
+              <Trans i18nKey="about_us.subtitle_description">
+                Donations Trackers was developed by members of
+                <ExternalLink href="https://www.uaem.org">
+                  Universities Allied for Essential Medicines
+                </ExternalLink>
+                (UAEM) and an astounding group of student web developers at
+                McGill University.
+              </Trans>
             </p>
             <div className="mt-10 text-base leading-7 text-gray-700">
               <h3 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
-                Donations Trackers
+                {t("about_us.dt_title")}
               </h3>
               <div className="mt-6 flex flex-col gap-x-8 gap-y-20 lg:flex-row">
                 <div className="w-full lg:flex-auto">
                   <p className="text-xl leading-8 text-gray-600">
-                    Donations Trackers is a website that provides a platform for
+                    <Trans i18nKey="about_us.dt_description">
+                      Donations Trackers is a website that provides a platform
+                      for users to efficiently and effectively share donations
+                      in the Greater Montréal area. The project was concocted by
+                      a group of McGill UAEM members through a design sprint
+                      called
+                      <ExternalLink href="https://www.ignitetheidea.org/innovate4health-about">
+                        Innovate4Health
+                      </ExternalLink>
+                      organized by
+                      <ExternalLink href="https://www.reactgroup.org">
+                        ReAct
+                      </ExternalLink>
+                      ,
+                      <ExternalLink href="https://ifmsa.org">
+                        IFMSA
+                      </ExternalLink>
+                      (International Federation of Medical Students
+                      Association), and the
+                      <ExternalLink href="https://www.ignitetheidea.org">
+                        IDEA Initiative
+                      </ExternalLink>
+                      at Johns Hopkins Bloomberg School of Public Health.
+                      Originally, the website aimed to increase transparency in
+                      personal protective equipment (PPE) distribution amid the
+                      shortage during the COVID-19 pandemic. With the pandemic
+                      gradually (and fortunately) coming to an end, the team
+                      decided to adapt the website to increase accessibility to
+                      making/receiving donations in general (e.g. canned food,
+                      essential goods, worn clothes, etc.).
+                    </Trans>
+                    {/* Donations Trackers is a website that provides a platform for
                     users to efficiently and effectively share donations in the
                     Greater Montréal area. The project was concocted by a group
                     of McGill UAEM members through a design sprint called{" "}
@@ -205,7 +246,7 @@ const AboutUsContent = () => {
                     gradually (and fortunately) coming to an end, the team
                     decided to adapt the website to increase accessibility to
                     making/receiving donations in general (e.g. canned food,
-                    essential goods, worn clothes, etc.).
+                    essential goods, worn clothes, etc.). */}
                   </p>
                 </div>
               </div>

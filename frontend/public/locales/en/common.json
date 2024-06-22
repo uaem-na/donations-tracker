@@ -20,6 +20,15 @@
   "previous": "Previous",
   "showing_results": "Showing <from>{{from}}</from> to <to>{{to}}</to> of <total>{{total}}</total> results",
   "all": "All",
+  "about_us": {
+    "title": "UAEM Chapter of McGill",
+    "title_description": "is a global network of university students striving to increase access\nand affordability to life-saving medicines. Considering that\nuniversities are key stakeholders in the drug development\npipeline, students can promote equitable licensing practices by\nencouraging university policy changes. The UAEM chapter of McGill\nis one of the most active chapters in North America. Currently,\nthe chapter's main projects include Donations Trackers, as well as the <1/> <2>UAEM Canadian Report Card</2>, Open Science, and more.",
+    "email": "$t(email)",
+    "subtitle": "About Us",
+    "subtitle_description": "Donations Trackers was developed by members of <1>Universities Allied for Essential Medicines</1> (UAEM) and an astounding group of student web developers at McGill\nUniversity.",
+    "dt_title": "Donations Trackers",
+    "dt_description": "Donations Trackers is a website that provides a platform for users to efficiently and effectively share donations in the Greater Montréal area. The project was concocted by a group of McGill UAEM members through a design sprint called <1>Innovate4Health</1> organized by <3>ReAct</3>, <5>IFMSA</5> (International Federation of Medical Students Association),and the <7>IDEA Initiative</7> at Johns Hopkins Bloomberg School of Public Health.\nOriginally, the website aimed to increase transparency in\npersonal protective equipment (PPE) distribution amid the\nshortage during the COVID-19 pandemic. With the pandemic\ngradually (and fortunately) coming to an end, the team\ndecided to adapt the website to increase accessibility to\nmaking/receiving donations in general (e.g. canned food,\nessential goods, worn clothes, etc.)."
+  },
   "posts": {
     "title": "Posts",
     "admin_guide": "Click to see more detailed guides on posts page.",

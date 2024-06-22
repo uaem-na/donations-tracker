@@ -10,7 +10,7 @@
   "activate": "Activer",
   "deactivate": "Désactiver",
   "loading": "Chargement...",
-  "email": "E-mail",
+  "email": "Courriel",
   "select_a_tab": "Sélectionnez un onglet",
   "display_per_page": "Afficher par page",
   "search": "Rechercher",
@@ -20,6 +20,10 @@
   "previous": "Précédent",
   "showing_results": "Affichage des résultats <from>{{from}}</from> à <to>{{to}}</to> de <total>{{total}}</total>",
   "all": "Tous",
+  "about_us": {
+    "title": "UAEM ",
+    "email": "$t(email)"
+  },
   "posts": {
     "title": "Messages",
     "admin_guide": "Cliquez pour voir des guides plus détaillés sur la page des articles.",
