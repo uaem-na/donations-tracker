@@ -5,8 +5,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { LayoutContext, LayoutContextType } from "@layout/Layout";
 import { useGetSessionQuery } from "@services/api";
 import { useContext } from "react";
+import { useTranslation } from "react-i18next";
 import { NavLink } from "react-router-dom";
-
+import { LanguageToggle } from "./LanguageToggle";
 interface NavListProps {
   siteLinks: ISiteLinks[];
   isUserAdmin?: boolean;
@@ -57,12 +58,13 @@ interface ISidebarMobileProps {
 
 export const SidebarMobile = ({ name, siteLinks }: ISidebarMobileProps) => {
   const { data: session, isLoading } = useGetSessionQuery();
+  const { t } = useTranslation();
   const { mobileNavIsOpen, updateMobileNavIsOpen } = useContext(
     LayoutContext
   ) as LayoutContextType;
 
   if (isLoading) {
-    return <div className="hidden">Loading...</div>;
+    return <div className="hidden">{t("loading")}</div>;
   }
 
   return (
@@ -92,6 +94,9 @@ export const SidebarMobile = ({ name, siteLinks }: ISidebarMobileProps) => {
                 <div className="h-8 w-auto text-gray-100 font-light">
                   {name}
                 </div>
+              </div>
+              <div className="flex shrink-0 items-center">
+                <LanguageToggle isMobile={true}/>
               </div>
 
               <NavList

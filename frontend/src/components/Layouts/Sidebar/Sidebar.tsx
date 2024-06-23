@@ -4,8 +4,9 @@ import { IconDefinition } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useGetSessionQuery } from "@services/api";
 import { generateRandomID } from "@utils";
+import { useTranslation } from "react-i18next";
 import { NavLink } from "react-router-dom";
-
+import { LanguageToggle } from "./LanguageToggle";
 interface SidebarLogoProps {
   name: string;
 }
@@ -25,7 +26,7 @@ interface NavListProps {
 
 const NavList = ({ siteLinks, isUserAdmin = false }: NavListProps) => {
   return (
-    <nav className="mt-8">
+    <nav className="mt-4">
       <ul className="flex flex-col items-center space-y-1">
         {siteLinks
           .filter(({ menu, adminOnly }) => menu && (!adminOnly || isUserAdmin))
@@ -79,18 +80,22 @@ interface ISidebarProps {
 
 export const Sidebar = ({ name, siteLinks }: ISidebarProps) => {
   const { data: session, isLoading } = useGetSessionQuery();
+  const { t } = useTranslation();
 
   if (isLoading) {
-    return <div className="hidden">Loading...</div>;
+    return <div className="hidden">{t("loading")}</div>;
   }
 
   return (
     <div className="hidden lg:fixed lg:inset-y-0 lg:left-0 lg:z-50 lg:block lg:w-20 lg:overflow-y-auto lg:bg-gray-900 lg:pb-4">
       <SidebarLogo name={name} />
-      <NavList
-        siteLinks={siteLinks}
-        isUserAdmin={session?.role?.includes(UserRole.ADMIN)}
-      />
+      <div className="mt-6">
+        <LanguageToggle isMobile={false}/>
+        <NavList
+          siteLinks={siteLinks}
+          isUserAdmin={session?.role?.includes(UserRole.ADMIN)}
+        />
+      </div>
     </div>
   );
 };
