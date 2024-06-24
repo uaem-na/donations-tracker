@@ -133,10 +133,16 @@ export namespace QueryArgs {
     };
 
     export type Keyword = {
-      keyword?: string
+      keyword?: string;
     };
 
-    export type All = PostType & UserType & Categories & PostStatus & Date & Keyword;
+    export type All = PostType &
+      UserType &
+      Categories &
+      PostStatus &
+      Date &
+      Keyword &
+      PriceRange;
   }
 
   export type Pagination = {
