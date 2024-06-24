@@ -378,7 +378,6 @@ export const FilterLayout = ({
                       id="price"
                       type="number"
                       value={currentPriceRange[0]}
-                      defaultValue={selectedPriceRange[0]}
                       onChange={(event) => {
                         setCurrentPriceRange([
                           event.target.valueAsNumber,
@@ -392,7 +391,6 @@ export const FilterLayout = ({
                       id="price"
                       type="number"
                       value={currentPriceRange[1]}
-                      defaultValue={selectedPriceRange[1]}
                       onChange={(event) => {
                         setCurrentPriceRange([
                           currentPriceRange[0],
