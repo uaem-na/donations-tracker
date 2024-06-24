@@ -29,7 +29,7 @@ const NavList = ({ siteLinks, isUserAdmin = false }: NavListProps) => {
 
 const NavItem = ({ to, name }) => {
   const { updateMobileNavIsOpen } = useContext(
-    LayoutContext
+    LayoutContext,
   ) as LayoutContextType;
 
   return (
@@ -60,7 +60,7 @@ export const SidebarMobile = ({ name, siteLinks }: ISidebarMobileProps) => {
   const { data: session, isLoading } = useGetSessionQuery();
   const { t } = useTranslation();
   const { mobileNavIsOpen, updateMobileNavIsOpen } = useContext(
-    LayoutContext
+    LayoutContext,
   ) as LayoutContextType;
 
   if (isLoading) {
@@ -95,8 +95,9 @@ export const SidebarMobile = ({ name, siteLinks }: ISidebarMobileProps) => {
                   {name}
                 </div>
               </div>
+
               <div className="flex shrink-0 items-center">
-                <LanguageToggle isMobile={true}/>
+                <LanguageToggle isMobile={true} />
               </div>
 
               <NavList
