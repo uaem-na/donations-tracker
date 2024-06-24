@@ -7,6 +7,7 @@ import { generateRandomID } from "@utils";
 import { useTranslation } from "react-i18next";
 import { NavLink } from "react-router-dom";
 import { LanguageToggle } from "./LanguageToggle";
+
 interface SidebarLogoProps {
   name: string;
 }
@@ -36,7 +37,7 @@ const NavList = ({ siteLinks, isUserAdmin = false }: NavListProps) => {
               to={path}
               name={name}
               icon={icon}
-            ></NavItem>
+            />
           ))}
       </ul>
     </nav>
@@ -49,7 +50,6 @@ interface NavItemProps {
   icon?: IconDefinition;
 }
 
-// TODO: Add active class to nav item
 const NavItem = ({ to, name, icon }: NavItemProps) => {
   return (
     <li>
@@ -63,7 +63,6 @@ const NavItem = ({ to, name, icon }: NavItemProps) => {
                 : "text-gray-400 hover:text-white hover:bg-gray-800"
             }`
           }
-          tabIndex={-1}
         >
           {icon && <FontAwesomeIcon icon={icon} className="h-6 w-6 shrink-0" />}
           <span className="sr-only">{name}</span>
@@ -90,7 +89,7 @@ export const Sidebar = ({ name, siteLinks }: ISidebarProps) => {
     <div className="hidden lg:fixed lg:inset-y-0 lg:left-0 lg:z-50 lg:block lg:w-20 lg:overflow-y-auto lg:bg-gray-900 lg:pb-4">
       <SidebarLogo name={name} />
       <div className="mt-6">
-        <LanguageToggle isMobile={false}/>
+        <LanguageToggle isMobile={false} />
         <NavList
           siteLinks={siteLinks}
           isUserAdmin={session?.role?.includes(UserRole.ADMIN)}
