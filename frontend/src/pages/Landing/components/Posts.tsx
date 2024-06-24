@@ -15,13 +15,14 @@ import { capitalizeFirstLetter } from "@utils";
 import { getStatusIndicator } from "@utils/GetStatusIndicator";
 import formatDistance from "date-fns/formatDistance";
 import { useEffect, useState } from "react";
+import { useLandingContext } from "@contexts/LandingContext"
 
 interface IPostsProp {
   posts: ApiModel.Post[];
-  handleLocateClick?: (post: ApiModel.Post) => void;
 }
 
-export const Posts = ({ posts, handleLocateClick }: IPostsProp) => {
+export const Posts = ({ posts }: IPostsProp) => {
+  const {locatePost} = useLandingContext()
   const postsPerPage = 10;
 
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -127,12 +128,12 @@ export const Posts = ({ posts, handleLocateClick }: IPostsProp) => {
                       </DrawerContent>
                     </Drawer>
 
-                    {handleLocateClick && (
+                    {locatePost && (
                       <Tooltip message="Locate" asChild>
                         <button
                           type="button"
                           className="rounded bg-red-500 px-2 py-1 text-xs text-gray-50 shadow-sm ring-1 ring-inset ring-red-600 hover:bg-red-600 cursor-pointer"
-                          onClick={() => handleLocateClick(post)}
+                          onClick={() => locatePost(post)}
                         >
                           <FontAwesomeIcon icon={faLocationDot} />
                           <span className="sr-only">Locate</span>
