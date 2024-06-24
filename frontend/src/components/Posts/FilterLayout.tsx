@@ -11,6 +11,7 @@ import {
   FilterUserType,
   Option,
 } from "@components";
+import { AdminGuide } from "@components/AdminGuide";
 import { Input, Tooltip } from "@components/Controls";
 import { SelectInput } from "@components/Controls/Select";
 import {
@@ -22,7 +23,6 @@ import {
 } from "@components/Drawer";
 import { faCircleQuestion, faFilter } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { RenderAdminGuide } from "@pages/Admin/components/RenderAdminGuide";
 import * as Popover from "@radix-ui/react-popover";
 import { ApiModel } from "@services/api";
 
@@ -91,7 +91,7 @@ export const FilterLayout = ({
   };
 
   const transformCategoriesToOptions = (
-    categories: ApiModel.PostItemCategory[]
+    categories: ApiModel.PostItemCategory[],
   ) => {
     return categories.map((category) => ({
       value: category.value,
@@ -102,11 +102,12 @@ export const FilterLayout = ({
   return (
     <div>
       <div className="flex items-baseline justify-between border-b border-gray-200 pb-6">
-        <h1 className="text-2xl font-bold leading-10 tracking-tight text-gray-900">
-          {heading}
-        </h1>
-        <RenderAdminGuide guideType={{ guideType: "posts" }} />
-
+        <div className="flex">
+          <h1 className="text-2xl font-bold leading-10 tracking-tight text-gray-900">
+            {heading}
+          </h1>
+          <AdminGuide guideType="posts" />
+        </div>
         <div className="flex items-center">
           <div className="relative inline-block text-left">
             <div>
@@ -159,7 +160,7 @@ export const FilterLayout = ({
                         defaultOption={selectedType}
                         onChange={(option) => {
                           handlePostTypeFilterChange(
-                            option.value as FilterPostType
+                            option.value as FilterPostType,
                           );
                           setSelectedType(option);
                         }}
@@ -185,7 +186,7 @@ export const FilterLayout = ({
                         defaultOption={selectedUserType}
                         onChange={(option) => {
                           handleUserTypeFilterChange(
-                            option.value as FilterUserType
+                            option.value as FilterUserType,
                           );
                           setSelectedUserType(option);
                         }}

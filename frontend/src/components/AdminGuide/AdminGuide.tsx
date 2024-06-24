@@ -8,18 +8,28 @@ import {
 } from "@components/Dialog";
 import { faCircleQuestion } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { classMerge } from "@utils/ClassMerge";
+import { useCurrentPath } from "@hooks/useCurrentPath";
+import { useRole } from "@hooks/useRole";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 export type AdminGuideProps = {
-  className?: string;
   guideType: "users" | "posts" | "reports";
 };
 
-export const AdminGuide = ({ className, guideType }: AdminGuideProps) => {
+export const AdminGuide = ({ guideType }: AdminGuideProps) => {
+  const role = useRole();
+  const pathname = useCurrentPath();
   const { t } = useTranslation();
   const [showGuideTooltip, setShowGuideTooltip] = useState(false);
+
+  if (!role || role.toLowerCase() !== "admin") {
+    return null;
+  }
+
+  if (pathname.indexOf("admin") === -1) {
+    return null;
+  }
 
   const toggleShowGuideTooltip = () => {
     setShowGuideTooltip(!showGuideTooltip);
@@ -33,19 +43,15 @@ export const AdminGuide = ({ className, guideType }: AdminGuideProps) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <button
-          className={classMerge("absolute mt-3 ml-16 items-center", className)}
-        >
-          <span>
-            <Tooltip asChild message={t(`${guideType}.admin_guide`)}>
-              <FontAwesomeIcon
-                icon={faCircleQuestion}
-                className="mx-2"
-                onMouseEnter={toggleShowGuideTooltip}
-                onMouseLeave={toggleShowGuideTooltip}
-              />
-            </Tooltip>
-          </span>
+        <button>
+          <Tooltip asChild message={t(`${guideType}.admin_guide`)}>
+            <FontAwesomeIcon
+              icon={faCircleQuestion}
+              className="mx-2"
+              onMouseEnter={toggleShowGuideTooltip}
+              onMouseLeave={toggleShowGuideTooltip}
+            />
+          </Tooltip>
         </button>
       </DialogTrigger>
       <DialogContent className="overflow-auto">
