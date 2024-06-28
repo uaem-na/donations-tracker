@@ -146,7 +146,7 @@ export class PostController {
       );
     }
 
-    if (user.organization.verified != true) {
+    if (!user.organization.verified) {
       throw new AuthorizationError(
         `Organizational users need to be verified before creating a post.`,
       );
