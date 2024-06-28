@@ -9,10 +9,12 @@ import {
 } from "@services/api";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { registerIndividualSchema } from "./schemas/RegisterIndividualSchema";
 
 export const IndividualRegistrationForm = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { data: currentSession, isLoading } = useGetSessionQuery();
   const [getSessionAfterRegister, { data: afterRegisterSession }] =
@@ -67,7 +69,7 @@ export const IndividualRegistrationForm = () => {
   });
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div>{t("loading")}</div>;
   }
 
   return (
@@ -75,28 +77,32 @@ export const IndividualRegistrationForm = () => {
       <div>{serverMessage && <Alert type="error">{serverMessage}</Alert>}</div>
 
       <div>
-        <Label htmlFor="username">Username</Label>
+        <Label htmlFor="username">
+          {t("register.individual_form.username")}
+        </Label>
         <div className="mt-2">
           <Input
             {...register("username")}
             id="username"
             type="text"
             autoComplete="username"
-            placeholder="Username"
+            placeholder={t("register.individual_form.username")}
             errorMessage={errors.username?.message}
           />
         </div>
       </div>
 
       <div>
-        <Label htmlFor="displayName">Display name</Label>
+        <Label htmlFor="displayName">
+          {t("register.individual_form.display_name")}
+        </Label>
         <div className="mt-2">
           <Input
             {...register("displayName")}
             id="displayName"
             type="text"
             autoComplete="nickname"
-            placeholder="Display name"
+            placeholder={t("register.individual_form.display_name")}
             errorMessage={errors.displayName?.message}
           />
         </div>
@@ -104,28 +110,32 @@ export const IndividualRegistrationForm = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-6">
         <div>
-          <Label htmlFor="firstName">First name</Label>
+          <Label htmlFor="firstName">
+            {t("register.individual_form.first_name")}
+          </Label>
           <div className="mt-2">
             <Input
               {...register("firstName")}
               id="firstName"
               type="text"
               autoComplete="given-name"
-              placeholder="First name"
+              placeholder={t("register.individual_form.first_name")}
               errorMessage={errors.firstName?.message}
             />
           </div>
         </div>
 
         <div>
-          <Label htmlFor="lastName">Last name</Label>
+          <Label htmlFor="lastName">
+            {t("register.individual_form.last_name")}
+          </Label>
           <div className="mt-2">
             <Input
               {...register("lastName")}
               id="lastName"
               type="text"
               autoComplete="family-name"
-              placeholder="Last name"
+              placeholder={t("register.individual_form.last_name")}
               errorMessage={errors.lastName?.message}
             />
           </div>
@@ -133,42 +143,46 @@ export const IndividualRegistrationForm = () => {
       </div>
 
       <div>
-        <Label htmlFor="email">Email</Label>
+        <Label htmlFor="email">{t("register.individual_form.email")}</Label>
         <div className="mt-2">
           <Input
             {...register("email")}
             id="email"
             type="email"
             autoComplete="email"
-            placeholder="Email"
+            placeholder={t("register.individual_form.email")}
             errorMessage={errors.email?.message}
           />
         </div>
       </div>
 
       <div>
-        <Label htmlFor="password">Password</Label>
+        <Label htmlFor="password">
+          {t("register.individual_form.password")}
+        </Label>
         <div className="mt-2">
           <Input
             {...register("password")}
             id="password"
             type="password"
             autoComplete="new-password"
-            placeholder="Password"
+            placeholder={t("register.individual_form.password")}
             errorMessage={errors.password?.message}
           />
         </div>
       </div>
 
       <div>
-        <Label htmlFor="confirmPassword">Confirm password</Label>
+        <Label htmlFor="confirmPassword">
+          {t("register.individual_form.confirm_password")}
+        </Label>
         <div className="mt-2">
           <Input
             {...register("confirmPassword")}
             id="confirmPassword"
             type="password"
             autoComplete="new-password"
-            placeholder="Confirm your password"
+            placeholder={t("register.individual_form.confirm_password")}
             errorMessage={errors.confirmPassword?.message}
           />
         </div>
@@ -180,7 +194,7 @@ export const IndividualRegistrationForm = () => {
           type="submit"
           className="flex w-full justify-center"
         >
-          Register
+          {t("register.individual_form.submit")}
         </Button>
       </div>
     </form>

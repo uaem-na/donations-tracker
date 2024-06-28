@@ -13,10 +13,12 @@ import {
 } from "@services/api";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { registerOrganizationSchema } from "./schemas/RegisterOrganizationSchema";
 
 export const OrganizationRegistrationForm = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { data: currentSession, isLoading } = useGetSessionQuery();
   const [getSessionAfterRegister, { data: afterRegisterSession }] =
@@ -73,7 +75,7 @@ export const OrganizationRegistrationForm = () => {
   });
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div>{t("loading")}</div>;
   }
 
   /*
@@ -103,14 +105,16 @@ export const OrganizationRegistrationForm = () => {
       <div>{serverMessage && <Alert type="error">{serverMessage}</Alert>}</div>
 
       <div>
-        <Label htmlFor="username">Username</Label>
+        <Label htmlFor="username">
+          {t("register.organization_form.username")}
+        </Label>
         <div className="mt-2">
           <Input
             {...register("username")}
             id="username"
             type="text"
             autoComplete="username"
-            placeholder="Username"
+            placeholder={t("register.organization_form.username")}
             errorMessage={errors.username?.message}
           ></Input>
         </div>
@@ -118,28 +122,32 @@ export const OrganizationRegistrationForm = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-6">
         <div>
-          <Label htmlFor="firstName">First name</Label>
+          <Label htmlFor="firstName">
+            {t("register.organization_form.first_name")}
+          </Label>
           <div className="mt-2">
             <Input
               {...register("firstName")}
               id="firstName"
               type="text"
               autoComplete="given-name"
-              placeholder="First name"
+              placeholder={t("register.organization_form.first_name")}
               errorMessage={errors.firstName?.message}
             />
           </div>
         </div>
 
         <div>
-          <Label htmlFor="lastName">Last name</Label>
+          <Label htmlFor="lastName">
+            {t("register.organization_form.last_name")}
+          </Label>
           <div className="mt-2">
             <Input
               {...register("lastName")}
               id="lastName"
               type="text"
               autoComplete="family-name"
-              placeholder="Last name"
+              placeholder={t("register.organization_form.last_name")}
               errorMessage={errors.lastName?.message}
             />
           </div>
@@ -147,7 +155,7 @@ export const OrganizationRegistrationForm = () => {
       </div>
 
       <div>
-        <Label htmlFor="phone">Phone</Label>
+        <Label htmlFor="phone">{t("register.organization_form.phone")}</Label>
         <div className="mt-2">
           <Input
             {...register("phone")}
@@ -155,21 +163,21 @@ export const OrganizationRegistrationForm = () => {
             id="phone"
             type="phone"
             autoComplete="tel"
-            placeholder="Phone"
+            placeholder={t("register.organization_form.phone")}
             errorMessage={errors.phone?.message}
           />
         </div>
       </div>
 
       <div>
-        <Label htmlFor="email">Email</Label>
+        <Label htmlFor="email">{t("register.organization_form.email")}</Label>
         <div className="mt-2">
           <Input
             {...register("email")}
             id="email"
             type="email"
             autoComplete="email"
-            placeholder="Email"
+            placeholder={t("register.organization_form.email")}
             errorMessage={errors.email?.message}
           />
         </div>
@@ -177,7 +185,9 @@ export const OrganizationRegistrationForm = () => {
 
       <div className="col-span-full">
         <Label htmlFor="organization">
-          <span className="mr-2">Organization</span>
+          <span className="mr-2">
+            {t("register.organization_form.organization")}
+          </span>
           <Tooltip
             asChild
             message={
@@ -197,7 +207,7 @@ export const OrganizationRegistrationForm = () => {
             id="organization"
             type="organization"
             autoComplete="organization-title"
-            placeholder="Organization"
+            placeholder={t("register.organization_form.organization")}
             errorMessage={errors.organization?.message}
           />
         </div>
@@ -205,14 +215,16 @@ export const OrganizationRegistrationForm = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-6">
         <div className="md:col-span-2">
-          <Label htmlFor="streetAddress">Address</Label>
+          <Label htmlFor="streetAddress">
+            {t("register.organization_form.address")}
+          </Label>
           <div className="mt-2">
             <Input
               {...register("streetAddress")}
               id="streetAddress"
               type="text"
               autoComplete="street-address"
-              placeholder="Address"
+              placeholder={t("register.organization_form.address")}
               errorMessage={errors.streetAddress?.message}
             />
           </div>
@@ -220,20 +232,20 @@ export const OrganizationRegistrationForm = () => {
 
         <div className="md:col-span-1">
           <Label htmlFor="postalCode">
-          <span className="mr-2">Postal Code</span>
+            <span className="mr-2">
+              {t("register.organization_form.postal_code")}
+            </span>
             <Tooltip
-            asChild
-            message={
-              "Please format all uppercase and no spaces. Eg: A1A1A1"
-            }
-          >
-            <FontAwesomeIcon
-              tabIndex={0}
-              className=" text-gray-6400"
-              icon={faInfoCircle}
-            />
-          </Tooltip>
-            </Label>
+              asChild
+              message={"Please format all uppercase and no spaces. Eg: A1A1A1"}
+            >
+              <FontAwesomeIcon
+                tabIndex={0}
+                className=" text-gray-6400"
+                icon={faInfoCircle}
+              />
+            </Tooltip>
+          </Label>
           <div className="mt-2">
             <Input
               {...register("postalCode", {
@@ -242,7 +254,7 @@ export const OrganizationRegistrationForm = () => {
               id="postalCode"
               type="text"
               autoComplete="postal-code"
-              placeholder="Postal code"
+              placeholder={t("register.organization_form.postal_code")}
               errorMessage={errors.postalCode?.message}
             />
           </div>
@@ -251,26 +263,28 @@ export const OrganizationRegistrationForm = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-6">
         <div>
-          <Label htmlFor="city">City</Label>
+          <Label htmlFor="city">{t("register.organization_form.city")}</Label>
           <div className="mt-2">
             <Input
               {...register("city")}
               id="city"
               type="text"
               autoComplete="address-level2"
-              placeholder="City"
+              placeholder={t("register.organization_form.city")}
               errorMessage={errors.city?.message}
             />
           </div>
         </div>
 
         <div>
-          <Label htmlFor="province">Province</Label>
+          <Label htmlFor="province">
+            {t("register.organization_form.province.0")}
+          </Label>
           <SelectInput
             {...register("province")}
             id="province"
             name="province"
-            placeholder="Select a province"
+            placeholder={t("register.organization_form.province.1")}
             autoComplete="address-level1"
             options={Object.keys(ProvinceName).map((p) => {
               return {
@@ -284,28 +298,32 @@ export const OrganizationRegistrationForm = () => {
       </div>
 
       <div>
-        <Label htmlFor="password">Password</Label>
+        <Label htmlFor="password">
+          {t("register.organization_form.password")}
+        </Label>
         <div className="mt-2">
           <Input
             {...register("password")}
             id="password"
             type="password"
             autoComplete="new-password"
-            placeholder="Password"
+            placeholder={t("register.organization_form.password")}
             errorMessage={errors.password?.message}
           />
         </div>
       </div>
 
       <div>
-        <Label htmlFor="confirmPassword">Confirm password</Label>
+        <Label htmlFor="confirmPassword">
+          {t("register.organization_form.confirm_password")}
+        </Label>
         <div className="mt-2">
           <Input
             {...register("confirmPassword")}
             id="confirmPassword"
             type="password"
             autoComplete="new-password"
-            placeholder="Confirm your password"
+            placeholder={t("register.organization_form.confirm_password")}
             errorMessage={errors.confirmPassword?.message}
           />
         </div>
@@ -317,7 +335,7 @@ export const OrganizationRegistrationForm = () => {
           type="submit"
           className="flex w-full justify-center"
         >
-          Register
+          {t("register.organization_form.submit")}
         </Button>
       </div>
     </form>

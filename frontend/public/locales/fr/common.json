@@ -267,7 +267,39 @@
     "username": "$t(users.username)",
     "password": "Mot de passe",
     "sign_in": "Connectez-vous"
-
+  },
+  "register": {
+    "title": "S’inscrire pour un compte",
+    "title_description": "Choisissez le type de compte que vous souhaitez enregistrer comme :",
+    "question": "Quelle est la différence entre un individu et un utilisateur de l’organisation? Veuillez consulter notre page <1>FAQ</1>.",
+    "individual_form": {
+      "title": "Enregistrement en tant qu’utilisateur individuel",
+      "username": "$t(users.username)",
+      "display_name": "$t(users.display_name)",
+      "first_name": "Prénom",
+      "last_name": "Nom de famille",
+      "email": "Courriel",
+      "password": "$t(login.password)",
+      "confirm_password": "Confirmez le mot de passe",
+      "submit": "$t(user_actions.register)"
+    },
+    "organization_form": {
+      "title": "Registering as an organization",
+      "username": "$t(users.username)",
+      "display_name": "$t(users.display_name)",
+      "first_name": "Prénom",
+      "last_name": "Nom de famille",
+      "phone": "Téléphone",
+      "email": "Email",
+      "organization": "Organisation",
+      "address": "Adresse",
+      "postal_code": "Code postal",
+      "city": "Ville",
+      "province": ["Province", "Sélectionner une province"],
+      "password": "$t(login.password)",
+      "confirm_password": "Confirmez le mot de passe",
+      "submit": "$t(user_actions.register)"
+    }
   },
   "user_actions": {
     "open_user_menu": "Ouvrir le menu utilisateur",
