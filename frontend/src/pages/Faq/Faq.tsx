@@ -47,7 +47,7 @@ const FaqItem = (props) => {
 
 export const FaqPage = () => {
   const { t } = useTranslation();
-  const faqItemSecondArray = t("faq.item_2.answer", {
+  const faqSecondItemArray = t("faq.item_2.answer", {
     returnObjects: true,
   }) as Array<Object>;
 
@@ -68,9 +68,9 @@ export const FaqPage = () => {
                 <ol className="list-inside my-5 list-decimal marker:font-semibold">
                   <li className="mb-3 d leading-5">
                     <span className="font-semibold">
-                      {faqItemSecondArray[0]["instruction"]}
+                      {faqSecondItemArray[0]["instruction"]}
                     </span>
-                    {faqItemSecondArray[0]["step"].map((step, idx) => (
+                    {faqSecondItemArray[0]["step"].map((step, idx) => (
                       <p key={idx} className="mb-3 leading-5">
                         {step}
                       </p>
@@ -78,23 +78,23 @@ export const FaqPage = () => {
                   </li>
                   <li className="mb-3 d">
                     <span className="font-semibold">
-                      {faqItemSecondArray[1]["instruction"]}
+                      {faqSecondItemArray[1]["instruction"]}
                     </span>
                     <p className="mb-3 leading-5">
-                      {faqItemSecondArray[1]["step"][0]}
+                      {faqSecondItemArray[1]["step"][0]}
                     </p>
                     <p className="mb-3 leading-5 text-sm">
-                      {faqItemSecondArray[1]["step"][1]}
+                      {faqSecondItemArray[1]["step"][1]}
                     </p>
                     <p className="mb-3 leading-5 text-sm">
-                      {faqItemSecondArray[1]["step"][2]}
+                      {faqSecondItemArray[1]["step"][2]}
                     </p>
                   </li>
                   <li className="mb-3 d">
                     <span className="font-semibold">
-                      {faqItemSecondArray[2]["instruction"]}
+                      {faqSecondItemArray[2]["instruction"]}
                     </span>
-                    {faqItemSecondArray[2]["step"].map((step, idx) => (
+                    {faqSecondItemArray[2]["step"].map((step, idx) => (
                       <p key={idx} className="mb-3 leading-5">
                         {step}
                       </p>
@@ -102,20 +102,20 @@ export const FaqPage = () => {
                   </li>
                   <li className="mb-3 d">
                     <span className="font-semibold">
-                      {faqItemSecondArray[3]["instruction"]}
+                      {faqSecondItemArray[3]["instruction"]}
                     </span>
-                    <p>{faqItemSecondArray[3]["step"][0]}</p>
+                    <p>{faqSecondItemArray[3]["step"][0]}</p>
                   </li>
                   <li className="mb-3 d">
                     <span className="font-semibold">
-                      {faqItemSecondArray[4]["instruction"]}
+                      {faqSecondItemArray[4]["instruction"]}
                     </span>
                   </li>
                   <li className="mb-3 d">
                     <span className="font-semibold">
-                      {faqItemSecondArray[5]["instruction"]}
+                      {faqSecondItemArray[5]["instruction"]}
                     </span>
-                    <p>{faqItemSecondArray[5]["step"][0]}</p>
+                    <p>{faqSecondItemArray[5]["step"][0]}</p>
                   </li>
                 </ol>
               </p>

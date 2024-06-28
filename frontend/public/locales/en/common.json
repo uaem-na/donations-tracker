@@ -262,6 +262,13 @@
     "display_name": "Display name",
     "username": "Username"
   },
+  "login": {
+    "title": "Sign in to your account",
+    "title_description": "Not a member? <1>Click here to register</1>",
+    "username": "$t(users.username)",
+    "password": "Password",
+    "sign_in": "Sign in"
+  },
   "user_actions": {
     "open_user_menu": "Open user menu",
     "your_account": "Your account",

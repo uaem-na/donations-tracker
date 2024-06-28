@@ -261,6 +261,14 @@
     "display_name": "Nom d'affichage",
     "username": "Nom d'utilisateur"
   },
+  "login": {
+    "title": "Connectez-vous à votre compte",
+    "title_description": "Vous n’êtes pas membre? <1>Cliquez ici pour vous inscrire</1>",
+    "username": "$t(users.username)",
+    "password": "Mot de passe",
+    "sign_in": "Connectez-vous"
+
+  },
   "user_actions": {
     "open_user_menu": "Ouvrir le menu utilisateur",
     "your_account": "Votre compte",
