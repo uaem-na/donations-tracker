@@ -58,7 +58,7 @@ export const FilterContainer = ({
   const [selected, setSelected] = useState<Option | Option[]>(
     multiSelect
       ? (defaultOption as Option[]) ?? [optionsWithAll[0]]
-      : (defaultOption as Option) ?? optionsWithAll[0],
+      : (defaultOption as Option) ?? optionsWithAll[0]
   );
 
   const [expanded, setExpanded] = useState<boolean>(defaultExpanded);
@@ -103,7 +103,7 @@ export const FilterContainer = ({
     if (alreadySelected) {
       // Option is already selected, remove it
       const filtered = (selected as Option[]).filter(
-        (option) => option.value !== value,
+        (option) => option.value !== value
       );
       if (!filtered || filtered.length === 0) {
         // If there are no options selected, set the default option
@@ -120,7 +120,7 @@ export const FilterContainer = ({
       } else {
         // Else, remove "all" option from selected array and add selectedOption
         const filtered = (selected as Option[]).filter(
-          (option) => option.value !== "all",
+          (option) => option.value !== "all"
         );
         setSelected([...filtered, selectedOption]);
       }
@@ -139,6 +139,19 @@ export const FilterContainer = ({
     );
   };
 
+  // don't show "requests" and "offers" filter on unverified org user's "my posts" tab
+  const showFilterForUnverifiedOrganization = (postType: string) => {
+    return (
+      !header ||
+      !(
+        header === t("posts.my_posts") &&
+        user?.role === UserRole.ORGANIZATION &&
+        !user?.verified &&
+        (postType === PostType.REQUEST || postType === PostType.OFFER)
+      )
+    );
+  };
+
   const renderSingleFilter = () => {
     return (
       <>
@@ -149,20 +162,21 @@ export const FilterContainer = ({
         >
           {optionsWithAll.map(
             (option) =>
-              showFilterForIndividual(option.value) && (
+              showFilterForIndividual(option.value) &&
+              showFilterForUnverifiedOrganization(option.value) && (
                 <li
                   key={option.value}
                   className={classMerge(
                     "rounded-md px-3 py-1.5 text-sm font-medium cursor-pointer",
                     (selected as Option).value === option.value
                       ? activeClassNames
-                      : inactiveClassNames,
+                      : inactiveClassNames
                   )}
                   onClick={() => handleChange(option.value)}
                 >
                   <span>{option.label}</span>
                 </li>
-              ),
+              )
           )}
         </ul>
       </>
@@ -190,27 +204,35 @@ export const FilterContainer = ({
         </h3>
         <div className={classMerge("pt-6 px-3", expanded ? "block" : "hidden")}>
           <div className="space-y-4">
-            {optionsWithAll.map((option, index) => {
+            {optionsWithAll.map((option) => {
+              const showOption =
+                showFilterForIndividual(option.value) &&
+                showFilterForUnverifiedOrganization(option.value);
+
               return (
-                <div key={option.value} className="flex items-center ">
-                  <input
-                    id={`${name}-${option.value}`}
-                    name={`${name}[]`}
-                    value={option.value}
-                    type="checkbox"
-                    className="h-4 w-4 rounded border-gray-300 text-purple-800 focus:ring-purple-700"
-                    onChange={(e) => handleChange(e.target.value)}
-                    checked={
-                      !!(selected as Option[]).find(matchByValue(option.value))
-                    }
-                  />
-                  <label
-                    htmlFor={`${name}-${option.value}`}
-                    className="ml-3 text-sm text-gray-600"
-                  >
-                    {option.label}
-                  </label>
-                </div>
+                showOption && (
+                  <div key={option.value} className="flex items-center">
+                    <input
+                      id={`${name}-${option.value}`}
+                      name={`${name}[]`}
+                      value={option.value}
+                      type="checkbox"
+                      className="h-4 w-4 rounded border-gray-300 text-purple-800 focus:ring-purple-700"
+                      onChange={(e) => handleChange(e.target.value)}
+                      checked={
+                        !!(selected as Option[]).find(
+                          matchByValue(option.value)
+                        )
+                      }
+                    />
+                    <label
+                      htmlFor={`${name}-${option.value}`}
+                      className="ml-3 text-sm text-gray-600"
+                    >
+                      {option.label}
+                    </label>
+                  </div>
+                )
               );
             })}
           </div>
