@@ -16,6 +16,7 @@ export const PostCluster = () => {
   const { setVisiblePosts, postToLocate, locatePost } = useLandingContext();
 
   useEffect(() => {
+    // console.log(map);
     if (map && postToLocate) {
       map.panTo(
         new google.maps.LatLng(
@@ -44,6 +45,9 @@ export const PostCluster = () => {
         );
         setVisiblePosts(visiblePosts);
       }}
+      // onUnmount={(clusterer) => {
+      //   clusterer.removeMarkers(clusterer.getMarkers(), true);
+      // }}
     >
       {(clusterer) => (
         <>

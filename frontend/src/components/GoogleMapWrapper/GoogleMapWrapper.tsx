@@ -1,6 +1,6 @@
 import { useLandingContext } from "@contexts/LandingContext";
-import { GoogleMap, useJsApiLoader } from "@react-google-maps/api";
-import { memo } from "react";
+import { GoogleMap, Libraries, useJsApiLoader } from "@react-google-maps/api";
+import { useMemo, memo} from "react";
 import { Locate } from "./Locate";
 import { PostCluster } from "./PostCluster";
 
@@ -23,11 +23,12 @@ const mapOptions: google.maps.MapOptions = {
 // TODO: add search integration?
 export const GoogleMapWrapper = () => {
   const { postToLocate } = useLandingContext();
+  const libraries = useMemo<Libraries>(() => ["marker"], []);
 
   const { isLoaded } = useJsApiLoader({
     id: MAP_ID,
     googleMapsApiKey: KEY,
-    libraries: ["marker"],
+    libraries: libraries,
   });
 
   return isLoaded ? (

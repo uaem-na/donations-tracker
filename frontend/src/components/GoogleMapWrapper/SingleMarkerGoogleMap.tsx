@@ -114,7 +114,6 @@ const GoogleMap = ({
         position: { lat, lng },
         content: div,
       });
-      console.log(lat, lng, postId, map, div);
       marker["data"] = postId;
       return marker;
     },
