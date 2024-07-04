@@ -28,7 +28,7 @@ const log = debug("backend:admin");
 export class AdminController {
   constructor(
     private postService: PostService,
-    private userService: UserService
+    private userService: UserService,
   ) {}
 
   pre = (req) => {
@@ -52,7 +52,7 @@ export class AdminController {
     }
 
     const { page, limit } = tryParsePaginationQuery(req);
-    const { postType, userType, categories, date } =
+    const { postType, userType, priceRange, categories, date } =
       tryParsePostFilterQuery(req);
 
     //! date objects in MongoDB stored in UTC, adjust for ET
@@ -62,6 +62,7 @@ export class AdminController {
       status: PostStatus.PENDING_APPROVAL,
       ...(postType && { type: postType }),
       ...(userType && { authorType: userType }),
+      ...(priceRange && {priceRange: priceRange}),
       ...(categories && {
         "item.category": { $in: categories },
       }),
@@ -76,9 +77,9 @@ export class AdminController {
       page,
       limit,
       filterQuery,
-      { updatedAt: -1, createdAt: -1 }
+      { updatedAt: -1, createdAt: -1 },
     );
-
+    
     const postDtos = posts.map((post) => PostDto.fromDocument(post));
 
     const response: PaginatedResponse<PostDto> = {
@@ -143,7 +144,7 @@ export class AdminController {
       page,
       limit,
       filterQuery,
-      { updatedAt: -1, createdAt: -1 }
+      { updatedAt: -1, createdAt: -1 },
     );
 
     const userDtos = users.map((user) => UserDto.fromDocument(user));
@@ -226,9 +227,14 @@ export class AdminController {
 
     log(`${req.user?.id} toggled active for user ${userId} to ${user.active}.`);
 
-    const toggledPosts = await this.postService.setPostStatus(userId, user.active ? PostStatus.OPEN : PostStatus.CLOSED);
+    const toggledPosts = await this.postService.setPostStatus(
+      userId,
+      user.active ? PostStatus.OPEN : PostStatus.CLOSED,
+    );
 
-    log(`Toggled ${toggledPosts} posts to ${user.active ? PostStatus.OPEN : PostStatus.CLOSED}.`);
+    log(
+      `Toggled ${toggledPosts} posts to ${user.active ? PostStatus.OPEN : PostStatus.CLOSED}.`,
+    );
 
     res.status(200).json({
       message: `Successfully set user ${userId} active status to ${user.active}.`,
