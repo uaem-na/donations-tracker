@@ -311,6 +311,7 @@
     "register": "S'inscrire"
   },
   "errors": {
-    "unknown_server_error": "An error occurred"
+    "unknown_server_error": "Une erreur s'est produite",
+    "missing_post_id": "Erreur : Impossible de supprimer le post. L'ID du post est manquant. Veuillez réessayer."
   }
 }

@@ -161,4 +161,16 @@ export class PostService {
 
     return await post.save();
   }
+
+  async rejectPost(postId: string): Promise<PostDocument> {
+    const post = await this.getPost(postId);
+
+    if (!post) {
+      throw new Error(`Error rejecting post. Post does not exist.`);
+    }
+
+    post.status = PostStatus.REJECTED;
+
+    return await post.save();
+  }
 }

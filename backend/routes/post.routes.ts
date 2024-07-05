@@ -1,13 +1,18 @@
 import { Router } from "express";
 import { PostController } from "../controllers";
 import { ensureAuthenticated } from "../middlewares";
-import { PostService, UserService } from "../services";
+import { PostService, ResendService, UserService } from "../services";
 
 // * middleware function to create route handlers
 const router = Router();
 const postService = new PostService();
 const userService = new UserService();
-const postController = new PostController(postService, userService);
+const resendService = new ResendService();
+const postController = new PostController(
+  postService,
+  userService,
+  resendService,
+);
 
 // * wire up public routes with controller
 router.get("/", postController.getPublicPosts);
@@ -24,7 +29,7 @@ router.post("/:id/star", ensureAuthenticated, postController.starPost);
 router.get(
   "/user/:userId",
   ensureAuthenticated,
-  postController.getPostsByUserId
+  postController.getPostsByUserId,
 );
 
 export default router;

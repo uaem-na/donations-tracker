@@ -218,7 +218,7 @@ export const api = createApi({
       query: ({ postId }) => `/posts/${postId}`,
       providesTags: (result, error, arg) => [{ type: "posts", id: arg.postId }],
     }),
-    createPost: builder.mutation<unknown, QueryArgs.Posts.CreatePost>({
+    createPost: builder.mutation<ApiResponse.MessageResponse, QueryArgs.Posts.CreatePost>({
       query: (post) => ({
         url: "posts",
         method: "POST",

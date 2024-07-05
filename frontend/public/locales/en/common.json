@@ -312,6 +312,7 @@
     "register": "Register"
   },
   "errors": {
-    "unknown_server_error": "An error occurred"
+    "unknown_server_error": "An error occurred",
+    "missing_post_id": "Error: Unable to delete the post. The post ID is missing. Please try again."
   }
 }

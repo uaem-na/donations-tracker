@@ -11,14 +11,9 @@ import {
   PostTypes,
   UserRole,
 } from "../constants";
-import {
-  AuthorizationError,
-  InvalidOperationError,
-  NotFoundError,
-  ValidationError,
-} from "../errors";
+import { AuthorizationError, NotFoundError, ValidationError } from "../errors";
 import { PostDto } from "../models/posts";
-import { PostService, UserService } from "../services";
+import { PostService, ResendService, UserService } from "../services";
 import {
   Location,
   OptionallyPaginatedListResponse,
@@ -40,7 +35,8 @@ const log = debug("backend:post");
 export class PostController {
   constructor(
     private postService: PostService,
-    private userService: UserService
+    private userService: UserService,
+    private resendService: ResendService,
   ) {}
 
   // this API is called on public post listings page without authentication
@@ -77,19 +73,20 @@ export class PostController {
         },
       }),
 
-      ...(typeof keyword === "string" && keyword && {
-        $or: [
-          { 'item.name': new RegExp(keyword, "i") },
-          { 'item.description': new RegExp(keyword, "i") },
-        ],
-      }),
+      ...(typeof keyword === "string" &&
+        keyword && {
+          $or: [
+            { "item.name": new RegExp(keyword, "i") },
+            { "item.description": new RegExp(keyword, "i") },
+          ],
+        }),
     };
 
     const [posts, count] = await this.postService.getPaginatedPosts(
       page,
       limit,
       filterQuery,
-      { updatedAt: -1, createdAt: -1 }
+      { updatedAt: -1, createdAt: -1 },
     );
 
     const postDtos = posts.map((post) => PostDto.fromDocument(post));
@@ -140,13 +137,19 @@ export class PostController {
 
     if (user.role === UserRole.INDIVIDUAL && type === PostType.REQUEST) {
       throw new AuthorizationError(
-        `Individual users are unable to create request posts.`
+        `Individual users are unable to create request posts.`,
       );
     }
 
     if (user.active === false) {
       throw new AuthorizationError(
-        `User ${user.username} is deactivated and is not authorized to create a post.`
+        `User ${user.username} is deactivated and is not authorized to create a post.`,
+      );
+    }
+
+    if (user.isEmailVerified === false) {
+      throw new AuthorizationError(
+        `User must verify their email before creating posts.`,
       );
     }
 
@@ -176,6 +179,12 @@ export class PostController {
     });
 
     log(`Created post [${post._id}] by user ${user.username}.`);
+
+    this.resendService.send({
+        to: user.email,
+        subject: "Your post has been created",
+        html: "Thank you for contributing to UAEM. Your post has been categorized as \"Other\" and is queued for review by our admin team. We'll notify you once it's been approved and published. This process usually takes 1-2 business days."
+    });
 
     res.status(201).json(PostDto.fromDocument(post));
   });
@@ -266,7 +275,7 @@ export class PostController {
 
     if (req.user.username !== post.author.username.toString()) {
       throw new AuthorizationError(
-        `User ${req.user.username} is not authorized to update post ${id}.`
+        `User ${req.user.username} is not authorized to update post ${id}.`,
       );
     }
 
@@ -302,7 +311,7 @@ export class PostController {
 
     if (req.user.username !== post.author.username.toString()) {
       throw new AuthorizationError(
-        `User ${req.user.username} is not authorized to delete post ${id}.`
+        `User ${req.user.username} is not authorized to delete post ${id}.`,
       );
     }
 
@@ -348,7 +357,7 @@ export class PostController {
       page,
       limit,
       filterQuery,
-      { updatedAt: -1, createdAt: -1 }
+      { updatedAt: -1, createdAt: -1 },
     );
     const postDtos = posts.map((post) => PostDto.fromDocument(post));
     const response: PaginatedResponse<PostDto> = {
@@ -371,7 +380,7 @@ export class PostController {
     const { locale } = req.query;
 
     const categories = this.postService.getItemCategories(
-      locale as "en" | "fr"
+      locale as "en" | "fr",
     );
 
     res.json(categories);
@@ -396,4 +405,26 @@ export class PostController {
 
     res.json(result);
   });
+
+  private async sendEmailNotification({
+    email,
+    subject,
+    html,
+  }: {
+    email: string;
+    subject: string;
+    html: string;
+  }) {
+    let backendUrl = process.env.BACKEND_URL;
+    if (!backendUrl) {
+      backendUrl = "http://localhost:8081";
+      log(`backendUrl is not set, using default: ${backendUrl}`);
+    }
+
+    this.resendService.send({
+      to: email,
+      subject: "Your post has been created",
+      html: "Thank you for contributing on UAEM. Your post has been categorized as \"Other\" and has been queued for review by our admin team. We'll notify you once it's been approved and published. This process usually takes 1-2 business days. ",
+    });
+  }
 }
