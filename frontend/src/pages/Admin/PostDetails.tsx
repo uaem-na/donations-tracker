@@ -16,11 +16,11 @@ export const AdminPostDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
-  const [approvePostApi, { isSuccess: isApproveSuccess, error: approveError }] =
-    useApprovePostAdminMutation();
+  // const [approvePostApi, { isSuccess: isApproveSuccess, error: approveError }] =
+  //   useApprovePostAdminMutation();
 
-  const [rejectPostApi, { isSuccess: isRejectSuccess, error: rejectError }] =
-    useRejectPostAdminMutation();
+  // const [rejectPostApi, { isSuccess: isRejectSuccess, error: rejectError }] =
+  //   useRejectPostAdminMutation();
 
   if (!id) {
     navigate("/errors/404");
@@ -38,25 +38,26 @@ export const AdminPostDetailsPage = () => {
     }
   };
 
-  const handleApproveClick = () => {
-    if (postData && postData.item.category === "Other") {
-      // create button here
-      approvePostApi({ postId: id });
-    } else {
-      approvePostApi({ postId: id });
-    }
-  };
+  // const handleApproveClick = () => {
+  //   if (postData && postData.item.category === "Other") {
+  //     // create button here
+  //     approvePostApi({ postId: id });
+  //   } else {
+  //     approvePostApi({ postId: id });
+  //   }
+  // };
 
-  const handleRejectClick = () => {
-    alert("coming soon");
-    // rejectPostApi({ postId: id });
-  };
+  // const handleRejectClick = () => {
+  //   if (postData && postData.item.category === "Other") {
+  //     rejectPostApi({ postId: id });
+  //   } 
+  // };
 
 
   return (
     <div className="container mx-auto">
       <PostDetails id={id} onError={handleError} hideEditDelete={true} />
-      <div className="mt-4 flex justify-end gap-2.5 px-4">
+      {/* <div className="mt-4 flex justify-end gap-2.5 px-4">
         <Button
           intent="primary"
           onClick={handleApproveClick}
@@ -73,8 +74,8 @@ export const AdminPostDetailsPage = () => {
           <FontAwesomeIcon icon={faCircleXmark} />
           Reject
         </Button>
-      </div>
-    </div>
+      </div> */}
+</div>
   );
 };
 

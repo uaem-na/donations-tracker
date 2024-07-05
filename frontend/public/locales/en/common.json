@@ -262,6 +262,46 @@
     "display_name": "Display name",
     "username": "Username"
   },
+  "login": {
+    "title": "Sign in to your account",
+    "title_description": "Not a member? <1>Click here to register</1>",
+    "username": "$t(users.username)",
+    "password": "Password",
+    "sign_in": "Sign in"
+  },
+  "register": {
+    "title": "Register for an account",
+    "title_description": "Choose the type of account you want to register as:",
+    "question": "What is the difference between an individual vs organization user? Please see our <1>FAQ</1> page.",
+    "individual_form": {
+      "title": "Registering as an individual user",
+      "username": "$t(users.username)",
+      "display_name": "$t(users.display_name)",
+      "first_name": "First name",
+      "last_name": "Last name",
+      "email": "Email",
+      "password": "$t(login.password)",
+      "confirm_password": "Confirm password",
+      "submit": "$t(user_actions.register)"
+    },
+    "organization_form": {
+      "title": "Registering as an organization",
+      "username": "$t(users.username)",
+      "display_name": "$t(users.display_name)",
+      "first_name": "First name",
+      "last_name": "Last name",
+      "phone": "Phone",
+      "email": "Email",
+      "organization": "Organization",
+      "address": "Address",
+      "postal_code": "Postal Code",
+      "city": "City",
+      "province": ["Province", "Select a province"],
+      "password": "$t(login.password)",
+      "confirm_password": "Confirm password",
+      "submit": "$t(user_actions.register)"
+    }
+  },
   "user_actions": {
     "open_user_menu": "Open user menu",
     "your_account": "Your account",
@@ -272,6 +312,7 @@
     "register": "Register"
   },
   "errors": {
-    "unknown_server_error": "An error occurred"
+    "unknown_server_error": "An error occurred",
+    "missing_post_id": "Error: Unable to delete the post. The post ID is missing. Please try again."
   }
 }

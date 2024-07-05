@@ -44,6 +44,9 @@ export const PostCluster = () => {
         );
         setVisiblePosts(visiblePosts);
       }}
+      // onUnmount={(clusterer) => {
+      //   clusterer.removeMarkers(clusterer.getMarkers(), true);
+      // }}
     >
       {(clusterer) => (
         <>

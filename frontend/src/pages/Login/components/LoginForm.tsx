@@ -8,10 +8,12 @@ import {
 } from "@services/api";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import { loginSchema } from "./schemas/LoginSchema";
 
 export const LoginForm = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { data: currentSession, isLoading } = useGetSessionQuery();
   const [getSessionAfterLogin, { data: afterLoginSession }] =
@@ -84,7 +86,7 @@ export const LoginForm = () => {
       )}
 
       <div>
-        <Label htmlFor="username">Username</Label>
+        <Label htmlFor="username">{t("login.username")}</Label>
         <div className="mt-2">
           <Input
             {...register("username")}
@@ -92,7 +94,7 @@ export const LoginForm = () => {
             name="username"
             type="text"
             autoComplete="username"
-            placeholder="Username"
+            placeholder={t("login.username")}
             required
             errorMessage={errors.username?.message}
           />
@@ -100,14 +102,14 @@ export const LoginForm = () => {
       </div>
 
       <div>
-        <Label htmlFor="password">Password</Label>
+        <Label htmlFor="password">{t("login.password")}</Label>
         <div className="mt-2">
           <Input
             {...register("password")}
             id="password"
             type="password"
             autoComplete="current-password"
-            placeholder="Password"
+            placeholder={t("login.password")}
             required
             errorMessage={errors.password?.message}
           />
@@ -128,7 +130,7 @@ export const LoginForm = () => {
           type="submit"
           className="flex w-full justify-center"
         >
-          Sign in
+          {t("login.sign_in")}
         </Button>
       </div>
     </form>

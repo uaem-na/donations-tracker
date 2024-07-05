@@ -62,6 +62,7 @@ const PostSchema: Schema<Post> = new Schema(
         PostStatus.PENDING_APPROVAL,
         PostStatus.OPEN,
         PostStatus.IN_PROGRESS,
+        PostStatus.REJECTED,
         PostStatus.CLOSED,
       ],
       required: true,

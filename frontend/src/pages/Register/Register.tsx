@@ -3,9 +3,10 @@ import { faBuilding, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useGetSessionQuery } from "@services/api";
 import { useEffect } from "react";
+import { Trans, useTranslation } from "react-i18next";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
-
 export const RegisterPage = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { data: currentSession } = useGetSessionQuery();
 
@@ -46,10 +47,10 @@ export const RegisterPage = () => {
       <div className="my-auto sm:mx-auto sm:w-full sm:max-w-[650px]">
         <div className="bg-white px-6 py-12 shadow sm:rounded-md sm:px-12">
           <h2 className="text-base font-semibold leading-6 text-gray-900">
-            Register for an account
+            {t("register.title")}
           </h2>
           <p className="mt-1 text-sm text-gray-500">
-            Choose the type of account you want to register as:
+            {t("register.title_description")}
           </p>
           <ul
             role="list"
@@ -57,7 +58,7 @@ export const RegisterPage = () => {
           >
             <li className="flow-root">
               {renderAccountTypeSelection({
-                name: "Individual",
+                name: t("users.individual"),
                 icon: faUser,
                 iconText: "User icon",
                 to: "/register/individual-account",
@@ -66,7 +67,7 @@ export const RegisterPage = () => {
             </li>
             <li className="flow-root">
               {renderAccountTypeSelection({
-                name: "Organization",
+                name: t("users.organization"),
                 icon: faBuilding,
                 iconText: "Building icon",
                 to: "/register/organization-account",
@@ -76,12 +77,17 @@ export const RegisterPage = () => {
           </ul>
           <div className="mt-4 flex">
             <span className="text-sm">
-              What is the difference between an individual vs organization user?
-              Please see our{" "}
-              <Link to="/faq" className="text-purple-800 hover:text-purple-600">
-                FAQ
-              </Link>{" "}
-              page.
+              <Trans i18nKey="register.question">
+                What is the difference between an individual vs organization
+                user? Please see our
+                <Link
+                  to="/faq"
+                  className="text-purple-800 hover:text-purple-600"
+                >
+                  FAQ
+                </Link>
+                page.
+              </Trans>
             </span>
           </div>
         </div>

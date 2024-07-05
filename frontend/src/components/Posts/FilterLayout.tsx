@@ -91,7 +91,7 @@ export const FilterLayout = ({
   };
 
   const transformCategoriesToOptions = (
-    categories: ApiModel.PostItemCategory[],
+    categories: ApiModel.PostItemCategory[]
   ) => {
     return categories.map((category) => ({
       value: category.value,
@@ -160,7 +160,7 @@ export const FilterLayout = ({
                         defaultOption={selectedType}
                         onChange={(option) => {
                           handlePostTypeFilterChange(
-                            option.value as FilterPostType,
+                            option.value as FilterPostType
                           );
                           setSelectedType(option);
                         }}
@@ -186,7 +186,7 @@ export const FilterLayout = ({
                         defaultOption={selectedUserType}
                         onChange={(option) => {
                           handleUserTypeFilterChange(
-                            option.value as FilterUserType,
+                            option.value as FilterUserType
                           );
                           setSelectedUserType(option);
                         }}

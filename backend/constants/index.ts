@@ -56,6 +56,7 @@ export const FilterableUserTypesAdmin = [
 export enum PostStatus {
   OPEN = "open",
   PENDING_APPROVAL = "pending-approval",
+  REJECTED = "rejected",
   IN_PROGRESS = "in-progress", // TODO: is this needed?
   CLOSED = "closed",
 }
@@ -63,6 +64,7 @@ export enum PostStatus {
 export const PostStatuses = [
   PostStatus.OPEN,
   PostStatus.PENDING_APPROVAL,
+  PostStatus.REJECTED,
   PostStatus.IN_PROGRESS,
   PostStatus.CLOSED,
 ];
