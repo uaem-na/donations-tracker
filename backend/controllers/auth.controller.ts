@@ -55,6 +55,12 @@ export class AuthController {
   });
 
   login = expressAsyncHandler(async (req, res, next) => {
+    // TODO: #107 if user.active === false, do not allow them to login
+    // TODO: #107 if user.active === false, show reason why their account was deactivated (bilingual)
+    // TODO: #107 if user.active === false, also display message that they can contact UAEM support email for reactivation (bilingual)
+    // displaying bilingual server messages could be achieved by returning a unique server code to frontend, which in turn displays bilingual resources in frontend
+    // e.g. JSON payload of { statusCode: '1' } ==> display some error
+
     req.session.save((err) => {
       if (err) {
         log(`Error saving session: ${err}`);

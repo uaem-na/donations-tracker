@@ -59,6 +59,7 @@ export class PostController {
 
     const keyword = req.query.keyword;
 
+    // TODO: #107 add filter author.active === false
     const filterQuery: FilterQuery<PostDocument> = {
       status: PostStatus.OPEN,
       ...(postType && { type: postType }),
@@ -103,6 +104,7 @@ export class PostController {
 
   // this API is called on landing page
   getAllPosts = expressAsyncHandler(async (req, res, next) => {
+    // TODO: #107 add filter author.active === false
     const posts = await this.postService.getPosts({
       status: PostStatus.OPEN,
     });

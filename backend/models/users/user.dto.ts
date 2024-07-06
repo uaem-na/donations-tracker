@@ -23,6 +23,7 @@ export class UserDto {
   lastName: string;
   role: string;
   active: boolean;
+  activeStatusChangeReason: string | undefined;
   location: UserLocationDto | undefined;
   starred: string[] | undefined;
   isEmailVerified: boolean;

@@ -121,7 +121,7 @@ export class UserController {
       return;
     }
 
-    await this.userService.verifyOrgniazationUser(userId);
+    await this.userService.verifyOrganizationUser(userId);
 
     log(`Verified user ${userId}.`);
 

@@ -58,6 +58,7 @@ router.put(
   adminController.verifyUser,
 );
 
+// TODO: #107 probably update this to HTTP POST
 router.put(
   "/users/:id/active",
   ensureAuthenticated,

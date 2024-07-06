@@ -74,6 +74,7 @@ export const UserDetails = ({
       onError({ status: 500, message: "User ID must be available" });
       return;
     }
+    // TODO: #107 collect reason for toggling status
     toggleUserActive({ userId: user.id });
     setActiveDialogOpen(false);
   };

@@ -265,13 +265,14 @@ export class AdminController {
       return;
     }
 
-    await this.userService.verifyOrgniazationUser(userId);
+    await this.userService.verifyOrganizationUser(userId);
 
     log(`${req.user?.id} verified user ${userId}.`);
 
     res.status(200).json({ message: `Successfully verified user ${userId}.` });
   });
 
+  // TODO: #107 collect reason in the payload and save it to user.activeStatusChangeReason
   toggleUserActive = expressAsyncHandler(async (req, res, next) => {
     await validateUserId({ key: "userId", req, optional: false });
 
@@ -291,16 +292,18 @@ export class AdminController {
 
     const user = await this.userService.toggleActive(userId);
 
-    log(`${req.user?.id} toggled active for user ${userId} to ${user.active}.`);
+    // TODO: #107 send email to the user that their account has been deactivated; content TBD
 
-    const toggledPosts = await this.postService.setPostStatus(
-      userId,
-      user.active ? PostStatus.OPEN : PostStatus.CLOSED,
-    );
+    // log(`${req.user?.id} toggled active for user ${userId} to ${user.active}.`);
 
-    log(
-      `Toggled ${toggledPosts} posts to ${user.active ? PostStatus.OPEN : PostStatus.CLOSED}.`,
-    );
+    // const toggledPosts = await this.postService.setPostStatus(
+    //   userId,
+    //   user.active ? PostStatus.OPEN : PostStatus.CLOSED,
+    // );
+
+    // log(
+    //   `Toggled ${toggledPosts} posts to ${user.active ? PostStatus.OPEN : PostStatus.CLOSED}.`,
+    // );
 
     res.status(200).json({
       message: `Successfully set user ${userId} active status to ${user.active}.`,

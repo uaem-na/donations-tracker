@@ -90,7 +90,7 @@ export class UserService {
     }
   }
 
-  async verifyOrgniazationUser(id: string): Promise<UserDocument> {
+  async verifyOrganizationUser(id: string): Promise<UserDocument> {
     const user = await this.getUserById(id);
 
     if (!user) {

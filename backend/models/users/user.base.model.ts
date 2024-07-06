@@ -79,7 +79,8 @@ const UserSchema: Schema<UserDocument & PassportLocalDocument> = new Schema({
     },
   },
   location: { type: LocationSchema, required: false },
-  active: { type: Boolean, default: true }, // TODO: add deactivation mechanism
+  active: { type: Boolean, default: true },
+  activeStatusChangeReason: { type: String, maxlength: 512, required: false },
   role: {
     type: String,
     enum: [UserRole.ADMIN, UserRole.ORGANIZATION, UserRole.INDIVIDUAL],
