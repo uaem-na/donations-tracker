@@ -142,7 +142,8 @@
       "Contactez l'auteur des articles pour confirmer les catégories définies pour les articles."
     ],
     "author": "Auteur",
-    "available": "Disponible",
+    "available": "Disponible(s)",
+    "requested": "Demandé(s)",
     "type": "Type",
     "offer": "Offre",
     "offers": "Offres",

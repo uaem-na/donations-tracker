@@ -1,4 +1,5 @@
 import { Badge } from "@components/Badge";
+import { PostType } from "@constants";
 import { faChevronRight, faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
@@ -99,7 +100,10 @@ export const PostItem = ({
               </Link>
             </p>
             <p className="mt-1 flex text-xs leading-5 text-gray-500">
-              CAD {price} • {quantity} {t("posts.available")}
+              CAD {price} • {quantity}{" "}
+              {type === PostType.OFFER
+                ? t("posts.available")
+                : t("posts.requested")}
             </p>
             <p className="mt-1 flex text-xs leading-5 text-gray-500">
               {displayName}
