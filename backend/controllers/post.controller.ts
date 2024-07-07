@@ -13,7 +13,7 @@ import {
 } from "../constants";
 import { AuthorizationError, NotFoundError, ValidationError } from "../errors";
 import { PostDto } from "../models/posts";
-import { PostService, UserService } from "../services";
+import { PostService, ResendService, UserService } from "../services";
 import {
   Location,
   OptionallyPaginatedListResponse,
@@ -36,6 +36,7 @@ export class PostController {
   constructor(
     private postService: PostService,
     private userService: UserService,
+    private resendService: ResendService,
   ) {}
 
   // this API is called on public post listings page without authentication
@@ -152,6 +153,12 @@ export class PostController {
       );
     }
 
+    if (user.isEmailVerified === false) {
+      throw new AuthorizationError(
+        `User must verify their email before creating posts.`,
+      );
+    }
+
     const postalCode = location.postalCode as string;
     const point = await geocode(postalCode);
     console.log(point);
@@ -178,6 +185,12 @@ export class PostController {
     });
 
     log(`Created post [${post._id}] by user ${user.username}.`);
+
+    this.resendService.send({
+      to: user.email,
+      subject: "Your post has been created",
+      html: "Thank you for contributing to UAEM. Your post has been categorized as \"Other\" and is queued for review by our admin team. We'll notify you once it's been approved and published. This process usually takes 1-2 business days.",
+    });
 
     res.status(201).json(PostDto.fromDocument(post));
   });
@@ -398,4 +411,26 @@ export class PostController {
 
     res.json(result);
   });
+
+  private async sendEmailNotification({
+    email,
+    subject,
+    html,
+  }: {
+    email: string;
+    subject: string;
+    html: string;
+  }) {
+    let backendUrl = process.env.BACKEND_URL;
+    if (!backendUrl) {
+      backendUrl = "http://localhost:8081";
+      log(`backendUrl is not set, using default: ${backendUrl}`);
+    }
+
+    this.resendService.send({
+      to: email,
+      subject: "Your post has been created",
+      html: "Thank you for contributing on UAEM. Your post has been categorized as \"Other\" and has been queued for review by our admin team. We'll notify you once it's been approved and published. This process usually takes 1-2 business days. ",
+    });
+  }
 }

@@ -27,6 +27,7 @@ import {
   useDeletePostMutation,
   useGetPostQuery,
   useGetSessionQuery,
+  useRejectPostAdminMutation,
 } from "@services/api";
 import { capitalizeFirstLetter } from "@utils";
 import { getStatusIndicator } from "@utils/GetStatusIndicator";
@@ -36,9 +37,11 @@ interface PostDetailsProps {
   onError: (err) => void;
   redirectOnDelete?: boolean;
   redirectOnApprove?: boolean;
+  redirectOnReject?: boolean;
   hideEditDelete?: boolean;
   hideReportButton?: boolean;
   hideApproveButton?: boolean; // ADDED
+  hideRejectButton?: boolean;
 }
 
 export const PostDetails = ({
@@ -46,9 +49,11 @@ export const PostDetails = ({
   onError,
   redirectOnDelete = true,
   redirectOnApprove = true, // ADDED
+  redirectOnReject = true,
   hideEditDelete = false,
   hideReportButton = false,
   hideApproveButton = false, // ADDED
+  hideRejectButton = false,
 }: PostDetailsProps) => {
   const { t } = useTranslation();
   const { data: currentSession } = useGetSessionQuery();
@@ -56,11 +61,14 @@ export const PostDetails = ({
 
   const [serverMessage, setServerMessage] = useState();
 
-  const [approvePostApi, {isSuccess: isApproveSuccess, error: approveError}] =
-  useApprovePostAdminMutation();
+  const [approvePostApi, { isSuccess: isApproveSuccess, error: approveError }] =
+    useApprovePostAdminMutation();
 
   const [deletePostApi, { isSuccess: isDeleteSuccess, error: deleteError }] =
     useDeletePostMutation();
+
+  const [rejectPostApi, { isSuccess: isRejectSuccess, error: rejectError }] =
+    useRejectPostAdminMutation();
 
   const {
     data: post,
@@ -77,7 +85,7 @@ export const PostDetails = ({
 
   const onDelete = async () => {
     if (!post?.id) {
-      onError({ status: 500, message: "Post ID must be available" });
+      onError({ status: 500, message: t("errors.missing_post_id") });
       return;
     }
     deletePostApi({ id: post.id });
@@ -85,18 +93,37 @@ export const PostDetails = ({
 
   const onApprove = async () => {
     if (!post?.id) {
-      onError({ status: 500, message: "Post ID must be available" });
+      onError({ status: 500, message: t("errors.missing_post_id") });
       return;
     }
     approvePostApi({ postId: post.id });
-  }
+  };
+
+  const onReject = async () => {
+    if (!post?.id) {
+      onError({ status: 500, message: t("errors.missing_post_id") });
+      return;
+    }
+    rejectPostApi({ postId: post.id });
+  };
 
   // handle successful requests
   useEffect(() => {
-    if ((isDeleteSuccess && redirectOnDelete) || (isApproveSuccess && redirectOnApprove)) {
+    if (
+      (isDeleteSuccess && redirectOnDelete) ||
+      (isApproveSuccess && redirectOnApprove) ||
+      (isRejectSuccess && redirectOnReject)
+    ) {
       navigate(`/posts`);
     }
-  }, [isDeleteSuccess, isApproveSuccess]);
+  }, [isDeleteSuccess, isApproveSuccess, isRejectSuccess]);
+
+  // handle server error message
+  useEffect(() => {
+    if (approveError) {
+      handleServerErrors(approveError);
+    }
+  }, [approveError]);
 
   // handle server error message
   useEffect(() => {
@@ -104,6 +131,13 @@ export const PostDetails = ({
       handleServerErrors(deleteError);
     }
   }, [deleteError]);
+
+  // handle server error message
+  useEffect(() => {
+    if (rejectError) {
+      handleServerErrors(rejectError);
+    }
+  }, [rejectError]);
 
   const handleServerErrors = (error) => {
     const err: any = "error" in error ? error.error : error.data;
@@ -276,7 +310,7 @@ export const PostDetails = ({
                             intent="secondary"
                             className="flex gap-1.5 justify-center items-center"
                           >
-                            <FontAwesomeIcon icon={faCancel} /> 
+                            <FontAwesomeIcon icon={faCancel} />
                             {t("cancel")}
                           </Button>
                         </DialogClose>
@@ -291,14 +325,28 @@ export const PostDetails = ({
           )}
           {!hideApproveButton &&
             currentSession &&
-            currentSession.role.includes(UserRole.ADMIN) && post.item.category.includes("other") && (
-        <Button 
-            intent="primary"
-            className="flex gap-1.5 justify-center items-center"
-            onClick={onApprove}
-          >
-          Approve
-        </Button>)}
+            currentSession.role.includes(UserRole.ADMIN) &&
+            post.item.category.includes("other") && (
+              <Button
+                intent="primary"
+                className="flex gap-1.5 justify-center items-center"
+                onClick={onApprove}
+              >
+                Approve
+              </Button>
+            )}
+          {!hideRejectButton &&
+            currentSession &&
+            currentSession.role.includes(UserRole.ADMIN) &&
+            post.item.category.includes("other") && (
+              <Button
+                intent="secondary"
+                className="flex gap-1.5 justify-center items-center"
+                onClick={onReject}
+              >
+                Reject
+              </Button>
+            )}
         </div>
       </div>
 

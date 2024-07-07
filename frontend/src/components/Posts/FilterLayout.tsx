@@ -11,6 +11,7 @@ import {
   FilterUserType,
   Option,
 } from "@components";
+import { AdminGuide } from "@components/AdminGuide";
 import { Input, Tooltip } from "@components/Controls";
 import { SelectInput } from "@components/Controls/Select";
 import {
@@ -22,7 +23,6 @@ import {
 } from "@components/Drawer";
 import { faCircleQuestion, faFilter } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { RenderAdminGuide } from "@pages/Admin/components/RenderAdminGuide";
 import * as Popover from "@radix-ui/react-popover";
 import { ApiModel } from "@services/api";
 
@@ -90,14 +90,24 @@ export const FilterLayout = ({
     setShowPriceTooltip(!showPriceTooltip);
   };
 
+  const transformCategoriesToOptions = (
+    categories: ApiModel.PostItemCategory[],
+  ) => {
+    return categories.map((category) => ({
+      value: category.value,
+      label: t(`posts.item_categories.${category.label.toLowerCase()}`),
+    }));
+  };
+
   return (
     <div>
       <div className="flex items-baseline justify-between border-b border-gray-200 pb-6">
-        <h1 className="text-2xl font-bold leading-10 tracking-tight text-gray-900">
-          {heading}
-        </h1>
-        <RenderAdminGuide guideType={{ guideType: "posts" }} />
-
+        <div className="flex">
+          <h1 className="text-2xl font-bold leading-10 tracking-tight text-gray-900">
+            {heading}
+          </h1>
+          <AdminGuide guideType="posts" />
+        </div>
         <div className="flex items-center">
           <div className="relative inline-block text-left">
             <div>
@@ -368,7 +378,6 @@ export const FilterLayout = ({
                       id="price"
                       type="number"
                       value={currentPriceRange[0]}
-                      defaultValue={selectedPriceRange[0]}
                       onChange={(event) => {
                         setCurrentPriceRange([
                           event.target.valueAsNumber,
@@ -382,7 +391,6 @@ export const FilterLayout = ({
                       id="price"
                       type="number"
                       value={currentPriceRange[1]}
-                      defaultValue={selectedPriceRange[1]}
                       onChange={(event) => {
                         setCurrentPriceRange([
                           currentPriceRange[0],
@@ -410,7 +418,7 @@ export const FilterLayout = ({
                 <FilterContainer
                   name="category"
                   ariaLabel={t("posts.category")}
-                  options={categories ?? []}
+                  options={transformCategoriesToOptions(categories)}
                   multiSelect={true}
                   onChange={(options) => {
                     handleCategoryFilterChange(options);

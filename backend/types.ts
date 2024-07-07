@@ -117,7 +117,7 @@ export type Post = {
   authorType: "individual" | "organization";
   location: Location | LocationDocument;
   item: PostItem | PostItemDocument;
-  status: "open" | "in-progress" | "closed" | "pending-approval";
+  status: "open" | "in-progress" | "closed" | "pending-approval" | "rejected";
   views: number;
   createdAt: Date;
   updatedAt: Date;

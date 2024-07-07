@@ -56,10 +56,12 @@ export const ReportsPage = () => {
   return (
     <div className="px-4 py-5">
       <div className="flex items-baseline justify-between border-b border-gray-200 pb-6">
-        <h1 className="text-2xl font-bold leading-10 tracking-tight text-gray-900">
-          {t("reports.manage_reported_posts")}
-        </h1>
-        <AdminGuide className="mt-2.5 ml-[250px]" guideType={"reports"} />
+        <div className="flex">
+          <h1 className="text-2xl font-bold leading-10 tracking-tight text-gray-900">
+            {t("reports.manage_reported_posts")}
+          </h1>
+          <AdminGuide guideType={"reports"} />
+        </div>
       </div>
 
       <div className="flex items-center justify-end">
@@ -103,7 +105,7 @@ export const ReportsPage = () => {
                 outstanding_reports={reportedPost.outstanding_reports}
               />
             );
-          }
+          },
         )}
       </ul>
 

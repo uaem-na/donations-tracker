@@ -6,7 +6,7 @@ import { PostStatus } from "../constants";
 import { AuthorizationError } from "../errors";
 import { PostDto } from "../models/posts";
 import { UserDto } from "../models/users";
-import { PostService, UserService } from "../services";
+import { PostService, ResendService, UserService } from "../services";
 import { PaginatedResponse, PostDocument, UserDocument } from "../types";
 import {
   tryParsePaginationQuery,
@@ -29,6 +29,7 @@ export class AdminController {
   constructor(
     private postService: PostService,
     private userService: UserService,
+    private resendService: ResendService,
   ) {}
 
   pre = (req) => {
@@ -52,7 +53,7 @@ export class AdminController {
     }
 
     const { page, limit } = tryParsePaginationQuery(req);
-    const { postType, userType, categories, date } =
+    const { postType, userType, priceRange, categories, date } =
       tryParsePostFilterQuery(req);
 
     //! date objects in MongoDB stored in UTC, adjust for ET
@@ -62,6 +63,7 @@ export class AdminController {
       status: PostStatus.PENDING_APPROVAL,
       ...(postType && { type: postType }),
       ...(userType && { authorType: userType }),
+      ...(priceRange && { priceRange: priceRange }),
       ...(categories && {
         "item.category": { $in: categories },
       }),
@@ -174,11 +176,76 @@ export class AdminController {
       return;
     }
 
-    await this.postService.approvePost(postId);
+    const post = await this.postService.approvePost(postId);
 
     log(`${req.user?.id} approved post ${postId}.`);
 
+    const { author } = post;
+    if (author?.email) {
+      const { displayName, email } = author;
+      log(`sending email to author ${email}`);
+
+      const body = `Dear ${displayName},
+
+      We are pleased to inform you that your recent post on our platform has been approved by our administrators. The restrictions previously placed on your post have now been removed, and it is open to the public.
+      We appreciate your contribution and look forward to seeing more engaging content from you.
+      If you have any questions or need further assistance, please don't hesitate to reach out to our support team.
+      Thank you for being an active member of our community.`;
+
+      this.resendService.send({
+        to: email,
+        subject: "Your post has been approved",
+        html: body,
+      });
+    } else {
+      log(`author/author's email not defined, skip sending email`);
+    }
+
     res.status(200).json({ message: `Successfully approved post ${postId}.` });
+  });
+
+  rejectPost = expressAsyncHandler(async (req, res, next) => {
+    await validatePostId({ req, optional: false });
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      res.status(400).json({ errors: errors.array({ onlyFirstError: true }) });
+      return;
+    }
+
+    const { postId } = req.body;
+    if (!postId) {
+      res
+        .status(400)
+        .json({ error: `Error rejecting post. Post ID must be specified.` });
+      return;
+    }
+
+    const post = await this.postService.rejectPost(postId);
+
+    log(`${req.user?.id} rejected post ${postId}.`);
+
+    const { author } = post;
+    if (author?.email) {
+      const { displayName, email } = author;
+      log(`sending email to author ${email}`);
+
+      const body = `Dear ${displayName},
+
+      Thank you for submitting your recent post on our platform. After careful review by our administrators, we regret to inform you that your post has not been approved for publication.
+      This decision was made to ensure the quality and relevance of content shared within our community. We encourage you to review our content guidelines and consider making adjustments to your post for resubmission.
+      If you have any questions or need further clarification on the decision, please feel free to reach out to our support team. We are here to assist you and provide any necessary guidance.
+      Thank you for your understanding and continued participation in our community.`;
+
+      this.resendService.send({
+        to: email,
+        subject: "Your post has been rejected",
+        html: body,
+      });
+    } else {
+      log(`author/author's email not defined, skip sending email`);
+    }
+
+    res.status(200).json({ message: `Successfully rejected post ${postId}.` });
   });
 
   verifyUser = expressAsyncHandler(async (req, res, next) => {

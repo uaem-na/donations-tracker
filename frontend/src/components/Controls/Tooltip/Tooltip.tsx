@@ -21,7 +21,9 @@ const TooltipComponent = ({
   return (
     <Tooltip.Provider delayDuration={delayDuration}>
       <Tooltip.Root>
-        <Tooltip.Trigger asChild={asChild}>{children}</Tooltip.Trigger>
+        <Tooltip.Trigger asChild={asChild} tabIndex={-1}>
+          {children}
+        </Tooltip.Trigger>
         <Tooltip.Portal>
           <Tooltip.Content
             side={side}

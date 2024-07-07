@@ -130,7 +130,8 @@ export namespace QueryArgs {
       Categories &
       PostStatus &
       Date &
-      Keyword;
+      Keyword &
+      PriceRange;
   }
 
   export type Pagination = {
