@@ -45,13 +45,18 @@ export class PostService {
     }
 
     const { priceRange, ...restFilters } = filter;
-    const posts = await PostModel.find({
-      "item.price": {
-        $gte: Number(priceRange[0]),
-        $lte: Number(priceRange[1]),
-      },
-      ...(restFilters && { ...restFilters }),
-    })
+
+    const query = {
+      ...(priceRange && {
+        "item.price": {
+          $gte: Number(priceRange[0]),
+          $lte: Number(priceRange[1]),
+        },
+      }),
+      ...restFilters,
+    };
+
+    const posts = await PostModel.find(query)
       .sort(sort)
       .skip((page - 1) * limit)
       .limit(limit)
