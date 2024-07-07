@@ -169,6 +169,10 @@
     "register": "Register"
   },
   "errors": {
-    "unknown_server_error": "An error occurred"
+    "unknown_server_error": "An error occurred",
+    "posts": {
+      "email_not_verified": "You need to verify your email first to create a post.",
+      "organization_not_verified": "As an organization, an administrator needs to verify your account to create a post."
+    }
   }
 }

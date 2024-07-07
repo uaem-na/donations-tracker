@@ -26,7 +26,6 @@ export class UserDto {
   location: UserLocationDto | undefined;
   starred: string[] | undefined;
   isEmailVerified: boolean;
-  verified: boolean | undefined;
   organization:
     | {
         name: string;
@@ -64,11 +63,9 @@ export class UserDto {
     this.lastName = lastName;
     this.role = role;
     this.active = user.active;
-    this.verified = true;
     this.isEmailVerified = user.isEmailVerified ?? false;
 
     if (role === UserRole.ORGANIZATION && "organization" in user) {
-      this.verified = user.organization.verified;
       this.organization = {
         name: user.organization.name,
         address: {

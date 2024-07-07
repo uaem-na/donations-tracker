@@ -168,6 +168,10 @@
     "register": "S'inscrire"
   },
   "errors": {
-    "unknown_server_error": "An error occurred"
+    "unknown_server_error": "An error occurred",
+    "posts": {
+      "email_not_verified": "Vous devez vérifier votre courriel d'abord pour créer une publication.",
+      "organization_not_verified": "En tant qu'organisation, un administrateur doit vérifier votre compte pour créer une publication."
+    }
   }
 }

@@ -47,7 +47,7 @@ export const RequireAuth = ({ children, role }: RequireAuthProps) => {
   if (
     (pathname === "/posts/request/new" || pathname === "/posts/offer/new") &&
     session.role.includes(UserRole.ORGANIZATION) &&
-    session.verified
+    !session.organization?.verified
   ) {
     return <Navigate to="/account/dashboard" />;
   }
