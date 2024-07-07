@@ -7,6 +7,7 @@
   "cancel": "Cancel",
   "submit": "Submit",
   "report": "Report",
+  "details": "Details",
   "activate": "Activate",
   "deactivate": "Deactivate",
   "loading": "Loading...",
@@ -14,12 +15,18 @@
   "select_a_tab": "Select a tab",
   "display_per_page": "Display per page",
   "search": "Search",
+  "search_posts": "Search posts...",
   "search_results": "Search results",
   "no_search_results": "No search results",
   "next": "Next",
   "previous": "Previous",
   "showing_results": "Showing <from>{{from}}</from> to <to>{{to}}</to> of <total>{{total}}</total> results",
   "all": "All",
+  "account": {
+    "dashboard": "Dashboard",
+    "general": "General",
+    "security": "Security"
+  },
   "auth": {
     "on_organization_register": "Thank you for registering as an organization. This is just to confirm that your registration was successful. Donations Tracker administrators will review your information to fully verify you as an organization user. Until then, you will not be allowed to make offers and requests. We aim to respond within 1-2 business days. We appreciate your understanding and commit to getting back to you as soon as possible."
   },
@@ -194,6 +201,13 @@
       "stationary": "Stationary",
       "toy": "Toy",
       "other": "Other"
+    },
+    "status": {
+      "open": "Open",
+      "pending_approval": "Pending approval",
+      "rejected": "Rejected",
+      "in_progress": "In progress",
+      "closed": "Closed"
     }
   },
   "reports": {
@@ -222,6 +236,15 @@
     "resolution": "Resolution",
     "confirmation": "Are you sure you want to mark this as resolved?",
     "my_reports": "My reports"
+  },
+  "sites": {
+    "home": "Home",
+    "about_us": "About us",
+    "posts": "Posts",
+    "faq": "FAQ",
+    "admin_users": "Users (Admin)",
+    "admin_posts": "Posts (Admin)",
+    "admin_reports": "Reports (Admin)"
   },
   "users": {
     "title": "Users",

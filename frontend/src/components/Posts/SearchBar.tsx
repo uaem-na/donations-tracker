@@ -1,8 +1,9 @@
-
-import React from "react";
 import { Input } from "@components/Controls";
+import React from "react";
+import { useTranslation } from "react-i18next";
 
-export const SearchBar = ({keyword, setKeyword }) => {
+export const SearchBar = ({ keyword, setKeyword }) => {
+  const { t } = useTranslation();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setKeyword(event.target.value);
@@ -12,11 +13,10 @@ export const SearchBar = ({keyword, setKeyword }) => {
     <div>
       <Input
         type="text"
-        placeholder="Search posts..."
+        placeholder={t("search_posts")}
         value={keyword}
         onChange={handleChange}
-      >
-      </Input>
+      ></Input>
     </div>
   );
 };

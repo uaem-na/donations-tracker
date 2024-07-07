@@ -26,16 +26,17 @@ interface NavListProps {
 }
 
 const NavList = ({ siteLinks, isUserAdmin = false }: NavListProps) => {
+  const { t } = useTranslation();
   return (
     <nav className="mt-4">
       <ul className="flex flex-col items-center space-y-1">
         {siteLinks
           .filter(({ menu, adminOnly }) => menu && (!adminOnly || isUserAdmin))
-          .map(({ name, path, icon }) => (
+          .map(({ name, path, icon, translationKey }) => (
             <NavItem
               key={name + generateRandomID()}
               to={path}
-              name={name}
+              name={t(translationKey)}
               icon={icon}
             />
           ))}

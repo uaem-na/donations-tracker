@@ -7,6 +7,7 @@
   "cancel": "Annuler",
   "submit": "Soumettre",
   "report": "Rapport",
+  "details": "Détails",
   "activate": "Activer",
   "deactivate": "Désactiver",
   "loading": "Chargement...",
@@ -14,12 +15,18 @@
   "select_a_tab": "Sélectionnez un onglet",
   "display_per_page": "Afficher par page",
   "search": "Rechercher",
+  "search_posts": "Rechercher des publications...",
   "search_results": "Résultats de la recherche",
   "no_search_results": "Aucun résultat de recherche",
   "next": "Suivant",
   "previous": "Précédent",
   "showing_results": "Affichage des résultats <from>{{from}}</from> à <to>{{to}}</to> de <total>{{total}}</total>",
   "all": "Tous",
+  "account": {
+    "dashboard": "Tableau de bord",
+    "general": "Général",
+    "security": "Sécurité"
+  },
   "auth": {
     "on_organization_register": "[TBD] Merci de votre inscription en tant qu'organisation. Votre inscription est confirmée. Les administrateurs de Donations Tracker examineront vos informations pour une vérification complète. En attendant, vous ne pourrez pas faire d'offres ni de demandes. Nous visons à répondre dans un délai de 1 à 2 jours ouvrables. Merci de votre compréhension, et nous nous engageons à vous répondre dès que possible."
   },
@@ -172,7 +179,7 @@
     "updated_at": "Mis à jour le {{date}}",
     "created_on": "Créé le {{date}}",
     "last_modified_on": "Dernière modification le {{date}}",
-    "my_posts": "Mes messages",
+    "my_posts": "Mes publications",
     "favorites": "Favoris",
     "star": "Étoile",
     "no_posts_found": "Aucun article trouvé",
@@ -194,6 +201,13 @@
       "stationary": "Papeterie",
       "toy": "Jouet",
       "other": "Autre"
+    },
+    "status": {
+      "open": "Ouvert",
+      "pending_approval": "En attente d'approbation",
+      "rejected": "Rejeté",
+      "in_progress": "En cours",
+      "closed": "Fermé"
     }
   },
   "reports": {
@@ -220,7 +234,17 @@
     "mark_as_resolved": "Marquer comme résolu",
     "no_reports_found": "Aucun rapport trouvé",
     "resolution": "Résolution",
-    "confirmation": "Êtes-vous sûr de vouloir marquer ce problème comme résolu ?"
+    "confirmation": "Êtes-vous sûr de vouloir marquer ce problème comme résolu ?",
+    "my_reports": "Mes rapports"
+  },
+  "sites": {
+    "home": "Accueil",
+    "about_us": "À propos de nous",
+    "posts": "Publications",
+    "faq": "FAQ",
+    "admin_users": "Utilisateurs (admin)",
+    "admin_posts": "Publications (admin)",
+    "admin_reports": "Rapports (admin)"
   },
   "users": {
     "title": "Utilisateurs",

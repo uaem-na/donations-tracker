@@ -29,8 +29,7 @@ import {
   useGetSessionQuery,
   useRejectPostAdminMutation,
 } from "@services/api";
-import { capitalizeFirstLetter } from "@utils";
-import { getStatusIndicator } from "@utils/GetStatusIndicator";
+import { TranslatedPostStatus } from "./TranslatedPostStatus";
 
 interface PostDetailsProps {
   id: string;
@@ -170,13 +169,12 @@ export const PostDetails = ({
         <h2 className="text-base font-semibold leading-6 text-gray-900">
           <Badge
             color={post.type === PostType.OFFER ? "purple" : "blue"}
-            text={capitalizeFirstLetter(post.type)}
+            text={t(`posts.${post.type}`)}
           />
           <span className="ml-2">{post.item.name}</span>{" "}
         </h2>
         <div className="flex items-center gap-2">
-          {getStatusIndicator(post.status)}
-          <span className="text-sm">{capitalizeFirstLetter(post.status)}</span>
+          <TranslatedPostStatus status={post.status} />
         </div>
       </div>
 

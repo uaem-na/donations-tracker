@@ -5,12 +5,14 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { NavItem } from "@pages/Account/components/NavLink";
 import { PropsWithChildren } from "react";
+import { useTranslation } from "react-i18next";
 
 interface IAccountLayoutProps {}
 
 export const AccountLayout = (
-  props: PropsWithChildren<IAccountLayoutProps>
+  props: PropsWithChildren<IAccountLayoutProps>,
 ) => {
+  const { t } = useTranslation();
   return (
     <div className="lg:flex lg:gap-x-16 lg:px-8">
       <aside className="flex overflow-x-auto px-0.5 border-b border-gray-900/5 py-4 lg:block lg:w-64 lg:flex-none lg:border-0 lg:py-20">
@@ -19,21 +21,21 @@ export const AccountLayout = (
             <li>
               <NavItem
                 to="/account/dashboard"
-                name="Dashboard"
+                name={t("account.dashboard")}
                 icon={faChartSimple}
               ></NavItem>
             </li>
             <li>
               <NavItem
                 to="/account/general"
-                name="General"
+                name={t("account.general")}
                 icon={faUser}
               ></NavItem>
             </li>
             <li>
               <NavItem
                 to="/account/security"
-                name="Security"
+                name={t("account.security")}
                 icon={faFingerprint}
               ></NavItem>
             </li>

@@ -7,21 +7,22 @@ import {
   DrawerTrigger,
 } from "@components/Drawer";
 import { PostDetails } from "@components/Posts/PostDetails";
+import { TranslatedPostStatus } from "@components/Posts/TranslatedPostStatus";
 import { PostType } from "@constants";
+import { useLandingContext } from "@contexts/LandingContext";
 import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ApiModel } from "@services/api";
-import { capitalizeFirstLetter } from "@utils";
-import { getStatusIndicator } from "@utils/GetStatusIndicator";
 import formatDistance from "date-fns/formatDistance";
 import { useEffect, useState } from "react";
-import { useLandingContext } from "@contexts/LandingContext";
+import { useTranslation } from "react-i18next";
 
 interface IPostsProp {
   posts: ApiModel.Post[];
 }
 
 export const Posts = ({ posts }: IPostsProp) => {
+  const { t } = useTranslation();
   const { locatePost } = useLandingContext();
   const postsPerPage = 10;
 
@@ -89,10 +90,10 @@ export const Posts = ({ posts }: IPostsProp) => {
                       <div className="mt-3 flex items-center gap-x-2.5 text-xs leading-5 text-gray-400">
                         <div className="truncate">
                           <div className="flex justify-center items-center">
-                            {getStatusIndicator(post.status)}
-                            <span className="ml-1">
-                              {capitalizeFirstLetter(post.status)}
-                            </span>
+                            <TranslatedPostStatus
+                              status={post.status}
+                              className="ml-1"
+                            />
                           </div>
                         </div>
                         &mdash;
@@ -104,7 +105,7 @@ export const Posts = ({ posts }: IPostsProp) => {
                     </div>
                     <Badge
                       color={post.type === PostType.OFFER ? "purple" : "blue"}
-                      text={capitalizeFirstLetter(post.type)}
+                      text={t(`posts.${post.type}`)}
                     />
                   </div>
                   <div className="flex justify-end gap-x-2 mb-1">
@@ -114,7 +115,7 @@ export const Posts = ({ posts }: IPostsProp) => {
                           type="button"
                           className="rounded bg-white px-2 py-1 text-xs font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 cursor-pointer"
                         >
-                          Details
+                          {t("details")}
                         </button>
                       </DrawerTrigger>
                       <DrawerContent size="medium">
