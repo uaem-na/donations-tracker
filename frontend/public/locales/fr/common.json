@@ -20,6 +20,9 @@
   "previous": "Précédent",
   "showing_results": "Affichage des résultats <from>{{from}}</from> à <to>{{to}}</to> de <total>{{total}}</total>",
   "all": "Tous",
+  "auth": {
+    "on_organization_register": "[TBD] Merci de votre inscription en tant qu'organisation. Votre inscription est confirmée. Les administrateurs de Donations Tracker examineront vos informations pour une vérification complète. En attendant, vous ne pourrez pas faire d'offres ni de demandes. Nous visons à répondre dans un délai de 1 à 2 jours ouvrables. Merci de votre compréhension, et nous nous engageons à vous répondre dès que possible."
+  },
   "posts": {
     "title": "Messages",
     "admin_guide": "Cliquez pour voir des guides plus détaillés sur la page des articles.",

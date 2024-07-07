@@ -13,11 +13,13 @@ import {
 } from "@services/api";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { registerOrganizationSchema } from "./schemas/RegisterOrganizationSchema";
 
 export const OrganizationRegistrationForm = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { data: currentSession, isLoading } = useGetSessionQuery();
   const [getSessionAfterRegister, { data: afterRegisterSession }] =
     useLazyGetSessionQuery();
@@ -48,7 +50,7 @@ export const OrganizationRegistrationForm = () => {
   useEffect(() => {
     if (isSuccess) {
       setServerMessage(
-        "Thank you for registering as an organization. This is just to confirm that your registration was successful. Donations Tracker administrators will review your information to fully verify you as an organization user. Until then, you will not be allowed to make offers and requests. We aim to respond within 1-2 business days. We appreciate your understanding and commit to getting back to you as soon as possible."
+        "Thank you for registering as an organization. This is just to confirm that your registration was successful. Donations Tracker administrators will review your information to fully verify you as an organization user. Until then, you will not be allowed to make offers and requests. We aim to respond within 1-2 business days. We appreciate your understanding and commit to getting back to you as soon as possible.",
       );
       getSessionAfterRegister();
     }
@@ -70,7 +72,13 @@ export const OrganizationRegistrationForm = () => {
 
   useEffect(() => {
     if (afterRegisterSession) {
-      navigate("/account/dashboard");
+      const state = {
+        message: t("auth.on_organization_register"),
+      };
+
+      navigate("/account/dashboard", {
+        state,
+      });
     }
   });
 

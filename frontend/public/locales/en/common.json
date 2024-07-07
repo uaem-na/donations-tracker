@@ -20,6 +20,9 @@
   "previous": "Previous",
   "showing_results": "Showing <from>{{from}}</from> to <to>{{to}}</to> of <total>{{total}}</total> results",
   "all": "All",
+  "auth": {
+    "on_organization_register": "Thank you for registering as an organization. This is just to confirm that your registration was successful. Donations Tracker administrators will review your information to fully verify you as an organization user. Until then, you will not be allowed to make offers and requests. We aim to respond within 1-2 business days. We appreciate your understanding and commit to getting back to you as soon as possible."
+  },
   "posts": {
     "title": "Posts",
     "admin_guide": "Click to see more detailed guides on posts page.",
