@@ -73,7 +73,7 @@ export namespace ApiModel {
     firstName: string;
     lastName: string;
     active: boolean;
-    starred: Post[];
+    starred: string[];
     isEmailVerified: boolean;
     location?: Location;
     organization?: UserOrganization;
