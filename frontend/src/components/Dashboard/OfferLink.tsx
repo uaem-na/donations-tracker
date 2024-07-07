@@ -1,4 +1,4 @@
-import formatDistance from "date-fns/formatDistance";
+import { TimeAgo } from "@components/TimeAgo";
 import { Link } from "react-router-dom";
 
 export const OfferLink = ({ id, postalCode, ppeProfiles, createdAt }) => {
@@ -7,7 +7,7 @@ export const OfferLink = ({ id, postalCode, ppeProfiles, createdAt }) => {
       <div className="inline-block px-3 font-semibold">
         <div className="p-6 w-64 h-80 max-w-xs overflow-hidden rounded-lg shadow-md bg-white hover:shadow-xl transition-shadow duration-300 ease-in-out">
           <h2 className="text-2xl text-gray-700 mb-2">
-            {formatDistance(new Date(createdAt), new Date())} ago
+            <TimeAgo date={new Date(createdAt)} />
           </h2>
           <h3 className="text-gray-700">Offered PPE:</h3>
           <div className="mb-2">

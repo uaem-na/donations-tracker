@@ -8,12 +8,12 @@ import {
 } from "@components/Drawer";
 import { PostDetails } from "@components/Posts/PostDetails";
 import { TranslatedPostStatus } from "@components/Posts/TranslatedPostStatus";
+import { TimeAgo } from "@components/TimeAgo";
 import { PostType } from "@constants";
 import { useLandingContext } from "@contexts/LandingContext";
 import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ApiModel } from "@services/api";
-import formatDistance from "date-fns/formatDistance";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -22,7 +22,7 @@ interface IPostsProp {
 }
 
 export const Posts = ({ posts }: IPostsProp) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { locatePost } = useLandingContext();
   const postsPerPage = 10;
 
@@ -98,8 +98,7 @@ export const Posts = ({ posts }: IPostsProp) => {
                         </div>
                         &mdash;
                         <p className="whitespace-nowrap">
-                          {formatDistance(new Date(post.createdAt), new Date())}{" "}
-                          ago
+                          <TimeAgo date={new Date(post.createdAt)} />
                         </p>
                       </div>
                     </div>
@@ -137,7 +136,7 @@ export const Posts = ({ posts }: IPostsProp) => {
                           onClick={() => locatePost(post)}
                         >
                           <FontAwesomeIcon icon={faLocationDot} />
-                          <span className="sr-only">Locate</span>
+                          <span className="sr-only">{t("landing.locate")}</span>
                         </button>
                       </Tooltip>
                     )}
@@ -153,12 +152,12 @@ export const Posts = ({ posts }: IPostsProp) => {
             <div className="flex flex-1 justify-between sm:justify-end gap-1.5">
               {currentPage === 1 ? null : (
                 <Button type="button" onClick={handlePrev} intent="secondary">
-                  Previous
+                  {t("previous")}
                 </Button>
               )}
               {currentPage === totalPages ? null : (
                 <Button type="button" onClick={handleNext} intent="secondary">
-                  Next
+                  {t("next")}
                 </Button>
               )}
             </div>
@@ -171,10 +170,10 @@ export const Posts = ({ posts }: IPostsProp) => {
             className="mx-auto h-12 w-12 text-red-600"
           />
           <h3 className="mt-2 text-sm font-semibold text-gray-900">
-            No offers or requests in view
+            {t("landing.no_posts_in_view")}
           </h3>
           <p className="mt-1 text-sm text-gray-500">
-            Get started by navigating around the map!
+            {t("landing.get_started_by_navigating")}
           </p>
         </div>
       )}

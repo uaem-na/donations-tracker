@@ -22,6 +22,11 @@
   "previous": "Previous",
   "showing_results": "Showing <from>{{from}}</from> to <to>{{to}}</to> of <total>{{total}}</total> results",
   "all": "All",
+  "landing": {
+    "no_posts_in_view": "No offers or requests in view",
+    "get_started_by_navigating": "Get started by navigating around the map!",
+    "locate": "Locate"
+  },
   "account": {
     "dashboard": "Dashboard",
     "general": "General",
