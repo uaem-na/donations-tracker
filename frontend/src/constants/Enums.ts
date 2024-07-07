@@ -13,3 +13,11 @@ export const UserDiscriminator = {
   ORGANIZATION: "OrganizationUser" as const,
   INDIVIDUAL: "IndividualUser" as const,
 };
+
+export const PostStatus = {
+  OPEN: "open" as const,
+  PENDING_APPROVAL: "pending-approval" as const,
+  REJECTED: "rejected" as const,
+  IN_PROGRESS: "in-progress" as const,
+  CLOSED: "closed" as const,
+};

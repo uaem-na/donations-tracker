@@ -72,27 +72,16 @@ export namespace ApiModel {
     displayName: string;
     firstName: string;
     lastName: string;
-    verified: boolean;
     active: boolean;
-    starred: Post[];
+    starred: string[];
+    isEmailVerified: boolean;
     location?: Location;
     organization?: UserOrganization;
   };
 }
 
 export namespace ApiResponse {
-  export type Session = {
-    id: string;
-    displayName: string;
-    username: string;
-    email: string;
-    role: string;
-    firstName: string;
-    lastName: string;
-    verified: boolean;
-    isEmailVerified: boolean;
-    starred: string[]; // post ids
-  };
+  export type Session = ApiModel.User;
 
   export type PaginatedList<T> = {
     data: T[];

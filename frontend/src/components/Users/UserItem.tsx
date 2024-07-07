@@ -1,24 +1,19 @@
 import { Badge } from "@components/Badge";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { ApiModel } from "@store/services/types";
 import { getStatusIndicator } from "@utils/GetStatusIndicator";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
 interface UserItemProps {
-  id: string;
-  displayName: string;
-  verified: boolean;
-  type: string;
+  user: ApiModel.User;
 }
 
-export const UserItem = ({
-  id,
-  displayName,
-  verified,
-  type,
-}: UserItemProps) => {
+export const UserItem = ({ user }: UserItemProps) => {
   const { t } = useTranslation();
+  const { id, displayName, role } = user;
+  const verified = user.organization?.verified ?? true;
 
   const getColorForBadge = (type: string) => {
     switch (type) {
@@ -40,8 +35,8 @@ export const UserItem = ({
               <Link to={`${id}`}>
                 <span className="absolute inset-0 -mx-4 -my-5"></span>
                 <Badge
-                  color={getColorForBadge(type)}
-                  text={t(`users.${type}`)}
+                  color={getColorForBadge(role)}
+                  text={t(`users.${role}`)}
                   width="w-24"
                 />
                 <span className="mx-2">{`${displayName}`}</span>

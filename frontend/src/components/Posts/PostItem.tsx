@@ -1,13 +1,14 @@
 import { Badge } from "@components/Badge";
+import { PostStatus, PostType } from "@constants";
 import { faChevronRight, faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { useGetSessionQuery, useStarPostMutation } from "@services/api";
-import { capitalizeFirstLetter } from "@utils";
 import { getStatusIndicator } from "@utils/GetStatusIndicator";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+import { TranslatedPostStatus } from "./TranslatedPostStatus";
 
 interface PostItemProps {
   id: string;
@@ -21,6 +22,33 @@ interface PostItemProps {
   updatedAt: string;
   type: string;
 }
+
+const renderPostStatus = (status: string) => {
+  const { t } = useTranslation();
+  let translated = "";
+  switch (status) {
+    case PostStatus.PENDING_APPROVAL:
+      translated = t("posts.status.pending_approval");
+      break;
+    case PostStatus.REJECTED:
+      translated = t("posts.status.rejected");
+      break;
+    case PostStatus.IN_PROGRESS:
+      translated = t("posts.status.in_progress");
+      break;
+    case PostStatus.CLOSED:
+      translated = t("posts.status.closed");
+      break;
+    default:
+      translated = t("posts.status.open");
+  }
+  return (
+    <>
+      {getStatusIndicator(status)}
+      <span className="text-sm">{translated}</span>
+    </>
+  );
+};
 
 export const PostItem = ({
   id,
@@ -99,7 +127,10 @@ export const PostItem = ({
               </Link>
             </p>
             <p className="mt-1 flex text-xs leading-5 text-gray-500">
-              CAD {price} • {quantity} {t("posts.available")}
+              CAD {price} • {quantity}{" "}
+              {type === PostType.OFFER
+                ? t("posts.available")
+                : t("posts.requested")}
             </p>
             <p className="mt-1 flex text-xs leading-5 text-gray-500">
               {displayName}
@@ -109,8 +140,7 @@ export const PostItem = ({
         <div className="flex items-center gap-x-4">
           <div className="hidden sm:flex sm:flex-col sm:items-end">
             <span className="flex items-center gap-2">
-              {getStatusIndicator(status)}
-              <span className="text-sm">{capitalizeFirstLetter(status)}</span>
+              <TranslatedPostStatus status={status} />
             </span>
             <p className="mt-1 text-xs leading-5 text-gray-500">
               {shouldDisplayCreatedAt()

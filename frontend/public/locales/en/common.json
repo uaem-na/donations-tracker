@@ -7,6 +7,7 @@
   "cancel": "Cancel",
   "submit": "Submit",
   "report": "Report",
+  "details": "Details",
   "activate": "Activate",
   "deactivate": "Deactivate",
   "loading": "Loading...",
@@ -14,12 +15,26 @@
   "select_a_tab": "Select a tab",
   "display_per_page": "Display per page",
   "search": "Search",
+  "search_posts": "Search posts...",
   "search_results": "Search results",
   "no_search_results": "No search results",
   "next": "Next",
   "previous": "Previous",
   "showing_results": "Showing <from>{{from}}</from> to <to>{{to}}</to> of <total>{{total}}</total> results",
   "all": "All",
+  "landing": {
+    "no_posts_in_view": "No offers or requests in view",
+    "get_started_by_navigating": "Get started by navigating around the map!",
+    "locate": "Locate"
+  },
+  "account": {
+    "dashboard": "Dashboard",
+    "general": "General",
+    "security": "Security"
+  },
+  "auth": {
+    "on_organization_register": "Thank you for registering as an organization. This is just to confirm that your registration was successful. Donations Tracker administrators will review your information to fully verify you as an organization user. Until then, you will not be allowed to make offers and requests. We aim to respond within 1-2 business days. We appreciate your understanding and commit to getting back to you as soon as possible."
+  },
   "about_us": {
     "title": "UAEM Chapter of McGill",
     "title_description": "is a global network of university students striving to increase access\nand affordability to life-saving medicines. Considering that\nuniversities are key stakeholders in the drug development\npipeline, students can promote equitable licensing practices by\nencouraging university policy changes. The UAEM chapter of McGill\nis one of the most active chapters in North America. Currently,\nthe chapter's main projects include Donations Trackers, as well as the <1/> <2>UAEM Canadian Report Card</2>, Open Science, and more.",
@@ -140,6 +155,7 @@
     ],
     "author": "Author",
     "available": "Available",
+    "requested": "Requested",
     "type": "Type",
     "offer": "Offer",
     "offers": "Offers",
@@ -190,6 +206,13 @@
       "stationary": "Stationary",
       "toy": "Toy",
       "other": "Other"
+    },
+    "status": {
+      "open": "Open",
+      "pending_approval": "Pending approval",
+      "rejected": "Rejected",
+      "in_progress": "In progress",
+      "closed": "Closed"
     }
   },
   "reports": {
@@ -218,6 +241,15 @@
     "resolution": "Resolution",
     "confirmation": "Are you sure you want to mark this as resolved?",
     "my_reports": "My reports"
+  },
+  "sites": {
+    "home": "Home",
+    "about_us": "About us",
+    "posts": "Posts",
+    "faq": "FAQ",
+    "admin_users": "Users (Admin)",
+    "admin_posts": "Posts (Admin)",
+    "admin_reports": "Reports (Admin)"
   },
   "users": {
     "title": "Users",
@@ -313,6 +345,10 @@
   },
   "errors": {
     "unknown_server_error": "An error occurred",
-    "missing_post_id": "Error: Unable to delete the post. The post ID is missing. Please try again."
+    "missing_post_id": "Error: Unable to delete the post. The post ID is missing. Please try again.",
+    "posts": {
+      "email_not_verified": "You need to verify your email first to create a post.",
+      "organization_not_verified": "As an organization, an administrator needs to verify your account to create a post."
+    }
   }
 }

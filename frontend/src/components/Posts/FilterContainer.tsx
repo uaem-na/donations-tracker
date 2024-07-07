@@ -190,27 +190,33 @@ export const FilterContainer = ({
         </h3>
         <div className={classMerge("pt-6 px-3", expanded ? "block" : "hidden")}>
           <div className="space-y-4">
-            {optionsWithAll.map((option, index) => {
+            {optionsWithAll.map((option) => {
+              const showOption = showFilterForIndividual(option.value);
+
               return (
-                <div key={option.value} className="flex items-center ">
-                  <input
-                    id={`${name}-${option.value}`}
-                    name={`${name}[]`}
-                    value={option.value}
-                    type="checkbox"
-                    className="h-4 w-4 rounded border-gray-300 text-purple-800 focus:ring-purple-700"
-                    onChange={(e) => handleChange(e.target.value)}
-                    checked={
-                      !!(selected as Option[]).find(matchByValue(option.value))
-                    }
-                  />
-                  <label
-                    htmlFor={`${name}-${option.value}`}
-                    className="ml-3 text-sm text-gray-600"
-                  >
-                    {option.label}
-                  </label>
-                </div>
+                showOption && (
+                  <div key={option.value} className="flex items-center">
+                    <input
+                      id={`${name}-${option.value}`}
+                      name={`${name}[]`}
+                      value={option.value}
+                      type="checkbox"
+                      className="h-4 w-4 rounded border-gray-300 text-purple-800 focus:ring-purple-700"
+                      onChange={(e) => handleChange(e.target.value)}
+                      checked={
+                        !!(selected as Option[]).find(
+                          matchByValue(option.value),
+                        )
+                      }
+                    />
+                    <label
+                      htmlFor={`${name}-${option.value}`}
+                      className="ml-3 text-sm text-gray-600"
+                    >
+                      {option.label}
+                    </label>
+                  </div>
+                )
               );
             })}
           </div>

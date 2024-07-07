@@ -9,7 +9,7 @@ const typeColorMapping: Record<statusType, string> = {
 
 export const MapPin = (type: string) => {
   const markerSvgString = encodeURIComponent(
-    renderToStaticMarkup(<PinSvg type={type} />)
+    renderToStaticMarkup(<PinSvg type={type} />),
   );
 
   const markerPinUrl = `data:image/svg+xml,${markerSvgString}`;

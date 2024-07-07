@@ -27,8 +27,7 @@ export const AdminPostDetailsPage = () => {
     return;
   }
 
-  const { data: postData, error: postError } = useGetPostQuery({postId: id});
-
+  const { data: postData, error: postError } = useGetPostQuery({ postId: id });
 
   const handleError = (err) => {
     if (err.status === 404) {
@@ -50,9 +49,8 @@ export const AdminPostDetailsPage = () => {
   // const handleRejectClick = () => {
   //   if (postData && postData.item.category === "Other") {
   //     rejectPostApi({ postId: id });
-  //   } 
+  //   }
   // };
-
 
   return (
     <div className="container mx-auto">
@@ -75,7 +73,7 @@ export const AdminPostDetailsPage = () => {
           Reject
         </Button>
       </div> */}
-</div>
+    </div>
   );
 };
 
