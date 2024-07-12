@@ -104,12 +104,11 @@ export class PostController {
 
   // this API is called on landing page
   getAllPosts = expressAsyncHandler(async (req, res, next) => {
-    // TODO: #107 add filter author.active === false
     const posts = await this.postService.getPosts({
       status: PostStatus.OPEN,
     });
 
-    const postDtos = posts.map((post) => PostDto.fromDocument(post));
+    const postDtos = posts.map((post) => PostDto.fromAggregate(post));
 
     const response: OptionallyPaginatedListResponse<PostDto> = {
       data: postDtos || [],

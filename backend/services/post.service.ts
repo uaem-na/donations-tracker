@@ -1,4 +1,4 @@
-import { FilterQuery, SortOrder } from "mongoose";
+import { FilterQuery, PipelineStage, SortOrder } from "mongoose";
 
 import {
   BilingualPostCategory,
@@ -66,12 +66,34 @@ export class PostService {
   }
 
   async getPosts(filter?: FilterQuery<PostDocument>): Promise<PostDocument[]> {
-    const posts = await PostModel.find({
-      ...(filter && { ...filter }),
-    })
-      .sort({ updatedAt: -1, createdAt: -1 })
-      .populate("author", "displayName -__t");
+    const pipeline: PipelineStage[] = [
+      {
+        $lookup: {
+          from: "users",
+          localField: "author",
+          foreignField: "_id",
+          pipeline: [{ $match: { active: true } }],
+          as: "activeUsers",
+        },
+      },
+      {
+        $unwind: {
+          path: "$activeUsers",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $match: {
+          ...(filter && { ...filter }),
+        },
+      },
+      { $unset: "activeUsers" },
+      { $sort: { updatedAt: -1, createdAt: -1 } },
+    ];
 
+    const posts = await PostModel.aggregate<PostDocument>(pipeline);
+
+    // make sure posts is returning an array of documents
     return posts || [];
   }
 
