@@ -7,6 +7,7 @@ declare global {
       id: string;
       email: string;
       username: string;
+      active: boolean;
     }
   }
 }

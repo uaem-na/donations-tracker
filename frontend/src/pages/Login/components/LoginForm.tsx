@@ -6,6 +6,7 @@ import {
   useLazyGetSessionQuery,
   useLoginMutation,
 } from "@services/api";
+import { getErrorMessage } from "@utils/GetErrorMessage";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -48,12 +49,8 @@ export const LoginForm = () => {
   useEffect(() => {
     if (error) {
       setShowResetPassword(true);
-      if ("status" in error) {
-        const err: any = "error" in error ? error.error : error.data;
-        setServerMessage(err.errors.join(",") ?? "An error occurred");
-      } else {
-        setServerMessage(error.message ?? "An error occurred");
-      }
+      const message = getErrorMessage(error);
+      setServerMessage(message);
     } else {
       setShowResetPassword(false);
     }

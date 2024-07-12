@@ -25,7 +25,6 @@ const validateDisplayNameFormat = (val: string) => {
   return /^[0-9a-zA-ZÀ-ÖØ-öø-ÿ-_.]+$/.test(val);
 };
 
-// ! TODO: reset password mechanism
 const UserSchema: Schema<UserDocument & PassportLocalDocument> = new Schema({
   email: {
     type: String,

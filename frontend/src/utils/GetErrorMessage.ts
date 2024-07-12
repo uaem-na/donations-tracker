@@ -1,5 +1,6 @@
 import { SerializedError } from "@reduxjs/toolkit";
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
+import i18n from "i18next";
 
 type ErrorWithMessage = {
   message: string;
@@ -20,20 +21,26 @@ const hasErrors = (errorData: unknown): errorData is ErrorWithErrors => {
 export const getErrorMessage = (
   error: FetchBaseQueryError | SerializedError,
 ) => {
+  const defaultErrorMessage = i18n.t("errors.unknown_server_error");
   if (!("status" in error)) {
-    return (
-      error.message ??
-      "An unknown error occurred. Please contact the administrator."
-    );
+    return error.message ?? defaultErrorMessage;
   }
 
+  let message = "";
   if (hasMessage(error.data)) {
-    return error.data.message;
+    message = i18n.exists(error.data.message)
+      ? i18n.t(error.data.message)
+      : error.data.message;
   }
 
-  if (hasErrors(error.data)) {
-    return error.data.errors.join(", ");
+  if (hasErrors(error.data) && error.data.errors.length > 0) {
+    const translatedErrors = error.data.errors.map((err) =>
+      i18n.exists(err) ? i18n.t(err) : err,
+    );
+
+    // TODO: if message should be included as part of the error message update here
+    message = translatedErrors.join(", ");
   }
 
-  return "An unknown error occurred. Please contact the administrator.";
+  return message || defaultErrorMessage;
 };

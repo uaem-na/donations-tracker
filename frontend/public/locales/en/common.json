@@ -344,7 +344,8 @@
     "register": "Register"
   },
   "errors": {
-    "unknown_server_error": "An error occurred",
+    "inactive_user": "Your account has been deactivated. Please contact UAEM support for reactivation.",
+    "unknown_server_error": "An unknown error occurred. Please contact UAEM support.",
     "missing_post_id": "Error: Unable to delete the post. The post ID is missing. Please try again.",
     "posts": {
       "email_not_verified": "You need to verify your email first to create a post.",
