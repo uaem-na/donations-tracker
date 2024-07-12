@@ -295,19 +295,63 @@ export class AdminController {
     }
 
     const user = await this.userService.toggleActive(userId, reason);
+    let emailSubject = "";
+    let emailContent = "";
+    if (!user.active) {
+      emailSubject =
+        "Votre compte a été désactive | Your account has been deactivated";
+      emailContent = `
+      <div>
+        <p>English content follows French</p>
+        <p>
+          Cher/Chère ${user.displayName},<br /><br />
+          Nous regrettons de vous informer que votre compte a été désactivé. Si vous avez des questions ou besoin d'assistance supplémentaire, veuillez contacter notre équipe de support.<br /><br />
+          <strong>Raison de la désactivation :</strong> ${reason}<br /><br />
+          Merci de votre compréhension.<br /><br />
+          Cordialement,<br />
+          UAEM McGill Chapter
+        </p>
+        <hr />
+        <p>
+          Dear ${user.displayName},<br /><br />
+          We regret to inform you that your account has been deactivated. If you have any questions or need further assistance, please contact our support team.<br /><br />
+          <strong>Reason for deactivation:</strong> ${reason}<br /><br />
+          Thank you for your understanding.<br /><br />
+          Best regards,<br />
+          UAEM McGill Chapter
+        </p>
+      </div>
+    `;
+    } else {
+      emailSubject =
+        "Votre compte a été réactivé | Your account has been reactivated";
+      emailContent = `
+      <div>
+        <p>English content follows French</p>
+        <p>
+          Cher/Chère ${user.displayName},<br /><br />
+          Nous sommes heureux de vous informer que votre compte a été réactivé. Vous pouvez maintenant accéder à votre compte et utiliser nos services comme d'habitude. Si vous avez des questions ou besoin d'assistance supplémentaire, veuillez contacter notre équipe de support.<br /><br />
+          Merci pour votre patience et votre compréhension.<br /><br />
+          Cordialement,<br />
+          UAEM McGill Chapter
+        </p>
+        <hr />
+        <p>
+          Dear ${user.displayName},<br /><br />
+          We are pleased to inform you that your account has been reactivated. You can now access your account and use our services as usual. If you have any questions or need further assistance, please contact our support team.<br /><br />
+          Thank you for your patience and understanding.<br /><br />
+          Best regards,<br />a
+          UAEM McGill Chapter
+        </p>
+      </div>
+    `;
+    }
 
-    // TODO: #107 send email to the user that their account has been deactivated; content TBD
-
-    // log(`${req.user?.id} toggled active for user ${userId} to ${user.active}.`);
-
-    // const toggledPosts = await this.postService.setPostStatus(
-    //   userId,
-    //   user.active ? PostStatus.OPEN : PostStatus.CLOSED,
-    // );
-
-    // log(
-    //   `Toggled ${toggledPosts} posts to ${user.active ? PostStatus.OPEN : PostStatus.CLOSED}.`,
-    // );
+    this.resendService.send({
+      to: user.email,
+      subject: emailSubject,
+      html: emailContent,
+    });
 
     res.status(200).json({
       message: `Successfully set user ${userId} active status to ${user.active}.`,
