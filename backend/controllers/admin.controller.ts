@@ -19,6 +19,7 @@ import {
   validatePaginationRequest,
   validatePostId,
   validatePostsFilterRequest,
+  validateUserDeactivationReason,
   validateUserId,
   validateUsersFilterRequest,
 } from "./validators";
@@ -272,9 +273,12 @@ export class AdminController {
     res.status(200).json({ message: `Successfully verified user ${userId}.` });
   });
 
-  // TODO: #107 collect reason in the payload and save it to user.activeStatusChangeReason
   toggleUserActive = expressAsyncHandler(async (req, res, next) => {
     await validateUserId({ key: "userId", req, optional: false });
+    await validateUserDeactivationReason({
+      req,
+      optional: true,
+    });
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -282,7 +286,7 @@ export class AdminController {
       return;
     }
 
-    const { userId } = req.body;
+    const { userId, reason } = req.body;
     if (!userId) {
       res
         .status(400)
@@ -290,7 +294,7 @@ export class AdminController {
       return;
     }
 
-    const user = await this.userService.toggleActive(userId);
+    const user = await this.userService.toggleActive(userId, reason);
 
     // TODO: #107 send email to the user that their account has been deactivated; content TBD
 

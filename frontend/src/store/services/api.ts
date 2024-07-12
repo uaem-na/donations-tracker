@@ -305,10 +305,10 @@ export const api = createApi({
       ApiModel.User,
       MutationArgs.Users.ToggleUserActive
     >({
-      query: ({ userId }) => ({
+      query: ({ userId, reason }) => ({
         url: `admin/users/${userId}/active`,
         method: "PUT",
-        body: { userId },
+        body: { userId, reason },
       }),
       invalidatesTags: (result, error, { userId }) => [
         { type: "users", id: userId },

@@ -22,13 +22,7 @@ router.post(
   "/verify",
   ensureAuthenticated,
   ensureAdmin,
-  userController.verifyUser
-);
-router.put(
-  "/:id/active",
-  ensureAuthenticated,
-  ensureAdmin,
-  userController.setActive
+  userController.verifyUser,
 );
 
 export default router;

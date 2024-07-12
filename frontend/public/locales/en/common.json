@@ -291,6 +291,8 @@
     "activate_confirm_title": "Are you sure you want to activate?",
     "deactivate": "Deactivate",
     "deactivate_confirm_title": "Are you sure you want to deactivate?",
+    "reason_for_deactivation": "Reason for deactivation",
+    "reason_for_reactivation": "Reason for reactivation",
     "display_name": "Display name",
     "username": "Username"
   },

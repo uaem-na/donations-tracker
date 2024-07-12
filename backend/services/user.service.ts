@@ -105,10 +105,17 @@ export class UserService {
     return await user.save();
   }
 
-  async toggleActive(id: string): Promise<UserDocument> {
+  async toggleActive(id: string, reason: string): Promise<UserDocument> {
     const user = await UserModel.findOneAndUpdate(
       { _id: id },
-      [{ $set: { active: { $eq: [false, "$active"] } } }],
+      [
+        {
+          $set: {
+            active: { $eq: [false, "$active"] },
+            activeStatusChangeReason: reason,
+          },
+        },
+      ],
       { new: true },
     );
 

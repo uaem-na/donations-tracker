@@ -73,6 +73,7 @@ export namespace ApiModel {
     firstName: string;
     lastName: string;
     active: boolean;
+    activeStatusChangeReason: string;
     starred: string[];
     isEmailVerified: boolean;
     location?: Location;
@@ -257,6 +258,7 @@ export namespace MutationArgs {
   export namespace Users {
     export type ToggleUserActive = {
       userId: string;
+      reason: string;
     };
 
     export type VerifyUser = {
