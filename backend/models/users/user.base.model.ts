@@ -110,6 +110,7 @@ UserSchema.methods.isOrganization = function (): boolean {
 // salt and hash added by passport-local-mongoose
 UserSchema.plugin(passportLocalMongoose, {
   usernameLowerCase: true,
+  usernameCaseInsensitive: true,
   limitAttempts: true,
   maxAttempts: 10,
   unlockInterval: 10 * 60 * 1000, // 10 minutes

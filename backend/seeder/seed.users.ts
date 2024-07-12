@@ -10,7 +10,7 @@ import { UserDocument } from "../types.js";
 
 export const fakeAdminUser = async (
   username: string,
-  password: string
+  password: string,
 ): Promise<UserDocument> => {
   const user = new AdminUserModel({
     lastName: faker.person.lastName(),
@@ -21,7 +21,7 @@ export const fakeAdminUser = async (
     location: {
       lat: faker.location.latitude(),
       lng: faker.location.longitude(),
-      postalCode: faker.location.zipCode().replace(/ /g,''),
+      postalCode: faker.location.zipCode().replace(/ /g, ""),
     },
     role: UserRole.ADMIN,
   });
@@ -33,7 +33,7 @@ export const fakeAdminUser = async (
 
 export const fakeOrganizationUser = async (
   username: string,
-  password: string
+  password: string,
 ): Promise<UserDocument> => {
   const user = new OrganizationUserModel({
     lastName: faker.person.lastName(),
@@ -44,7 +44,7 @@ export const fakeOrganizationUser = async (
     location: {
       lat: faker.location.latitude(),
       lng: faker.location.longitude(),
-      postalCode: faker.location.zipCode().replace(/ /g,''), // * note postalCodes won't match
+      postalCode: faker.location.zipCode().replace(/ /g, ""), // * note postalCodes won't match
     },
     organization: {
       name: faker.company.name(),
@@ -53,7 +53,7 @@ export const fakeOrganizationUser = async (
         city: faker.location.city(),
         province: faker.location.state(), // * note that province & its code won't match
         provinceCode: faker.location.state({ abbreviated: true }),
-        postalCode: faker.location.zipCode().replace(/ /g,''),
+        postalCode: faker.location.zipCode().replace(/ /g, ""),
       },
       phone: faker.phone.number(),
       type: faker.word.noun(),
@@ -68,7 +68,7 @@ export const fakeOrganizationUser = async (
 
 export const fakeIndividualUser = async (
   username: string,
-  password: string
+  password: string,
 ): Promise<UserDocument> => {
   const user = new IndividualUserModel({
     lastName: faker.person.lastName(),
@@ -79,7 +79,7 @@ export const fakeIndividualUser = async (
     location: {
       lat: faker.location.latitude(),
       lng: faker.location.longitude(),
-      postalCode: faker.location.zipCode().replace(/ /g,''),
+      postalCode: faker.location.zipCode().replace(/ /g, ""),
     },
     role: UserRole.INDIVIDUAL,
   });
@@ -91,7 +91,7 @@ export const fakeIndividualUser = async (
 
 export const seedUsers = async (
   destroy: boolean,
-  count: number
+  count: number,
 ): Promise<UserDocument[]> => {
   if (destroy) {
     console.log("🚀 ~ file: seed.users.ts ~ seedUsers ~ destroy:", destroy);
@@ -109,7 +109,7 @@ export const seedUsers = async (
     for (let i = 0; i < count; i++) {
       const username = i === 0 ? "admin" : `admin${i}`;
 
-      const user = await fakeAdminUser(username, defaultPassword);
+      const user = await fakeAdminUser(username.toLowerCase(), defaultPassword);
 
       users.push(user);
     }
@@ -117,8 +117,8 @@ export const seedUsers = async (
     // create random individual users (default)
     for (let i = 0; i < count; i++) {
       const user = await fakeIndividualUser(
-        faker.internet.userName(),
-        defaultPassword
+        faker.internet.userName().toLowerCase(),
+        defaultPassword,
       );
 
       users.push(user);
@@ -127,8 +127,8 @@ export const seedUsers = async (
     // create random organization users
     for (let i = 0; i < count; i++) {
       const user = await fakeOrganizationUser(
-        faker.internet.userName(),
-        defaultPassword
+        faker.internet.userName().toLowerCase(),
+        defaultPassword,
       );
 
       users.push(user);
