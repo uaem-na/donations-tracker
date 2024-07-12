@@ -1,4 +1,4 @@
-import formatDistance from "date-fns/formatDistance";
+import { TimeAgo } from "@components/TimeAgo";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -30,7 +30,7 @@ export const RequestLink = ({
             {statuses[statusID]}
           </h2>
           <h2 className="text-lg text-gray-700 mb-2">
-            {formatDistance(new Date(createdAt), new Date())} ago
+            <TimeAgo date={new Date(createdAt)} />
           </h2>
           <h3 className="text-gray-700">Requested PPE:</h3>
           <div className="mb-2">

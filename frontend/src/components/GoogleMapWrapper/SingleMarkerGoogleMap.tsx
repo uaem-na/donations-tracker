@@ -30,7 +30,7 @@ export const SingleMarkerGoogleMap = ({
           return <GoogleMap zoom={8} center={center} post={post} />;
       }
     },
-    [post]
+    [post],
   );
 
   return (
@@ -78,7 +78,7 @@ const GoogleMap = ({
             lat: post.location?.lat ?? center.lat,
             lng: post.location?.lng ?? center.lng,
           },
-        })
+        }),
       );
     }
   }, [post]);
@@ -98,11 +98,11 @@ const GoogleMap = ({
     (
       { lat, lng }: google.maps.LatLngLiteral,
       postId: string,
-      postType: string
+      postType: string,
     ): google.maps.marker.AdvancedMarkerElement => {
       if (!MarkerUtils.isAdvancedMarkerAvailable(map)) {
         throw new Error(
-          "AdvancedMarkerElement is not available, make sure to set Map ID"
+          "AdvancedMarkerElement is not available, make sure to set Map ID",
         );
       }
       const div = document.createElement("div");
@@ -117,7 +117,7 @@ const GoogleMap = ({
       marker["data"] = postId;
       return marker;
     },
-    [map]
+    [map],
   );
 
   return (

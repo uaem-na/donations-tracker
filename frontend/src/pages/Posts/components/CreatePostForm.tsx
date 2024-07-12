@@ -190,7 +190,7 @@ export const CreatePostForm = ({ type }: CreatePostFormProps) => {
             </div>
           </div>
           <div>
-            <Label htmlFor="category">
+            <Label htmlFor="postalCode">
               {t("posts.postal_code")}
               <Tooltip asChild message={t("posts.postal_code_tooltip")}>
                 <FontAwesomeIcon

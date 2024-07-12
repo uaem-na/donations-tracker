@@ -7,22 +7,23 @@ import {
   DrawerTrigger,
 } from "@components/Drawer";
 import { PostDetails } from "@components/Posts/PostDetails";
+import { TranslatedPostStatus } from "@components/Posts/TranslatedPostStatus";
+import { TimeAgo } from "@components/TimeAgo";
 import { PostType } from "@constants";
+import { useLandingContext } from "@contexts/LandingContext";
 import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ApiModel } from "@services/api";
-import { capitalizeFirstLetter } from "@utils";
-import { getStatusIndicator } from "@utils/GetStatusIndicator";
-import formatDistance from "date-fns/formatDistance";
 import { useEffect, useState } from "react";
-import { useLandingContext } from "@contexts/LandingContext"
+import { useTranslation } from "react-i18next";
 
 interface IPostsProp {
   posts: ApiModel.Post[];
 }
 
 export const Posts = ({ posts }: IPostsProp) => {
-  const {locatePost} = useLandingContext()
+  const { t, i18n } = useTranslation();
+  const { locatePost } = useLandingContext();
   const postsPerPage = 10;
 
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -89,22 +90,21 @@ export const Posts = ({ posts }: IPostsProp) => {
                       <div className="mt-3 flex items-center gap-x-2.5 text-xs leading-5 text-gray-400">
                         <div className="truncate">
                           <div className="flex justify-center items-center">
-                            {getStatusIndicator(post.status)}
-                            <span className="ml-1">
-                              {capitalizeFirstLetter(post.status)}
-                            </span>
+                            <TranslatedPostStatus
+                              status={post.status}
+                              className="ml-1"
+                            />
                           </div>
                         </div>
                         &mdash;
                         <p className="whitespace-nowrap">
-                          {formatDistance(new Date(post.createdAt), new Date())}{" "}
-                          ago
+                          <TimeAgo date={new Date(post.createdAt)} />
                         </p>
                       </div>
                     </div>
                     <Badge
                       color={post.type === PostType.OFFER ? "purple" : "blue"}
-                      text={capitalizeFirstLetter(post.type)}
+                      text={t(`posts.${post.type}`)}
                     />
                   </div>
                   <div className="flex justify-end gap-x-2 mb-1">
@@ -114,7 +114,7 @@ export const Posts = ({ posts }: IPostsProp) => {
                           type="button"
                           className="rounded bg-white px-2 py-1 text-xs font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 cursor-pointer"
                         >
-                          Details
+                          {t("details")}
                         </button>
                       </DrawerTrigger>
                       <DrawerContent size="medium">
@@ -136,7 +136,7 @@ export const Posts = ({ posts }: IPostsProp) => {
                           onClick={() => locatePost(post)}
                         >
                           <FontAwesomeIcon icon={faLocationDot} />
-                          <span className="sr-only">Locate</span>
+                          <span className="sr-only">{t("landing.locate")}</span>
                         </button>
                       </Tooltip>
                     )}
@@ -152,12 +152,12 @@ export const Posts = ({ posts }: IPostsProp) => {
             <div className="flex flex-1 justify-between sm:justify-end gap-1.5">
               {currentPage === 1 ? null : (
                 <Button type="button" onClick={handlePrev} intent="secondary">
-                  Previous
+                  {t("previous")}
                 </Button>
               )}
               {currentPage === totalPages ? null : (
                 <Button type="button" onClick={handleNext} intent="secondary">
-                  Next
+                  {t("next")}
                 </Button>
               )}
             </div>
@@ -170,10 +170,10 @@ export const Posts = ({ posts }: IPostsProp) => {
             className="mx-auto h-12 w-12 text-red-600"
           />
           <h3 className="mt-2 text-sm font-semibold text-gray-900">
-            No offers or requests in view
+            {t("landing.no_posts_in_view")}
           </h3>
           <p className="mt-1 text-sm text-gray-500">
-            Get started by navigating around the map!
+            {t("landing.get_started_by_navigating")}
           </p>
         </div>
       )}

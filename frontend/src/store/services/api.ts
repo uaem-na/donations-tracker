@@ -92,7 +92,7 @@ export const api = createApi({
         },
       }),
       transformResponse: (
-        response: ApiResponse.PaginatedList<ApiModel.Post>
+        response: ApiResponse.PaginatedList<ApiModel.Post>,
       ): ApiResponse.PaginatedList<ApiModel.Post> => {
         const posts = response.data;
         response.data = posts?.map((post) => ({
@@ -123,7 +123,7 @@ export const api = createApi({
         params: { ...args },
       }),
       transformResponse: (
-        response: ApiResponse.PaginatedList<ApiModel.Post>
+        response: ApiResponse.PaginatedList<ApiModel.Post>,
       ): ApiResponse.PaginatedList<ApiModel.Post> => {
         const posts = response.data;
         response.data = posts.map((post) => ({
@@ -154,7 +154,7 @@ export const api = createApi({
         params: { ...args },
       }),
       transformResponse: (
-        response: ApiResponse.PaginatedList<ApiModel.Post>
+        response: ApiResponse.PaginatedList<ApiModel.Post>,
       ): ApiResponse.PaginatedList<ApiModel.Post> => {
         const posts = response.data;
         response.data = posts.map((post) => ({
@@ -188,7 +188,7 @@ export const api = createApi({
         method: "GET",
       }),
       transformResponse: (
-        response: ApiResponse.PaginatedList<ApiModel.Post>
+        response: ApiResponse.PaginatedList<ApiModel.Post>,
       ): ApiResponse.PaginatedList<ApiModel.Post> => {
         const posts = response.data;
         response.data = posts.map((post) => ({
@@ -218,7 +218,10 @@ export const api = createApi({
       query: ({ postId }) => `/posts/${postId}`,
       providesTags: (result, error, arg) => [{ type: "posts", id: arg.postId }],
     }),
-    createPost: builder.mutation<ApiResponse.MessageResponse, QueryArgs.Posts.CreatePost>({
+    createPost: builder.mutation<
+      ApiResponse.MessageResponse,
+      QueryArgs.Posts.CreatePost
+    >({
       query: (post) => ({
         url: "posts",
         method: "POST",
@@ -321,7 +324,7 @@ export const api = createApi({
         params: { ...args },
       }),
       transformResponse: (
-        response: ApiResponse.PaginatedList<ApiModel.Post>
+        response: ApiResponse.PaginatedList<ApiModel.Post>,
       ): ApiResponse.PaginatedList<ApiModel.Post> => {
         const posts = response.data;
         response.data = posts.map((post) => ({

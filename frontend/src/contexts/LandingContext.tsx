@@ -15,7 +15,9 @@ export const LandingProvider = ({ children }) => {
   const [postToLocate, locatePost] = useState<ApiModel.Post | null>(null);
 
   return (
-    <LandingContext.Provider value={{ visiblePosts, setVisiblePosts, postToLocate, locatePost }}>
+    <LandingContext.Provider
+      value={{ visiblePosts, setVisiblePosts, postToLocate, locatePost }}
+    >
       {children}
     </LandingContext.Provider>
   );

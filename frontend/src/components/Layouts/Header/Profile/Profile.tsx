@@ -1,4 +1,5 @@
 import { Avatar } from "@components";
+import { useToast } from "@components/Toast";
 import { UserRole } from "@constants";
 import { faHandshake, faUser } from "@fortawesome/free-regular-svg-icons";
 import {
@@ -8,6 +9,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { useGetSessionQuery, useLogoutMutation } from "@services/api";
+import { classMerge } from "@utils";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -17,6 +19,13 @@ const ProfileMenu = () => {
   const [logout] = useLogoutMutation();
   const navigate = useNavigate();
   const { t } = useTranslation(["common"]);
+  const toast = useToast();
+
+  const disableMakingPosts =
+    !user?.isEmailVerified ||
+    (user?.role === UserRole.ORGANIZATION && !user?.organization?.verified);
+  const allowMakingRequest =
+    user?.role === UserRole.ORGANIZATION || user?.role === UserRole.ADMIN;
 
   return (
     <>
@@ -53,9 +62,30 @@ const ProfileMenu = () => {
               <DropdownMenu.Group>
                 <DropdownMenu.Item
                   onSelect={() => {
-                    navigate("/posts/offer/new");
+                    if (!user.isEmailVerified) {
+                      toast.open({
+                        content: t("errors.posts.email_not_verified"),
+                        type: "error",
+                      });
+                    } else if (
+                      user.role === UserRole.ORGANIZATION &&
+                      !user.organization?.verified
+                    ) {
+                      toast.open({
+                        content: t("errors.posts.organization_not_verified"),
+                        type: "error",
+                      });
+                    } else {
+                      navigate("/posts/offer/new");
+                    }
                   }}
-                  className="block px-3 py-1 text-sm leading-6 font-light text-gray-900 cursor-pointer hover:bg-gray-50"
+                  className={classMerge(
+                    "block px-3 py-1 text-sm leading-6 font-light text-gray-900 cursor-pointer hover:bg-gray-50",
+                    {
+                      "text-gray-700 cursor-not-allowed opacity-50":
+                        disableMakingPosts,
+                    },
+                  )}
                 >
                   <FontAwesomeIcon
                     icon={faHandshake}
@@ -63,12 +93,33 @@ const ProfileMenu = () => {
                   />
                   {t("user_actions.make_offer")}
                 </DropdownMenu.Item>
-                {user.role !== UserRole.INDIVIDUAL && (
+                {allowMakingRequest && (
                   <DropdownMenu.Item
                     onSelect={() => {
-                      navigate("/posts/request/new");
+                      if (!user.isEmailVerified) {
+                        toast.open({
+                          content: t("errors.posts.email_not_verified"),
+                          type: "error",
+                        });
+                      } else if (
+                        user.role === UserRole.ORGANIZATION &&
+                        !user.organization?.verified
+                      ) {
+                        toast.open({
+                          content: t("errors.posts.organization_not_verified"),
+                          type: "error",
+                        });
+                      } else {
+                        navigate("/posts/request/new");
+                      }
                     }}
-                    className="block px-3 py-1 text-sm leading-6 font-light text-gray-900 cursor-pointer hover:bg-gray-50"
+                    className={classMerge(
+                      "block px-3 py-1 text-sm leading-6 font-light text-gray-900 cursor-pointer hover:bg-gray-50",
+                      {
+                        "text-gray-700 cursor-not-allowed opacity-50":
+                          disableMakingPosts,
+                      },
+                    )}
                   >
                     <FontAwesomeIcon
                       icon={faFileSignature}

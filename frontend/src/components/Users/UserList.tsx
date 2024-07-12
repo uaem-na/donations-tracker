@@ -32,15 +32,7 @@ export const UserList = ({ users }: UserListProps) => {
       className="divide-y divide-gray-100 overflow-hidden bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl mt-2"
     >
       {users?.map((user: ApiModel.User) => {
-        return (
-          <UserItem
-            key={user.id}
-            id={user.id}
-            displayName={user.displayName}
-            verified={user.verified}
-            type={user.role}
-          />
-        );
+        return <UserItem user={user} key={user.id} />;
       })}
     </ul>
   );

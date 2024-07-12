@@ -10,7 +10,7 @@ export const Locate = () => {
         map.setZoom(15);
       }
     },
-    [map]
+    [map],
   );
 
   return (
@@ -25,7 +25,7 @@ export const Locate = () => {
               lng: position.coords.longitude,
             });
           },
-          () => null
+          () => null,
         );
       }}
     >

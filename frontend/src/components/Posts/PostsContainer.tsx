@@ -102,20 +102,20 @@ export const PostsContainer = ({
       updateDate(date);
     }
   };
-  
+
   // display posts after a new price range is selected
   const handlePriceRangeFilterChange = (newPriceRange: [number, number]) => {
-      // update parent container state
-      updatePage(1);
-      updatePriceRange(newPriceRange);
+    // update parent container state
+    updatePage(1);
+    updatePriceRange(newPriceRange);
   };
 
   const handleKeywordChange = (keyword: string) => {
-    if(filters.keyword && updateKeyword !== undefined) {
+    if (filters.keyword && updateKeyword !== undefined) {
       updatePage(1);
       updateKeyword(keyword);
     }
-  }
+  };
 
   const renderPaginationResults = useCallback(() => {
     const from = total === 0 ? 0 : page * perPage - (perPage - 1);

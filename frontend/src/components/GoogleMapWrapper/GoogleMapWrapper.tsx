@@ -1,6 +1,6 @@
 import { useLandingContext } from "@contexts/LandingContext";
 import { GoogleMap, Libraries, useJsApiLoader } from "@react-google-maps/api";
-import { useMemo, memo} from "react";
+import { useMemo, memo } from "react";
 import { Locate } from "./Locate";
 import { PostCluster } from "./PostCluster";
 

@@ -149,6 +149,12 @@ export class PostController {
       );
     }
 
+    if (!user.organization.verified) {
+      throw new AuthorizationError(
+        `Organizational users need to be verified before creating a post.`,
+      );
+    }
+
     if (user.isEmailVerified === false) {
       throw new AuthorizationError(
         `User must verify their email before creating posts.`,
@@ -183,9 +189,9 @@ export class PostController {
     log(`Created post [${post._id}] by user ${user.username}.`);
 
     this.resendService.send({
-        to: user.email,
-        subject: "Your post has been created",
-        html: "Thank you for contributing to UAEM. Your post has been categorized as \"Other\" and is queued for review by our admin team. We'll notify you once it's been approved and published. This process usually takes 1-2 business days."
+      to: user.email,
+      subject: "Your post has been created",
+      html: "Thank you for contributing to UAEM. Your post has been categorized as \"Other\" and is queued for review by our admin team. We'll notify you once it's been approved and published. This process usually takes 1-2 business days.",
     });
 
     res.status(201).json(PostDto.fromDocument(post));

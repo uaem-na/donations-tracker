@@ -34,7 +34,7 @@ export const LanguageToggle = ({ isMobile }: LanguageToggleProps) => {
     >
       <Tooltip
         message={
-          i18n.language === "en" ? "Switch to French" : "Switch to English"
+          i18n.language === "en" ? "Passer au français" : "Switch to English"
         }
         side="right"
         delayDuration={0}

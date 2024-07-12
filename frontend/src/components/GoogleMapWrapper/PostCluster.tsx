@@ -20,8 +20,8 @@ export const PostCluster = () => {
       map.panTo(
         new google.maps.LatLng(
           postToLocate.location.lat!,
-          postToLocate.location.lng!
-        )
+          postToLocate.location.lng!,
+        ),
       );
       map.setZoom(13);
     }
@@ -40,7 +40,7 @@ export const PostCluster = () => {
           .getMarkers()
           .filter((marker) => marker.isAdded) as PostMarker[];
         const visiblePosts = posts.filter((post) =>
-          addedMarkers.some((marker) => marker.postId === post.id)
+          addedMarkers.some((marker) => marker.postId === post.id),
         );
         setVisiblePosts(visiblePosts);
       }}

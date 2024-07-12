@@ -19,7 +19,7 @@ const log = debug("backend:user");
 export class UserController {
   constructor(
     private userService: UserService,
-    private postService: PostService
+    private postService: PostService,
   ) {}
 
   getAllUsers = expressAsyncHandler(async (req, res, next) => {
@@ -72,7 +72,7 @@ export class UserController {
     const updatedUser = await this.userService.updatePassword(
       currentUserId,
       password,
-      newPassword
+      newPassword,
     );
 
     log(`Updated password for user ${currentUserId}.`);
@@ -205,7 +205,7 @@ export class UserController {
       page,
       limit,
       filterQuery,
-      { updatedAt: -1, createdAt: -1 }
+      { updatedAt: -1, createdAt: -1 },
     );
 
     const postDtos = posts.map((post) => PostDto.fromDocument(post));
