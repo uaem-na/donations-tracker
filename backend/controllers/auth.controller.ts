@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { timingSafeEqual } from "crypto";
 import debug from "debug";
 import { Request } from "express";
 import expressAsyncHandler from "express-async-handler";
@@ -164,8 +165,12 @@ export class AuthController {
       return;
     }
 
-    // TODO: handle this better with timing safe equals to prevent timing attacks
-    if (user.emailVerificationToken !== token) {
+    if (
+      !timingSafeEqual(
+        Buffer.from(user.emailVerificationToken),
+        Buffer.from(token.toString()),
+      )
+    ) {
       res.status(403).json({ message: "Invalid token." });
       return;
     }
@@ -281,8 +286,12 @@ export class AuthController {
       return;
     }
 
-    // TODO: handle this better with timing safe equals to prevent timing attacks
-    if (user.resetPasswordToken !== token) {
+    if (
+      !timingSafeEqual(
+        Buffer.from(user.resetPasswordToken),
+        Buffer.from(token.toString()),
+      )
+    ) {
       res.status(403).json({ message: "Invalid token." });
       return;
     }
