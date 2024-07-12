@@ -98,7 +98,7 @@ export const UserDetails = ({
 
     err.errors.length > 0
       ? setServerMessage(
-          err.errors.join(",") ?? t("errors.unknown_server_error")
+          err.errors.join(",") ?? t("errors.unknown_server_error"),
         )
       : setServerMessage(err.message ?? t("errors.unknown_server_error"));
   };
@@ -125,7 +125,6 @@ export const UserDetails = ({
   const {
     role,
     username,
-    verified,
     email,
     displayName,
     firstName,
@@ -134,6 +133,8 @@ export const UserDetails = ({
     location,
     organization,
   } = user;
+
+  const verified = user.organization?.verified ?? true;
 
   return (
     <div className="container mx-auto px-4 py-8 sm:px-8 sm:pb-14">
