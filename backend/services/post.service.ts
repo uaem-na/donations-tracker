@@ -56,13 +56,38 @@ export class PostService {
       ...restFilters,
     };
 
-    const posts = await PostModel.find(query)
-      .sort(sort)
-      .skip((page - 1) * limit)
-      .limit(limit)
-      .populate("author", "role displayName -__t");
+    const pipeline: PipelineStage[] = [
+      {
+        $lookup: {
+          from: "users",
+          localField: "author",
+          foreignField: "_id",
+          pipeline: [{ $match: { active: true } }],
+          as: "activeUsers",
+        },
+      },
+      {
+        $unwind: {
+          path: "$activeUsers",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $match: {
+          ...(query && { ...query }),
+        },
+      },
+      { $unset: "activeUsers" },
+      { $sort: { updatedAt: -1, createdAt: -1 } },
+    ];
 
-    return [posts || [], await PostModel.countDocuments(filter)];
+    const posts = await PostModel.aggregate<PostDocument>(pipeline)
+      .skip((page - 1) * limit)
+      .limit(limit);
+
+    const postCounts = await PostModel.aggregate<PostDocument>(pipeline);
+
+    return [posts || [], postCounts.length];
   }
 
   async getPosts(filter?: FilterQuery<PostDocument>): Promise<PostDocument[]> {
