@@ -59,7 +59,6 @@ export class PostController {
 
     const keyword = req.query.keyword;
 
-    // TODO: #107 add filter author.active === false
     const filterQuery: FilterQuery<PostDocument> = {
       status: PostStatus.OPEN,
       ...(postType && { type: postType }),
