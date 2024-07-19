@@ -1,16 +1,28 @@
 interface IStatusIndicatorProps {
-  status?: "offline" | "online" | "busy" | "away";
+  status?:
+    | "green"
+    | "online"
+    | "red"
+    | "busy"
+    | "yellow"
+    | "away"
+    | "gray"
+    | "offline";
 }
 
 export const StatusIndicator = ({ status }: IStatusIndicatorProps) => {
   const statusColor = () => {
     switch (status) {
+      case "green":
       case "online":
         return "text-green-400 bg-green-400/10";
+      case "red":
       case "busy":
         return "text-red-400 bg-red-400/10";
+      case "yellow":
       case "away":
         return "text-yellow-400 bg-yellow-400/10";
+      case "gray":
       case "offline":
       default:
         return "text-gray-500 bg-gray-100/10";

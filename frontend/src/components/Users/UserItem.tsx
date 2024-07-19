@@ -1,8 +1,9 @@
 import { Badge } from "@components/Badge";
+import { StatusIndicator } from "@components/StatusIndicator";
+import { UserRole } from "@constants";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ApiModel } from "@store/services/types";
-import { getStatusIndicator } from "@utils/GetStatusIndicator";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
@@ -13,17 +14,36 @@ interface UserItemProps {
 export const UserItem = ({ user }: UserItemProps) => {
   const { t } = useTranslation();
   const { id, displayName, role } = user;
-  const verified = user.organization?.verified ?? true;
 
   const getColorForBadge = (type: string) => {
     switch (type) {
-      case "admin":
+      case UserRole.ADMIN:
         return "green";
-      case "individual":
+      case UserRole.INDIVIDUAL:
         return "purple";
       default:
         return "blue";
     }
+  };
+
+  const renderOrganizationVerificationStatus = () => {
+    if (role !== UserRole.ORGANIZATION || !user.organization) {
+      return;
+    }
+
+    const isVerified = user.organization.verified;
+    const color = isVerified ? "green" : "red";
+
+    return (
+      <div className="hidden sm:flex sm:flex-col sm:items-end">
+        <span className="flex items-center gap-2">
+          <StatusIndicator status={color} />
+          <span className="text-sm">
+            {isVerified ? t("users.verified") : t("users.not_verified")}
+          </span>
+        </span>
+      </div>
+    );
   };
 
   return (
@@ -45,14 +65,7 @@ export const UserItem = ({ user }: UserItemProps) => {
           </div>
         </div>
         <div className="flex items-center gap-x-4">
-          <div className="hidden sm:flex sm:flex-col sm:items-end">
-            <span className="flex items-center gap-2">
-              {getStatusIndicator(verified)}
-              <span className="text-sm">
-                {verified ? t("users.verified") : t("users.not_verified")}
-              </span>
-            </span>
-          </div>
+          {renderOrganizationVerificationStatus()}
           <FontAwesomeIcon
             className="h-5 w-5 flex-none text-gray-400"
             icon={faChevronRight}

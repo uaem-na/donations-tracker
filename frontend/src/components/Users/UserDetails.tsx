@@ -9,6 +9,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@components/Dialog";
+import { StatusIndicator } from "@components/StatusIndicator";
+import { UserRole } from "@constants";
 import {
   faCancel,
   faCheckCircle,
@@ -22,7 +24,6 @@ import {
   useToggleUserActiveAdminMutation,
   useVerifyUserAdminMutation,
 } from "@services/api";
-import { getStatusIndicator } from "@utils";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
@@ -30,14 +31,9 @@ import { useNavigate } from "react-router-dom";
 interface UserDetailsProps {
   id: string;
   onError: (err) => void;
-  redirectOnDelete?: boolean;
 }
 
-export const UserDetails = ({
-  id,
-  onError,
-  redirectOnDelete = true,
-}: UserDetailsProps) => {
+export const UserDetails = ({ id, onError }: UserDetailsProps) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
@@ -61,24 +57,6 @@ export const UserDetails = ({
       onError(getUserError);
     }
   }, [isError]);
-
-  const onVerify = async () => {
-    if (!user?.id) {
-      onError({ status: 500, message: "User ID must be available" });
-      return;
-    }
-    verifyUserApi({ userId: user.id });
-  };
-
-  const onToggleActive = async () => {
-    if (!user?.id) {
-      onError({ status: 500, message: "User ID must be available" });
-      return;
-    }
-    toggleUserActive({ userId: user.id, reason: reason });
-    setReason("");
-    setActiveDialogOpen(false);
-  };
 
   // handle successful requests
   useEffect(() => {
@@ -112,6 +90,24 @@ export const UserDetails = ({
     return <p>{t("errors.unknown_server_error")}</p>;
   }
 
+  const onVerifyClick = async () => {
+    if (!user?.id) {
+      onError({ status: 500, message: "User ID must be available" });
+      return;
+    }
+    verifyUserApi({ userId: user.id });
+  };
+
+  const toggleUserStatus = async () => {
+    if (!user?.id) {
+      onError({ status: 500, message: "User ID must be available" });
+      return;
+    }
+    toggleUserActive({ userId: user.id, reason: reason });
+    setReason("");
+    setActiveDialogOpen(false);
+  };
+
   const getColorForBadge = (type: string) => {
     switch (type) {
       case "admin":
@@ -121,6 +117,33 @@ export const UserDetails = ({
       default:
         return "blue";
     }
+  };
+
+  const renderOrganizationVerificationStatus = () => {
+    if (role !== UserRole.ORGANIZATION || !user.organization) {
+      return;
+    }
+
+    const isVerified = user.organization.verified;
+    const color = isVerified ? "green" : "red";
+
+    return (
+      <span className="flex items-center gap-2">
+        <StatusIndicator status={color} />
+        <span className="text-sm">
+          {isVerified ? t("users.verified") : t("users.not_verified")}
+        </span>
+      </span>
+    );
+  };
+
+  const renderProperty = (label: React.ReactNode, value: React.ReactNode) => {
+    return (
+      <>
+        <dt className="text-gray-500 mr-3">{label}</dt>
+        <dd className="text-gray-700 col-start-2">{value}</dd>
+      </>
+    );
   };
 
   const {
@@ -136,130 +159,66 @@ export const UserDetails = ({
     activeStatusChangeReason,
   } = user;
   const verified = user.organization?.verified ?? true;
+  const organizationAddress =
+    organization &&
+    `${organization.address.street}, ${organization.address.city}, ${organization.address.province} (${organization.address.provinceCode}), ${organization.address.country} (${organization.address.countryCode})`;
 
   return (
-    <div className="container mx-auto px-4 py-8 sm:px-8 sm:pb-14">
+    <div className="container mx-auto px-4 py-8 sm:px-8 sm:pb-14 leading-6">
       <div className="mb-4">
         {serverMessage && <Alert type="error">{serverMessage}</Alert>}
       </div>
 
       <div className="flex justify-between items-center">
-        <h2 className="text-base font-semibold leading-6 text-gray-900">
+        <h2 className="text-base font-semibold text-gray-900">
           <Badge color={getColorForBadge(role)} text={t(`users.${role}`)} />
           <span className="ml-2">{displayName}</span>{" "}
         </h2>
-        <div className="flex items-center gap-2">
-          {getStatusIndicator(verified)}
-          <span className="text-sm">
-            {verified ? t("users.verified") : t("users.not_verified")}
-          </span>
-        </div>
+        {renderOrganizationVerificationStatus()}
       </div>
 
-      <div className="mt-4 pr-4 py-4">
-        <h2 className="text-base font-semibold leading-6 text-gray-900">
+      <div className="pr-4 py-4">
+        <h2 className="text-base font-semibold text-gray-900">
           {t("users.user_information")}
         </h2>
-        <dl className="mt-6 text-sm leading-6">
-          <div>
-            <dt className="inline text-gray-500 mr-3">
-              {t("users.display_name")}
-            </dt>
-            <dd className="inline text-gray-700">{displayName}</dd>
-          </div>
-          <div>
-            <dt className="inline text-gray-500 mr-3">{t("users.username")}</dt>
-            <dd className="inline text-gray-700">{username}</dd>
-          </div>
-
-          <div>
-            <dt className="inline text-gray-500 mr-3">{t("users.name")}</dt>
-            <dd className="inline text-gray-700">
-              {firstName} {lastName}
-            </dd>
-          </div>
-          <div>
-            <dt className="inline text-gray-500 mr-3">{t("users.email")}</dt>
-            <dd className="inline text-gray-700">
-              <a href={`mailto:${email}`}>{email}</a>
-            </dd>
-          </div>
-          <div>
-            <dt className="inline text-gray-500 mr-3">{t("users.status")}</dt>
-            <dd className="inline text-gray-700">
-              {active ? t("users.active") : t("users.inactive")}
-            </dd>
-          </div>
-          {activeStatusChangeReason && (
-            <div>
-              <dt className="inline text-gray-500 mr-3">
-                {active
-                  ? t("users.reason_for_reactivation")
-                  : t("users.reason_for_deactivation")}
-              </dt>
-              <dd className="inline text-gray-700">
-                {activeStatusChangeReason}
-              </dd>
-            </div>
+        <dl className="grid gap-x-4 gap-y-1 mt-2 text-sm [grid-template-columns:max-content]">
+          {renderProperty(t("users.display_name"), displayName)}
+          {renderProperty(t("users.username"), username)}
+          {renderProperty(t("users.name"), `${firstName} ${lastName}`)}
+          {renderProperty(
+            t("users.email"),
+            <a href={`mailto:${email}`}>{email}</a>,
           )}
+          {renderProperty(
+            t("users.active"),
+            active ? t("users.active") : t("users.inactive"),
+          )}
+          {activeStatusChangeReason &&
+            renderProperty(
+              active
+                ? t("users.reason_for_reactivation")
+                : t("users.reason_for_deactivation"),
+              activeStatusChangeReason,
+            )}
+          {location?.postalCode &&
+            renderProperty(t("users.postal_code"), location.postalCode)}
         </dl>
       </div>
 
-      {location?.postalCode && (
-        <div className="mt-4 pr-4 py-4">
-          <h2 className="text-base font-semibold leading-6 text-gray-900">
-            {t("users.location_information")}
-          </h2>
-          <dl className="mt-6 text-sm leading-6">
-            <div>
-              <dt className="inline text-gray-500 mr-3">
-                {t("users.postal_code")}
-              </dt>
-              <dd className="inline text-gray-700">{location.postalCode}</dd>
-            </div>
-          </dl>
-        </div>
-      )}
-
       {organization && (
-        <div className="mt-4 pr-4 py-4">
-          <h2 className="text-base font-semibold leading-6 text-gray-900">
+        <div className="pr-4 py-4">
+          <h2 className="text-base font-semibold text-gray-900">
             {t("users.organization_information")}
           </h2>
-          <dl className="mt-6 text-sm leading-6">
-            <div>
-              <dt className="inline text-gray-500 mr-3">{t("users.name")}</dt>
-              <dd className="inline text-gray-700">{organization.name}</dd>
-            </div>
-          </dl>
-          <dl className="mt-6 text-sm leading-6">
-            <div>
-              <dt className="inline text-gray-500 mr-3">
-                {t("users.phone_number")}
-              </dt>
-              <dd className="inline text-gray-700">
-                <a href={`tel:${organization.phone}`}>{organization.phone}</a>
-              </dd>
-            </div>
-          </dl>
-          <dl className="mt-6 text-sm leading-6">
-            <div>
-              <dt className="inline text-gray-500 mr-3">
-                {t("users.address")}
-              </dt>
-              <dd className="inline text-gray-700">
-                {organization.address.street}, {organization.address.city},{" "}
-                {organization.address.province} (
-                {organization.address.provinceCode}),{" "}
-                {organization.address.country} (
-                {organization.address.countryCode})
-              </dd>
-            </div>
+          <dl className="grid gap-x-4 gap-y-1 mt-2 text-sm [grid-template-columns:max-content]">
+            {renderProperty(t("users.name"), organization.name)}
+            {renderProperty(t("users.phone_number"), organization.phone)}
+            {renderProperty(t("users.address"), organizationAddress)}
           </dl>
         </div>
       )}
 
-      <div className="mt-4 flex justify-end gap-2.5">
+      <div className="mt-2 flex justify-end gap-2.5">
         {organization && !verified && (
           <Dialog>
             <DialogTrigger asChild>
@@ -279,7 +238,7 @@ export const UserDetails = ({
                     <Button
                       type="button"
                       className="flex gap-1.5 justify-center items-center"
-                      onClick={onVerify}
+                      onClick={onVerifyClick}
                     >
                       <FontAwesomeIcon icon={faCheckCircle} />
                       {t("users.verify")}
@@ -343,7 +302,7 @@ export const UserDetails = ({
                     type="button"
                     intent={active ? "danger" : "primary"}
                     className="flex gap-1.5 justify-center items-center"
-                    onClick={onToggleActive}
+                    onClick={toggleUserStatus}
                   >
                     <FontAwesomeIcon icon={active ? faTrash : faRecycle} />
                     {active ? t("users.deactivate") : t("users.activate")}
