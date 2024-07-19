@@ -88,9 +88,10 @@ export const EditPostForm = ({ id, onError }: EditPostFormProps) => {
       onError({ status: 500, message: "Post ID must be available" });
       return;
     }
+
     editPostApi({
       id: post.id,
-      location: {},
+      location: data.location,
       type: data.type,
       item: data.item,
     });
