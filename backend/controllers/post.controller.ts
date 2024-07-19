@@ -88,7 +88,7 @@ export class PostController {
       filterQuery,
       { updatedAt: -1, createdAt: -1 },
     );
-  
+
     const postDtos = posts.map((post) => PostDto.fromAggregate(post));
 
     const response: PaginatedResponse<PostDto> = {
@@ -147,7 +147,7 @@ export class PostController {
       );
     }
 
-    if (!user.organization.verified) {
+    if (user.organization && !user.organization.verified) {
       throw new AuthorizationError(
         `Organizational users need to be verified before creating a post.`,
       );
@@ -161,7 +161,6 @@ export class PostController {
 
     const postalCode = location.postalCode as string;
     const point = await geocode(postalCode);
-    console.log(point);
     let postLocation: Location;
     if (point) {
       postLocation = {
