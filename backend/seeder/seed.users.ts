@@ -68,7 +68,7 @@ export const fakeOrganizationUser = async (
         provinceCode: faker.location.state({ abbreviated: true }),
         postalCode: faker.location.zipCode().replace(/ /g, ""),
       },
-      phone: faker.helpers.fromRegExp("/+1[0-9]{3}-[0-9]{3}-[0-9]{4}/"),
+      phone: faker.helpers.fromRegExp("+1[0-9]{3}-[0-9]{3}-[0-9]{4}"),
       type: faker.word.noun(),
       verified: isEmailVerified && Math.random() < 0.5,
     },
