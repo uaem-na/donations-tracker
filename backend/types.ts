@@ -66,6 +66,7 @@ export type User = {
   firstName: string;
   lastName: string;
   active: boolean;
+  activeStatusChangeReason: string;
   createdAt: Date;
   updatedAt: Date;
   role: string;

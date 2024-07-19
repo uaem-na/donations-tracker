@@ -7,6 +7,7 @@ export * from "./validatePostId";
 export * from "./validatePostsFilterRequest";
 export * from "./validateUpdatePassword";
 export * from "./validateUpdateUserInfo";
+export * from "./validateUserDeactivationReason";
 export * from "./validateUserId";
 export * from "./validateUserRegisterBase";
 export * from "./validateUserRegisterOrg";

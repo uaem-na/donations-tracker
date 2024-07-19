@@ -43,6 +43,7 @@ interface PostDetailsProps {
   hideRejectButton?: boolean;
 }
 
+// TODO: #107 if author.active === false, display that in the details page for visual cue
 export const PostDetails = ({
   id,
   onError,

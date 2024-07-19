@@ -25,7 +25,6 @@ const validateDisplayNameFormat = (val: string) => {
   return /^[0-9a-zA-ZÀ-ÖØ-öø-ÿ-_.]+$/.test(val);
 };
 
-// ! TODO: reset password mechanism
 const UserSchema: Schema<UserDocument & PassportLocalDocument> = new Schema({
   email: {
     type: String,
@@ -79,7 +78,8 @@ const UserSchema: Schema<UserDocument & PassportLocalDocument> = new Schema({
     },
   },
   location: { type: LocationSchema, required: false },
-  active: { type: Boolean, default: true }, // TODO: add deactivation mechanism
+  active: { type: Boolean, default: true },
+  activeStatusChangeReason: { type: String, maxlength: 512, required: false },
   role: {
     type: String,
     enum: [UserRole.ADMIN, UserRole.ORGANIZATION, UserRole.INDIVIDUAL],
@@ -110,6 +110,7 @@ UserSchema.methods.isOrganization = function (): boolean {
 // salt and hash added by passport-local-mongoose
 UserSchema.plugin(passportLocalMongoose, {
   usernameLowerCase: true,
+  usernameCaseInsensitive: true,
   limitAttempts: true,
   maxAttempts: 10,
   unlockInterval: 10 * 60 * 1000, // 10 minutes

@@ -291,6 +291,8 @@
     "activate_confirm_title": "Are you sure you want to activate?",
     "deactivate": "Deactivate",
     "deactivate_confirm_title": "Are you sure you want to deactivate?",
+    "reason_for_deactivation": "Reason for deactivation",
+    "reason_for_reactivation": "Reason for reactivation",
     "display_name": "Display name",
     "username": "Username"
   },
@@ -344,7 +346,8 @@
     "register": "Register"
   },
   "errors": {
-    "unknown_server_error": "An error occurred",
+    "inactive_user": "Your account has been deactivated. Please contact UAEM support for reactivation.",
+    "unknown_server_error": "An unknown error occurred. Please contact UAEM support.",
     "missing_post_id": "Error: Unable to delete the post. The post ID is missing. Please try again.",
     "posts": {
       "email_not_verified": "You need to verify your email first to create a post.",

@@ -291,6 +291,8 @@
     "activate_confirm_title": "Etes-vous sûr de vouloir activer?",
     "deactivate": "Désactiver",
     "deactivate_confirm_title": "Etes-vous sûr de vouloir désactiver?",
+    "reason_for_deactivation": "Raison de la désactivation",
+    "reason_for_reactivation": "Raison de la réactivation",
     "display_name": "Nom d'affichage",
     "username": "Nom d'utilisateur"
   },
@@ -344,7 +346,8 @@
     "register": "S'inscrire"
   },
   "errors": {
-    "unknown_server_error": "Une erreur s'est produite",
+    "inactive_user": "Votre compte a été désactivé. Veuillez contacter le support de l'UAEM pour réactivation.",
+    "unknown_server_error": "Une erreur inconnue s'est produite. Veuillez contacter le support de l'UAEM.",
     "missing_post_id": "Erreur : Impossible de supprimer le post. L'ID du post est manquant. Veuillez réessayer.",
     "posts": {
       "email_not_verified": "Vous devez vérifier votre courriel d'abord pour créer une publication.",

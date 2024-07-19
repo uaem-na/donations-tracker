@@ -23,6 +23,7 @@ export class UserDto {
   lastName: string;
   role: string;
   active: boolean;
+  activeStatusChangeReason: string | undefined;
   location: UserLocationDto | undefined;
   starred: string[] | undefined;
   isEmailVerified: boolean;
@@ -64,6 +65,7 @@ export class UserDto {
     this.role = role;
     this.active = user.active;
     this.isEmailVerified = user.isEmailVerified ?? false;
+    this.activeStatusChangeReason = user.activeStatusChangeReason;
 
     if (role === UserRole.ORGANIZATION && "organization" in user) {
       this.organization = {

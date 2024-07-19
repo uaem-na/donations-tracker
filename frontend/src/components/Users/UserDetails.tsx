@@ -1,6 +1,6 @@
 import { Alert } from "@components/Alert";
 import { Badge } from "@components/Badge";
-import { Button } from "@components/Controls";
+import { Button, Input, Label } from "@components/Controls";
 import {
   Dialog,
   DialogContent,
@@ -43,6 +43,7 @@ export const UserDetails = ({
 
   const [activeDialogOopen, setActiveDialogOpen] = useState(false);
   const [serverMessage, setServerMessage] = useState();
+  const [reason, setReason] = useState("");
 
   const [verifyUserApi, { isSuccess: isVerifySuccess, error: verifyError }] =
     useVerifyUserAdminMutation();
@@ -74,7 +75,8 @@ export const UserDetails = ({
       onError({ status: 500, message: "User ID must be available" });
       return;
     }
-    toggleUserActive({ userId: user.id });
+    toggleUserActive({ userId: user.id, reason: reason });
+    setReason("");
     setActiveDialogOpen(false);
   };
 
@@ -97,7 +99,7 @@ export const UserDetails = ({
 
     err.errors.length > 0
       ? setServerMessage(
-          err.errors.join(",") ?? t("errors.unknown_server_error")
+          err.errors.join(",") ?? t("errors.unknown_server_error"),
         )
       : setServerMessage(err.message ?? t("errors.unknown_server_error"));
   };
@@ -124,7 +126,6 @@ export const UserDetails = ({
   const {
     role,
     username,
-    verified,
     email,
     displayName,
     firstName,
@@ -132,7 +133,9 @@ export const UserDetails = ({
     active,
     location,
     organization,
+    activeStatusChangeReason,
   } = user;
+  const verified = user.organization?.verified ?? true;
 
   return (
     <div className="container mx-auto px-4 py-8 sm:px-8 sm:pb-14">
@@ -187,6 +190,18 @@ export const UserDetails = ({
               {active ? t("users.active") : t("users.inactive")}
             </dd>
           </div>
+          {activeStatusChangeReason && (
+            <div>
+              <dt className="inline text-gray-500 mr-3">
+                {active
+                  ? t("users.reason_for_reactivation")
+                  : t("users.reason_for_deactivation")}
+              </dt>
+              <dd className="inline text-gray-700">
+                {activeStatusChangeReason}
+              </dd>
+            </div>
+          )}
         </dl>
       </div>
 
@@ -304,6 +319,24 @@ export const UserDetails = ({
                   ? t("users.deactivate_confirm_title")
                   : t("users.activate_confirm_title")}
               </DialogTitle>
+              <Label htmlFor="reason">
+                {active
+                  ? t("users.reason_for_deactivation")
+                  : t("users.reason_for_reactivation")}
+              </Label>
+              <Input
+                type="text"
+                name="reason"
+                id="reason"
+                maxLength={512}
+                value={reason}
+                onChange={(e) => setReason(e.target.value)}
+                placeholder={
+                  active
+                    ? t("users.reason_for_deactivation")
+                    : t("users.reason_for_reactivation")
+                }
+              />
               <DialogFooter>
                 <div className="mt-5 sm:mt-4 flex flex-row-reverse gap-2">
                   <Button
@@ -315,7 +348,6 @@ export const UserDetails = ({
                     <FontAwesomeIcon icon={active ? faTrash : faRecycle} />
                     {active ? t("users.deactivate") : t("users.activate")}
                   </Button>
-
                   <DialogClose asChild>
                     <Button
                       type="button"

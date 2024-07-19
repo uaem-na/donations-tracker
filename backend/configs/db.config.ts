@@ -14,12 +14,11 @@ if (!connectionString) {
 export const configureDb = (app: Express) => {
   connect(connectionString);
 
-  // TODO: should we exit the process if there is an error?
   connection.on("error", console.error.bind(console, "CONNECTION ERROR"));
 
   connection.once("open", () => {
     log(
-      `Connected to MongoDB at ${connection.host}:${connection.port}/${connection.db.databaseName}`
+      `Connected to MongoDB at ${connection.host}:${connection.port}/${connection.db.databaseName}`,
     );
   });
 };

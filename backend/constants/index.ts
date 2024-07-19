@@ -57,7 +57,7 @@ export enum PostStatus {
   OPEN = "open",
   PENDING_APPROVAL = "pending-approval",
   REJECTED = "rejected",
-  IN_PROGRESS = "in-progress", // TODO: is this needed?
+  IN_PROGRESS = "in-progress",
   CLOSED = "closed",
 }
 
@@ -73,6 +73,11 @@ export enum UserRole {
   ADMIN = "admin",
   ORGANIZATION = "organization",
   INDIVIDUAL = "individual",
+}
+
+export enum Language {
+  ENGLISH = "en",
+  FRENCH = "fr",
 }
 
 export const UserRoles = [

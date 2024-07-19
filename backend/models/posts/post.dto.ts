@@ -61,6 +61,10 @@ export class PostDto {
     };
   }
 
+  static fromAggregate(document: PostDocument): PostDto {
+    return new PostDto(document._id, document)
+  }
+
   static fromDocument(document: Document): PostDto {
     const post = document.toObject() as Post;
     return new PostDto(document.id, post);

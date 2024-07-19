@@ -9,7 +9,6 @@ import {
 import { Post, PostDocument, PostItem } from "../../types";
 import { ImageSchema, LocationSchema } from "../common";
 
-// TODO: consider merging with PostSchema
 const ItemSchema: Schema<PostItem> = new Schema({
   name: { type: String, required: true, maxlength: 256 },
   quantity: { type: Number, required: true, min: 1 },
@@ -71,7 +70,7 @@ const PostSchema: Schema<Post> = new Schema(
     },
     views: { type: Number, default: 0 },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 export const PostModel: Model<PostDocument> = model(ModelName.POST, PostSchema);
