@@ -177,6 +177,14 @@ export const EditPostForm = ({ id, onError }: EditPostFormProps) => {
     return <div>Loading...</div>;
   }
 
+  const handlePostalCodeChange = (event) => {
+    const { value } = event.target;
+    // Remove spaces and convert to uppercase
+    const formattedValue = value.replace(/\s+/g, "").toUpperCase();
+    event.target.value = formattedValue;
+    return event;
+  };
+
   return (
     <div className="container mx-auto">
       <div className="flex justify-end items-center mb-4">
@@ -334,7 +342,11 @@ export const EditPostForm = ({ id, onError }: EditPostFormProps) => {
             </Label>
             <div className="mt-2">
               <Input
-                {...register(`location.postalCode`)}
+                {...register(`location.postalCode`, {
+                  onChange: (event) => {
+                    return handlePostalCodeChange(event);
+                  },
+                })}
                 id="postalCode"
                 type="text"
                 errorMessage={errors.location?.postalCode?.message}

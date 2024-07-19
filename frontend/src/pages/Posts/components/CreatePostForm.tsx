@@ -101,6 +101,14 @@ export const CreatePostForm = ({ type }: CreatePostFormProps) => {
     }
   }, [error]);
 
+  const handlePostalCodeChange = (event) => {
+    const { value } = event.target;
+    // Remove spaces and convert to uppercase
+    const formattedValue = value.replace(/\s+/g, "").toUpperCase();
+    event.target.value = formattedValue;
+    return event;
+  };
+
   return (
     <div className="container mx-auto">
       <div className="flex items-center justify-center mb-4">
@@ -202,7 +210,11 @@ export const CreatePostForm = ({ type }: CreatePostFormProps) => {
             </Label>
             <div className="mt-2">
               <Input
-                {...register(`location.postalCode`)}
+                {...register(`location.postalCode`, {
+                  onChange: (event) => {
+                    return handlePostalCodeChange(event);
+                  },
+                })}
                 id="postalCode"
                 type="text"
                 errorMessage={errors.location?.postalCode?.message}
