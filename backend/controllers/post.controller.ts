@@ -161,7 +161,6 @@ export class PostController {
 
     const postalCode = location.postalCode as string;
     const point = await geocode(postalCode);
-    console.log(point);
     let postLocation: Location;
     if (point) {
       postLocation = {
