@@ -1,16 +1,9 @@
 import debug from "debug";
 import expressAsyncHandler from "express-async-handler";
-import { body, param, validationResult } from "express-validator";
+import { param, validationResult } from "express-validator";
 import { FilterQuery } from "mongoose";
 
-import {
-  PostCategories,
-  PostCategory,
-  PostStatus,
-  PostType,
-  PostTypes,
-  UserRole,
-} from "../constants";
+import { PostCategory, PostStatus, PostType, UserRole } from "../constants";
 import { AuthorizationError, NotFoundError, ValidationError } from "../errors";
 import { PostDto } from "../models/posts";
 import { PostService, ResendService, UserService } from "../services";
@@ -217,55 +210,7 @@ export class PostController {
       throw new AuthorizationError("User not logged in.");
     }
 
-    await param("id").notEmpty().run(req);
-    await body("type").trim().notEmpty().isIn(PostTypes).run(req);
-    await body("item").isObject().run(req);
-    await body("item.name")
-      .trim()
-      .notEmpty()
-      .isString()
-      .isLength({
-        max: 256,
-      })
-      .run(req);
-    await body("item.quantity")
-      .trim()
-      .notEmpty()
-      .isInt({
-        min: 1,
-        allow_leading_zeroes: false,
-      })
-      .run(req);
-    await body("item.price")
-      .trim()
-      .notEmpty()
-      .isInt({
-        min: 0,
-        allow_leading_zeroes: false,
-      })
-      .run(req);
-    await body("item.description")
-      .trim()
-      .notEmpty()
-      .isString()
-      .isLength({
-        max: 2048,
-      })
-      .run(req);
-    await body("item.category")
-      .trim()
-      .notEmpty()
-      .isString()
-      .isIn(PostCategories)
-      .run(req);
-    await body("item.image").optional().isObject().run(req);
-    await body("item.image.data").optional().notEmpty().isBase64().run(req);
-    await body("item.image.contentType")
-      .optional()
-      .trim()
-      .notEmpty()
-      .isString()
-      .run(req);
+    await validatePostCreation({ req, optional: false });
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -284,11 +229,31 @@ export class PostController {
       );
     }
 
-    const { type, item } = req.body;
+    const { type, item, location } = req.body;
+
+    const user = await this.userService.getUserByUsername(req.user.username);
+
+    if (!user) {
+      throw new NotFoundError(`Error finding user ${req.user.username}.`);
+    }
+
+    const postalCode = location.postalCode as string;
+    const point = await geocode(postalCode);
+    let postLocation: Location;
+    if (point) {
+      postLocation = {
+        lat: point[0],
+        lng: point[1],
+        postalCode,
+      };
+    } else {
+      postLocation = user.location;
+    }
 
     const updatedPost = await this.postService.updatePost(id, {
       type,
       item,
+      location: postLocation,
     });
 
     log(`Updated post ${id} for user ${req.user.username}.`);

@@ -32,11 +32,9 @@ import {
 
 import { CreateEditPostSchema } from "./schemas/CreateEditPostSchema";
 
-type Type = (typeof PostType)[keyof typeof PostType];
-
 interface EditPostFormProps {
   id: string;
-  onError: (err) => void;
+  onError: (err: any) => void;
 }
 
 export const EditPostForm = ({ id, onError }: EditPostFormProps) => {
@@ -50,7 +48,8 @@ export const EditPostForm = ({ id, onError }: EditPostFormProps) => {
     isSuccess: isPostLoaded,
     error: postError,
   } = useGetPostQuery({ postId: id });
-  const { data: categories } = useGetItemCategoriesQuery({ locale: "en" });
+  const { data: categories, isSuccess: isCategoriesLoaded } =
+    useGetItemCategoriesQuery({ locale: "en" });
   const [
     editPostApi,
     { isLoading: isEditing, isSuccess: isEditSuccess, error: editError },
@@ -89,9 +88,10 @@ export const EditPostForm = ({ id, onError }: EditPostFormProps) => {
       onError({ status: 500, message: "Post ID must be available" });
       return;
     }
+
     editPostApi({
       id: post.id,
-      location: {},
+      location: data.location,
       type: data.type,
       item: data.item,
     });
@@ -110,6 +110,9 @@ export const EditPostForm = ({ id, onError }: EditPostFormProps) => {
     if (isPostLoaded) {
       setValue("type", post.type, { shouldValidate: true });
       setValue("item", post.item, { shouldValidate: true });
+      setValue("location.postalCode", post.location.postalCode!, {
+        shouldValidate: true,
+      });
 
       if (getValues("item.price") === 0) {
         setIsDonation(true);
@@ -117,15 +120,22 @@ export const EditPostForm = ({ id, onError }: EditPostFormProps) => {
       }
     }
 
+    if (isPostLoaded && isCategoriesLoaded) {
+      setValue("item.category", post.item.category, { shouldValidate: true });
+    }
+
     if (isPostError) {
       onError(postError);
     }
-  }, [isPostLoaded, isPostError]);
+  }, [isPostLoaded, isPostError, isCategoriesLoaded]);
 
   // handle successful requests
   useEffect(() => {
+    if (!post) {
+      return;
+    }
     if (isEditSuccess || isDeleteSuccess) {
-      navigate(`/posts/list`);
+      navigate(`/posts/${post.id}`);
     }
   }, [isEditSuccess, isDeleteSuccess]);
 
@@ -167,6 +177,14 @@ export const EditPostForm = ({ id, onError }: EditPostFormProps) => {
   if (isPostLoading) {
     return <div>Loading...</div>;
   }
+
+  const handlePostalCodeChange = (event) => {
+    const { value } = event.target;
+    // Remove spaces and convert to uppercase
+    const formattedValue = value.replace(/\s+/g, "").toUpperCase();
+    event.target.value = formattedValue;
+    return event;
+  };
 
   return (
     <div className="container mx-auto">
@@ -250,7 +268,7 @@ export const EditPostForm = ({ id, onError }: EditPostFormProps) => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-x-4 gap-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-x-4 gap-y-6">
           <div>
             <Label htmlFor="isDonation">{t("posts.donation")}</Label>
             <div className="flex">
@@ -309,6 +327,30 @@ export const EditPostForm = ({ id, onError }: EditPostFormProps) => {
                 id="price"
                 type="number"
                 errorMessage={errors.item?.price?.message}
+              />
+            </div>
+          </div>
+          <div>
+            <Label htmlFor="postalCode">
+              {t("posts.postal_code")}
+              <Tooltip asChild message={t("posts.postal_code_tooltip")}>
+                <FontAwesomeIcon
+                  icon={faCircleQuestion}
+                  className="mx-2"
+                  onClick={toggleShowPriceTooltip}
+                />
+              </Tooltip>
+            </Label>
+            <div className="mt-2">
+              <Input
+                {...register(`location.postalCode`, {
+                  onChange: (event) => {
+                    return handlePostalCodeChange(event);
+                  },
+                })}
+                id="postalCode"
+                type="text"
+                errorMessage={errors.location?.postalCode?.message}
               />
             </div>
           </div>
