@@ -94,6 +94,11 @@ export class AdminController {
     res.json(response);
   });
 
+  /* TODO: add an async handler for users filtered based on post report status
+    must make an aggregate db call with re
+  */
+
+
   getUserById = expressAsyncHandler(async (req, res, next) => {
     this.pre(req);
 

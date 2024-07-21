@@ -9,8 +9,11 @@ interface IFilterLayoutProps extends PropsWithChildren {
   handleUserTypeFilterChange: (userType: FilterUserType) => void;
   filters: {
     userType: boolean;
+    reportedUser: boolean;
   };
 }
+
+// TODO: add additional filter container below user Type
 
 export const FilterLayout = ({
   heading,
@@ -78,6 +81,21 @@ export const FilterLayout = ({
                   onChange={(option) =>
                     handleUserTypeFilterChange(option.value as FilterUserType)
                   }
+                />
+              </div>
+            )}
+
+            {filters.reportedUser && (
+              <div className="border-b border-gray-200 pt-6 last:pb-6">
+                <FilterContainer
+                  name="reportedUser"
+                  ariaLabel={t("posts.category")}
+                  multiSelect={false}
+                  options={[{ value: "reported", label: "reported users" }]}
+                  // onChange={(options) => {
+                  //   handleCategoryFilterChange(options);
+                  //   setSelectedCategories(options);
+                  // }}
                 />
               </div>
             )}

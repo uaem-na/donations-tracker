@@ -29,7 +29,7 @@ export const AdminUsersPage = () => {
         updatePage={setPage}
         updatePerPage={setPerPage}
         updateUserType={setUserType}
-        filters={{ userType: true }}
+        filters={{ userType: true, reportedUser: false }}
       />
     </div>
   );

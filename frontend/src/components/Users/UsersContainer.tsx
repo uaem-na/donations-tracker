@@ -18,6 +18,7 @@ interface UsersContainerProps {
   updateUserType: (setter: SetStateAction<FilterUserType>) => void;
   filters: {
     userType: boolean;
+    reportedUser: boolean;
   };
 }
 
@@ -58,8 +59,8 @@ export const UsersContainer = ({
                 total === 0
                   ? 0
                   : page === 1
-                  ? 1
-                  : page * perPage - (perPage - 1),
+                    ? 1
+                    : page * perPage - (perPage - 1),
               to: page * perPage > total ? total : page * perPage,
               total: total,
             }}
