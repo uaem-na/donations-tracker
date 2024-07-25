@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { FilterQuery, SortOrder } from "mongoose";
+import { FilterQuery, PipelineStage, SortOrder } from "mongoose";
 import { UserModel } from "../models/users";
 import { User, UserDocument } from "../types";
 
 export class UserService {
   async getPaginatedUsers(
+    withReport: boolean | undefined,
     page: number,
     limit: number,
     filter: FilterQuery<UserDocument> = {},
@@ -17,6 +18,60 @@ export class UserService {
   ): Promise<[UserDocument[], number]> {
     if (!page || !limit || page < 0 || limit < 0) {
       throw new Error("Error paginating users. Invalid page or limit.");
+    }
+
+    const pipeline: PipelineStage[] = [
+      {
+        $lookup: {
+          from: "posts",
+          localField: "_id",
+          foreignField: "author",
+          as: "userPosts",
+        },
+      },
+      {
+        $lookup: {
+          from: "reports",
+          localField: "userPosts._id",
+          foreignField: "post",
+          pipeline: [{ $match: { status: "unresolved" } }],
+          as: "postsWithReports",
+        },
+      },
+      {
+        $addFields: {
+          reports_count: {
+            $size: {
+              $ifNull: ["$postsWithReports", []],
+            },
+          },
+        },
+      },
+      {
+        $match: {
+          ...(filter && { ...filter }),
+        },
+      },
+      {
+        $sort: {
+          reports_count: -1,
+          updatedAt: -1,
+          createdAt: -1,
+        },
+      },
+      {
+        $unset: ["userPosts", "postsWithReports", "reports_count"],
+      },
+    ];
+
+    // with the with report filter
+    if (withReport !== undefined && withReport) {
+      const posts = await UserModel.aggregate<UserDocument>(pipeline)
+        .skip((page - 1) * limit)
+        .limit(limit);
+      const postCounts = await UserModel.aggregate<UserDocument>(pipeline);
+
+      return [posts || [], postCounts.length];
     }
 
     const posts = await UserModel.find({
