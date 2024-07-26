@@ -34,7 +34,6 @@ export class UserService {
           from: "reports",
           localField: "userPosts._id",
           foreignField: "post",
-          pipeline: [{ $match: { status: "unresolved" } }],
           as: "postsWithReports",
         },
       },
