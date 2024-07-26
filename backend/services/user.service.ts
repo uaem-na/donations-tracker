@@ -5,7 +5,7 @@ import { User, UserDocument } from "../types";
 
 export class UserService {
   async getPaginatedUsers(
-    withReport: boolean | undefined,
+    reported_user: boolean,
     page: number,
     limit: number,
     filter: FilterQuery<UserDocument> = {},
@@ -50,6 +50,7 @@ export class UserService {
       {
         $match: {
           ...(filter && { ...filter }),
+          reports_count: { $gt: 0 }
         },
       },
       {
@@ -65,7 +66,7 @@ export class UserService {
     ];
 
     // with the with report filter
-    if (withReport !== undefined && withReport) {
+    if (reported_user) {
       const posts = await UserModel.aggregate<UserDocument>(pipeline)
         .skip((page - 1) * limit)
         .limit(limit);

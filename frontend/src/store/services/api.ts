@@ -410,7 +410,6 @@ export const api = createApi({
         { type: "users", id: args.userId },
       ],
     }),
-    // TODO: add an api for users filtered based on post report status
     getReportedPost: builder.query<
       ApiModel.Report[],
       QueryArgs.Reports.ReportedPost

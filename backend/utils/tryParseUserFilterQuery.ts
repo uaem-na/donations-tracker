@@ -19,7 +19,9 @@ export const tryParseUserFilterQuery = (req: Request) => {
   return {
     ...(parsedUserType !== FilterUserTypeAdmin.ALL && {
       userType: parsedUserType,
-      reported_user: parsedReportedUser,
     }),
+    ...{
+      reported_user: parsedReportedUser,
+    },
   };
 };

@@ -94,10 +94,6 @@ export class AdminController {
     res.json(response);
   });
 
-  /* TODO: add an async handler for users filtered based on post report status
-    must make an aggregate db call with re
-
-  */
 
   getUserById = expressAsyncHandler(async (req, res, next) => {
     this.pre(req);
@@ -138,7 +134,6 @@ export class AdminController {
       res.status(400).json({ errors: errors.array({ onlyFirstError: true }) });
       return;
     }
-    log("The request ", req.query);
 
     const { page, limit } = tryParsePaginationQuery(req);
     const { userType, reported_user } = tryParseUserFilterQuery(req);
@@ -155,8 +150,13 @@ export class AdminController {
       { updatedAt: -1, createdAt: -1 },
     );
 
-    const userDtos = users.map((user) => UserDto.fromDocument(user));
-
+    let userDtos : UserDto[];
+    if (reported_user) {
+      userDtos = users.map((user) => UserDto.fromAggregate(user));
+    }else {
+      userDtos = users.map((user) => UserDto.fromDocument(user));
+    }
+    
     const response: PaginatedResponse<UserDto> = {
       data: userDtos || [],
       page: page,
