@@ -82,7 +82,7 @@ export class AdminController {
       { updatedAt: -1, createdAt: -1 },
     );
 
-    const postDtos = posts.map((post) => PostDto.fromDocument(post));
+    const postDtos = posts.map((post) => PostDto.fromAggregate(post));
 
     const response: PaginatedResponse<PostDto> = {
       data: postDtos || [],
