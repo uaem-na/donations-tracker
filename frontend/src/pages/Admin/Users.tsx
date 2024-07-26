@@ -11,10 +11,18 @@ export const AdminUsersPage = () => {
 
   // default filter should be "all" otherwise 400 error will be returned
   const [userType, setUserType] = useState<FilterUserType>("all");
+  const [withReport, setWithReport] = useState<boolean>(false);
   const { data: usersResponse, isLoading } = useGetUsersAdminQuery({
     per_page: perPage,
     page: page,
     user_type: userType,
+    reported_user: withReport,
+  });
+  console.log({
+    per_page: perPage,
+    page: page,
+    user_type: userType,
+    reported_user: withReport,
   });
 
   return (
@@ -29,7 +37,11 @@ export const AdminUsersPage = () => {
         updatePage={setPage}
         updatePerPage={setPerPage}
         updateUserType={setUserType}
-        filters={{ userType: true, reportedUser: false }}
+        updateWithReport={setWithReport}
+        filters={{
+          userType: true,
+          reportedUser: true,
+        }}
       />
     </div>
   );

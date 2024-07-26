@@ -294,7 +294,9 @@
     "reason_for_deactivation": "Reason for deactivation",
     "reason_for_reactivation": "Reason for reactivation",
     "display_name": "Display name",
-    "username": "Username"
+    "username": "Username",
+    "reported_users": "Reported users",
+    "reported_states": "User report states"
   },
   "login": {
     "title": "Sign in to your account",

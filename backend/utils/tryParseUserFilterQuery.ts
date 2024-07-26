@@ -3,15 +3,15 @@ import { FilterUserTypeAdmin } from "../constants";
 import { isEnumValue } from "./isEnumValue";
 
 export const tryParseUserFilterQuery = (req: Request) => {
-  const { user_type, with_report } = req.query;
+  const { user_type, reported_user } = req.query;
 
   const parsedUserType = isEnumValue(user_type, FilterUserTypeAdmin)
     ? user_type
     : FilterUserTypeAdmin.ALL;
 
-  const parsedWithReport =
-    typeof with_report === "string"
-      ? with_report.toLowerCase() === "true"
+  const parsedReportedUser =
+    typeof reported_user === "string"
+      ? reported_user.toLowerCase() === "true"
         ? true
         : false
       : false;
@@ -19,7 +19,7 @@ export const tryParseUserFilterQuery = (req: Request) => {
   return {
     ...(parsedUserType !== FilterUserTypeAdmin.ALL && {
       userType: parsedUserType,
-      withReport: parsedWithReport,
+      reported_user: parsedReportedUser,
     }),
   };
 };

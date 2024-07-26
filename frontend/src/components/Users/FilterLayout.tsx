@@ -1,4 +1,8 @@
-import { FilterContainer, FilterUserType } from "@components";
+import {
+  FilterContainer,
+  FilterReportedUserType,
+  FilterUserType,
+} from "@components";
 import { AdminGuide } from "@components/AdminGuide";
 import { SelectInput } from "@components/Controls/Select";
 import { PropsWithChildren } from "react";
@@ -7,6 +11,9 @@ interface IFilterLayoutProps extends PropsWithChildren {
   heading: string;
   handlePerPageChange: (val: string) => void;
   handleUserTypeFilterChange: (userType: FilterUserType) => void;
+  handleReportedUserFilterChange: (
+    reportedUserType: FilterReportedUserType,
+  ) => void;
   filters: {
     userType: boolean;
     reportedUser: boolean;
@@ -19,6 +26,7 @@ export const FilterLayout = ({
   heading,
   handlePerPageChange,
   handleUserTypeFilterChange,
+  handleReportedUserFilterChange,
   filters,
   children,
 }: IFilterLayoutProps) => {
@@ -86,16 +94,21 @@ export const FilterLayout = ({
             )}
 
             {filters.reportedUser && (
-              <div className="border-b border-gray-200 pt-6 last:pb-6">
+              <div className="border-gray-200 pt-6 last:pb-6">
                 <FilterContainer
                   name="reportedUser"
-                  ariaLabel={t("posts.category")}
+                  activeClassNames="bg-purple-100 text-purple-800"
+                  inactiveClassNames="text-gray-500 hover:text-gray-700 hover:bg-gray-50"
+                  ariaLabel={t("users.reported_states")}
                   multiSelect={false}
-                  options={[{ value: "reported", label: "reported users" }]}
-                  // onChange={(options) => {
-                  //   handleCategoryFilterChange(options);
-                  //   setSelectedCategories(options);
-                  // }}
+                  options={[
+                    { value: "reported", label: t("users.reported_users") },
+                  ]}
+                  onChange={(option) => {
+                    handleReportedUserFilterChange(
+                      option.value as FilterReportedUserType,
+                    );
+                  }}
                 />
               </div>
             )}

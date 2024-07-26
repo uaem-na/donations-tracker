@@ -1,3 +1,4 @@
+import { FilterReportedUserType } from "@components";
 import { Button } from "@components/Controls";
 import { ApiModel } from "@services/api";
 import { SetStateAction, useCallback } from "react";
@@ -16,6 +17,7 @@ interface UsersContainerProps {
   updatePage: (setter: SetStateAction<number>) => void;
   updatePerPage: (setter: SetStateAction<PerPageOption>) => void;
   updateUserType: (setter: SetStateAction<FilterUserType>) => void;
+  updateWithReport: (setter: SetStateAction<boolean>) => void;
   filters: {
     userType: boolean;
     reportedUser: boolean;
@@ -32,6 +34,7 @@ export const UsersContainer = ({
   updatePage,
   updatePerPage,
   updateUserType,
+  updateWithReport,
   filters,
 }: UsersContainerProps) => {
   const { t } = useTranslation();
@@ -46,6 +49,19 @@ export const UsersContainer = ({
     // update parent container state
     updatePage(1);
     updateUserType(userType);
+  };
+
+  const handleReportedUserFilterChange = (
+    reportedUserType: FilterReportedUserType,
+  ) => {
+    // update parent container state
+    updatePage(1);
+    // toggle reported user filter
+    if (reportedUserType === "reported") {
+      updateWithReport(true);
+    } else {
+      updateWithReport(false);
+    }
   };
 
   const renderPaginationResults = useCallback(() => {
@@ -87,6 +103,7 @@ export const UsersContainer = ({
       handleUserTypeFilterChange={(option) =>
         handleUserTypeFilterChange(option)
       }
+      handleReportedUserFilterChange={handleReportedUserFilterChange}
     >
       <div className="flex flex-col gap-y-4">
         <UserList users={users} />

@@ -141,14 +141,14 @@ export class AdminController {
     log("The request ", req.query);
 
     const { page, limit } = tryParsePaginationQuery(req);
-    const { userType, withReport } = tryParseUserFilterQuery(req);
+    const { userType, reported_user } = tryParseUserFilterQuery(req);
 
     const filterQuery: FilterQuery<UserDocument> = {
       ...(userType && { role: userType }),
     };
 
     const [users, count] = await this.userService.getPaginatedUsers(
-      withReport,
+      reported_user,
       page,
       limit,
       filterQuery,
