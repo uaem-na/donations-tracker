@@ -22,7 +22,7 @@ const validateNameFormat = (val: string) => {
 };
 
 const validateDisplayNameFormat = (val: string) => {
-  return /^[0-9a-zA-ZÀ-ÖØ-öø-ÿ-_.]+$/.test(val);
+  return /^[0-9a-zA-ZÀ-ÖØ-öø-ÿ-_. ]+$/.test(val);
 };
 
 const UserSchema: Schema<UserDocument & PassportLocalDocument> = new Schema({

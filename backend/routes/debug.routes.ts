@@ -8,7 +8,6 @@ router.get("/geocode/:postalCode", async (req: Request, res: Response) => {
 
   try {
     const response = await geocodeDebug(postalCode);
-    console.log(response);
     res.json({ postalCode, response: response.data });
   } catch (error) {
     if (error instanceof Error) {

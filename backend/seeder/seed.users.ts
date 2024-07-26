@@ -12,12 +12,18 @@ export const fakeAdminUser = async (
   username: string,
   password: string,
 ): Promise<UserDocument> => {
+  const lastName = faker.person.lastName();
+  const firstName = faker.person.firstName();
+  const email =
+    `${firstName}.${lastName}@${faker.internet.domainName()}`.toLowerCase();
+  const displayName = `${firstName} ${lastName}`;
   const user = new AdminUserModel({
-    lastName: faker.person.lastName(),
-    firstName: faker.person.firstName(),
-    email: faker.internet.email(),
-    username: username,
-    displayName: faker.internet.displayName(),
+    lastName,
+    firstName,
+    email,
+    displayName,
+    username,
+    isEmailVerified: true,
     location: {
       lat: faker.location.latitude(),
       lng: faker.location.longitude(),
@@ -35,12 +41,19 @@ export const fakeOrganizationUser = async (
   username: string,
   password: string,
 ): Promise<UserDocument> => {
+  const lastName = faker.person.lastName();
+  const firstName = faker.person.firstName();
+  const email =
+    `${firstName}.${lastName}@${faker.internet.domainName()}`.toLowerCase();
+  const displayName = `${firstName} ${lastName}`;
+  const isEmailVerified = Math.random() < 0.5;
   const user = new OrganizationUserModel({
-    lastName: faker.person.lastName(),
-    firstName: faker.person.firstName(),
-    email: faker.internet.email(),
-    username: username,
-    displayName: faker.internet.displayName(),
+    lastName,
+    firstName,
+    email,
+    displayName,
+    username,
+    isEmailVerified: isEmailVerified,
     location: {
       lat: faker.location.latitude(),
       lng: faker.location.longitude(),
@@ -55,8 +68,9 @@ export const fakeOrganizationUser = async (
         provinceCode: faker.location.state({ abbreviated: true }),
         postalCode: faker.location.zipCode().replace(/ /g, ""),
       },
-      phone: faker.phone.number(),
+      phone: faker.helpers.fromRegExp("/+1[0-9]{3}-[0-9]{3}-[0-9]{4}/"),
       type: faker.word.noun(),
+      verified: isEmailVerified && Math.random() < 0.5,
     },
     role: UserRole.ORGANIZATION,
   });
@@ -70,12 +84,19 @@ export const fakeIndividualUser = async (
   username: string,
   password: string,
 ): Promise<UserDocument> => {
+  const lastName = faker.person.lastName();
+  const firstName = faker.person.firstName();
+  const email =
+    `${firstName}.${lastName}@${faker.internet.domainName()}`.toLowerCase();
+  const displayName = `${firstName} ${lastName}`;
+
   const user = new IndividualUserModel({
-    lastName: faker.person.lastName(),
-    firstName: faker.person.firstName(),
-    email: faker.internet.email(),
-    displayName: faker.internet.displayName(),
-    username: username,
+    lastName,
+    firstName,
+    email,
+    displayName,
+    username,
+    isEmailVerified: Math.random() < 0.5,
     location: {
       lat: faker.location.latitude(),
       lng: faker.location.longitude(),
