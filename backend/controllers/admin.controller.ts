@@ -82,7 +82,7 @@ export class AdminController {
       { updatedAt: -1, createdAt: -1 },
     );
 
-    const postDtos = posts.map((post) => PostDto.fromDocument(post));
+    const postDtos = posts.map((post) => PostDto.fromAggregate(post));
 
     const response: PaginatedResponse<PostDto> = {
       data: postDtos || [],
@@ -93,6 +93,7 @@ export class AdminController {
 
     res.json(response);
   });
+
 
   getUserById = expressAsyncHandler(async (req, res, next) => {
     this.pre(req);
@@ -117,7 +118,6 @@ export class AdminController {
     }
 
     const userDto = UserDto.fromDocument(user);
-
     res.json(userDto);
   });
 
@@ -136,21 +136,27 @@ export class AdminController {
     }
 
     const { page, limit } = tryParsePaginationQuery(req);
-    const { userType } = tryParseUserFilterQuery(req);
+    const { userType, reported_user } = tryParseUserFilterQuery(req);
 
     const filterQuery: FilterQuery<UserDocument> = {
       ...(userType && { role: userType }),
     };
 
     const [users, count] = await this.userService.getPaginatedUsers(
+      reported_user,
       page,
       limit,
       filterQuery,
       { updatedAt: -1, createdAt: -1 },
     );
 
-    const userDtos = users.map((user) => UserDto.fromDocument(user));
-
+    let userDtos : UserDto[];
+    if (reported_user) {
+      userDtos = users.map((user) => UserDto.fromAggregate(user));
+    }else {
+      userDtos = users.map((user) => UserDto.fromDocument(user));
+    }
+    
     const response: PaginatedResponse<UserDto> = {
       data: userDtos || [],
       page: page,

@@ -92,6 +92,10 @@ export class UserDto {
     }
   }
 
+  static fromAggregate(document: UserDocument): UserDto {
+    return new UserDto(document._id, document)
+  }
+
   static fromDocument(document: Document): UserDto {
     const user = document.toObject() as User;
     return new UserDto(document.id, user);

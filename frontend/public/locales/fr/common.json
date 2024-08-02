@@ -294,7 +294,9 @@
     "reason_for_deactivation": "Raison de la désactivation",
     "reason_for_reactivation": "Raison de la réactivation",
     "display_name": "Nom d'affichage",
-    "username": "Nom d'utilisateur"
+    "username": "Nom d'utilisateur",
+    "reported_users": "Utilisateurs signalés",
+    "reported_states": "États des utilisateurs signalés"
   },
   "login": {
     "title": "Connectez-vous à votre compte",

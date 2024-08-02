@@ -126,6 +126,10 @@ export namespace QueryArgs {
       keyword?: string;
     };
 
+    export type ReportedUser = {
+      reported_user: boolean;
+    };
+
     export type All = PostType &
       UserType &
       Categories &
@@ -202,7 +206,9 @@ export namespace QueryArgs {
         userId: string;
       };
 
-    export type GetPaginatedUsers = Pagination & Filters.UserType;
+    export type GetPaginatedUsers = Pagination &
+      Filters.UserType &
+      Filters.ReportedUser;
   }
 }
 
