@@ -132,6 +132,7 @@ export const UserDetails = ({
     lastName,
     active,
     location,
+    report,
     organization,
     activeStatusChangeReason,
   } = user;
@@ -216,6 +217,22 @@ export const UserDetails = ({
                 {t("users.postal_code")}
               </dt>
               <dd className="inline text-gray-700">{location.postalCode}</dd>
+            </div>
+          </dl>
+        </div>
+      )}
+
+      {report && (
+        <div className="mt-4 pr-4 py-4">
+          <h2 className="text-base font-semibold leading-6 text-gray-900">
+            {t("users.report_information")}
+          </h2>
+          <dl className="mt-6 text-sm leading-6">
+            <div>
+              <dt className="inline text-gray-500 mr-3">
+                {t("users.postal_code")}
+              </dt>
+              <dd className="inline text-gray-700">{"Hi"}</dd>
             </div>
           </dl>
         </div>
