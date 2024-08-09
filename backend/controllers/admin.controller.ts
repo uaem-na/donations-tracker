@@ -1,12 +1,13 @@
 import { debug } from "debug";
 import expressAsyncHandler from "express-async-handler";
-import { validationResult } from "express-validator";
+import { validationResult, param, body } from "express-validator";
 import { FilterQuery } from "mongoose";
 import { PostStatus } from "../constants";
-import { AuthorizationError } from "../errors";
+import { AuthorizationError, ValidationError } from "../errors";
 import { PostDto } from "../models/posts";
 import { UserDto } from "../models/users";
-import { PostService, ResendService, UserService } from "../services";
+import { ReportDto } from "../models/reports";
+import { PostService, ReportService, ResendService, UserService } from "../services";
 import { PaginatedResponse, PostDocument, UserDocument } from "../types";
 import {
   tryParsePaginationQuery,
@@ -31,6 +32,7 @@ export class AdminController {
     private postService: PostService,
     private userService: UserService,
     private resendService: ResendService,
+    private reportService: ReportService,
   ) {}
 
   pre = (req) => {
@@ -119,6 +121,23 @@ export class AdminController {
 
     const userDto = UserDto.fromDocument(user);
     res.json(userDto);
+  });
+
+  getUserReports = expressAsyncHandler(async (req, res, next) => {
+    await param("userId").notEmpty().run(req);
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      throw new ValidationError(errors.array());
+    }
+
+    const { userId } = req.params;
+
+    const reports = await this.reportService.getUserReports(userId);
+    console.log(reports);
+    res
+      .status(200)
+      .json(reports.map((report) => ReportDto.fromDocument(report)));
   });
 
   getUsersToVerify = expressAsyncHandler(async (req, res, next) => {

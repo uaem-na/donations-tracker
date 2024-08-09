@@ -171,7 +171,7 @@ export class ReportController {
     const { userId } = req.params;
 
     const reports = await this.reportService.getUserReports(userId);
-
+    console.log(reports);
     res
       .status(200)
       .json(reports.map((report) => ReportDto.fromDocument(report)));
