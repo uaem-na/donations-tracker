@@ -93,7 +93,7 @@ export type UserDocument = User &
 export type Report = {
   _id: string;
   reporter: User;
-  resolver: User;
+  resolver?: User;
   post: Post | PostDocument;
   status: "resolved" | "unresolved";
   notes: string;

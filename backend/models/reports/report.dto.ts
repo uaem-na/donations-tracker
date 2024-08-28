@@ -1,5 +1,5 @@
 import { Document } from "mongoose";
-import { PostDocument, Report, UserDocument } from "../../types";
+import { PostDocument, Report, UserDocument, ReportDocument } from "../../types";
 import { PostDto } from "../posts";
 import { UserDto } from "../users";
 
@@ -25,6 +25,10 @@ export class ReportDto {
     const report = document.toObject() as Report;
     return new ReportDto(document.id, report);
   }
+  static fromAggregate(document: ReportDocument): ReportDto {
+    return new ReportDto(document._id, document);
+  }
+
 }
 
 export class ReportedPostDto {

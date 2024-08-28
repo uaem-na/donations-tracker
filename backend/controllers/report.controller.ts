@@ -98,6 +98,7 @@ export class ReportController {
 
     const { id } = req.params;
     const reports = await this.reportService.getReportedPost(id);
+    console.log(reports);
 
     if (!reports) {
       throw new NotFoundError(`Error finding report ${id}.`);
@@ -171,7 +172,6 @@ export class ReportController {
     const { userId } = req.params;
 
     const reports = await this.reportService.getUserReports(userId);
-    console.log(reports);
     res
       .status(200)
       .json(reports.map((report) => ReportDto.fromDocument(report)));

@@ -1,7 +1,9 @@
 import { ObjectId } from "mongodb";
+import { PipelineStage, Types } from "mongoose";
 import { ReportModel } from "../models/reports";
+import { PostModel } from "../models/posts";
+import { UserModel } from "../models/users";
 import { PostDocument, Report, ReportDocument } from "../types";
-
 export class ReportService {
   async createReport(report: Partial<Report>) {
     const newReport = new ReportModel({
@@ -20,7 +22,7 @@ export class ReportService {
 
   async getReportedPosts(
     page: number,
-    limit: number
+    limit: number,
   ): Promise<
     [{ _id: string; outstanding_reports: number; post: PostDocument }[], number]
   > {
@@ -123,7 +125,68 @@ export class ReportService {
   }
 
   async getUserReports(userId: string): Promise<ReportDocument[]> {
-    const reports = await ReportModel.find({ userId: userId });
+
+    const pipeline: PipelineStage[] = [
+      {
+        $lookup: {
+          from: "posts",
+          localField: "post",
+          foreignField: "_id",
+          pipeline: [
+            {
+              $match: {
+                author: new Types.ObjectId(userId)
+              },
+            },
+          ],
+          as: "postDetails",
+        },
+      },
+      {
+        $unwind: {
+          path: "$postDetails",
+        },
+      },
+      {
+        $group: {
+          _id: "$status",
+          report: { $push: "$$ROOT" },
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $sort: {
+          count: -1,
+          updatedAt: -1,
+          createdAt: -1,
+        },
+      },
+      { $unset: ["_id", "count"] },
+      {
+        $unwind: {
+          path: "$report",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $set: {
+          _id: "$report._id",
+          reporter: "$report.reporter",
+          post: "$report.post",
+          status: "$report.status",
+          notes: "$report.notes",
+          createdAt: "$report.createdAt",
+          updatedAt: "$report.updatedAt",
+        },
+      },
+      { $unset: "report" },
+      { $unset: "postDetails" },
+    ];
+
+    const reports = await ReportModel.aggregate<ReportDocument>(pipeline);
+    // unwind (expand) the post field inside report
+    await PostModel.populate(reports, { path: 'post' });
+    await UserModel.populate(reports, { path: 'reporter' });
 
     return reports;
   }

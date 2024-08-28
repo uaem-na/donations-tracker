@@ -1,12 +1,12 @@
 import { debug } from "debug";
 import expressAsyncHandler from "express-async-handler";
-import { validationResult, param, body } from "express-validator";
+import { param, validationResult } from "express-validator";
 import { FilterQuery } from "mongoose";
 import { PostStatus } from "../constants";
 import { AuthorizationError, ValidationError } from "../errors";
 import { PostDto } from "../models/posts";
-import { UserDto } from "../models/users";
 import { ReportDto } from "../models/reports";
+import { UserDto } from "../models/users";
 import { PostService, ReportService, ResendService, UserService } from "../services";
 import { PaginatedResponse, PostDocument, UserDocument } from "../types";
 import {
@@ -113,17 +113,31 @@ export class AdminController {
     const { id } = req.params;
 
     const user = await this.userService.getUserById(id);
+    const reports = await this.reportService.getUserReports(id);
 
     if (!user) {
       res.status(404).json({ error: `User ${id} not found.` });
       return;
     }
 
+    if (!reports) {
+      res.status(404).json({ error: `Reports from ${id} not found.` });
+      return;
+    }
+
     const userDto = UserDto.fromDocument(user);
+    console.log(reports);
+    const reportDtos = reports.map((report) => {
+      ReportDto.fromAggregate(report);
+    });  
+    console.log({...reportDtos});
+
+    // console.log({userDto, ...reportDtos});
+
     res.json(userDto);
   });
 
-  getUserReports = expressAsyncHandler(async (req, res, next) => {
+  getUserReportsById = expressAsyncHandler(async (req, res, next) => {
     await param("userId").notEmpty().run(req);
 
     const errors = validationResult(req);
@@ -134,7 +148,7 @@ export class AdminController {
     const { userId } = req.params;
 
     const reports = await this.reportService.getUserReports(userId);
-    console.log(reports);
+
     res
       .status(200)
       .json(reports.map((report) => ReportDto.fromDocument(report)));
