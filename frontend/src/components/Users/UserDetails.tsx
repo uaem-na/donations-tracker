@@ -12,6 +12,7 @@ import {
 import {
   faCancel,
   faCheckCircle,
+  faRectangleList,
   faRecycle,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
@@ -22,6 +23,8 @@ import {
   useToggleUserActiveAdminMutation,
   useVerifyUserAdminMutation,
 } from "@services/api";
+import { ApiModel } from "@services/api";
+import { ReportSummaryItem } from "@pages/Admin/components/ReportSummaryItem";
 import { getStatusIndicator } from "@utils";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -50,7 +53,7 @@ export const UserDetails = ({
   const [toggleUserActive] = useToggleUserActiveAdminMutation();
 
   const {
-    data: user,
+    data: data,
     isLoading,
     isError,
     error: getUserError,
@@ -63,19 +66,19 @@ export const UserDetails = ({
   }, [isError]);
 
   const onVerify = async () => {
-    if (!user?.id) {
+    if (!data?.user?.id) {
       onError({ status: 500, message: "User ID must be available" });
       return;
     }
-    verifyUserApi({ userId: user.id });
+    verifyUserApi({ userId: data?.user?.id });
   };
 
   const onToggleActive = async () => {
-    if (!user?.id) {
+    if (!data?.user?.id) {
       onError({ status: 500, message: "User ID must be available" });
       return;
     }
-    toggleUserActive({ userId: user.id, reason: reason });
+    toggleUserActive({ userId: data?.user?.id, reason: reason });
     setReason("");
     setActiveDialogOpen(false);
   };
@@ -108,7 +111,7 @@ export const UserDetails = ({
     return <p>{t("loading")}</p>;
   }
 
-  if (!user) {
+  if (!data?.user) {
     return <p>{t("errors.unknown_server_error")}</p>;
   }
 
@@ -132,11 +135,12 @@ export const UserDetails = ({
     lastName,
     active,
     location,
-    report,
     organization,
     activeStatusChangeReason,
-  } = user;
-  const verified = user.organization?.verified ?? true;
+  } = data?.user!;
+
+  const userReports = data?.reports!;
+  const verified = data?.user!.organization?.verified ?? true;
 
   return (
     <div className="container mx-auto px-4 py-8 sm:px-8 sm:pb-14">
@@ -206,6 +210,50 @@ export const UserDetails = ({
         </dl>
       </div>
 
+      <div className="mt-4 pr-4 py-4">
+        <h2 className="text-base font-semibold leading-6 text-gray-900">
+          {t("users.report_information")}
+        </h2>
+        {userReports === undefined || userReports.length === 0 ? (
+          <div className="mt-6 relative block w-full rounded-lg border-2 border-dashed border-gray-300 p-12 text-center">
+            <FontAwesomeIcon
+              className="mx-auto h-12 w-12 text-gray-400"
+              icon={faRectangleList}
+            />
+            <span className="mt-2 block text-sm font-semibold text-gray-900">
+              {t("reports.no_reports_found")}
+            </span>
+          </div>
+        ) : (
+          <ul
+            role="list"
+            className="divide-y divide-gray-100 overflow-hidden bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl mt-2"
+          >
+            {userReports.map(
+              (
+                report,
+                //   {
+                //   id: string;
+                //   reporter: User;
+                //   resolver?: User;
+                //   post: ApiModel.Post;
+                //   status: "resolved" | "unresolved";
+                //   notes: string;
+                // }
+              ) => {
+                return (
+                  <ReportSummaryItem
+                    key={report.id}
+                    id={report.id}
+                    summary={report.notes}
+                  />
+                );
+              },
+            )}
+          </ul>
+        )}
+      </div>
+
       {location?.postalCode && (
         <div className="mt-4 pr-4 py-4">
           <h2 className="text-base font-semibold leading-6 text-gray-900">
@@ -217,22 +265,6 @@ export const UserDetails = ({
                 {t("users.postal_code")}
               </dt>
               <dd className="inline text-gray-700">{location.postalCode}</dd>
-            </div>
-          </dl>
-        </div>
-      )}
-
-      {report && (
-        <div className="mt-4 pr-4 py-4">
-          <h2 className="text-base font-semibold leading-6 text-gray-900">
-            {t("users.report_information")}
-          </h2>
-          <dl className="mt-6 text-sm leading-6">
-            <div>
-              <dt className="inline text-gray-500 mr-3">
-                {t("users.postal_code")}
-              </dt>
-              <dd className="inline text-gray-700">{"Hi"}</dd>
             </div>
           </dl>
         </div>

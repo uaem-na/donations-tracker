@@ -16,7 +16,6 @@ export const ReportsPage = () => {
     per_page: perPage,
     page: page,
   });
-  console.log(reportedPostsResponse);
 
   const handlePerPageChange = (val: string) => {
     // update parent container state

@@ -391,7 +391,7 @@ export const api = createApi({
             ]
           : [{ type: "users", id: "admin-list" }],
     }),
-    getUserAdmin: builder.query<ApiModel.User, QueryArgs.Users.GetUser>({
+    getUserAdmin: builder.query<ApiModel.UserReports, QueryArgs.Users.GetUser>({
       query: ({ userId }) => ({ url: `admin/users/${userId}`, method: "GET" }),
       providesTags: (result, error, args) => [
         { type: "users", id: args.userId },

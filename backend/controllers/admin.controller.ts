@@ -7,7 +7,12 @@ import { AuthorizationError, ValidationError } from "../errors";
 import { PostDto } from "../models/posts";
 import { ReportDto } from "../models/reports";
 import { UserDto } from "../models/users";
-import { PostService, ReportService, ResendService, UserService } from "../services";
+import {
+  PostService,
+  ReportService,
+  ResendService,
+  UserService,
+} from "../services";
 import { PaginatedResponse, PostDocument, UserDocument } from "../types";
 import {
   tryParsePaginationQuery,
@@ -96,7 +101,6 @@ export class AdminController {
     res.json(response);
   });
 
-
   getUserById = expressAsyncHandler(async (req, res, next) => {
     this.pre(req);
 
@@ -126,15 +130,10 @@ export class AdminController {
     }
 
     const userDto = UserDto.fromDocument(user);
-    console.log(reports);
-    const reportDtos = reports.map((report) => {
-      ReportDto.fromAggregate(report);
-    });  
-    console.log({...reportDtos});
+    const reportDtos = reports.map((report) => ReportDto.fromAggregate(report));
 
-    // console.log({userDto, ...reportDtos});
 
-    res.json(userDto);
+    res.json({user: userDto, reports: reportDtos});
   });
 
   getUserReportsById = expressAsyncHandler(async (req, res, next) => {
@@ -183,13 +182,13 @@ export class AdminController {
       { updatedAt: -1, createdAt: -1 },
     );
 
-    let userDtos : UserDto[];
+    let userDtos: UserDto[];
     if (reported_user) {
       userDtos = users.map((user) => UserDto.fromAggregate(user));
-    }else {
+    } else {
       userDtos = users.map((user) => UserDto.fromDocument(user));
     }
-    
+
     const response: PaginatedResponse<UserDto> = {
       data: userDtos || [],
       page: page,

@@ -18,12 +18,6 @@ export const AdminUsersPage = () => {
     user_type: userType,
     reported_user: withReport,
   });
-  console.log({
-    per_page: perPage,
-    page: page,
-    user_type: userType,
-    reported_user: withReport,
-  });
 
   return (
     <div className="px-4 py-5">
