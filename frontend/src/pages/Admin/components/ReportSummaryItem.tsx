@@ -1,4 +1,5 @@
 import { Badge } from "@components/Badge";
+import { Link } from "@components/Controls";
 import autoAnimate from "@formkit/auto-animate";
 import {
   faChevronDown,
@@ -8,11 +9,19 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ApiModel } from "@store/services/types";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
+
+interface SummaryItemProps {
+  label: string;
+  postId: string;
+  children: React.ReactNode;
+}
+
 interface ReportSummaryItemProps {
   report: ApiModel.Report;
 }
 
-const SummaryItem = (props) => {
+const SummaryItem = ({ label, postId, children }: SummaryItemProps) => {
+  const { t } = useTranslation();
   const [isExpanded, setIsExpanded] = useState(false);
   const parent = useRef(null);
 
@@ -22,7 +31,7 @@ const SummaryItem = (props) => {
 
   return (
     <div className="pt-2">
-      <dt>
+      <div>
         <button
           type="button"
           className="flex w-full items-center justify-between text-left text-gray-900"
@@ -34,15 +43,18 @@ const SummaryItem = (props) => {
               className="h-5 w-5 flex-none text-gray-400"
               icon={isExpanded ? faChevronDown : faChevronRight}
             />
+            <span className="ml-2 font-semibold">{label}</span>
           </span>
         </button>
-      </dt>
+      </div>
       {isExpanded && (
-        <div className="pt-6">
-          <p className="font-semibold">{props.label}</p>
-          <dd className="text-base leading-7 text-gray-600" ref={parent}>
-            {props.children}
-          </dd>
+        <div className="flex flex-col">
+          <div className="text-base leading-7 text-gray-600" ref={parent}>
+            {children}
+          </div>
+          <Link to={`/admin/reports/post/${postId}`} className="self-end">
+            {t("open")}
+          </Link>
         </div>
       )}
     </div>
@@ -51,6 +63,10 @@ const SummaryItem = (props) => {
 
 export const ReportSummaryItem = ({ report }: ReportSummaryItemProps) => {
   const { t } = useTranslation();
+  const categoryString =
+    t(`posts.item_categories.${report.post.item.category}`) || "";
+  const summaryLabel = `[${categoryString}] ${report.post.item.name}`;
+
   return (
     <li
       key={report.id}
@@ -70,7 +86,7 @@ export const ReportSummaryItem = ({ report }: ReportSummaryItemProps) => {
             text={t(`reports.${report.status}`)}
           />
         </div>
-        <SummaryItem label="Report Summary">
+        <SummaryItem label={summaryLabel} postId={report.post.id}>
           <p className="leading-5 text-xs mt-2 text-gray-500">{report.notes}</p>
         </SummaryItem>
       </div>

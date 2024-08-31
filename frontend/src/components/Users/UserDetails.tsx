@@ -226,45 +226,6 @@ export const UserDetails = ({
         </dl>
       </div>
 
-      <div className="mt-4 pr-4 py-4">
-        <h2 className="text-base font-semibold leading-6 text-gray-900">
-          {t("users.report_information")}
-        </h2>
-        {reportResponse?.reports === undefined ||
-        reportResponse?.reports.length === 0 ? (
-          <div className="mt-6 relative block w-full rounded-lg border-2 border-dashed border-gray-300 p-12 text-center">
-            <FontAwesomeIcon
-              className="mx-auto h-12 w-12 text-gray-400"
-              icon={faRectangleList}
-            />
-            <span className="mt-2 block text-sm font-semibold text-gray-900">
-              {t("reports.no_reports_found")}
-            </span>
-          </div>
-        ) : (
-          <ul
-            role="list"
-            className="mt-6 divide-y divide-gray-100 overflow-hidden bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl"
-          >
-            {unresolvedReports?.map(
-              (
-                report,
-                //   {
-                //   id: string;
-                //   reporter: User;
-                //   resolver?: User;
-                //   post: ApiModel.Post;
-                //   status: "resolved" | "unresolved";
-                //   notes: string;
-                // }
-              ) => {
-                return <ReportSummaryItem report={report} />;
-              },
-            )}
-          </ul>
-        )}
-      </div>
-
       {location?.postalCode && (
         <div className="mt-4 pr-4 py-4">
           <h2 className="text-base font-semibold leading-6 text-gray-900">
@@ -423,6 +384,33 @@ export const UserDetails = ({
             </DialogHeader>
           </DialogContent>
         </Dialog>
+      </div>
+
+      <div className="mt-4 pr-4 py-4">
+        <h2 className="text-base font-semibold leading-6 text-gray-900">
+          {t("users.report_information")}
+        </h2>
+        {reportResponse?.reports === undefined ||
+        reportResponse?.reports.length === 0 ? (
+          <div className="mt-6 relative block w-full rounded-lg border-2 border-dashed border-gray-300 p-12 text-center">
+            <FontAwesomeIcon
+              className="mx-auto h-12 w-12 text-gray-400"
+              icon={faRectangleList}
+            />
+            <span className="mt-2 block text-sm font-semibold text-gray-900">
+              {t("reports.no_reports_found")}
+            </span>
+          </div>
+        ) : (
+          <ul
+            role="list"
+            className="mt-6 divide-y divide-gray-100 overflow-hidden bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl"
+          >
+            {unresolvedReports?.map((report) => {
+              return <ReportSummaryItem report={report} />;
+            })}
+          </ul>
+        )}
       </div>
     </div>
   );
