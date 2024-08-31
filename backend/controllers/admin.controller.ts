@@ -131,7 +131,6 @@ export class AdminController {
 
     const userDto = UserDto.fromDocument(user);
     const reportDtos = reports.map((report) => ReportDto.fromAggregate(report));
-    console.log(JSON.stringify(reportDtos, null, 2));
 
     res.json({ user: userDto, reports: reportDtos });
   });

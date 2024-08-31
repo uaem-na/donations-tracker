@@ -174,8 +174,6 @@ export class ReportService {
     await UserModel.populate(reports, { path: "reporter" });
     await UserModel.populate(reports, { path: "resolver" });
 
-    console.log(JSON.stringify(reports, null, 2));
-
     return reports;
   }
 }

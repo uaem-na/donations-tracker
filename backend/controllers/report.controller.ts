@@ -98,7 +98,6 @@ export class ReportController {
 
     const { id } = req.params;
     const reports = await this.reportService.getReportedPost(id);
-    console.log(reports);
 
     if (!reports) {
       throw new NotFoundError(`Error finding report ${id}.`);

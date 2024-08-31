@@ -55,12 +55,9 @@ export const ReportsByUserPage = () => {
 
   // useMemo to filter reportedPosts by loggedInUserId
   const filteredReportedPosts = useMemo(() => {
-    console.log("Reported Posts:", reportedPostsResponse?.data);
-    console.log("Logged In User ID:", loggedInUserId);
     // Assuming each reportedPost has a post.author.id you want to match against loggedInUserId
     return (
       reportedPostsResponse?.data.filter((reportedPost) => {
-        console.log("Post Author ID:", reportedPost.post.author.id); // Debug log
         return reportedPost.post.author.id !== loggedInUserId;
       }) || []
     );

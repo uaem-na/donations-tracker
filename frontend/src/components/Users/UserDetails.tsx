@@ -51,7 +51,6 @@ export const UserDetails = ({
     [],
   );
   const [resolvedReports, setResolvedReports] = useState<ApiModel.Report[]>([]);
-  console.log(unresolvedReports);
 
   const [verifyUserApi, { isSuccess: isVerifySuccess, error: verifyError }] =
     useVerifyUserAdminMutation();

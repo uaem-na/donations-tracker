@@ -63,7 +63,6 @@ export const UpdateUserInfoForm = () => {
   // handle server error message
   useEffect(() => {
     if (error) {
-      console.log(error);
       if ("status" in error) {
         const err: any = "error" in error ? error.error : error.data;
         setServerMessage(err.errors.join(",") ?? "An error occurred");
