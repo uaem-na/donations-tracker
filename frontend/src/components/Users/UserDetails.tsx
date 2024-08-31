@@ -17,14 +17,14 @@ import {
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { ReportSummaryItem } from "@pages/Admin/components/ReportSummaryItem";
 import { DialogClose } from "@radix-ui/react-dialog";
 import {
+  ApiModel,
   useGetUserAdminQuery,
   useToggleUserActiveAdminMutation,
   useVerifyUserAdminMutation,
 } from "@services/api";
-import { ApiModel } from "@services/api";
-import { ReportSummaryItem } from "@pages/Admin/components/ReportSummaryItem";
 import { getStatusIndicator } from "@utils";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -47,13 +47,18 @@ export const UserDetails = ({
   const [activeDialogOopen, setActiveDialogOpen] = useState(false);
   const [serverMessage, setServerMessage] = useState();
   const [reason, setReason] = useState("");
+  const [unresolvedReports, setUnresolvedReports] = useState<ApiModel.Report[]>(
+    [],
+  );
+  const [resolvedReports, setResolvedReports] = useState<ApiModel.Report[]>([]);
+  console.log(unresolvedReports);
 
   const [verifyUserApi, { isSuccess: isVerifySuccess, error: verifyError }] =
     useVerifyUserAdminMutation();
   const [toggleUserActive] = useToggleUserActiveAdminMutation();
 
   const {
-    data: data,
+    data: reportResponse,
     isLoading,
     isError,
     error: getUserError,
@@ -65,20 +70,32 @@ export const UserDetails = ({
     }
   }, [isError]);
 
+  useEffect(() => {
+    const unresolved = reportResponse?.reports?.filter(
+      (x) => x.status === "unresolved",
+    )!;
+    setUnresolvedReports(unresolved);
+
+    const resolved = reportResponse?.reports?.filter(
+      (x) => x.status === "resolved",
+    )!;
+    setResolvedReports(resolved);
+  }, [reportResponse]);
+
   const onVerify = async () => {
-    if (!data?.user?.id) {
+    if (!reportResponse?.user?.id) {
       onError({ status: 500, message: "User ID must be available" });
       return;
     }
-    verifyUserApi({ userId: data?.user?.id });
+    verifyUserApi({ userId: reportResponse?.user?.id });
   };
 
   const onToggleActive = async () => {
-    if (!data?.user?.id) {
+    if (!reportResponse?.user?.id) {
       onError({ status: 500, message: "User ID must be available" });
       return;
     }
-    toggleUserActive({ userId: data?.user?.id, reason: reason });
+    toggleUserActive({ userId: reportResponse?.user?.id, reason: reason });
     setReason("");
     setActiveDialogOpen(false);
   };
@@ -111,7 +128,7 @@ export const UserDetails = ({
     return <p>{t("loading")}</p>;
   }
 
-  if (!data?.user) {
+  if (!reportResponse?.user) {
     return <p>{t("errors.unknown_server_error")}</p>;
   }
 
@@ -137,10 +154,9 @@ export const UserDetails = ({
     location,
     organization,
     activeStatusChangeReason,
-  } = data?.user!;
+  } = reportResponse?.user!;
 
-  const userReports = data?.reports!;
-  const verified = data?.user!.organization?.verified ?? true;
+  const verified = reportResponse?.user!.organization?.verified ?? true;
 
   return (
     <div className="container mx-auto px-4 py-8 sm:px-8 sm:pb-14">
@@ -214,7 +230,8 @@ export const UserDetails = ({
         <h2 className="text-base font-semibold leading-6 text-gray-900">
           {t("users.report_information")}
         </h2>
-        {userReports === undefined || userReports.length === 0 ? (
+        {reportResponse?.reports === undefined ||
+        reportResponse?.reports.length === 0 ? (
           <div className="mt-6 relative block w-full rounded-lg border-2 border-dashed border-gray-300 p-12 text-center">
             <FontAwesomeIcon
               className="mx-auto h-12 w-12 text-gray-400"
@@ -227,9 +244,9 @@ export const UserDetails = ({
         ) : (
           <ul
             role="list"
-            className="divide-y divide-gray-100 overflow-hidden bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl mt-2"
+            className="mt-6 divide-y divide-gray-100 overflow-hidden bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl"
           >
-            {userReports.map(
+            {unresolvedReports?.map(
               (
                 report,
                 //   {
@@ -241,13 +258,7 @@ export const UserDetails = ({
                 //   notes: string;
                 // }
               ) => {
-                return (
-                  <ReportSummaryItem
-                    key={report.id}
-                    id={report.id}
-                    summary={report.notes}
-                  />
-                );
+                return <ReportSummaryItem report={report} />;
               },
             )}
           </ul>

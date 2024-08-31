@@ -129,11 +129,13 @@ export class AdminController {
       return;
     }
 
+
+
     const userDto = UserDto.fromDocument(user);
     const reportDtos = reports.map((report) => ReportDto.fromAggregate(report));
+    console.log(reportDtos);
 
-
-    res.json({user: userDto, reports: reportDtos});
+    res.json({ user: userDto, reports: reportDtos });
   });
 
   getUserReportsById = expressAsyncHandler(async (req, res, next) => {

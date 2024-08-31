@@ -179,6 +179,12 @@ export class ReportService {
           updatedAt: "$report.updatedAt",
         },
       },
+      {
+        $unwind: {
+          path: "$report.post.item",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
       { $unset: "report" },
       { $unset: "postDetails" },
     ];
