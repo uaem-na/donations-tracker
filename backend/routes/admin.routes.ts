@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { AdminController } from "../controllers/admin.controller";
 import { ensureAdmin, ensureAuthenticated } from "../middlewares";
-import { PostService, ResendService, UserService } from "../services";
+import { PostService, ResendService, UserService, ReportService } from "../services";
 
 // * middleware function to create route handlers
 const router = Router();
@@ -9,10 +9,12 @@ const router = Router();
 const postService = new PostService();
 const userService = new UserService();
 const resendService = new ResendService();
+const reportService = new ReportService();
 const adminController = new AdminController(
   postService,
   userService,
   resendService,
+  reportService,
 );
 
 // * wire up routes with controller

@@ -12,12 +12,15 @@ import {
 import {
   faCancel,
   faCheckCircle,
+  faRectangleList,
   faRecycle,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { ReportSummaryItem } from "@pages/Admin/components/ReportSummaryItem";
 import { DialogClose } from "@radix-ui/react-dialog";
 import {
+  ApiModel,
   useGetUserAdminQuery,
   useToggleUserActiveAdminMutation,
   useVerifyUserAdminMutation,
@@ -44,13 +47,17 @@ export const UserDetails = ({
   const [activeDialogOopen, setActiveDialogOpen] = useState(false);
   const [serverMessage, setServerMessage] = useState();
   const [reason, setReason] = useState("");
+  const [unresolvedReports, setUnresolvedReports] = useState<ApiModel.Report[]>(
+    [],
+  );
+  const [resolvedReports, setResolvedReports] = useState<ApiModel.Report[]>([]);
 
   const [verifyUserApi, { isSuccess: isVerifySuccess, error: verifyError }] =
     useVerifyUserAdminMutation();
   const [toggleUserActive] = useToggleUserActiveAdminMutation();
 
   const {
-    data: user,
+    data: reportResponse,
     isLoading,
     isError,
     error: getUserError,
@@ -62,20 +69,32 @@ export const UserDetails = ({
     }
   }, [isError]);
 
+  useEffect(() => {
+    const unresolved = reportResponse?.reports?.filter(
+      (x) => x.status === "unresolved",
+    )!;
+    setUnresolvedReports(unresolved);
+
+    const resolved = reportResponse?.reports?.filter(
+      (x) => x.status === "resolved",
+    )!;
+    setResolvedReports(resolved);
+  }, [reportResponse]);
+
   const onVerify = async () => {
-    if (!user?.id) {
+    if (!reportResponse?.user?.id) {
       onError({ status: 500, message: "User ID must be available" });
       return;
     }
-    verifyUserApi({ userId: user.id });
+    verifyUserApi({ userId: reportResponse?.user?.id });
   };
 
   const onToggleActive = async () => {
-    if (!user?.id) {
+    if (!reportResponse?.user?.id) {
       onError({ status: 500, message: "User ID must be available" });
       return;
     }
-    toggleUserActive({ userId: user.id, reason: reason });
+    toggleUserActive({ userId: reportResponse?.user?.id, reason: reason });
     setReason("");
     setActiveDialogOpen(false);
   };
@@ -108,7 +127,7 @@ export const UserDetails = ({
     return <p>{t("loading")}</p>;
   }
 
-  if (!user) {
+  if (!reportResponse?.user) {
     return <p>{t("errors.unknown_server_error")}</p>;
   }
 
@@ -134,8 +153,9 @@ export const UserDetails = ({
     location,
     organization,
     activeStatusChangeReason,
-  } = user;
-  const verified = user.organization?.verified ?? true;
+  } = reportResponse?.user!;
+
+  const verified = reportResponse?.user!.organization?.verified ?? true;
 
   return (
     <div className="container mx-auto px-4 py-8 sm:px-8 sm:pb-14">
@@ -363,6 +383,33 @@ export const UserDetails = ({
             </DialogHeader>
           </DialogContent>
         </Dialog>
+      </div>
+
+      <div className="mt-4 pr-4 py-4">
+        <h2 className="text-base font-semibold leading-6 text-gray-900">
+          {t("users.report_information")}
+        </h2>
+        {reportResponse?.reports === undefined ||
+        reportResponse?.reports.length === 0 ? (
+          <div className="mt-6 relative block w-full rounded-lg border-2 border-dashed border-gray-300 p-12 text-center">
+            <FontAwesomeIcon
+              className="mx-auto h-12 w-12 text-gray-400"
+              icon={faRectangleList}
+            />
+            <span className="mt-2 block text-sm font-semibold text-gray-900">
+              {t("reports.no_reports_found")}
+            </span>
+          </div>
+        ) : (
+          <ul
+            role="list"
+            className="mt-6 divide-y divide-gray-100 overflow-hidden bg-white shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl"
+          >
+            {unresolvedReports?.map((report) => {
+              return <ReportSummaryItem report={report} />;
+            })}
+          </ul>
+        )}
       </div>
     </div>
   );

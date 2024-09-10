@@ -5,12 +5,16 @@ import { PostDocument, ReportDocument, UserDocument } from "../types.js";
 
 export const fakeReport = (
   reporter: UserDocument,
-  post: PostDocument
+  post: PostDocument,
 ): ReportDocument => {
+  // 80% chance of being resolved
+  const status =
+    Math.random() <= 0.8 ? ReportStatus.RESOLVED : ReportStatus.UNRESOLVED;
+
   const report = new ReportModel({
     reporter: reporter,
     post: post,
-    status: ReportStatus.UNRESOLVED,
+    status: status,
     notes: faker.word.words({ count: { min: 5, max: 100 } }),
   });
 
@@ -20,7 +24,7 @@ export const fakeReport = (
 export const seedReports = async (
   destroy: boolean,
   reporter: UserDocument,
-  posts: PostDocument[]
+  posts: PostDocument[],
 ): Promise<ReportDocument[]> => {
   if (destroy) {
     console.log("🚀 ~ file: seed.reports.ts ~ seedReports ~ destroy:", destroy);

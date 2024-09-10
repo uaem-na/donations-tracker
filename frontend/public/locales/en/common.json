@@ -1,5 +1,6 @@
 {
   "title": "Title",
+  "open": "Open",
   "add": "Add",
   "edit": "Edit",
   "delete": "Delete",
@@ -277,6 +278,7 @@
     "active": "Active",
     "inactive": "Inactive",
     "location_information": "Location information",
+    "report_information": "Report information",
     "postal_code": "Postal code",
     "organization_information": "Organization information",
     "phone_number": "Phone number",

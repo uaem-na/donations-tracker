@@ -1,7 +1,8 @@
 import { ObjectId } from "mongodb";
+import { PipelineStage, Types } from "mongoose";
 import { ReportModel } from "../models/reports";
+import { UserModel } from "../models/users";
 import { PostDocument, Report, ReportDocument } from "../types";
-
 export class ReportService {
   async createReport(report: Partial<Report>) {
     const newReport = new ReportModel({
@@ -20,7 +21,7 @@ export class ReportService {
 
   async getReportedPosts(
     page: number,
-    limit: number
+    limit: number,
   ): Promise<
     [{ _id: string; outstanding_reports: number; post: PostDocument }[], number]
   > {
@@ -123,7 +124,55 @@ export class ReportService {
   }
 
   async getUserReports(userId: string): Promise<ReportDocument[]> {
-    const reports = await ReportModel.find({ userId: userId });
+    const pipeline: PipelineStage[] = [
+      {
+        $lookup: {
+          from: "posts",
+          localField: "post",
+          foreignField: "_id",
+          as: "post",
+        },
+      },
+      { $unwind: "$post" },
+      {
+        $match: {
+          "post.author": new Types.ObjectId(userId),
+        },
+      },
+      {
+        $group: {
+          _id: "$status",
+          reports: { $push: "$$ROOT" },
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $sort: {
+          count: -1,
+          updatedAt: -1,
+          createdAt: -1,
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          reports: 1,
+        },
+      },
+      {
+        $unwind: "$reports",
+      },
+      {
+        $replaceRoot: {
+          newRoot: "$reports",
+        },
+      },
+    ];
+
+    const reports = await ReportModel.aggregate<ReportDocument>(pipeline);
+
+    await UserModel.populate(reports, { path: "reporter" });
+    await UserModel.populate(reports, { path: "resolver" });
 
     return reports;
   }

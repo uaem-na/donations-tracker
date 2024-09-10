@@ -1,5 +1,6 @@
 {
   "title": "Titre",
+  "open": "Ouvrir",
   "add": "Ajouter",
   "edit": "Modifier",
   "delete": "Supprimer",
@@ -277,6 +278,7 @@
     "active": "Actif",
     "inactive": "Inactif",
     "location_information": "Informations de localisation",
+    "report_information": "Informations sur les rapports",
     "postal_code": "Code postal",
     "organization_information": "Informations sur l'organisation",
     "phone_number": "Numéro de téléphone",

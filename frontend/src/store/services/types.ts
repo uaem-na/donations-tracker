@@ -56,6 +56,11 @@ export namespace ApiModel {
     notes: string;
   };
 
+  export type UserReports = {
+    user: User;
+    reports: Report[];
+  };
+
   export type UserOrganization = {
     name: string;
     address: Address;
